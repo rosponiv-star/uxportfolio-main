@@ -10,6 +10,8 @@ import Figure from '../../components/case/Figure.astro';
 import Note from '../../components/case/Note.astro';
 import Metrics from '../../components/case/Metrics.astro';
 import Insights from '../../components/case/Insights.astro';
+import Reframes from '../../components/case/Reframes.astro';
+import Archetypes from '../../components/case/Archetypes.astro';
 import { chaptersOf, getProjects, hrefOf, slugOf, type Project } from '../../lib/projects';
 
 export async function getStaticPaths() {
@@ -112,7 +114,7 @@ const facts = [
 
       <!-- Chapters (from MDX) ---------------------------------------------- -->
       <div class="chapters">
-        <Content components={{ Chapter, Todo, Figure, Note, Metrics, Insights }} />
+        <Content components={{ Chapter, Todo, Figure, Note, Metrics, Insights, Reframes, Archetypes }} />
       </div>
 
     </div>
@@ -324,7 +326,7 @@ const facts = [
     content: '';
     position: absolute;
     inset: 0;
-    background: rgb(0 0 0 / 0.4);
+    background: rgb(17 17 17 / 0.72);
   }
 
   .next__grid {

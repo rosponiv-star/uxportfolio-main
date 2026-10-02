@@ -1,0 +1,97 @@
+---
+// Behavioural archetypes. Each row: name + quote in track A, traits in tracks B–C.
+interface Props {
+  items: {
+    name: string;
+    alias?: string;
+    quote: string;
+    traits: { label: string; text: string }[];
+  }[];
+}
+const { items } = Astro.props;
+---
+
+<ol class="archetypes">
+  {
+    items.map((a, i) => (
+      <li class="archetype trio" data-reveal style={`--d: ${i}`}>
+        <div class="archetype__head">
+          <span class="label archetype__n">{String(i + 1).padStart(2, '0')}{a.alias && ` — ${a.alias}`}</span>
+          <h3 class="archetype__name">{a.name}</h3>
+          <blockquote class="archetype__quote">“{a.quote}”</blockquote>
+        </div>
+        <dl class="archetype__traits span-2">
+          {a.traits.map((t) => (
+            <div>
+              <dt class="label muted">{t.label}</dt>
+              <dd>{t.text}</dd>
+            </div>
+          ))}
+        </dl>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .archetype {
+    row-gap: var(--space-3);
+    padding-block: var(--space-4);
+  }
+
+  .archetype:first-child {
+    padding-top: 0;
+  }
+
+  .archetype + .archetype {
+    border-top: 1px solid var(--rule);
+  }
+
+  .archetype__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .archetype__n {
+    color: var(--signal);
+  }
+
+  .archetype__name {
+    font-size: var(--fs-h3);
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .archetype__quote {
+    padding: 0;
+    border: 0;
+    font-size: var(--fs-small);
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: none;
+  }
+
+  .archetype__traits {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3) var(--gutter);
+    margin: 0;
+  }
+
+  .archetype__traits dt {
+    margin-bottom: 4px;
+  }
+
+  .archetype__traits dd {
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 640px) {
+    .archetype__traits {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

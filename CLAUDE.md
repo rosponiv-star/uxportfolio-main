@@ -42,6 +42,8 @@ Components available in MDX without imports:
   whole body lane. Import the image at the top of the MDX file. A `video="/media/x.mp4"` prop is also
   supported.
 - `<Metrics items={[{ value, label }]} />` and `<Insights items={[{ title, text }]} />`.
+- `<Reframes items={[{ client, problem, idea? }]} />`: problem-reframing cycles. The last item is shown as the final framing.
+- `<Archetypes items={[{ name, alias?, quote, traits: [{ label, text }] }]} />`: behavioural archetypes.
 - `<Todo>…</Todo>`: visible placeholder. Remove these as the real content arrives.
 
 Cover media: put the image in `src/assets/projects/<name>/` and reference it in the frontmatter
@@ -87,8 +89,20 @@ The owner has rejected two other placements, so do not bring them back:
 
 The Work index stays a plain numbered list.
 
-The current facts in the five MDX files (year, type, platform, role, timeline, team, tools) are
-INVENTED placeholders. Replace them with the real ones when each case study is written.
+Status:
+- JustCook (01) is written with real data.
+- The other four MDX files still carry INVENTED placeholder facts (year, type, platform, role, timeline, team,
+  tools). Replace them with the real ones when each case study is written.
+
+## Case-study content rules (agreed with the owner)
+
+- Use the official numbers from the project reports. Never inflate them.
+- Present projected metrics as targets, never as results.
+- Show a confident result and the process behind it. Don't narrate every setback (e.g. a partner who
+  didn't join). Keep honest limits for the Reflection chapter.
+- Cover and figure boards are composed from the owner's official media (renders, posts, flyers) on a warm
+  #e9e3d6 ground. Source PDFs are rendered with headless Chrome + pdf.js (scripts live in the session
+  scratchpad, not in the repo).
 
 ## Design rules (agreed with the owner)
 

@@ -1,0 +1,97 @@
+---
+// Problem-reframing cycles (e.g. Client–Problem–Solution iterations).
+// Each row: cycle number + who in track A, problem and idea in tracks B–C.
+// The last item is the final framing and is emphasised.
+interface Props {
+  items: { client: string; problem: string; idea?: string }[];
+}
+const { items } = Astro.props;
+const last = items.length - 1;
+---
+
+<ol class="reframes">
+  {
+    items.map((it, i) => (
+      <li class:list={['reframe trio', { 'reframe--final': i === last }]} data-reveal style={`--d: ${i}`}>
+        <div class="reframe__head">
+          <span class="reframe__n label">{i === last ? 'Final framing' : `Cycle ${String(i + 1).padStart(2, '0')}`}</span>
+          <p class="reframe__client">{it.client}</p>
+        </div>
+        <div class="reframe__body span-2">
+          <p>
+            <span class="label muted">Problem</span>
+            {it.problem}
+          </p>
+          {it.idea && (
+            <p>
+              <span class="label muted">Idea</span>
+              {it.idea}
+            </p>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .reframe {
+    row-gap: var(--space-2);
+    padding-block: var(--space-3);
+  }
+
+  .reframe:first-child {
+    padding-top: 0;
+  }
+
+  .reframe + .reframe {
+    border-top: 1px solid var(--rule);
+  }
+
+  .reframe__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .reframe__n {
+    color: var(--ink-3);
+  }
+
+  .reframe__client {
+    color: var(--ink);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  .reframe__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    max-width: 62ch;
+    color: var(--ink-3);
+  }
+
+  .reframe__body p {
+    display: grid;
+    grid-template-columns: 9ch minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: var(--space-1);
+  }
+
+  .reframe--final .reframe__n {
+    color: var(--signal);
+  }
+
+  .reframe--final .reframe__client {
+    font-size: var(--fs-h3);
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+  }
+
+  .reframe--final .reframe__body {
+    color: var(--ink);
+    font-size: var(--fs-lead);
+    line-height: 1.4;
+  }
+</style>
