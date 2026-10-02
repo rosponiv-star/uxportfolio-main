@@ -59,7 +59,9 @@ const facts = [
     <!-- Intro ------------------------------------------------------------ -->
     <header class="wrap intro">
       <a href="/#work" class="intro__back">
-        <span class="arrow arrow--back" aria-hidden="true">←</span>
+        <svg class="intro__chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+          <path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
         <span>All work</span>
       </a>
       <h1 class="intro__title trim">{title}</h1>
@@ -198,7 +200,7 @@ const facts = [
     align-items: center;
     gap: var(--space-1);
     height: 40px;
-    padding: 0 18px 0 14px;
+    padding: 0 18px 0 12px;
     border: 1px solid var(--rule);
     border-radius: 999px;
     font-size: var(--fs-small);
@@ -210,6 +212,10 @@ const facts = [
       color 0.25s,
       border-color 0.25s,
       background-color 0.25s;
+  }
+
+  .intro__chev {
+    flex: none;
   }
 
   .intro__back:hover,
