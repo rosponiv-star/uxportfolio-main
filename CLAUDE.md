@@ -72,6 +72,7 @@ and use `cover.video`.
 - Never use skill percentages, skill bars or proficiency ratings for skills or tools.
 - No filler: every label or element must carry real information. That rules out decorative counters,
   status chips, local clocks, "(01)" section indices and taglines that repeat nearby content.
+  Exception, requested by the owner: the small numbers (01, 02…) in the nav and in the Work index stay.
 - Hero statement: short, a single dark colour, 48px.
 - Do not tell the owner's personal/educational backstory (school history, internships,
   certifications). The CV covers that. Keep the focus on projects and process.
