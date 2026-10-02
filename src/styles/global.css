@@ -15,8 +15,8 @@
   --ink-2: #33332f;
   --ink-3: #6b6b65; /* secondary text, AA on paper */
   --ink-4: #8a8a84; /* large text / decorative only */
-  --rule: #dcdcd7;
-  --rule-strong: #111111;
+  --rule: rgb(17 17 17 / 0.08); /* hairlines between rows */
+  --rule-strong: rgb(17 17 17 / 0.22); /* section dividers */
   --signal: #3d5a73; /* single accent, used sparingly */
 
   /* Type */

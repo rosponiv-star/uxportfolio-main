@@ -1,12 +1,12 @@
 ---
 // Filterable collection (Work, Playground): title, category filters with counts,
-// item count, Grid/Index switch, a 12 / 6+6 grid and an index table.
+// Grid/Index switch, a 12 / 6+6 grid and an index table.
 //
 // The parent renders the grid items in the default slot, each wrapped in
 //   <div class="work__slot" data-size="full|half" data-year="…" data-cats="id id"> … </div>
 // (use gridSizes() and categoryId() from lib/collection).
 import Cover from './Cover.astro';
-import { categoryId, yearSpan } from '../lib/collection';
+import { categoryId } from '../lib/collection';
 import type { Project } from '../lib/projects';
 
 export interface CollectionItem {
@@ -38,7 +38,6 @@ const filters = [
     .map((c) => ({ id: categoryId(c), label: c, count: items.filter((it) => it.cats.includes(c)).length }))
     .filter((f) => f.count > 0),
 ];
-const span = yearSpan(items.map((i) => i.year));
 ---
 
 <section class="work" id={id} aria-labelledby={`${id}-title`} data-work data-noun={noun.join('|')}>
@@ -55,10 +54,6 @@ const span = yearSpan(items.map((i) => i.year));
         ))
       }
     </div>
-
-    <p class="work__count" aria-live="polite" data-work-count data-total={n}>
-      {n} of {n} {n === 1 ? noun[0] : noun[1]}{span && `, ${span}`}
-    </p>
 
     <div class="work__views" role="group" aria-label="View">
       <button type="button" class="opt" data-view="grid" aria-pressed="true"><span class="opt__name">Grid</span></button>
@@ -110,14 +105,11 @@ const span = yearSpan(items.map((i) => i.year));
 
 <script>
   document.querySelectorAll<HTMLElement>('[data-work]').forEach((root) => {
-    const [single, plural] = (root.dataset.noun || 'item|items').split('|');
     const key = `view:${root.id}`;
     const slots = Array.from(root.querySelectorAll<HTMLElement>('.work__slot'));
     const rows = Array.from(root.querySelectorAll<HTMLElement>('[data-work-index] li'));
     const grid = root.querySelector<HTMLElement>('[data-work-grid]')!;
     const index = root.querySelector<HTMLElement>('[data-work-index]')!;
-    const count = root.querySelector<HTMLElement>('[data-work-count]')!;
-    const total = Number(count.dataset.total);
     const filterBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
     const viewBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-view]'));
 
@@ -146,11 +138,6 @@ const span = yearSpan(items.map((i) => i.year));
         if (!r.hidden) enter(r);
       });
 
-      const years = visible.map((s) => Number(s.dataset.year)).filter(Number.isFinite);
-      const lo = Math.min(...years);
-      const hi = Math.max(...years);
-      const span = years.length ? (lo === hi ? `${lo}` : `${lo} to ${hi}`) : '';
-      count.textContent = `${n} of ${total} ${total === 1 ? single : plural}${span ? `, ${span}` : ''}`;
     };
 
     const applyView = (view: string) => {
@@ -230,14 +217,8 @@ const span = yearSpan(items.map((i) => i.year));
     grid-column: 6 / -1;
   }
 
-  .work__count {
-    grid-column: 1 / span 6;
-    font-size: var(--fs-small);
-    color: var(--ink-3);
-  }
-
   .work__views {
-    grid-column: 7 / -1;
+    grid-column: 1 / -1;
   }
 
   /* Options (filters + view switch): grey until hover or selected. The selected one
@@ -414,7 +395,6 @@ const span = yearSpan(items.map((i) => i.year));
 
   @media (max-width: 960px) {
     .work__title,
-    .work__count,
     .work__filters,
     .work__views {
       grid-column: 1 / -1;

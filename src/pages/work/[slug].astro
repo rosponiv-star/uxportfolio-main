@@ -157,10 +157,6 @@ const facts = [
         )
       }
     </div>
-    <span class="reg next__reg next__reg--tl" aria-hidden="true"></span>
-    <span class="reg next__reg next__reg--tr" aria-hidden="true"></span>
-    <span class="reg next__reg next__reg--bl" aria-hidden="true"></span>
-    <span class="reg next__reg next__reg--br" aria-hidden="true"></span>
     <div class="wrap grid next__inner">
       <p class="next__label label">Next case study</p>
       <p class="next__title">{next.data.title}</p>
@@ -373,33 +369,6 @@ const facts = [
     background-size: 64px 64px;
     background-position: center;
     mask-image: radial-gradient(ellipse at 60% 40%, #000 25%, transparent 85%);
-  }
-
-  .next__reg {
-    position: absolute;
-    width: 13px;
-    height: 13px;
-    opacity: 0.6;
-  }
-
-  .next__reg--tl {
-    top: var(--space-3);
-    left: var(--space-3);
-  }
-
-  .next__reg--tr {
-    top: var(--space-3);
-    right: var(--space-3);
-  }
-
-  .next__reg--bl {
-    bottom: var(--space-3);
-    left: var(--space-3);
-  }
-
-  .next__reg--br {
-    bottom: var(--space-3);
-    right: var(--space-3);
   }
 
   /* One block anchored bottom-left: label → title → tagline. */

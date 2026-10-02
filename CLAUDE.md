@@ -86,10 +86,12 @@ title, the footer wordmark and the nav micro-numbers.
 ## Collections (Work and Playground)
 
 - `components/Collection.astro` is shared by the Work page (projects) and the Playground (experiments): title,
-  filters, count, Grid/Index switch, grid and index table. The page renders its cards in the slot, each wrapped in
+  filters, Grid/Index switch, grid and index table. The page renders its cards in the slot, each wrapped in
   `.work__slot` (sizes from `gridSizes()` in `lib/collection.ts`). `components/Card.astro` is the generic card;
   `ProjectCard` wraps it with the project cover. Playground experiments are defined in `playground.astro`, with their
   own filter vocabulary, and their live demo is the card media.
+- No project count line (removed by the owner). Covers have no corner marks.
+- Dividers are translucent ink: `--rule` 8% (row hairlines), `--rule-strong` 22% (section rules).
 - Small text (filters, counts, meta, nav, notes) is 16px through `--fs-small`. The selected option has a 1.5px underline.
 
 - Filters come from `categories` in each MDX file. The vocabulary is fixed in `lib/projects.ts → CATEGORIES` and in

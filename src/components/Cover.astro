@@ -44,10 +44,6 @@ const hasMedia = Boolean(cover?.image || cover?.video);
     ) : (
       <div class="cover__ph" aria-hidden="true">
         <span class="cover__grid" />
-        <span class="cover__corner cover__corner--tl reg" />
-        <span class="cover__corner cover__corner--tr reg" />
-        <span class="cover__corner cover__corner--bl reg" />
-        <span class="cover__corner cover__corner--br reg" />
         <span class="cover__title">{title}</span>
       </div>
     )
@@ -98,30 +94,6 @@ const hasMedia = Boolean(cover?.image || cover?.video);
     mask-image: radial-gradient(ellipse at 50% 55%, #000 30%, transparent 85%);
   }
 
-  .cover__corner {
-    position: absolute;
-    width: 13px;
-    height: 13px;
-    opacity: 0.6;
-  }
-
-  .cover__corner--tl {
-    top: 18px;
-    left: 18px;
-  }
-  .cover__corner--tr {
-    top: 18px;
-    right: 18px;
-  }
-  .cover__corner--bl {
-    bottom: 18px;
-    left: 18px;
-  }
-  .cover__corner--br {
-    bottom: 18px;
-    right: 18px;
-  }
-
   .cover__title {
     position: absolute;
     left: 50%;
@@ -141,9 +113,5 @@ const hasMedia = Boolean(cover?.image || cover?.video);
   }
 
   @media (max-width: 560px) {
-    .cover__corner {
-      width: 9px;
-      height: 9px;
-    }
   }
 </style>
