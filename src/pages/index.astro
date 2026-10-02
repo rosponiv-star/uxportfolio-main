@@ -49,10 +49,8 @@ const principles = [
         {
           words.map((w, i) => (
             <>
-              <span class="w">
-                <span class="w__i" style={`--i:${i}`}>
-                  {w}
-                </span>
+              <span class="w" style={`--i:${i}`}>
+                {w}
               </span>{' '}
             </>
           ))
@@ -129,27 +127,33 @@ const principles = [
     padding-block: var(--header-h);
   }
 
+  /* Statement entrance: each word comes into focus in sequence — fade, de-blur and a
+     small rise. No masks, so letters are never cut. */
+  /* fill-mode backwards: hidden during the delay, then back to the natural (filter-free)
+     style once done, so the text isn't left on a blurred compositing layer. */
   .w {
     display: inline-block;
-    overflow: hidden;
-    vertical-align: top;
-    padding-bottom: 0.1em;
-    margin-bottom: -0.1em;
+    animation: word-in 1.4s var(--ease-out) backwards;
+    animation-delay: calc(150ms + var(--i) * 55ms);
   }
 
-  .w__i {
-    display: inline-block;
-  }
+  @keyframes word-in {
+    from {
+      opacity: 0;
+      filter: blur(10px);
+      transform: translateY(0.18em);
+    }
 
-  :global(.js) .w__i {
-    transform: translateY(105%);
-    animation: word-up 1.1s var(--ease-out) forwards;
-    animation-delay: calc(120ms + var(--i) * 40ms);
-  }
-
-  @keyframes word-up {
     to {
+      opacity: 1;
+      filter: none;
       transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .w {
+      animation: none;
     }
   }
 
