@@ -112,21 +112,28 @@ const facts = [
         <Content components={{ Chapter, Todo, Figure, Note, Metrics, Insights }} />
       </div>
 
-      <!-- Next ----------------------------------------------------------- -->
-      <Section title="Next" id="next">
-        <a href={hrefOf(next)} class="next trio" data-cursor="Next case study">
-          <span class="next__main span-2">
-            <span class="next__title trim">{next.data.title}</span>
-            <span class="next__tagline">{next.data.tagline}</span>
-            <span class="next__cta label">Read case study <span class="arrow" aria-hidden="true">→</span></span>
-          </span>
-          <span class="next__thumb">
-            <Cover project={next} sizes="(min-width: 960px) 24vw, 100vw" />
-          </span>
-        </a>
-      </Section>
     </div>
   </article>
+
+  <!-- Next case study: full-bleed band in the next project's tone ---------- -->
+  <a
+    href={hrefOf(next)}
+    class:list={['next', { 'next--dark': next.data.toneDark }]}
+    style={`--tone: ${next.data.tone}`}
+    data-cursor="Open case study"
+    aria-label={`Next case study: ${next.data.title}`}
+  >
+    <div class="next__grid" aria-hidden="true"></div>
+    <div class="wrap grid next__inner">
+      <p class="next__label label">Next case study</p>
+      <p class="next__tagline col-text">{next.data.tagline}</p>
+      <p class="next__title">{next.data.title}</p>
+    </div>
+    <span class="reg next__reg next__reg--tl" aria-hidden="true"></span>
+    <span class="reg next__reg next__reg--tr" aria-hidden="true"></span>
+    <span class="reg next__reg next__reg--bl" aria-hidden="true"></span>
+    <span class="reg next__reg next__reg--br" aria-hidden="true"></span>
+  </a>
 </Base>
 
 <style>
@@ -262,46 +269,111 @@ const facts = [
     content: counter(chapter, decimal-leading-zero);
   }
 
-  /* Next ----------------------------------------------------------------- */
+  /* Next case study band ---------------------------------------------- */
   .next {
-    align-items: start;
+    position: relative;
+    display: block;
+    margin-top: var(--space-section);
+    background: var(--tone);
+    color: var(--ink);
+    overflow: hidden;
+    isolation: isolate;
   }
 
-  .next__main {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-3);
+  .next--dark {
+    color: var(--paper);
   }
 
-  .next__title {
-    font-size: clamp(3rem, 1rem + 6vw, 7.5rem);
-    font-weight: 500;
-    line-height: 0.92;
-    letter-spacing: -0.055em;
-    transition: color 0.3s;
+  .next__grid {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, currentColor 9%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, currentColor 9%, transparent) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: center;
+    mask-image: radial-gradient(ellipse at 50% 60%, #000 25%, transparent 80%);
+    transition: transform 1.4s var(--ease-out);
+  }
+
+  .next:hover .next__grid {
+    transform: scale(1.04);
+  }
+
+  .next__inner {
+    min-height: clamp(420px, 72vh, 760px);
+    align-content: space-between;
+    row-gap: var(--space-6);
+    padding-block: var(--space-6);
+  }
+
+  .next__label {
+    grid-column: 1 / span 3;
   }
 
   .next__tagline {
-    max-width: 46ch;
-    color: var(--ink-2);
+    font-size: var(--fs-lead);
+    line-height: 1.35;
+    letter-spacing: -0.012em;
+    max-width: 34ch;
   }
 
-  .next__cta {
-    color: var(--ink-3);
-    transition: color 0.25s;
-  }
-
-  .next__thumb {
-    display: block;
-    overflow: hidden;
+  .next__title {
+    grid-column: 1 / -1;
+    margin-left: -0.05em;
+    font-size: var(--fs-mega);
+    font-weight: 500;
+    line-height: 0.88;
+    letter-spacing: -0.06em;
+    text-wrap: balance;
+    transition: transform 0.9s var(--ease-out);
   }
 
   .next:hover .next__title {
-    color: var(--ink-3);
+    transform: translateX(var(--space-3));
   }
 
-  .next:hover .next__cta {
-    color: var(--ink);
+  .next__reg {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    opacity: 0.6;
+  }
+
+  .next__reg--tl {
+    top: var(--space-3);
+    left: var(--space-3);
+  }
+
+  .next__reg--tr {
+    top: var(--space-3);
+    right: var(--space-3);
+  }
+
+  .next__reg--bl {
+    bottom: var(--space-3);
+    left: var(--space-3);
+  }
+
+  .next__reg--br {
+    bottom: var(--space-3);
+    right: var(--space-3);
+  }
+
+  /* The band already separates the page from the footer */
+  :global(main:has(.next) + .footer .footer__contact)::before {
+    display: none;
+  }
+
+  :global(main:has(.next) + .footer .footer__contact) {
+    padding-top: 0;
+  }
+
+  @media (max-width: 960px) {
+    .next__label,
+    .next__tagline {
+      grid-column: 1 / -1;
+    }
   }
 </style>
