@@ -88,28 +88,28 @@ const { title, tagline, role, type, year, placeholder } = project.data;
     color: var(--ink);
   }
 
-  /* Compact spec table: label left, value right, hairline between rows */
+  /* Quiet key/value block: no rules, two aligned columns, tight rhythm */
   .pcard__facts {
-    gap: 0;
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    column-gap: var(--space-3);
+    row-gap: var(--space-1);
+    align-items: baseline;
+    align-content: start;
     font-size: var(--fs-small);
-    border-top: 1px solid var(--ink);
+    line-height: 1.5;
   }
 
   .pcard__facts > div {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: var(--space-2);
-    padding-block: 10px;
-    border-bottom: 1px solid var(--rule);
+    display: contents;
   }
 
   .pcard__facts dt {
     margin: 0;
   }
 
-  .pcard__facts dd {
-    text-align: right;
+  .pcard__facts > div:first-child > * {
+    text-box: trim-start cap alphabetic;
   }
 
   .pcard__status {
