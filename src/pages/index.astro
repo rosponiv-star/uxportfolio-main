@@ -119,14 +119,23 @@ const principles = [
   /* Hero ----------------------------------------------------------------- */
   /* Compact: the statement takes only its own space, so Selected work and the top of
      the first project are already visible at scroll 0. The depth texture fills this band. */
+  /* The hero is its own tinted band (it holds the depth texture). The change of surface
+     separates it from Selected work, so the section below needs no top rule. */
   .hero {
     position: relative;
+    background: var(--paper-alt);
+  }
+
+  .hero + :global(.wrap) > :global(.work) {
+    margin-top: clamp(56px, 9vh, 96px);
+    padding-top: 0;
+    border-top: 0;
   }
 
   .hero__inner {
     position: relative;
-    padding-top: calc(var(--header-h) + clamp(64px, 14vh, 140px));
-    padding-bottom: clamp(64px, 14vh, 140px);
+    padding-top: calc(var(--header-h) + clamp(48px, 10vh, 112px));
+    padding-bottom: clamp(48px, 10vh, 112px);
   }
 
   /* Statement entrance: each word comes into focus in sequence — fade, de-blur and a

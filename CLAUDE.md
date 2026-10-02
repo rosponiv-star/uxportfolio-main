@@ -100,7 +100,9 @@ title, the footer wordmark and the nav micro-numbers.
 - Grid: two columns, every card half width (4:3). One column on phones.
 - Collection header: row 1 = title (cols 1–8) + Grid/Index switch (right); row 2 = filters as a left-aligned toolbar.
   The grid has a wider column gap (32–56px) than the page gutter.
-- Card: title (lead size, Medium), then one grey line "type, platform   year" (year lighter), ABOVE the cover.
+- Card: cover, then title (lead size, Medium) and one grey line "type, platform   year" (year lighter) below it.
+- Home hero is a tinted band (--paper-alt) holding the depth texture; the band edge separates it from Selected work,
+  which therefore has no top rule on the home page.
 - Index view: a table (No., project, type, role, year). On hover the cover follows the cursor. The chosen view is
   remembered in localStorage.
 - The owner rejected these, so do not bring them back: a facts block right-aligned under the cover; facts unfolding

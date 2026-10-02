@@ -1,6 +1,5 @@
 ---
-// Generic collection card: title, then a grey line with type and year, above the media (slot),
-// so the eye reads what a project is before looking at it.
+// Generic collection card: media (slot), then the title and a grey line with type and year.
 // The media ratio comes from the grid slot (--card-ratio). With `href` the whole card is a link.
 interface Props {
   title: string;
@@ -16,15 +15,15 @@ const Tag = href ? 'a' : 'div';
 
 <article class="card" id={id}>
   <Tag class="card__link" href={href} data-cursor={href ? cursor : undefined}>
+    <div class="card__media" data-reveal="clip">
+      <slot />
+    </div>
     <div class="card__info">
       <h3 class="card__title">{title}</h3>
       <p class="card__meta">
         {meta && <span class="card__type">{meta}</span>}
         {year && <span class="card__year">{year}</span>}
       </p>
-    </div>
-    <div class="card__media" data-reveal="clip">
-      <slot />
     </div>
   </Tag>
 </article>
@@ -53,7 +52,7 @@ const Tag = href ? 'a' : 'div';
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
-    padding-bottom: var(--space-3);
+    padding-top: var(--space-3);
   }
 
   .card__title {
