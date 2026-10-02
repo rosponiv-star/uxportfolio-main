@@ -75,7 +75,7 @@ and use `cover.video`.
 
 ## Type scale (strict)
 
-Use only the size tokens in global.css: mega, display (36→60, page-opening statements, Geist Regular), h2 (48), h3 (28), lead (~22), body (17), small (15)
+Use only the size tokens in global.css: mega, display (30→60, page-opening statements, Geist Regular), h2 (48), h3 (28), lead (~22), body (17), small (15)
 and label (12, Geist Medium uppercase, 8% tracking). Never hard-code a font size. The only exceptions are graphics: the cover
 title, the footer wordmark and the nav micro-numbers.
 

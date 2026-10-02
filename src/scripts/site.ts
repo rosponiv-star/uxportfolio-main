@@ -22,7 +22,7 @@ function initReveals() {
         }
       }
     },
-    { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+    { rootMargin: '0px 0px -1% 0px', threshold: 0 },
   );
   items.forEach((el) => io.observe(el));
 }
