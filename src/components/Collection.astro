@@ -191,15 +191,16 @@ const filters = [
     border-top: 1px solid var(--rule-strong);
   }
 
-  /* Row 1: title + view switch. Row 2: filters as their own toolbar. */
+  /* Row 1: title. Row 2: filters (left) and the view switch (right) on one baseline. */
   .work__head {
     row-gap: var(--space-5);
-    align-items: end;
+    align-items: baseline;
     margin-bottom: var(--space-item);
   }
 
   .work__title {
-    grid-column: 1 / span 8;
+    grid-column: 1 / -1;
+    grid-row: 1;
     font-size: var(--fs-h2);
     font-weight: 500;
     line-height: 1.04;
@@ -213,15 +214,16 @@ const filters = [
     gap: var(--space-2) var(--space-4);
   }
 
-  .work__views {
-    grid-column: 9 / -1;
-    justify-content: flex-end;
-    padding-bottom: 0.3em;
+  .work__filters {
+    grid-column: 1 / span 9;
+    grid-row: 2;
+    justify-content: flex-start;
   }
 
-  .work__filters {
-    grid-column: 1 / -1;
-    justify-content: flex-start;
+  .work__views {
+    grid-column: 10 / -1;
+    grid-row: 2;
+    justify-content: flex-end;
   }
 
   /* Options (filters + view switch): grey until hover or selected. The selected one
@@ -407,6 +409,10 @@ const filters = [
 
     .work__head {
       row-gap: var(--space-3);
+    }
+
+    .work__views {
+      grid-row: 3;
     }
 
     .irow__title {

@@ -98,7 +98,7 @@ title, the footer wordmark and the nav micro-numbers.
   the enum in `content.config.ts`. Only categories in use are shown, with their counts.
 - The selected filter or view turns ink and is underlined (name and count separately). The others stay grey.
 - Grid: two columns, every card half width (4:3). One column on phones.
-- Collection header: row 1 = title (cols 1–8) + Grid/Index switch (right); row 2 = filters as a left-aligned toolbar.
+- Collection header: row 1 = title; row 2 = filters (left, cols 1–9) and Grid/Index switch (right, cols 10–12) on one baseline.
   The grid has a wider column gap (32–56px) than the page gutter.
 - Card: cover, then title (lead size, Medium) and one grey line "type, platform   year" (year lighter) below it.
 - Home hero is a tinted band (--paper-alt) holding the depth texture; the band edge separates it from Selected work,
