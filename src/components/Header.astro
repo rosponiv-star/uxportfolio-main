@@ -11,7 +11,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     <nav aria-label="Primary">
       <ul class="header__nav">
         {
-          nav.map((item) => {
+          nav.map((item, i) => {
             const active = item.match(path);
             return (
               <li>
@@ -20,7 +20,10 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
                   class:list={['header__link', { 'is-active': active }]}
                   aria-current={active ? 'page' : undefined}
                 >
-                  {item.label}
+                  <span class="header__idx label" aria-hidden="true">
+                    0{i + 1}
+                  </span>
+                  <span>{item.label}</span>
                 </a>
               </li>
             );
@@ -76,9 +79,22 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
   }
 
   .header__link {
-    position: relative;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
     color: var(--ink-3);
     transition: color 0.25s;
+  }
+
+  .header__idx {
+    font-size: 0.5625rem;
+    color: var(--ink-4);
+    transform: translateY(-0.45em);
+    transition: color 0.25s;
+  }
+
+  .header__link.is-active .header__idx {
+    color: var(--signal);
   }
 
   .header__link:hover,
@@ -86,22 +102,13 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     color: var(--ink);
   }
 
-  /* Active page: small signal dot under the label */
-  .header__link.is-active::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    bottom: -10px;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: var(--signal);
-    transform: translateX(-50%);
-  }
-
   @media (max-width: 520px) {
     .header__nav {
       gap: var(--space-3);
+    }
+
+    .header__idx {
+      display: none;
     }
   }
 </style>

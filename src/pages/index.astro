@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Section from '../components/Section.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import RegistrationField from '../components/RegistrationField.astro';
-import { getProjects, slugOf } from '../lib/projects';
+import { getProjects, numOf, slugOf } from '../lib/projects';
 
 const projects = await getProjects();
 
@@ -70,7 +70,8 @@ const principles = [
             projects.map((p) => (
               <li>
                 <a href={`#p-${slugOf(p)}`} data-spy-link={`p-${slugOf(p)}`} class="work__index-link">
-                  {p.data.title}
+                  <span class="label">{numOf(p)}</span>
+                  <span>{p.data.title}</span>
                 </a>
               </li>
             ))
@@ -117,14 +118,12 @@ const principles = [
   /* Hero ----------------------------------------------------------------- */
   .hero {
     position: relative;
-    display: flex;
-    min-height: min(78svh, 820px);
   }
 
   .hero__inner {
     position: relative;
-    align-content: end;
-    padding-top: calc(var(--header-h) + var(--space-6));
+    padding-top: calc(var(--header-h) + clamp(64px, 12vh, 136px));
+    padding-bottom: var(--space-section);
   }
 
   .w {
@@ -152,16 +151,31 @@ const principles = [
   }
 
   /* Work ----------------------------------------------------------------- */
+  /* The hero's bottom padding already provides the section gap */
+  :global(.sec.work) {
+    margin-top: 0;
+  }
+
   .work__index {
     margin-top: var(--space-3);
   }
 
   .work__index-link {
-    display: block;
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
     padding-block: var(--space-1);
     border-top: 1px solid var(--rule);
     color: var(--ink-3);
     font-size: 0.9375rem;
+    transition:
+      color 0.25s,
+      padding-left 0.4s var(--ease-out);
+  }
+
+  .work__index-link .label {
+    min-width: 2ch;
+    color: var(--ink-4);
     transition: color 0.25s;
   }
 
@@ -174,15 +188,12 @@ const principles = [
     color: var(--ink);
   }
 
-  .work__index-link:global(.is-active)::before {
-    content: '';
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    margin-right: var(--space-1);
-    border-radius: 50%;
-    background: var(--signal);
-    vertical-align: 0.15em;
+  .work__index-link:global(.is-active) {
+    padding-left: 10px;
+  }
+
+  .work__index-link:global(.is-active) .label {
+    color: var(--signal);
   }
 
   .work__list {
