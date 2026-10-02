@@ -99,9 +99,11 @@ title, the footer wordmark and the nav micro-numbers.
 - The selected filter or view turns ink and is underlined (name and count separately). The others stay grey.
 - Grid: two columns, every card half width (4:3). One column on phones.
 - Collection header: row 1 = title; row 2 = filters (left, cols 1–9) and Grid/Index switch (right, cols 10–12) on one baseline.
-  Cards sit close together: 8px column gap. Card entrance never changes the footprint: cover fades in at full size
-  while its image settles from scale 1.06; title then meta rise 10px; the second card of a row is delayed 120ms.
-- Card: cover, then title (lead size, Medium) and one grey line "type, platform   year" (year lighter) below it.
+  Cards sit close together: 8px gap in both directions (rows open up to 48px on touch, where text is below). Card
+  entrance never changes the footprint: cover fades in at full size while its image settles from scale 1.06; the
+  second card of a row is delayed 120ms.
+- Card: the cover fills the card. On hover/focus a flat 50% ink scrim fades in and the title, then "type, platform   year",
+  rise inside the card (light text). On touch devices the text sits below the cover instead.
 - Home hero is a tinted band (--paper-alt) holding the depth texture; the band edge separates it from Selected work,
   which therefore has no top rule on the home page.
 - Index view: a table (No., project, type, role, year). On hover the cover follows the cursor. The chosen view is

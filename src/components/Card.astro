@@ -1,5 +1,7 @@
 ---
-// Generic collection card: media (slot), then the title and a grey line with type and year.
+// Generic collection card. The media (slot) fills the card; title, type and year sit inside it
+// and appear on hover/focus over a flat scrim (legible on any cover). Without hover (touch),
+// the text stays visible below the media instead.
 // The media ratio comes from the grid slot (--card-ratio). With `href` the whole card is a link.
 interface Props {
   title: string;
@@ -29,49 +31,10 @@ const Tag = href ? 'a' : 'div';
 </article>
 
 <style>
-  /* Entrance (no change of footprint): the cover fades in at full size while the image inside
-     settles from a slight zoom; then title and meta rise a few pixels in sequence.
-     Driven by .is-in on [data-reveal='card'] (scripts/site.ts). Delay via --card-delay. */
-  :global(.js) .card .card__media {
-    opacity: 0;
-    transition: opacity 1s var(--ease-out) var(--card-delay, 0ms);
-  }
-
-  :global(.js) .card .card__media > :global(*) {
-    transform: scale(1.06);
-    transition: transform 1.6s var(--ease-out) var(--card-delay, 0ms);
-  }
-
-  :global(.js) .card .card__title,
-  :global(.js) .card .card__meta {
-    opacity: 0;
-    transform: translateY(10px);
-    transition:
-      opacity 0.8s var(--ease-out),
-      transform 0.8s var(--ease-out);
-  }
-
-  :global(.js) .card .card__title {
-    transition-delay: calc(var(--card-delay, 0ms) + 250ms);
-  }
-
-  :global(.js) .card .card__meta {
-    transition-delay: calc(var(--card-delay, 0ms) + 350ms);
-  }
-
-  :global(.js) .card:global(.is-in) .card__media,
-  :global(.js) .card:global(.is-in) .card__title,
-  :global(.js) .card:global(.is-in) .card__meta {
-    opacity: 1;
-    transform: none;
-  }
-
-  :global(.js) .card:global(.is-in) .card__media > :global(*) {
-    transform: none;
-  }
-
   .card__link {
+    position: relative;
     display: block;
+    overflow: hidden;
   }
 
   .card__media {
@@ -89,13 +52,6 @@ const Tag = href ? 'a' : 'div';
     aspect-ratio: auto;
   }
 
-  .card__info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    padding-top: var(--space-3);
-  }
-
   .card__title {
     font-size: var(--fs-lead);
     font-weight: 500;
@@ -103,18 +59,10 @@ const Tag = href ? 'a' : 'div';
     letter-spacing: -0.02em;
   }
 
-  .card__year {
-    flex: none;
-    color: var(--ink-4);
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* One line, so media in the same row always start at the same height */
   .card__meta {
     display: flex;
     gap: var(--space-3);
     font-size: var(--fs-small);
-    color: var(--ink-3);
   }
 
   .card__type {
@@ -122,5 +70,121 @@ const Tag = href ? 'a' : 'div';
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .card__year {
+    flex: none;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Entrance (footprint never changes): the cover fades in at full size while the image
+     settles from a slight zoom. Driven by .is-in on [data-reveal='card']; --card-delay staggers. */
+  :global(.js) .card .card__media {
+    opacity: 0;
+    transition: opacity 1s var(--ease-out) var(--card-delay, 0ms);
+  }
+
+  :global(.js) .card .card__media > :global(*) {
+    transform: scale(1.06);
+    transition: transform 1.6s var(--ease-out) var(--card-delay, 0ms);
+  }
+
+  :global(.js) .card:global(.is-in) .card__media {
+    opacity: 1;
+  }
+
+  :global(.js) .card:global(.is-in) .card__media > :global(*) {
+    transform: none;
+  }
+
+  /* Hover devices: text inside the card, revealed over a flat scrim */
+  @media (hover: hover) and (pointer: fine) {
+    .card__link::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgb(17 17 17 / 0.5);
+      opacity: 0;
+      transition: opacity 0.6s var(--ease-out);
+      pointer-events: none;
+    }
+
+    .card__info {
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding: var(--space-4);
+      color: var(--paper);
+      pointer-events: none;
+    }
+
+    .card__title,
+    .card__meta {
+      opacity: 0;
+      transform: translateY(14px);
+      transition:
+        opacity 0.5s var(--ease-out),
+        transform 0.7s var(--ease-out);
+    }
+
+    .card__meta {
+      color: rgb(252 252 251 / 0.78);
+    }
+
+    .card__year {
+      color: rgb(252 252 251 / 0.55);
+    }
+
+    .card__media > :global(*) {
+      transition: transform 1.2s var(--ease-out);
+    }
+
+    /* Hover / keyboard focus */
+    .card__link:hover::after,
+    .card__link:focus-visible::after {
+      opacity: 1;
+    }
+
+    .card__link:hover .card__title,
+    .card__link:focus-visible .card__title {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.06s;
+    }
+
+    .card__link:hover .card__meta,
+    .card__link:focus-visible .card__meta {
+      opacity: 1;
+      transform: none;
+      transition-delay: 0.14s;
+    }
+
+    :global(.js) .card:global(.is-in) .card__link:hover .card__media > :global(*),
+    .card__link:hover .card__media > :global(*) {
+      transform: scale(1.03);
+    }
+  }
+
+  /* Touch devices: text below the media */
+  @media not ((hover: hover) and (pointer: fine)) {
+    .card__info {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding-top: var(--space-2);
+    }
+
+    .card__meta {
+      color: var(--ink-3);
+    }
+
+    .card__year {
+      color: var(--ink-4);
+    }
   }
 </style>

@@ -263,8 +263,14 @@ const filters = [
 
   /* Grid view: two columns (6 + 6) */
   .work__grid {
-    row-gap: var(--space-item);
-    column-gap: 8px;
+    gap: 8px;
+  }
+
+  /* Touch: card text sits below each cover, so rows need room to breathe */
+  @media not ((hover: hover) and (pointer: fine)) {
+    .work__grid {
+      row-gap: var(--space-5);
+    }
   }
 
   .work__grid :global(.work__slot) {
