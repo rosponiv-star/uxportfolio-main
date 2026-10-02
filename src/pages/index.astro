@@ -63,8 +63,8 @@ const principles = [
 
   <div class="wrap">
     <!-- Work ------------------------------------------------------------ -->
-    <Section title="Selected work" id="work" class="work">
-      <nav slot="head" class="work__index" aria-label="Case studies" data-spy>
+    <Section title="Selected work" id="work" class="work" stacked>
+      <nav slot="aside" class="work__index" aria-label="Case studies" data-spy>
         <ol>
           {
             projects.map((p) => (
@@ -116,14 +116,17 @@ const principles = [
 
 <style>
   /* Hero ----------------------------------------------------------------- */
+  /* Scroll 0 shows only the statement; the work is revealed on scroll */
   .hero {
     position: relative;
+    display: flex;
+    min-height: 100svh;
   }
 
   .hero__inner {
     position: relative;
-    padding-top: calc(var(--header-h) + clamp(64px, 12vh, 136px));
-    padding-bottom: var(--space-section);
+    align-content: center;
+    padding-block: var(--header-h);
   }
 
   .w {
@@ -151,15 +154,6 @@ const principles = [
   }
 
   /* Work ----------------------------------------------------------------- */
-  /* The hero's bottom padding already provides the section gap */
-  :global(.sec.work) {
-    margin-top: 0;
-  }
-
-  .work__index {
-    margin-top: var(--space-3);
-  }
-
   .work__index-link {
     display: flex;
     align-items: baseline;
@@ -200,12 +194,6 @@ const principles = [
     display: flex;
     flex-direction: column;
     gap: var(--space-item);
-  }
-
-  @media (max-width: 960px) {
-    .work__index {
-      display: none;
-    }
   }
 
   /* Process -------------------------------------------------------------- */

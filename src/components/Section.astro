@@ -1,18 +1,24 @@
 ---
 // The one section pattern used across the site:
 // full-width rule → title in the head lane (cols 1–3, sticky) → content in the body lane (cols 4–12).
+//
+// `stacked` is for collection sections (Selected work, Experiments): the title gets its own
+// row so it doesn't read as the caption of the first item. An optional `aside` slot then
+// sits in the head lane (cols 1–3, sticky) next to the body.
 interface Props {
   title: string;
   id?: string;
   class?: string;
   bodyClass?: string;
+  stacked?: boolean;
 }
 
-const { title, id, class: className, bodyClass } = Astro.props;
+const { title, id, class: className, bodyClass, stacked = false } = Astro.props;
 const titleId = id ? `${id}-title` : undefined;
+const hasAside = Astro.slots.has('aside');
 ---
 
-<section class:list={['sec', className]} id={id} aria-labelledby={titleId} data-reveal="sec">
+<section class:list={['sec', { 'sec--stacked': stacked }, className]} id={id} aria-labelledby={titleId} data-reveal="sec">
   <div class="sec__head">
     <div class="sec__sticky">
       <slot name="pre" />
@@ -20,6 +26,15 @@ const titleId = id ? `${id}-title` : undefined;
       <slot name="head" />
     </div>
   </div>
+  {
+    hasAside && (
+      <div class="sec__aside">
+        <div class="sec__sticky">
+          <slot name="aside" />
+        </div>
+      </div>
+    )
+  }
   <div class:list={['sec__body', bodyClass]}>
     <slot />
   </div>

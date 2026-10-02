@@ -316,6 +316,25 @@ dd {
   min-width: 0;
 }
 
+/* Stacked: title on its own row, content starts below it */
+.sec--stacked .sec__head {
+  grid-column: 1 / -1;
+  margin-bottom: var(--space-6);
+}
+
+.sec--stacked .sec__head .sec__sticky {
+  position: static;
+}
+
+.sec__aside {
+  grid-column: 1 / span 3;
+  grid-row: 2;
+}
+
+.sec--stacked .sec__body {
+  grid-row: 2;
+}
+
 /* Vertical flow inside a body lane: one rhythm everywhere */
 .flow > * + * {
   margin-top: var(--space-block);
@@ -336,6 +355,14 @@ dd {
 
   .sec__head {
     margin-bottom: var(--space-5);
+  }
+
+  .sec__aside {
+    display: none;
+  }
+
+  .sec--stacked .sec__body {
+    grid-row: auto;
   }
 
   .sec__sticky {

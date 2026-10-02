@@ -114,9 +114,15 @@ const facts = [
 
       <!-- Next ----------------------------------------------------------- -->
       <Section title="Next" id="next">
-        <a href={hrefOf(next)} class="next" data-cursor="Next case study">
-          <span class="next__title trim">{next.data.title}</span>
-          <span class="next__arrow arrow" aria-hidden="true">→</span>
+        <a href={hrefOf(next)} class="next trio" data-cursor="Next case study">
+          <span class="next__main span-2">
+            <span class="next__title trim">{next.data.title}</span>
+            <span class="next__tagline">{next.data.tagline}</span>
+            <span class="next__cta label">Read case study <span class="arrow" aria-hidden="true">→</span></span>
+          </span>
+          <span class="next__thumb">
+            <Cover project={next} sizes="(min-width: 960px) 24vw, 100vw" />
+          </span>
         </a>
       </Section>
     </div>
@@ -261,10 +267,14 @@ const facts = [
 
   /* Next ----------------------------------------------------------------- */
   .next {
+    align-items: start;
+  }
+
+  .next__main {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-4);
+    gap: var(--space-3);
   }
 
   .next__title {
@@ -275,12 +285,26 @@ const facts = [
     transition: color 0.3s;
   }
 
-  .next__arrow {
-    font-size: clamp(2rem, 1rem + 3vw, 4rem);
-    line-height: 1;
+  .next__tagline {
+    max-width: 46ch;
+    color: var(--ink-2);
+  }
+
+  .next__cta {
+    color: var(--ink-3);
+    transition: color 0.25s;
+  }
+
+  .next__thumb {
+    display: block;
+    overflow: hidden;
   }
 
   .next:hover .next__title {
     color: var(--ink-3);
+  }
+
+  .next:hover .next__cta {
+    color: var(--ink);
   }
 </style>
