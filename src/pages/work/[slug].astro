@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Section from '../../components/Section.astro';
 import Cover from '../../components/Cover.astro';
+import PhoneScroll from '../../components/PhoneScroll.astro';
 import { Image } from 'astro:assets';
 import Chapter from '../../components/case/Chapter.astro';
 import Todo from '../../components/case/Todo.astro';
@@ -95,6 +96,18 @@ const facts = [
           }
         </dl>
       </Section>
+
+      <!-- Device walkthrough: placeholder screens until the real interfaces arrive -->
+      <PhoneScroll
+        label={`${title} interface walkthrough`}
+        screens={[
+          { color: project.data.tone },
+          { color: '#e9e6df' },
+          { color: '#3d5a73' },
+          { color: '#cfd6d1' },
+          { color: '#1c1c1a' },
+        ]}
+      />
 
       <!-- Contents ------------------------------------------------------- -->
       <Section title="Contents" id="contents">

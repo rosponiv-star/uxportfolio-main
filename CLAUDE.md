@@ -21,7 +21,11 @@ all site copy is in **English**.
 - `src/pages/index.astro`: Work page, which is also the home: compact hero (statement + depth texture; the top ~third of the first cover is visible at scroll 0), Selected work (filters, project count,
   Grid/Index switch, two-column grid of cards), "How I work" principles.
 - `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
-- `src/pages/work/[slug].astro`: case study template.
+- `src/pages/work/[slug].astro`: case study template. After Overview comes `components/PhoneScroll.astro`: a sticky
+  device scene where scrolling dissolves through the screens (half a viewport per screen, proximity snap while the scene
+  is on screen, progress indicator bottom-right). It uses solid placeholder colours until the real UI exists (pass
+  `{ image }` per screen). The device is drawn in CSS; a realistic hand photo is still to come (Higgsfield generation
+  needs a paid plan).
 - `src/pages/about.astro`, `src/pages/playground.astro`, `src/pages/404.astro`.
 - `src/content/projects/NN-name.mdx`: one file per case study. The `NN-` prefix is stripped from the URL.
 - `src/data/site.ts`: personal info (email, LinkedIn, CV path).
