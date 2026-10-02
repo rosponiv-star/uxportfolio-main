@@ -111,7 +111,7 @@ Status:
 
 - Swiss editorial base + tech precision (mono labels, registration marks, hairline rules), with a
   touch of brutalism (oversized type) and one experimental gesture (the cursor-reactive registration field).
-- Background `#f5f5f0`. One accent `--signal` (#3d5a73), used sparingly. No gradients and no
+- Background `#fafaf8` (near-white, slightly cool). One accent `--signal` (#3d5a73), used sparingly. No gradients and no
   fluorescent colours.
 - Type: Geist Medium for headings (H2 ≈ 48px), labels in Geist Medium at 12px, uppercase, 8% tracking,
   tabular figures. Use contrast between
