@@ -1,6 +1,6 @@
 ---
 // Visible placeholder describing the content that will fill this spot.
-// Remove once the real copy is in.
+// Spans the full body lane. Remove once the real copy is in.
 interface Props {
   label?: string;
 }
@@ -14,20 +14,23 @@ const { label = 'To populate' } = Astro.props;
 
 <style>
   .todo {
-    margin-block: 1.5em;
-    padding: 16px 18px 18px;
+    padding: var(--space-3);
     border: 1px dashed var(--ink-4);
     color: var(--ink-3);
-    font-size: 0.9375rem;
-    line-height: 1.5;
+    font-size: var(--fs-small);
+    line-height: 1.55;
   }
 
   .todo__label {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 8px;
+    gap: var(--space-1);
+    margin-bottom: var(--space-1);
     color: var(--ink);
+  }
+
+  .todo__body {
+    max-width: 72ch;
   }
 
   .todo__body :global(p + p) {

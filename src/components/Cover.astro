@@ -11,8 +11,7 @@ interface Props {
 }
 
 const { project, eager = false, sizes = '(min-width: 1100px) 66vw, 100vw' } = Astro.props;
-const { title, order, tone, toneDark, cover, type, year } = project.data;
-const num = String(order).padStart(2, '0');
+const { title, tone, toneDark, cover } = project.data;
 const hasMedia = Boolean(cover?.image || cover?.video);
 ---
 
@@ -49,15 +48,7 @@ const hasMedia = Boolean(cover?.image || cover?.video);
         <span class="cover__corner cover__corner--tr reg" />
         <span class="cover__corner cover__corner--bl reg" />
         <span class="cover__corner cover__corner--br reg" />
-        <span class="cover__meta cover__meta--top label">
-          <span>{num} / 05</span>
-          <span>{type}</span>
-        </span>
         <span class="cover__title">{title}</span>
-        <span class="cover__meta cover__meta--bottom label">
-          <span>Cover — video loop, 16:10</span>
-          <span>{year}</span>
-        </span>
       </div>
     )
   }
@@ -131,24 +122,6 @@ const hasMedia = Boolean(cover?.image || cover?.video);
     right: 18px;
   }
 
-  .cover__meta {
-    position: absolute;
-    left: 48px;
-    right: 48px;
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    opacity: 0.75;
-  }
-
-  .cover__meta--top {
-    top: 18px;
-  }
-
-  .cover__meta--bottom {
-    bottom: 18px;
-  }
-
   .cover__title {
     position: absolute;
     left: 50%;
@@ -168,12 +141,6 @@ const hasMedia = Boolean(cover?.image || cover?.video);
   }
 
   @media (max-width: 560px) {
-    .cover__meta {
-      left: 36px;
-      right: 36px;
-      font-size: 0.5625rem;
-    }
-
     .cover__corner {
       width: 9px;
       height: 9px;

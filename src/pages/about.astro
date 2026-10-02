@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import SectionHead from '../components/SectionHead.astro';
+import Section from '../components/Section.astro';
 import portrait from '../assets/valerio-rosponi.png';
 import { site } from '../data/site';
 
@@ -38,42 +38,41 @@ const toolkit = [
   { name: 'Unity', use: 'Interactive, spatial and XR prototypes.' },
   { name: 'IDEs', use: 'Building and testing what I design, in code.' },
 ];
+
+const now = [
+  { label: 'Studying', text: 'BSc in Interfaces & Communication, University of Trento.' },
+  { label: 'Based in', text: 'Trentino, Italy. Open to remote work.' },
+  {
+    label: 'Looking for',
+    text: 'Junior roles in UX, digital product and visual design. Especially drawn to health, fintech, fashion and wellbeing.',
+  },
+];
 ---
 
-<Base title="About" description="About Valerio Rosponi — how he thinks about design, what he brings to a team and what he is looking for.">
-  <!-- Intro ------------------------------------------------------------ -->
-  <header class="wrap intro">
-    <div class="intro__crumbs label">
-      <span>(About)</span>
-      <span class="muted">Valerio Rosponi — Trentino, Italy</span>
-    </div>
-    <h1 class="intro__statement">
-      I design products that help as many people as possible solve real problems,{' '}
-      <span class="muted-ink">crafted with enough care that they choose to stay.</span>
-    </h1>
+<Base
+  title="About"
+  description="About Valerio Rosponi — how he thinks about design, what he brings to a team and what he is looking for."
+  showFooterContact={false}
+>
+  <header class="wrap grid intro">
+    <h1 class="display col-wide">Useful to as many people as possible, and beautiful enough to make them stay.</h1>
   </header>
 
-  <!-- Portrait + approach ---------------------------------------------- -->
-  <section class="wrap section">
-    <div class="grid about">
-      <figure class="portrait" data-reveal="clip">
-        <Image
-          src={portrait}
-          alt="Portrait of Valerio Rosponi"
-          widths={[400, 640, 900, 1200]}
-          sizes="(min-width: 960px) 30vw, 100vw"
-          class="portrait__img"
-        />
-        <figcaption class="label muted portrait__cap">
-          <span>Fig. 01</span>
-          <span>Valerio Rosponi, 2026</span>
-        </figcaption>
-      </figure>
+  <div class="wrap">
+    <Section title="Approach" id="approach">
+      <div class="trio">
+        <figure class="portrait" data-reveal="clip">
+          <Image
+            src={portrait}
+            alt="Portrait of Valerio Rosponi"
+            widths={[400, 640, 900, 1200]}
+            sizes="(min-width: 960px) 24vw, 100vw"
+            class="portrait__img"
+          />
+        </figure>
 
-      <div class="approach">
-        <p class="label muted approach__label">Approach</p>
-        <div class="approach__text">
-          <p class="lead" data-reveal>
+        <div class="approach span-2">
+          <p class="lead trim" data-reveal>
             For me, design is the point where usefulness and beauty stop being separate goals. A product should solve a
             real problem for as many people as possible, and it should be crafted well enough that people trust it at
             first sight.
@@ -90,125 +89,86 @@ const toolkit = [
           </p>
         </div>
       </div>
-    </div>
-  </section>
+    </Section>
 
-  <!-- Strengths --------------------------------------------------------- -->
-  <section class="wrap section">
-    <SectionHead index="01" title="What I bring" aside="To a product team" />
-    <ol class="list">
-      {
-        strengths.map((s, i) => (
-          <li class="grid list__row">
-            <span class="list__rule" data-reveal="rule" />
-            <span class="list__n label">{String(i + 1).padStart(2, '0')}</span>
-            <h3 class="list__title h3" data-reveal>
-              {s.title}
-            </h3>
-            <p class="list__text" data-reveal style="--d:1">
-              {s.text}
-            </p>
-          </li>
-        ))
-      }
-    </ol>
-  </section>
+    <Section title="What I bring" id="strengths">
+      <ol>
+        {
+          strengths.map((s, i) => (
+            <li class="row trio">
+              <div class="row__head" data-reveal>
+                <span class="label row__n">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="h3 trim">{s.title}</h3>
+              </div>
+              <p class="row__text span-2 trim" data-reveal style="--d:1">
+                {s.text}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+    </Section>
 
-  <!-- Toolkit ----------------------------------------------------------- -->
-  <section class="wrap section">
-    <SectionHead index="02" title="Toolkit" aside="What I work with" />
-    <ul class="list">
-      {
-        toolkit.map((t) => (
-          <li class="grid list__row">
-            <span class="list__rule" data-reveal="rule" />
-            <span class="list__n label">
-              <span class="reg" />
-            </span>
-            <h3 class="list__title h3" data-reveal>
-              {t.name}
-            </h3>
-            <p class="list__text" data-reveal style="--d:1">
-              {t.use}
-            </p>
-          </li>
-        ))
-      }
-    </ul>
-  </section>
+    <Section title="Toolkit" id="toolkit">
+      <ul>
+        {
+          toolkit.map((t) => (
+            <li class="row trio">
+              <h3 class="h3 trim" data-reveal>
+                {t.name}
+              </h3>
+              <p class="row__text span-2 trim" data-reveal style="--d:1">
+                {t.use}
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </Section>
 
-  <!-- Contact ----------------------------------------------------------- -->
-  <section class="wrap section" id="contact">
-    <SectionHead index="03" title="Get in touch" aside="Contact" />
-    <div class="grid contact">
-      <p class="contact__intro lead" data-reveal>
-        I’m looking for junior roles in UX, digital product and visual design, remotely or on-site in Trentino. If
-        something here resonates with your team, email is the best way to reach me.
-      </p>
-      <ul class="contact__links" data-reveal style="--d:1">
-        <li>
+    <Section title="Now" id="now">
+      <dl class="trio">
+        {
+          now.map((n, i) => (
+            <div class="item" data-reveal style={`--d:${i}`}>
+              <dt class="label muted">{n.label}</dt>
+              <dd>{n.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </Section>
+
+    <Section title="Contact" id="contact">
+      <ul class="trio">
+        <li class="item" data-reveal>
           <span class="label muted">Email</span>
           <a class="link" href={`mailto:${site.email}`}>{site.email}</a>
         </li>
-        <li>
+        <li class="item" data-reveal style="--d:1">
           <span class="label muted">LinkedIn</span>
           <a href={site.linkedin} target="_blank" rel="noopener">
             Valerio Rosponi <span class="arrow arrow--ne" aria-hidden="true">↗</span>
           </a>
         </li>
-        <li>
+        <li class="item" data-reveal style="--d:2">
           <span class="label muted">Résumé</span>
           <a href={site.cv} target="_blank" rel="noopener">
             Download PDF <span class="arrow arrow--ne" aria-hidden="true">↗</span>
           </a>
         </li>
       </ul>
-    </div>
-  </section>
+    </Section>
+  </div>
 </Base>
 
 <style>
   .intro {
-    padding-top: calc(var(--header-h) + clamp(32px, 6vh, 72px));
+    padding-top: calc(var(--header-h) + var(--space-6) * 2);
   }
 
-  .intro__crumbs {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--rule-strong);
-  }
-
-  .intro__crumbs > span:first-child {
-    color: var(--signal);
-  }
-
-  .intro__statement {
-    margin-top: clamp(40px, 8vw, 120px);
-    max-width: 19em;
-    font-size: var(--fs-display);
-    font-weight: 500;
-    line-height: 1.06;
-    letter-spacing: -0.038em;
-    text-wrap: pretty;
-  }
-
-  .muted-ink {
-    color: var(--ink-4);
-  }
-
-  .section {
-    padding-top: clamp(80px, 11vw, 160px);
-  }
-
-  /* Portrait + approach */
-  .about {
-    row-gap: 48px;
-  }
-
+  /* Approach */
   .portrait {
-    grid-column: 1 / span 4;
     align-self: start;
     background: var(--paper);
   }
@@ -227,133 +187,60 @@ const toolkit = [
     filter: grayscale(0) contrast(1);
   }
 
-  .portrait__cap {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-
   .approach {
-    grid-column: 6 / span 7;
-    align-content: start;
-    display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    column-gap: var(--gutter);
-  }
-
-  .approach__label {
-    grid-column: 1 / -1;
-    padding-top: 14px;
-    margin-bottom: 28px;
-    border-top: 1px solid var(--rule-strong);
-  }
-
-  .approach__text {
-    grid-column: 1 / span 6;
     display: flex;
     flex-direction: column;
-    gap: 1.1em;
+    gap: var(--space-3);
     color: var(--ink-2);
     font-size: 1.125rem;
     line-height: 1.6;
   }
 
-  .approach__text .lead {
-    color: var(--ink);
-    font-size: var(--fs-lead);
-    line-height: 1.4;
+  .approach > * {
+    max-width: 60ch;
   }
 
-  @media (max-width: 960px) {
-    .portrait {
-      grid-column: 1 / span 8;
-    }
-
-    .approach {
-      grid-column: 1 / -1;
-    }
-
-    .approach__text {
-      grid-column: 1 / -1;
-    }
+  /* Rows (strengths, toolkit) */
+  .row {
+    row-gap: var(--space-2);
+    padding-block: var(--space-3) var(--space-5);
+    border-top: 1px solid var(--rule);
   }
 
-  @media (max-width: 560px) {
-    .portrait {
-      grid-column: 1 / -1;
-    }
+  .row:first-child {
+    border-top: 0;
+    padding-top: 0;
   }
 
-  /* Lists */
-  .list__row {
-    position: relative;
-    padding-block: 20px 28px;
-    row-gap: 10px;
+  .row__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
   }
 
-  .list__rule {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: var(--rule);
-  }
-
-  .list__row:last-child {
-    border-bottom: 1px solid var(--rule);
-  }
-
-  .list__n {
-    grid-column: 1 / span 3;
+  .row__n {
     color: var(--signal);
-    padding-top: 0.55em;
+    text-box: trim-both cap alphabetic;
   }
 
-  .list__title {
-    grid-column: 4 / span 4;
-  }
-
-  .list__text {
-    grid-column: 8 / span 5;
+  .row__text {
+    max-width: 58ch;
     color: var(--ink-2);
-    max-width: 44ch;
   }
 
-  @media (max-width: 960px) {
-    .list__n,
-    .list__title,
-    .list__text {
-      grid-column: 1 / -1;
-    }
-  }
-
-  /* Contact */
-  .contact {
-    row-gap: 40px;
-  }
-
-  .contact__intro {
-    grid-column: 4 / span 5;
-  }
-
-  .contact__links {
-    grid-column: 10 / span 3;
+  /* Now + contact items */
+  .item {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    align-items: flex-start;
+    gap: var(--space-1);
   }
 
-  .contact__links li {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  .item > :first-child {
+    text-box: trim-start cap alphabetic;
   }
 
-  @media (max-width: 960px) {
-    .contact__intro,
-    .contact__links {
-      grid-column: 1 / -1;
-    }
+  .item dd {
+    max-width: 32ch;
   }
 </style>

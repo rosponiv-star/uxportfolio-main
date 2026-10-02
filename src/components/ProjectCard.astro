@@ -1,6 +1,8 @@
 ---
+// Sits in the body lane (cols 4–12). Cover spans all three tracks;
+// title + tagline take tracks A–B, facts take track C.
 import Cover from './Cover.astro';
-import { hrefOf, numOf, slugOf, type Project } from '../lib/projects';
+import { hrefOf, slugOf, type Project } from '../lib/projects';
 
 interface Props {
   project: Project;
@@ -8,40 +10,37 @@ interface Props {
 }
 
 const { project, eager } = Astro.props;
-const { title, tagline, role, type, year, platform, placeholder } = project.data;
+const { title, tagline, role, type, year, placeholder } = project.data;
 ---
 
 <article class="pcard" id={`p-${slugOf(project)}`}>
   <a href={hrefOf(project)} class="pcard__link" data-cursor="Read case study">
     <div class="pcard__cover" data-reveal="clip">
-      <Cover project={project} eager={eager} />
+      <Cover project={project} eager={eager} sizes="(min-width: 960px) 72vw, 100vw" />
     </div>
 
-    <div class="pcard__info">
-      <div class="pcard__head">
-        <span class="pcard__num label">{numOf(project)}</span>
-        <h3 class="pcard__title">{title}</h3>
-        <span class="pcard__cta">
-          Read case study <span class="arrow" aria-hidden="true">→</span>
-        </span>
+    <div class="pcard__info trio">
+      <div class="pcard__main span-2">
+        <h3 class="pcard__title trim">{title}</h3>
+        <p class="pcard__tagline">{tagline}</p>
+        <span class="pcard__cta label">Read case study <span class="arrow" aria-hidden="true">→</span></span>
       </div>
 
-      <p class="pcard__tagline">{tagline}</p>
-
-      <dl class="pcard__meta">
+      <dl class="facts pcard__facts">
         <div><dt class="label muted">Role</dt><dd>{role}</dd></div>
         <div><dt class="label muted">Type</dt><dd>{type}</dd></div>
-        <div><dt class="label muted">Platform</dt><dd>{platform}</dd></div>
         <div><dt class="label muted">Year</dt><dd>{year}</dd></div>
+        {
+          placeholder && (
+            <div>
+              <dt class="label muted">Status</dt>
+              <dd class="pcard__status">
+                <span class="dot" /> In progress
+              </dd>
+            </div>
+          )
+        }
       </dl>
-
-      {
-        placeholder && (
-          <p class="pcard__status label">
-            <span class="dot" /> Case study in progress
-          </p>
-        )
-      }
     </div>
   </a>
 </article>
@@ -56,37 +55,32 @@ const { title, tagline, role, type, year, platform, placeholder } = project.data
   }
 
   .pcard__info {
-    display: grid;
-    grid-template-columns: repeat(9, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    row-gap: 14px;
-    padding-top: 18px;
+    padding-top: var(--space-3);
+    row-gap: var(--space-4);
   }
 
-  .pcard__head {
-    grid-column: 1 / -1;
+  .pcard__main {
     display: flex;
-    align-items: baseline;
-    gap: 16px;
-  }
-
-  .pcard__num {
-    color: var(--signal);
-    min-width: 2ch;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
   }
 
   .pcard__title {
-    flex: 1;
-    font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
+    font-size: var(--fs-h2);
     font-weight: 500;
-    letter-spacing: -0.04em;
     line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .pcard__tagline {
+    max-width: 44ch;
+    color: var(--ink-2);
   }
 
   .pcard__cta {
-    font-size: 0.9375rem;
+    margin-top: var(--space-1);
     color: var(--ink-3);
-    white-space: nowrap;
     transition: color 0.25s;
   }
 
@@ -94,44 +88,17 @@ const { title, tagline, role, type, year, platform, placeholder } = project.data
     color: var(--ink);
   }
 
-  .pcard__tagline {
-    grid-column: 1 / span 5;
-    color: var(--ink-2);
-    max-width: 46ch;
-    padding-left: calc(2ch + 16px);
+  .pcard__facts {
+    font-size: var(--fs-small);
   }
 
-  .pcard__meta {
-    grid-column: 6 / span 4;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px var(--gutter);
-    font-size: 0.875rem;
-  }
-
-  .pcard__meta dd {
-    margin-top: 2px;
+  .pcard__facts > div:first-child dt {
+    text-box: trim-start cap alphabetic;
   }
 
   .pcard__status {
-    grid-column: 1 / -1;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding-left: calc(2ch + 16px);
-    color: var(--ink-3);
-  }
-
-  @media (max-width: 860px) {
-    .pcard__tagline,
-    .pcard__meta,
-    .pcard__status {
-      grid-column: 1 / -1;
-      padding-left: 0;
-    }
-
-    .pcard__cta {
-      display: none;
-    }
+    gap: var(--space-1);
   }
 </style>

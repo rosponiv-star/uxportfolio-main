@@ -6,15 +6,12 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
 <header class="header" data-header>
   <div class="wrap header__inner">
-    <a href="/" class="header__name" aria-label={`${site.name} — home`}>
-      <span class="header__wordmark">{site.name}</span>
-      <span class="header__roles label muted">UX · Product · Visual</span>
-    </a>
+    <a href="/" class="header__name">{site.name}</a>
 
     <nav aria-label="Primary">
       <ul class="header__nav">
         {
-          nav.map((item, i) => {
+          nav.map((item) => {
             const active = item.match(path);
             return (
               <li>
@@ -23,10 +20,7 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
                   class:list={['header__link', { 'is-active': active }]}
                   aria-current={active ? 'page' : undefined}
                 >
-                  <span class="header__idx label" aria-hidden="true">
-                    0{i + 1}
-                  </span>
-                  <span>{item.label}</span>
+                  {item.label}
                 </a>
               </li>
             );
@@ -66,16 +60,11 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: var(--space-2);
   }
 
-  .header__name {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-  }
-
-  .header__wordmark {
+  .header__name,
+  .header__link {
     font-size: 0.9375rem;
     font-weight: 500;
     letter-spacing: -0.015em;
@@ -83,17 +72,11 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 
   .header__nav {
     display: flex;
-    gap: clamp(14px, 2.4vw, 36px);
+    gap: var(--space-4);
   }
 
   .header__link {
     position: relative;
-    display: inline-flex;
-    align-items: baseline;
-    gap: 6px;
-    font-size: 0.9375rem;
-    font-weight: 450;
-    letter-spacing: -0.01em;
     color: var(--ink-3);
     transition: color 0.25s;
   }
@@ -103,21 +86,22 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     color: var(--ink);
   }
 
-  .header__idx {
-    font-size: 0.5625rem;
-    transform: translateY(-0.45em);
-    color: var(--ink-4);
-    transition: color 0.25s;
+  /* Active page: small signal dot under the label */
+  .header__link.is-active::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--signal);
+    transform: translateX(-50%);
   }
 
-  .header__link.is-active .header__idx {
-    color: var(--signal);
-  }
-
-  @media (max-width: 720px) {
-    .header__roles,
-    .header__idx {
-      display: none;
+  @media (max-width: 520px) {
+    .header__nav {
+      gap: var(--space-3);
     }
   }
 </style>

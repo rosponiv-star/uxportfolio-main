@@ -18,7 +18,8 @@ all site copy is in **English**.
 
 ## Structure
 
-- `src/pages/index.astro`: Work page, which is also the home: hero, case studies, "How I work" principles, "Now".
+- `src/pages/index.astro`: Work page, which is also the home: hero, selected work, "How I work" principles.
+- `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
 - `src/pages/work/[slug].astro`: case study template.
 - `src/pages/about.astro`, `src/pages/playground.astro`, `src/pages/404.astro`.
 - `src/content/projects/NN-name.mdx`: one file per case study. The `NN-` prefix is stripped from the URL.
@@ -35,15 +36,29 @@ glance {problem, approach, outcome}, placeholder (set to `false` once the conten
 
 Components available in MDX without imports:
 - `<Chapter title="…">…</Chapter>`: a numbered chapter. Titles feed the Contents list automatically.
-- `<Note label="Decision">…</Note>`: margin annotation. Put it right before the paragraph it annotates.
-- `<Figure src={img} alt="" caption="" ratio="16/9" size="text|wide|full" />`. Import the image at
-  the top of the MDX file. A `video="/media/x.mp4"` prop is also supported.
+- `<Note label="Decision" text="Why…">paragraph(s)</Note>`: wraps the content it annotates. The content
+  goes in tracks A–B and the note in track C, top-aligned.
+- `<Figure src={img} alt="" caption="" ratio="16/9" size="wide|text" />`: `wide` (the default) spans the
+  whole body lane. Import the image at the top of the MDX file. A `video="/media/x.mp4"` prop is also
+  supported.
 - `<Metrics items={[{ value, label }]} />` and `<Insights items={[{ title, text }]} />`.
 - `<Todo>…</Todo>`: visible placeholder. Remove these as the real content arrives.
 
 Cover media: put the image in `src/assets/projects/<name>/` and reference it in the frontmatter
 `cover.image` with a relative path. Put looping videos (mp4/webm, muted) in `public/media/<name>/`
 and use `cover.video`.
+
+## Layout system (strict)
+
+- 12-column grid. Every section uses `<Section>`: a full-width rule, the title in the head lane
+  (cols 1–3, sticky), and the content in the body lane (cols 4–12).
+- The body lane splits into three equal tracks A (4–6), B (7–9) and C (10–12) through `.trio`.
+  Every element must start and end on a track edge. Running text uses the A–B measure. Boxes, figures,
+  metrics and rows span A–C.
+- Spacing comes only from the tokens in global.css: `--space-1…6`, `--space-block` (between blocks),
+  `--space-item` (between cards) and `--space-section` (between sections).
+- To verify alignment, measure element edges against the column lines in the browser (a JS audit).
+  Do not judge it by eye.
 
 ## Design rules (agreed with the owner)
 
@@ -55,6 +70,9 @@ and use `cover.video`.
   ink and grey to build hierarchy.
 - Animation level is medium. Always respect `prefers-reduced-motion`.
 - Never use skill percentages, skill bars or proficiency ratings for skills or tools.
+- No filler: every label or element must carry real information. That rules out decorative counters,
+  status chips, local clocks, "(01)" section indices and taglines that repeat nearby content.
+- Hero statement: short, a single dark colour, 48px.
 - Do not tell the owner's personal/educational backstory (school history, internships,
   certifications). The CV covers that. Keep the focus on projects and process.
 - Voice: professional, direct, human. Write about the product in the third person or impersonally,

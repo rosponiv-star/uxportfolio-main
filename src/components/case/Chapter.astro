@@ -1,7 +1,8 @@
 ---
-// A case-study chapter: heading in the left column (sticky on wide screens),
-// content on the right. Chapters are numbered automatically, and listed in the
-// page's Contents from their titles (see lib/projects.ts → chaptersOf).
+// A case-study chapter, built on the site-wide Section pattern: numbered title in
+// the head lane (sticky), content in the body lane. Titles also feed the page's
+// Contents list (see lib/projects.ts → chaptersOf).
+import Section from '../Section.astro';
 import { chapterId } from '../../lib/projects';
 
 interface Props {
@@ -10,11 +11,7 @@ interface Props {
 const { title } = Astro.props;
 ---
 
-<section class="chapter" aria-labelledby={chapterId(title)}>
-  <div class="chapter__head">
-    <h2 id={chapterId(title)}>{title}</h2>
-  </div>
-  <div class="chapter__body">
-    <slot />
-  </div>
-</section>
+<Section title={title} id={chapterId(title)} class="chapter" bodyClass="prose flow">
+  <span slot="pre" class="label chapter__n" aria-hidden="true"></span>
+  <slot />
+</Section>

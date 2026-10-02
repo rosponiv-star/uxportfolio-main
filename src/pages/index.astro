@@ -1,25 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
-import SectionHead from '../components/SectionHead.astro';
+import Section from '../components/Section.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import RegistrationField from '../components/RegistrationField.astro';
-import { getProjects, numOf, slugOf } from '../lib/projects';
+import { getProjects, slugOf } from '../lib/projects';
 
 const projects = await getProjects();
 
-// Hero statement: one block of text, two tones. `ink` segments carry the key facts.
-const statement: { text: string; ink?: boolean }[] = [
-  { text: 'Valerio Rosponi', ink: true },
-  { text: 'is a designer working across' },
-  { text: 'UX, digital product and visual design,', ink: true },
-  { text: 'currently studying Interfaces & Communication at the University of Trento. He designs products that help people solve real problems —' },
-  { text: 'grounded in evidence, precise to the last detail, and curious enough to try what hasn’t been done yet.', ink: true },
-];
-
-let wordIndex = 0;
-const words = statement.flatMap((seg) =>
-  seg.text.split(' ').map((w) => ({ w, ink: !!seg.ink, i: wordIndex++ })),
-);
+const statement =
+  'Valerio Rosponi, UX and digital product designer. Products that solve real problems, crafted to the last detail.';
+const words = statement.split(' ');
 
 const principles = [
   {
@@ -48,25 +38,18 @@ const principles = [
     practice: ['Concept exploration', 'Prototyping', 'Usability testing', 'Iteration'],
   },
 ];
-
-const now = [
-  { label: 'Studying', text: 'BSc in Interfaces & Communication, University of Trento. Third year.' },
-  { label: 'Looking for', text: 'Junior roles in UX, digital product and visual design.' },
-  { label: 'Working', text: 'Remotely, or on-site in Trentino, Italy.' },
-  { label: 'Drawn to', text: 'Health, fintech, fashion and wellbeing — and products used by many.' },
-];
 ---
 
 <Base>
   <!-- Hero -------------------------------------------------------------- -->
   <section class="hero">
     <RegistrationField />
-    <div class="wrap hero__inner">
-      <h1 class="hero__text">
+    <div class="wrap grid hero__inner">
+      <h1 class="hero__title display col-wide">
         {
-          words.map(({ w, ink, i }) => (
+          words.map((w, i) => (
             <>
-              <span class:list={['w', { 'w--ink': ink }]}>
+              <span class="w">
                 <span class="w__i" style={`--i:${i}`}>
                   {w}
                 </span>
@@ -75,38 +58,19 @@ const now = [
           ))
         }
       </h1>
-
-      <div class="hero__meta grid">
-        <a href="#work" class="hero__meta-item hero__cue">
-          <span class="label">Selected work ({String(projects.length).padStart(2, '0')})</span>
-          <span class="arrow hero__down" aria-hidden="true">↓</span>
-        </a>
-        <p class="hero__meta-item label muted">
-          <span>Based in Trentino, IT</span>
-          <span class="hero__clock" data-clock>--:--</span>
-        </p>
-        <p class="hero__meta-item label muted">
-          <span class="dot"></span>
-          <span>Open to junior roles</span>
-        </p>
-      </div>
     </div>
   </section>
 
-  <!-- Work -------------------------------------------------------------- -->
-  <section class="wrap section" id="work" aria-labelledby="work-title">
-    <SectionHead id="work-title" index="01" title="Selected case studies" aside={`${projects.length} projects`} />
-
-    <div class="grid work">
-      <nav class="work__index" aria-label="Case studies index" data-spy>
-        <p class="label muted work__index-title">Index</p>
+  <div class="wrap">
+    <!-- Work ------------------------------------------------------------ -->
+    <Section title="Selected work" id="work" class="work">
+      <nav slot="head" class="work__index" aria-label="Case studies" data-spy>
         <ol>
           {
             projects.map((p) => (
               <li>
                 <a href={`#p-${slugOf(p)}`} data-spy-link={`p-${slugOf(p)}`} class="work__index-link">
-                  <span class="label">{numOf(p)}</span>
-                  <span>{p.data.title}</span>
+                  {p.data.title}
                 </a>
               </li>
             ))
@@ -117,97 +81,58 @@ const now = [
       <div class="work__list">
         {projects.map((p, i) => <ProjectCard project={p} eager={i === 0} />)}
       </div>
-    </div>
-  </section>
+    </Section>
 
-  <!-- How I work -------------------------------------------------------- -->
-  <section class="wrap section" id="process" aria-labelledby="process-title">
-    <SectionHead id="process-title" index="02" title="How I work" aside="5 principles" />
-
-    <div class="grid">
-      <p class="process__intro lead" data-reveal>
+    <!-- How I work ------------------------------------------------------ -->
+    <Section title="How I work" id="process" bodyClass="flow">
+      <p class="lead measure" data-reveal>
         Every project asks for a different mix of methods, but the way I think about them stays the same. These are the
         principles I come back to, from the first question to the last pixel.
       </p>
-    </div>
 
-    <ol class="principles">
-      {
-        principles.map((p, i) => (
-          <li class="principle grid">
-            <span class="principle__rule" data-reveal="rule" />
-            <span class="principle__n label">P—{String(i + 1).padStart(2, '0')}</span>
-            <h3 class="principle__title h3" data-reveal>
-              {p.title}
-            </h3>
-            <div class="principle__body" data-reveal style="--d: 1">
-              <p>{p.text}</p>
-              <p class="principle__practice mono">
-                <span class="label muted">In practice</span>
-                <span>{p.practice.join(' · ')}</span>
-              </p>
-            </div>
-          </li>
-        ))
-      }
-    </ol>
-  </section>
-
-  <!-- Now --------------------------------------------------------------- -->
-  <section class="wrap section" id="now">
-    <SectionHead index="03" title="Now" aside="Updated 2026" />
-    <dl class="grid now">
-      {
-        now.map((n, i) => (
-          <div class="now__item" data-reveal style={`--d:${i}`}>
-            <dt class="label muted">{n.label}</dt>
-            <dd>{n.text}</dd>
-          </div>
-        ))
-      }
-    </dl>
-  </section>
+      <ol class="principles">
+        {
+          principles.map((p, i) => (
+            <li class="principle trio">
+              <div class="principle__head" data-reveal>
+                <span class="label principle__n">{String(i + 1).padStart(2, '0')}</span>
+                <h3 class="h3 trim">{p.title}</h3>
+              </div>
+              <div class="principle__body span-2" data-reveal style="--d: 1">
+                <p class="trim">{p.text}</p>
+                <p class="principle__practice">
+                  <span class="label muted">In practice</span>
+                  <span>{p.practice.join(' · ')}</span>
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </Section>
+  </div>
 </Base>
 
 <style>
   /* Hero ----------------------------------------------------------------- */
   .hero {
     position: relative;
-    min-height: 100svh;
     display: flex;
+    min-height: min(78svh, 820px);
   }
 
   .hero__inner {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 64px;
-    padding-top: calc(var(--header-h) + clamp(48px, 12vh, 140px));
-    padding-bottom: 24px;
-  }
-
-  .hero__text {
-    max-width: 22.5em;
-    font-size: var(--fs-display);
-    font-weight: 500;
-    line-height: 1.06;
-    letter-spacing: -0.038em;
-    color: var(--ink-4);
-    text-wrap: pretty;
+    align-content: end;
+    padding-top: calc(var(--header-h) + var(--space-6));
   }
 
   .w {
     display: inline-block;
     overflow: hidden;
     vertical-align: top;
-    /* room for descenders inside the mask */
-    padding-bottom: 0.08em;
-    margin-bottom: -0.08em;
-  }
-
-  .w--ink {
-    color: var(--ink);
+    padding-bottom: 0.1em;
+    margin-bottom: -0.1em;
   }
 
   .w__i {
@@ -217,7 +142,7 @@ const now = [
   :global(.js) .w__i {
     transform: translateY(105%);
     animation: word-up 1.1s var(--ease-out) forwards;
-    animation-delay: calc(120ms + var(--i) * 22ms);
+    animation-delay: calc(120ms + var(--i) * 40ms);
   }
 
   @keyframes word-up {
@@ -226,85 +151,18 @@ const now = [
     }
   }
 
-  .hero__meta {
-    border-top: 1px solid var(--rule-strong);
-    padding-top: 14px;
-    row-gap: 10px;
-  }
-
-  .hero__meta-item {
-    grid-column: span 4;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .hero__meta-item:nth-child(2) {
-    justify-content: center;
-  }
-
-  .hero__meta-item:last-child {
-    justify-content: flex-end;
-  }
-
-  .hero__clock {
-    color: var(--ink);
-  }
-
-  .hero__down {
-    animation: nudge 2.4s var(--ease-in-out) infinite;
-  }
-
-  @keyframes nudge {
-    0%,
-    60%,
-    100% {
-      transform: none;
-    }
-    30% {
-      transform: translateY(4px);
-    }
-  }
-
-  @media (max-width: 720px) {
-    .hero__meta-item {
-      grid-column: 1 / -1;
-      justify-content: flex-start !important;
-    }
-  }
-
-  /* Sections ------------------------------------------------------------- */
-  .section {
-    padding-top: clamp(96px, 12vw, 180px);
-  }
-
-  #work {
-    padding-top: clamp(48px, 6vw, 96px);
-  }
-
   /* Work ----------------------------------------------------------------- */
   .work__index {
-    grid-column: 1 / span 3;
-    align-self: start;
-    position: sticky;
-    top: calc(var(--header-h) + 24px);
-  }
-
-  .work__index-title {
-    margin-bottom: 14px;
+    margin-top: var(--space-3);
   }
 
   .work__index-link {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    padding-block: 7px;
+    display: block;
+    padding-block: var(--space-1);
     border-top: 1px solid var(--rule);
     color: var(--ink-3);
     font-size: 0.9375rem;
-    transition:
-      color 0.25s,
-      padding-left 0.4s var(--ease-out);
+    transition: color 0.25s;
   }
 
   .work__index li:last-child .work__index-link {
@@ -316,125 +174,63 @@ const now = [
     color: var(--ink);
   }
 
-  .work__index-link:global(.is-active) {
-    padding-left: 10px;
-  }
-
-  .work__index-link:global(.is-active) .label {
-    color: var(--signal);
+  .work__index-link:global(.is-active)::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin-right: var(--space-1);
+    border-radius: 50%;
+    background: var(--signal);
+    vertical-align: 0.15em;
   }
 
   .work__list {
-    grid-column: 4 / span 9;
     display: flex;
     flex-direction: column;
-    gap: clamp(72px, 9vw, 140px);
+    gap: var(--space-item);
   }
 
   @media (max-width: 960px) {
     .work__index {
       display: none;
     }
-
-    .work__list {
-      grid-column: 1 / -1;
-    }
   }
 
   /* Process -------------------------------------------------------------- */
-  .process__intro {
-    grid-column: 4 / span 7;
-    margin-bottom: clamp(48px, 6vw, 88px);
-  }
-
   .principle {
-    position: relative;
-    padding-block: 22px 36px;
-    row-gap: 14px;
+    padding-block: var(--space-3) var(--space-5);
+    border-top: 1px solid var(--rule);
+    row-gap: var(--space-2);
   }
 
-  .principle__rule {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: var(--rule);
-  }
-
-  .principle:last-child {
-    border-bottom: 1px solid var(--rule);
+  .principle__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
   }
 
   .principle__n {
-    grid-column: 1 / span 3;
     color: var(--signal);
-    padding-top: 0.55em;
-  }
-
-  .principle__title {
-    grid-column: 4 / span 4;
+    text-box: trim-both cap alphabetic;
   }
 
   .principle__body {
-    grid-column: 8 / span 5;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: var(--space-2);
     color: var(--ink-2);
+  }
+
+  .principle__body > p:first-child {
+    max-width: 58ch;
   }
 
   .principle__practice {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    font-size: var(--fs-small);
     color: var(--ink-3);
-    font-size: 0.8125rem;
-  }
-
-  @media (max-width: 960px) {
-    .process__intro {
-      grid-column: 1 / -1;
-    }
-
-    .principle__n {
-      grid-column: 1 / -1;
-    }
-
-    .principle__title,
-    .principle__body {
-      grid-column: 1 / -1;
-    }
-  }
-
-  /* Now ------------------------------------------------------------------ */
-  .now {
-    row-gap: 32px;
-  }
-
-  .now__item {
-    grid-column: span 3;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .now__item dd {
-    font-size: 1.125rem;
-    line-height: 1.4;
-    letter-spacing: -0.012em;
-    max-width: 24ch;
-  }
-
-  @media (max-width: 960px) {
-    .now__item {
-      grid-column: span 6;
-    }
-  }
-
-  @media (max-width: 520px) {
-    .now__item {
-      grid-column: 1 / -1;
-    }
   }
 </style>

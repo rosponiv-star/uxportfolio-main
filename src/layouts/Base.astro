@@ -8,9 +8,10 @@ interface Props {
   title?: string;
   description?: string;
   bodyClass?: string;
+  showFooterContact?: boolean;
 }
 
-const { title, description = site.description, bodyClass } = Astro.props;
+const { title, description = site.description, bodyClass, showFooterContact = true } = Astro.props;
 const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — UX & Digital Product Designer`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -45,7 +46,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    <Footer showContact={showFooterContact} />
 
     <script>
       import '../scripts/site';

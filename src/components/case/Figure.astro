@@ -1,7 +1,7 @@
 ---
 // Case-study figure. Pass `src` (imported image) or `video`; without either it
 // renders a sized placeholder frame that says what belongs there.
-// size: 'text' (prose width) | 'wide' (prose + margin column) | 'full' (page width)
+// size: 'wide' (default, full body lane: tracks A–C) | 'text' (tracks A–B)
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
@@ -11,7 +11,7 @@ interface Props {
   alt?: string;
   caption?: string;
   ratio?: string;
-  size?: 'text' | 'wide' | 'full';
+  size?: 'wide' | 'text';
   placeholder?: string;
   bg?: string;
 }
@@ -21,7 +21,7 @@ const {
   video,
   alt = '',
   caption,
-  ratio = '16/10',
+  ratio = '16/9',
   size = 'wide',
   placeholder = 'Image',
   bg,
@@ -34,7 +34,7 @@ const {
       video ? (
         <video src={video} muted loop playsinline preload="metadata" data-autoplay aria-label={alt} />
       ) : src ? (
-        <Image src={src} alt={alt} widths={[640, 1024, 1600, 2400]} sizes="(min-width: 1100px) 75vw, 100vw" />
+        <Image src={src} alt={alt} widths={[640, 1024, 1600, 2400]} sizes="(min-width: 960px) 72vw, 100vw" />
       ) : (
         <div class="fig__ph">
           <span class="reg fig__reg fig__reg--tl" />
@@ -45,12 +45,12 @@ const {
       )
     }
   </div>
-  {caption && <figcaption class="fig__cap mono">{caption}</figcaption>}
+  {caption && <figcaption class="fig__cap">{caption}</figcaption>}
 </figure>
 
 <style>
-  .fig {
-    margin-block: 2.5em;
+  .fig--text {
+    max-width: calc((200% - var(--gutter)) / 3);
   }
 
   .fig__frame {
@@ -73,9 +73,9 @@ const {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: var(--space-1);
     text-align: center;
-    padding: 24px;
+    padding: var(--space-3);
     background-image:
       linear-gradient(to right, var(--paper-3) 1px, transparent 1px),
       linear-gradient(to bottom, var(--paper-3) 1px, transparent 1px);
@@ -89,18 +89,26 @@ const {
   }
 
   .fig__reg--tl {
-    top: 14px;
-    left: 14px;
+    top: var(--space-2);
+    left: var(--space-2);
   }
 
   .fig__reg--br {
-    bottom: 14px;
-    right: 14px;
+    bottom: var(--space-2);
+    right: var(--space-2);
   }
 
   .fig__cap {
-    margin-top: 12px;
+    margin-top: var(--space-2);
+    max-width: calc((200% - var(--gutter)) / 3);
+    font-size: var(--fs-small);
     color: var(--ink-3);
-    max-width: 62ch;
+  }
+
+  @media (max-width: 640px) {
+    .fig--text,
+    .fig__cap {
+      max-width: none;
+    }
   }
 </style>

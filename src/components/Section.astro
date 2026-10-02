@@ -1,0 +1,26 @@
+---
+// The one section pattern used across the site:
+// full-width rule → title in the head lane (cols 1–3, sticky) → content in the body lane (cols 4–12).
+interface Props {
+  title: string;
+  id?: string;
+  class?: string;
+  bodyClass?: string;
+}
+
+const { title, id, class: className, bodyClass } = Astro.props;
+const titleId = id ? `${id}-title` : undefined;
+---
+
+<section class:list={['sec', className]} id={id} aria-labelledby={titleId} data-reveal="sec">
+  <div class="sec__head">
+    <div class="sec__sticky">
+      <slot name="pre" />
+      <h2 class="sec__title" id={titleId}>{title}</h2>
+      <slot name="head" />
+    </div>
+  </div>
+  <div class:list={['sec__body', bodyClass]}>
+    <slot />
+  </div>
+</section>

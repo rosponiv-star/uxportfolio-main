@@ -1,165 +1,105 @@
 ---
 import { site } from '../data/site';
+
+interface Props {
+  // The About page has its own Contact section, so it hides the footer's.
+  showContact?: boolean;
+}
+
+const { showContact = true } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer__rule" data-reveal="rule"></div>
-
-    <div class="grid footer__cols">
-      <div class="footer__col footer__col--intro">
-        <p class="label muted">Colophon</p>
-        <p class="footer__note">
-          Designed and built by Valerio Rosponi. Set in Geist and Geist Mono. No trackers, no cookies.
-        </p>
-      </div>
-
-      <div class="footer__col">
-        <p class="label muted">Elsewhere</p>
-        <ul class="footer__list">
-          <li><a class="link" href={`mailto:${site.email}`}>{site.email}</a></li>
+<footer class="wrap footer">
+  {
+    showContact && (
+      <div class="sec footer__contact" data-reveal="sec">
+        <div class="sec__head">
+          <p class="label">Contact</p>
+        </div>
+        <ul class="sec__body trio footer__links">
           <li>
-            <a href={site.linkedin} target="_blank" rel="noopener">
-              LinkedIn <span class="arrow arrow--ne" aria-hidden="true">↗</span>
+            <span class="label muted">Email</span>
+            <a class="link" href={`mailto:${site.email}`}>
+              {site.email}
             </a>
           </li>
           <li>
+            <span class="label muted">LinkedIn</span>
+            <a href={site.linkedin} target="_blank" rel="noopener">
+              Valerio Rosponi <span class="arrow arrow--ne" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li>
+            <span class="label muted">Résumé</span>
             <a href={site.cv} target="_blank" rel="noopener">
-              Résumé (PDF) <span class="arrow arrow--ne" aria-hidden="true">↗</span>
+              Download PDF <span class="arrow arrow--ne" aria-hidden="true">↗</span>
             </a>
           </li>
         </ul>
       </div>
+    )
+  }
 
-      <div class="footer__col">
-        <p class="label muted">Local time</p>
-        <p class="mono">
-          Trentino, IT — <span data-clock>--:--</span>
-        </p>
-      </div>
+  <p class="footer__mega" aria-hidden="true">Valerio Rosponi</p>
 
-      <div class="footer__col footer__col--top">
-        <a href="#top" class="footer__top">
-          Back to top <span class="arrow footer__up" aria-hidden="true">↑</span>
-        </a>
-      </div>
-    </div>
-
-    <p class="footer__mega" aria-hidden="true">
-      <span>Valerio</span>
-      <span>Rosponi</span>
-    </p>
-
-    <div class="footer__base label muted">
-      <span>© {year} {site.name}</span>
-      <span class="footer__base-reg"><span class="reg"></span></span>
-      <span>UX · Digital Product · Visual Design</span>
-    </div>
+  <div class="footer__base label">
+    <span class="muted">© {year} {site.name}</span>
+    <a href="#top" class="footer__top">Back to top <span class="arrow footer__up" aria-hidden="true">↑</span></a>
   </div>
 </footer>
 
 <style>
   .footer {
-    margin-top: clamp(96px, 14vw, 200px);
-    padding-bottom: 20px;
-    overflow: hidden;
+    margin-top: var(--space-section);
+    padding-bottom: var(--space-3);
   }
 
-  .footer__rule {
-    height: 1px;
-    background: var(--rule-strong);
+  .footer__contact {
+    margin-top: 0;
   }
 
-  .footer__cols {
-    padding-top: 20px;
-    row-gap: 32px;
-  }
-
-  .footer__col {
-    grid-column: span 3;
+  .footer__links li {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-1);
     font-size: 0.9375rem;
   }
 
-  .footer__note {
-    color: var(--ink-3);
-    max-width: 30ch;
-  }
-
-  .footer__list {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .footer__col--top {
-    align-items: flex-end;
-  }
-
-  .footer__top {
-    font-size: 0.9375rem;
-  }
-
-  a:hover .footer__up {
-    transform: translateY(-4px);
+  .footer__links a {
+    align-self: flex-start;
   }
 
   .footer__mega {
-    display: flex;
-    justify-content: space-between;
-    margin-top: clamp(64px, 10vw, 140px);
-    font-size: clamp(3.5rem, 14.6vw, 15.75rem);
+    margin-top: var(--space-section);
+    font-size: clamp(3rem, 14.2vw, 15.25rem);
     font-weight: 500;
     line-height: 0.8;
     letter-spacing: -0.065em;
     white-space: nowrap;
     user-select: none;
-  }
-
-  .footer__mega span:last-child {
-    color: var(--ink-4);
+    margin-left: -0.05em;
   }
 
   .footer__base {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    margin-top: 28px;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
   }
 
-  @media (max-width: 960px) {
-    .footer__col {
-      grid-column: span 6;
-    }
-
-    .footer__col--top {
-      align-items: flex-start;
-    }
+  a:hover .footer__up {
+    transform: translateY(-3px);
   }
 
-  @media (max-width: 560px) {
-    .footer__col {
-      grid-column: span 12;
-    }
-
+  @media (max-width: 640px) {
     .footer__mega {
-      flex-direction: column;
-      font-size: 24vw;
-      line-height: 0.82;
-    }
-
-    .footer__base-reg {
-      display: none;
-    }
-
-    .footer__base {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
+      white-space: normal;
+      font-size: 23vw;
+      line-height: 0.84;
     }
   }
 </style>

@@ -1,101 +1,45 @@
 ---
 import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
 import RegistrationField from '../components/RegistrationField.astro';
-
-// Add experiments here. `live: true` entries render an interactive tile.
-const slots = ['EXP—001', 'EXP—002', 'EXP—003', 'EXP—004', 'EXP—005'];
 ---
 
-<Base
-  title="Playground"
-  description="Experiments, side projects and things Valerio Rosponi made for the joy of it."
->
-  <header class="wrap intro">
-    <div class="intro__crumbs label">
-      <span>(Playground)</span>
-      <span class="muted">Experiments & side projects</span>
-    </div>
-    <h1 class="intro__statement">
-      Things made for the joy of it.
-      <span class="muted-ink">No briefs, no stakeholders, no deadlines — just curiosity, and the occasional bug that turns out to be a feature.</span>
-    </h1>
+<Base title="Playground" description="Experiments, side projects and things Valerio Rosponi made for the joy of it.">
+  <header class="wrap grid intro">
+    <h1 class="display col-wide">Things made for the joy of it.</h1>
+    <p class="lead col-text intro__lead">
+      No briefs, no stakeholders, no deadlines. Just curiosity, and the occasional bug that turns out to be a feature.
+    </p>
   </header>
 
-  <section class="wrap exps" aria-label="Experiments">
-    <article class="exp exp--live">
-      <div class="exp__stage" data-reveal="clip">
-        <RegistrationField spacing={26} radius={200} />
-        <span class="exp__hint label">Move your cursor</span>
-      </div>
-      <div class="exp__info">
-        <span class="label exp__id">EXP—000</span>
-        <h2 class="exp__title">Registration field</h2>
-        <p class="exp__text">
-          The cursor-reactive grid from the home page, given room to breathe. Print registration marks that turn and
-          warm up as you pass, a small nod to the precision behind every layout.
-        </p>
-        <p class="label muted">Canvas · TypeScript · 2026</p>
-      </div>
-    </article>
-
-    <div class="slots">
-      {
-        slots.map((id, i) => (
-          <div class="slot" data-reveal style={`--d:${i}`}>
-            <span class="label">{id}</span>
-            <span class="slot__state label muted">On the bench</span>
-          </div>
-        ))
-      }
-    </div>
-  </section>
+  <div class="wrap">
+    <Section title="Experiments" id="experiments">
+      <article class="exp trio">
+        <div class="exp__stage span-2" data-reveal="clip">
+          <RegistrationField spacing={26} radius={200} />
+          <span class="exp__hint label">Move your cursor</span>
+        </div>
+        <div class="exp__info">
+          <h3 class="h3 trim">Registration field</h3>
+          <p>
+            The cursor-reactive grid from the home page, given room to breathe. Print registration marks that turn and
+            warm up as you pass, a small nod to the precision behind every layout.
+          </p>
+          <p class="label muted">Canvas · TypeScript · 2026</p>
+        </div>
+      </article>
+    </Section>
+  </div>
 </Base>
 
 <style>
   .intro {
-    padding-top: calc(var(--header-h) + clamp(32px, 6vh, 72px));
-  }
-
-  .intro__crumbs {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    padding-bottom: 14px;
-    border-bottom: 1px solid var(--rule-strong);
-  }
-
-  .intro__crumbs > span:first-child {
-    color: var(--signal);
-  }
-
-  .intro__statement {
-    margin-top: clamp(40px, 8vw, 120px);
-    max-width: 19em;
-    font-size: var(--fs-display);
-    font-weight: 500;
-    line-height: 1.06;
-    letter-spacing: -0.038em;
-    text-wrap: pretty;
-  }
-
-  .muted-ink {
-    color: var(--ink-4);
-  }
-
-  .exps {
-    padding-top: clamp(80px, 11vw, 160px);
-  }
-
-  .exp {
-    display: grid;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    row-gap: 20px;
+    padding-top: calc(var(--header-h) + var(--space-6) * 2);
+    row-gap: var(--space-4);
   }
 
   .exp__stage {
     position: relative;
-    grid-column: 1 / span 8;
     aspect-ratio: 16 / 10;
     background: var(--paper-2);
     overflow: hidden;
@@ -104,57 +48,16 @@ const slots = ['EXP—001', 'EXP—002', 'EXP—003', 'EXP—004', 'EXP—005'];
 
   .exp__hint {
     position: absolute;
-    left: 16px;
-    bottom: 14px;
+    left: var(--space-2);
+    bottom: var(--space-2);
     color: var(--ink-3);
     pointer-events: none;
   }
 
   .exp__info {
-    grid-column: 9 / span 4;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding-top: 14px;
-    border-top: 1px solid var(--rule-strong);
-    align-self: start;
-  }
-
-  .exp__id {
-    color: var(--signal);
-  }
-
-  .exp__title {
-    font-size: var(--fs-h3);
-    letter-spacing: -0.025em;
-    line-height: 1.1;
-  }
-
-  .exp__text {
+    gap: var(--space-2);
     color: var(--ink-2);
-  }
-
-  .slots {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
-    gap: var(--gutter);
-    margin-top: clamp(64px, 8vw, 120px);
-  }
-
-  .slot {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    aspect-ratio: 4 / 3;
-    padding: 14px 16px;
-    border: 1px dashed var(--ink-4);
-    color: var(--ink-3);
-  }
-
-  @media (max-width: 960px) {
-    .exp__stage,
-    .exp__info {
-      grid-column: 1 / -1;
-    }
   }
 </style>

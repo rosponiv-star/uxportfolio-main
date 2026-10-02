@@ -1,5 +1,6 @@
 ---
-// Numbered key insights. items: [{ title: '...', text: '...' }, ...]
+// Numbered key insights: number + finding in track A, evidence in tracks B–C.
+// items: [{ title: '...', text: '...' }, ...]
 interface Props {
   items: { title: string; text: string }[];
 }
@@ -9,38 +10,32 @@ const { items } = Astro.props;
 <ol class="insights">
   {
     items.map((it, i) => (
-      <li class="insight" data-reveal style={`--d: ${i}`}>
-        <span class="insight__n label">I—{String(i + 1).padStart(2, '0')}</span>
-        <p class="insight__title">{it.title}</p>
-        <p class="insight__text">{it.text}</p>
+      <li class="insight trio" data-reveal style={`--d: ${i}`}>
+        <div class="insight__head">
+          <span class="insight__n label">{String(i + 1).padStart(2, '0')}</span>
+          <p class="insight__title">{it.title}</p>
+        </div>
+        <p class="insight__text span-2">{it.text}</p>
       </li>
     ))
   }
 </ol>
 
 <style>
-  .insights {
-    display: grid;
-    gap: 0;
-    margin-block: 2em;
-  }
-
   .insight {
-    display: grid;
-    grid-template-columns: 72px minmax(0, 1fr);
-    column-gap: 16px;
-    padding-block: 16px 20px;
+    row-gap: var(--space-2);
+    padding-block: var(--space-2) var(--space-4);
     border-top: 1px solid var(--rule);
   }
 
-  .insight:last-child {
-    border-bottom: 1px solid var(--rule);
+  .insight__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
   }
 
   .insight__n {
-    grid-row: span 2;
     color: var(--signal);
-    padding-top: 0.35em;
   }
 
   .insight__title {
@@ -52,19 +47,7 @@ const { items } = Astro.props;
   }
 
   .insight__text {
-    margin-top: 6px;
     color: var(--ink-3);
-  }
-
-  @media (max-width: 560px) {
-    .insight {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    .insight__n {
-      grid-row: auto;
-      margin-bottom: 8px;
-      padding-top: 0;
-    }
+    max-width: 58ch;
   }
 </style>

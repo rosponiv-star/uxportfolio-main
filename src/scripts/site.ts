@@ -62,26 +62,6 @@ function initHeader() {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Local clock (Europe/Rome)                                                  */
-/* -------------------------------------------------------------------------- */
-function initClock() {
-  const clocks = document.querySelectorAll<HTMLElement>('[data-clock]');
-  if (!clocks.length) return;
-  const fmt = new Intl.DateTimeFormat('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZone: 'Europe/Rome',
-    timeZoneName: 'short',
-  });
-  const tick = () => {
-    const text = fmt.format(new Date());
-    clocks.forEach((c) => (c.textContent = text));
-  };
-  tick();
-  setInterval(tick, 15_000);
-}
-
-/* -------------------------------------------------------------------------- */
 /* Cursor label on project covers                                             */
 /* -------------------------------------------------------------------------- */
 function initCursorLabel() {
@@ -214,7 +194,6 @@ function initVideos() {
 
 initReveals();
 initHeader();
-initClock();
 initCursorLabel();
 initScrollSpy();
 initProgress();
