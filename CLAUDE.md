@@ -94,7 +94,7 @@ INVENTED placeholders. Replace them with the real ones when each case study is w
 
 - Swiss editorial base + tech precision (mono labels, registration marks, hairline rules), with a
   touch of brutalism (oversized type) and one experimental gesture (the cursor-reactive registration field).
-- Background `#f5f5f0`. One accent `--signal` (#c93a14), used sparingly. No gradients and no
+- Background `#f5f5f0`. One accent `--signal` (#2b9e4d), used sparingly. No gradients and no
   fluorescent colours.
 - Type: Geist Medium for headings (H2 ≈ 48px), Geist Mono Bold for small labels. Use contrast between
   ink and grey to build hierarchy.

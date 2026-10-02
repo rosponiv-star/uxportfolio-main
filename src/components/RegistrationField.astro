@@ -39,7 +39,7 @@ const { class: className, spacing = 30, radius = 170 } = Astro.props;
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const css = getComputedStyle(document.documentElement);
   const INK = css.getPropertyValue('--ink').trim() || '#111111';
-  const SIGNAL = css.getPropertyValue('--signal').trim() || '#c93a14';
+  const SIGNAL = css.getPropertyValue('--signal').trim() || '#2b9e4d';
 
   function hexToRgb(hex: string) {
     const n = parseInt(hex.replace('#', ''), 16);
