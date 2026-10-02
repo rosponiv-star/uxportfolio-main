@@ -102,8 +102,9 @@ title, the footer wordmark and the nav micro-numbers.
   Cards sit close together: 8px gap in both directions (rows open up to 48px on touch, where text is below). Card
   entrance never changes the footprint: cover fades in at full size while its image settles from scale 1.06; the
   second card of a row is delayed 120ms.
-- Card: the cover fills the card. On hover/focus a flat 50% ink scrim fades in and the title, then "type, platform   year",
-  rise inside the card (light text). On touch devices the text sits below the cover instead.
+- Card: the cover fills the card. On hover/focus a paper-coloured caption bar slides up from the bottom edge carrying
+  the title, then "type, platform   year" in ink; the image is never darkened (the owner rejected a dark scrim). On touch
+  devices the text sits below the cover instead.
 - Home hero is a tinted band (--paper-alt) holding the depth texture; the band edge separates it from Selected work,
   which therefore has no top rule on the home page.
 - Index view: a table (No., project, type, role, year). On hover the cover follows the cursor. The chosen view is
