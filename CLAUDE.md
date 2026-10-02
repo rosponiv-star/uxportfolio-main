@@ -110,7 +110,7 @@ Status:
 ## Design rules (agreed with the owner)
 
 - Swiss editorial base + tech precision (mono labels, registration marks, hairline rules), with a
-  touch of brutalism (oversized type) and one experimental gesture (the cursor-reactive registration field).
+  touch of brutalism (oversized type) and one experimental gesture (the hero depth texture: three layers of near-invisible grain that drift in parallax with the cursor and surface slightly around it, components/DepthTexture.astro; the old registration field lives on in Playground).
 - Background `#fafaf8` (near-white, slightly cool). One accent `--signal` (#3d5a73), used sparingly. No gradients and no
   fluorescent colours.
 - Type: Geist Medium for headings (H2 ≈ 48px), labels in Geist Medium at 12px, uppercase, 8% tracking,

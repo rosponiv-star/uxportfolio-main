@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Section from '../components/Section.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import Cover from '../components/Cover.astro';
-import RegistrationField from '../components/RegistrationField.astro';
+import DepthTexture from '../components/DepthTexture.astro';
 import { CATEGORIES, categoryId, getProjects, hrefOf, numOf } from '../lib/projects';
 
 const projects = await getProjects();
@@ -63,7 +63,7 @@ const principles = [
 <Base>
   <!-- Hero -------------------------------------------------------------- -->
   <section class="hero">
-    <RegistrationField />
+    <DepthTexture intensity={0.5} />
     <div class="wrap grid hero__inner">
       <h1 class="hero__title display col-wide">
         {

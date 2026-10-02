@@ -1,0 +1,129 @@
+---
+// A barely-visible paper grain in three depth layers. The layers drift at different
+// speeds with the pointer (parallax), and dots near the cursor surface slightly ("breathe").
+// Static on touch devices and with reduced motion.
+interface Props {
+  class?: string;
+  intensity?: number; // 0–1
+}
+const { class: className, intensity = 0.5 } = Astro.props;
+---
+
+<div class:list={['dtex', className]} aria-hidden="true">
+  <canvas data-dtex data-intensity={intensity}></canvas>
+</div>
+
+<style>
+  .dtex {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+</style>
+
+<script>
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Deterministic random, so the texture is identical on every load.
+  function rand(seed: number) {
+    let s = seed;
+    return () => (s = (s * 16807) % 2147483647) / 2147483647;
+  }
+
+  // Far → near. density = dots per 10,000 px², depth = parallax travel in px.
+  const LAYERS = [
+    { density: 40, depth: 6, size: 1, alpha: 0.14, rgb: [17, 17, 17] },
+    { density: 19, depth: 16, size: 1.4, alpha: 0.16, rgb: [17, 17, 17] },
+    { density: 7, depth: 34, size: 2, alpha: 0.28, rgb: [61, 90, 115] },
+  ];
+  const BREATH_RADIUS = 160;
+
+  document.querySelectorAll<HTMLCanvasElement>('canvas[data-dtex]').forEach((canvas) => {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const host = canvas.parentElement!.parentElement || canvas.parentElement!;
+    const K = Number(canvas.dataset.intensity) || 0.5;
+
+    let w = 0, h = 0;
+    let dots: { x: number; y: number; z: number }[][] = [];
+    let tx = 0, ty = 0, ox = 0, oy = 0;
+    let mx = -9999, my = -9999, glow = 0, glowT = 0;
+    let raf = 0, visible = true;
+
+    const build = () => {
+      const r = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = r.width; h = r.height;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const area = (w * h) / 10000;
+      dots = LAYERS.map((L, i) => {
+        const rnd = rand(7 + i * 13);
+        return Array.from({ length: Math.round(L.density * area) }, () => ({ x: rnd(), y: rnd(), z: rnd() }));
+      });
+      draw();
+    };
+
+    const draw = () => {
+      ctx.clearRect(0, 0, w, h);
+      LAYERS.forEach((L, i) => {
+        const [r, g, b] = L.rgb;
+        const dx = -ox * L.depth, dy = -oy * L.depth * 0.75;
+        for (const d of dots[i]) {
+          const x = (((d.x * w + dx) % w) + w) % w;
+          const y = (((d.y * h + dy) % h) + h) % h;
+          let a = L.alpha * K * (0.6 + d.z * 0.4);
+          if (glow > 0.01) {
+            const t = Math.max(0, 1 - Math.hypot(x - mx, y - my) / BREATH_RADIUS);
+            a += t * 0.35 * K * glow;
+          }
+          ctx.fillStyle = `rgba(${r},${g},${b},${a})`;
+          ctx.fillRect(x - L.size / 2, y - L.size / 2, L.size, L.size);
+        }
+      });
+    };
+
+    const loop = () => {
+      ox += (tx - ox) * 0.06;
+      oy += (ty - oy) * 0.06;
+      glow += (glowT - glow) * 0.1;
+      draw();
+      const moving = Math.abs(tx - ox) > 0.0005 || Math.abs(ty - oy) > 0.0005 || Math.abs(glowT - glow) > 0.005;
+      raf = moving && visible ? requestAnimationFrame(loop) : 0;
+    };
+
+    const kick = () => {
+      if (!raf && visible) raf = requestAnimationFrame(loop);
+    };
+
+    if (fine && !reduced) {
+      host.addEventListener('pointermove', (e) => {
+        const r = canvas.getBoundingClientRect();
+        mx = e.clientX - r.left;
+        my = e.clientY - r.top;
+        tx = mx / r.width - 0.5;
+        ty = my / r.height - 0.5;
+        glowT = 1;
+        kick();
+      });
+      host.addEventListener('pointerleave', () => {
+        tx = 0; ty = 0; glowT = 0;
+        kick();
+      });
+    }
+
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) kick();
+    }).observe(canvas);
+
+    new ResizeObserver(build).observe(canvas);
+  });
+</script>
