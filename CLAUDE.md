@@ -79,8 +79,7 @@ title, the footer wordmark and the nav micro-numbers.
 ## Project facts
 
 On the project card, the facts sit in a single mono label line above the title:
-"TYPE · YEAR · ROLE · ● IN PROGRESS". It never wraps: it ends with an ellipsis if space runs out, so keep
-the facts short. Below it come the title (h2) and the tagline, all in tracks A–B.
+"TYPE · YEAR · ROLE · ● IN PROGRESS". Below it come the title (h2) and the tagline, all in tracks A–B.
 
 The owner has rejected two other placements, so do not bring them back:
 - a facts block in track C, right-aligned under the cover;
@@ -97,7 +96,7 @@ INVENTED placeholders. Replace them with the real ones when each case study is w
   touch of brutalism (oversized type) and one experimental gesture (the cursor-reactive registration field).
 - Background `#f5f5f0`. One accent `--signal` (#c93a14), used sparingly. No gradients and no
   fluorescent colours.
-- Type: Geist Medium for headings (H2 ≈ 48px), Geist Mono Regular (12px, uppercase, 6% tracking) for small labels. Use contrast between
+- Type: Geist Medium for headings (H2 ≈ 48px), Geist Mono Bold for small labels. Use contrast between
   ink and grey to build hierarchy.
 - Animation level is medium. Always respect `prefers-reduced-motion`.
 - Never use skill percentages, skill bars or proficiency ratings for skills or tools.

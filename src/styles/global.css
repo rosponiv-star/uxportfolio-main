@@ -184,8 +184,8 @@ dd {
 .label {
   font-family: var(--font-mono);
   font-size: var(--fs-label);
-  font-weight: 400;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   line-height: 1.4;
   text-transform: uppercase;
 }
@@ -509,8 +509,7 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
   top: 0.3em;
   font-family: var(--font-mono);
   font-size: var(--fs-label);
-  font-weight: 400;
-  letter-spacing: 0.06em;
+  font-weight: 700;
   color: var(--signal);
 }
 
@@ -756,8 +755,8 @@ a:focus-visible .arrow--back {
   color: var(--paper);
   font-family: var(--font-mono);
   font-size: var(--fs-label);
-  font-weight: 400;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
   opacity: 0;
