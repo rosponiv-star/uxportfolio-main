@@ -2,7 +2,7 @@
 
 Portfolio of Valerio Rosponi — UX, digital product and visual design.
 
-Built with [Astro](https://astro.build), MDX and hand-written CSS. Set in Geist and Geist Mono.
+Built with [Astro](https://astro.build), MDX and hand-written CSS. Set in Geist.
 
 ```bash
 npm install

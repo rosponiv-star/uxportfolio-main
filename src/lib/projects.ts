@@ -2,6 +2,11 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type Project = CollectionEntry<'projects'>;
 
+/** Filter vocabulary, in display order. Must match the enum in content.config.ts. */
+export const CATEGORIES = ['UX/UI', 'Service design', 'Product', 'XR', 'Research'] as const;
+
+export const categoryId = (c: string) => c.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+
 /** URL slug: file id without its numeric ordering prefix ("01-justcook" → "justcook"). */
 export const slugOf = (p: Project) => p.id.replace(/^\d+-/, '');
 

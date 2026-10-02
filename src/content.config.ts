@@ -12,6 +12,8 @@ const projects = defineCollection({
       tagline: z.string(),
       year: z.string(),
       type: z.string(),
+      // Work filters. Keep to the shared vocabulary in lib/projects.ts → CATEGORIES.
+      categories: z.array(z.enum(['UX/UI', 'Service design', 'Product', 'XR', 'Research'])).min(1),
       platform: z.string(),
       role: z.string(),
       timeline: z.string(),

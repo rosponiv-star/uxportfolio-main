@@ -1,9 +1,8 @@
 ---
-// Sits in the body lane (cols 4–12). Cover spans all three tracks; below it one
-// left-aligned text block in tracks A–B: an eyebrow with the project facts
-// (same mono label used above titles across the site), the title, the tagline.
+// Grid card: cover, then title with the year on the right, then type and platform in grey.
+// Width/ratio come from the Work grid slot (data-size="full" | "half").
 import Cover from './Cover.astro';
-import { hrefOf, slugOf, type Project } from '../lib/projects';
+import { categoryId, hrefOf, slugOf, type Project } from '../lib/projects';
 
 interface Props {
   project: Project;
@@ -11,42 +10,23 @@ interface Props {
 }
 
 const { project, eager } = Astro.props;
-const { title, tagline, role, type, year, placeholder } = project.data;
-const facts = [type, year, role];
+const { title, year, type, platform, categories } = project.data;
 ---
 
-<article class="pcard" id={`p-${slugOf(project)}`}>
+<article
+  class="pcard"
+  id={`p-${slugOf(project)}`}
+  data-work-item
+  data-cats={categories.map(categoryId).join(' ')}
+>
   <a href={hrefOf(project)} class="pcard__link" data-cursor="Read case study">
     <div class="pcard__cover" data-reveal="clip">
-      <Cover project={project} eager={eager} sizes="(min-width: 960px) 72vw, 100vw" />
+      <Cover project={project} eager={eager} sizes="(min-width: 960px) 90vw, 100vw" />
     </div>
-
-    <div class="pcard__info trio">
-      <div class="pcard__text span-2">
-        <p class="pcard__facts label">
-          {
-            facts.map((f, i) => (
-              <>
-                {i > 0 && <span aria-hidden="true">·</span>}
-                <span>{f}</span>
-              </>
-            ))
-          }
-          {
-            placeholder && (
-              <>
-                <span aria-hidden="true">·</span>
-                <span class="pcard__status">
-                  <span class="dot" />
-                  In progress
-                </span>
-              </>
-            )
-          }
-        </p>
-        <h3 class="pcard__title">{title}</h3>
-        <p class="pcard__tagline">{tagline}</p>
-      </div>
+    <div class="pcard__info">
+      <h3 class="pcard__title">{title}</h3>
+      <span class="pcard__year">{year}</span>
+      <p class="pcard__meta">{type}, {platform}</p>
     </div>
   </a>
 </article>
@@ -60,41 +40,36 @@ const facts = [type, year, role];
     overflow: hidden;
   }
 
+  /* Ratio is set by the grid slot: full = 2/1, half = 4/3 */
+  .pcard__cover :global(.cover) {
+    aspect-ratio: var(--card-ratio, 4 / 3);
+  }
+
   .pcard__info {
-    padding-top: var(--space-3);
-  }
-
-  .pcard__text {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
-  }
-
-  .pcard__facts {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 4px var(--space-1);
-    color: var(--ink-3);
-    text-box: trim-both cap alphabetic;
-  }
-
-  .pcard__status {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-3);
+    row-gap: 6px;
+    align-items: baseline;
+    padding-top: var(--space-2);
   }
 
   .pcard__title {
-    font-size: var(--fs-h2);
+    font-size: var(--fs-h3);
     font-weight: 500;
-    line-height: 1;
-    letter-spacing: -0.04em;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
   }
 
-  .pcard__tagline {
-    max-width: 46ch;
-    color: var(--ink-2);
+  .pcard__year {
+    font-size: var(--fs-small);
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pcard__meta {
+    grid-column: 1 / -1;
+    font-size: var(--fs-small);
+    color: var(--ink-3);
   }
 </style>

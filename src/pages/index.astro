@@ -2,14 +2,34 @@
 import Base from '../layouts/Base.astro';
 import Section from '../components/Section.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import Cover from '../components/Cover.astro';
 import RegistrationField from '../components/RegistrationField.astro';
-import { getProjects, numOf, slugOf } from '../lib/projects';
+import { CATEGORIES, categoryId, getProjects, hrefOf, numOf } from '../lib/projects';
 
 const projects = await getProjects();
 
 const statement =
   'Valerio Rosponi, UX and digital product designer. Products that solve real problems, crafted to the last detail.';
 const words = statement.split(' ');
+
+// Filters: only categories in use, in vocabulary order.
+const filters = [
+  { id: 'all', label: 'All', count: projects.length },
+  ...CATEGORIES.map((c) => ({
+    id: categoryId(c),
+    label: c,
+    count: projects.filter((p) => (p.data.categories as string[]).includes(c)).length,
+  })).filter((f) => f.count > 0),
+];
+
+const years = projects.map((p) => Number(p.data.year)).filter(Number.isFinite);
+const lo = Math.min(...years);
+const hi = Math.max(...years);
+const yearSpan = years.length ? (lo === hi ? `${lo}` : `${lo} to ${hi}`) : '';
+
+// Grid rhythm: full, half, half, full… A half left without a partner becomes full.
+const sizes = projects.map((_, i) => (i % 3 === 0 ? 'full' : 'half'));
+if (projects.length % 3 === 2) sizes[projects.length - 1] = 'full';
 
 const principles = [
   {
@@ -61,26 +81,71 @@ const principles = [
 
   <div class="wrap">
     <!-- Work ------------------------------------------------------------ -->
-    <Section title="Selected work" id="work" class="work" stacked>
-      <nav slot="aside" class="work__index" aria-label="Case studies" data-spy>
+    <section class="work" id="work" aria-labelledby="work-title" data-work>
+      <header class="grid work__head">
+        <h2 class="work__title" id="work-title">Selected work</h2>
+
+        <div class="work__filters" role="group" aria-label="Filter projects by type">
+          {
+            filters.map((f, i) => (
+              <button type="button" class="opt" data-filter={f.id} aria-pressed={i === 0 ? 'true' : 'false'}>
+                <span class="opt__name">{f.label}</span>
+                <span class="opt__count">{f.count}</span>
+              </button>
+            ))
+          }
+        </div>
+
+        <p class="work__count" aria-live="polite" data-work-count data-total={projects.length}>
+          {projects.length} of {projects.length} projects, {yearSpan}
+        </p>
+
+        <div class="work__views" role="group" aria-label="View">
+          <button type="button" class="opt" data-view="grid" aria-pressed="true"><span class="opt__name">Grid</span></button>
+          <button type="button" class="opt" data-view="index" aria-pressed="false"><span class="opt__name">Index</span></button>
+        </div>
+      </header>
+
+      <!-- Grid view -->
+      <div class="grid work__grid" data-work-grid>
+        {
+          projects.map((p, i) => (
+            <div class="work__slot" data-size={sizes[i]} data-year={p.data.year} data-cats={p.data.categories.map(categoryId).join(' ')}>
+              <ProjectCard project={p} eager={i === 0} />
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Index view -->
+      <div class="work__index" data-work-index hidden>
+        <div class="grid irow irow--head label muted" aria-hidden="true">
+          <span class="irow__n">No.</span>
+          <span class="irow__title">Project</span>
+          <span class="irow__type">Type</span>
+          <span class="irow__role">Role</span>
+          <span class="irow__year">Year</span>
+        </div>
         <ol>
           {
             projects.map((p) => (
-              <li>
-                <a href={`#p-${slugOf(p)}`} data-spy-link={`p-${slugOf(p)}`} class="work__index-link">
-                  <span class="label">{numOf(p)}</span>
-                  <span>{p.data.title}</span>
+              <li data-year={p.data.year} data-cats={p.data.categories.map(categoryId).join(' ')}>
+                <a class="grid irow" href={hrefOf(p)} data-preview-host>
+                  <span class="irow__n label">{numOf(p)}</span>
+                  <span class="irow__title">{p.data.title}</span>
+                  <span class="irow__type">{p.data.type}</span>
+                  <span class="irow__role">{p.data.role}</span>
+                  <span class="irow__year">{p.data.year}</span>
+                  <span class="irow__preview" aria-hidden="true">
+                    <Cover project={p} sizes="300px" />
+                  </span>
                 </a>
               </li>
             ))
           }
         </ol>
-      </nav>
-
-      <div class="work__list">
-        {projects.map((p, i) => <ProjectCard project={p} eager={i === 0} />)}
       </div>
-    </Section>
+    </section>
 
     <!-- How I work ------------------------------------------------------ -->
     <Section title="How I work" id="process" bodyClass="flow" tone="alt">
@@ -112,6 +177,100 @@ const principles = [
   </div>
 </Base>
 
+<script>
+  // Work: filters + Grid/Index switch. The server markup already renders "All" + "Grid".
+  const root = document.querySelector<HTMLElement>('[data-work]');
+  if (root) {
+    const slots = Array.from(root.querySelectorAll<HTMLElement>('.work__slot'));
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('[data-work-index] li'));
+    const grid = root.querySelector<HTMLElement>('[data-work-grid]')!;
+    const index = root.querySelector<HTMLElement>('[data-work-index]')!;
+    const count = root.querySelector<HTMLElement>('[data-work-count]')!;
+    const total = Number(count.dataset.total);
+    const filterBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const viewBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-view]'));
+
+    const press = (btns: HTMLButtonElement[], on: HTMLButtonElement) =>
+      btns.forEach((b) => b.setAttribute('aria-pressed', String(b === on)));
+
+    const enter = (el: HTMLElement) => {
+      el.classList.remove('is-entering');
+      void el.offsetWidth;
+      el.classList.add('is-entering');
+    };
+
+    const applyFilter = (id: string) => {
+      const match = (el: HTMLElement) => id === 'all' || (el.dataset.cats || '').split(' ').includes(id);
+      const visible = slots.filter(match);
+      slots.forEach((s) => (s.hidden = !visible.includes(s)));
+
+      // Re-flow the 12 / 6+6 rhythm on the visible projects
+      const n = visible.length;
+      visible.forEach((s, i) => {
+        let size = i % 3 === 0 ? 'full' : 'half';
+        if (n % 3 === 2 && i === n - 1) size = 'full';
+        s.dataset.size = size;
+        s.querySelectorAll<HTMLElement>('[data-reveal]').forEach((r) => r.classList.add('is-in'));
+        enter(s);
+      });
+
+      rows.forEach((r) => {
+        r.hidden = !match(r);
+        if (!r.hidden) enter(r);
+      });
+
+      const years = visible.map((s) => Number(s.dataset.year)).filter(Number.isFinite);
+      const lo = Math.min(...years);
+      const hi = Math.max(...years);
+      const span = years.length ? (lo === hi ? `${lo}` : `${lo} to ${hi}`) : '';
+      count.textContent = `${n} of ${total} projects${span ? `, ${span}` : ''}`;
+    };
+
+    const applyView = (view: string) => {
+      grid.hidden = view !== 'grid';
+      index.hidden = view !== 'index';
+      try {
+        localStorage.setItem('work-view', view);
+      } catch {}
+    };
+
+    filterBtns.forEach((b) =>
+      b.addEventListener('click', () => {
+        press(filterBtns, b);
+        applyFilter(b.dataset.filter!);
+      }),
+    );
+
+    viewBtns.forEach((b) =>
+      b.addEventListener('click', () => {
+        press(viewBtns, b);
+        applyView(b.dataset.view!);
+      }),
+    );
+
+    try {
+      const saved = localStorage.getItem('work-view');
+      const btn = viewBtns.find((b) => b.dataset.view === saved);
+      if (btn && saved) {
+        press(viewBtns, btn);
+        applyView(saved);
+      }
+    } catch {}
+
+    // Index view: the cover preview follows the cursor
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      root.querySelectorAll<HTMLElement>('[data-preview-host]').forEach((row) => {
+        const prev = row.querySelector<HTMLElement>('.irow__preview')!;
+        row.addEventListener('pointerenter', () => row.classList.add('is-previewing'));
+        row.addEventListener('pointerleave', () => row.classList.remove('is-previewing'));
+        row.addEventListener('pointermove', (e) => {
+          prev.style.transform = `translate3d(${e.clientX + 24}px, ${e.clientY - 110}px, 0)`;
+        });
+      });
+    }
+  }
+</script>
+
 <style>
   /* Hero ----------------------------------------------------------------- */
   /* Scroll 0 shows only the statement; the work is revealed on scroll */
@@ -128,9 +287,8 @@ const principles = [
   }
 
   /* Statement entrance: each word comes into focus in sequence — fade, de-blur and a
-     small rise. No masks, so letters are never cut. */
-  /* fill-mode backwards: hidden during the delay, then back to the natural (filter-free)
-     style once done, so the text isn't left on a blurred compositing layer. */
+     small rise. No masks, so letters are never cut. fill-mode backwards: hidden during
+     the delay, then back to the natural (filter-free) style once done. */
   .w {
     display: inline-block;
     animation: word-in 1.4s var(--ease-out) backwards;
@@ -158,46 +316,243 @@ const principles = [
   }
 
   /* Work ----------------------------------------------------------------- */
-  .work__index-link {
-    display: flex;
+  .work {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .work__head {
+    row-gap: var(--space-2);
     align-items: baseline;
-    gap: var(--space-2);
-    padding-block: var(--space-1);
-    border-top: 1px solid var(--rule);
-    color: var(--ink-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .work__title {
+    grid-column: 1 / span 5;
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+  }
+
+  .work__filters,
+  .work__views {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .work__filters {
+    grid-column: 6 / -1;
+  }
+
+  .work__count {
+    grid-column: 1 / span 6;
     font-size: var(--fs-small);
-    transition:
-      color 0.25s,
-      padding-left 0.4s var(--ease-out);
+    color: var(--ink-3);
   }
 
-  .work__index-link .label {
-    min-width: 2ch;
-    color: var(--ink-4);
-    transition: color 0.25s;
+  .work__views {
+    grid-column: 7 / -1;
   }
 
-  .work__index li:last-child .work__index-link {
-    border-bottom: 1px solid var(--rule);
+  /* Options (filters + view switch): grey until hover or selected. The selected one
+     turns ink and is underlined — name and count each get their own underline. */
+  .opt {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    font-size: var(--fs-small);
+    color: var(--ink-3);
+    transition: color 0.2s;
   }
 
-  .work__index-link:hover,
-  .work__index-link:global(.is-active) {
+  .opt__count {
+    font-size: var(--fs-label);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .opt__name,
+  .opt__count {
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 6px;
+    transition: text-decoration-color 0.25s;
+  }
+
+  .opt:hover,
+  .opt[aria-pressed='true'] {
     color: var(--ink);
   }
 
-  .work__index-link:global(.is-active) {
-    padding-left: 10px;
+  .opt[aria-pressed='true'] .opt__name,
+  .opt[aria-pressed='true'] .opt__count {
+    text-decoration-color: currentColor;
   }
 
-  .work__index-link:global(.is-active) .label {
+  /* Grid view: 12 / 6+6 rhythm */
+  .work__grid {
+    row-gap: var(--space-item);
+  }
+
+  .work__slot {
+    grid-column: span 6;
+    --card-ratio: 4 / 3;
+  }
+
+  .work__slot[data-size='full'] {
+    grid-column: 1 / -1;
+    --card-ratio: 2 / 1;
+  }
+
+  .work__grid[hidden],
+  .work__index[hidden],
+  .work__slot[hidden],
+  .work__index li[hidden] {
+    display: none;
+  }
+
+  .work__slot:global(.is-entering),
+  .work__index li:global(.is-entering) {
+    animation: work-in 0.6s var(--ease-out) both;
+  }
+
+  @keyframes work-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  /* Index view */
+  .irow {
+    position: relative;
+    align-items: baseline;
+    padding-block: var(--space-2);
+    border-top: 1px solid var(--rule);
+  }
+
+  .irow--head {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .work__index li:last-child .irow {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .irow__n {
+    grid-column: 1 / span 1;
+    color: var(--ink-4);
+    transition: color 0.2s;
+  }
+
+  .irow__title {
+    grid-column: 2 / span 4;
+  }
+
+  a.irow .irow__title {
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+
+  .irow__type {
+    grid-column: 6 / span 3;
+  }
+
+  .irow__role {
+    grid-column: 9 / span 3;
+  }
+
+  .irow__year {
+    grid-column: 12 / span 1;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  a.irow .irow__type,
+  a.irow .irow__role,
+  a.irow .irow__year {
+    font-size: var(--fs-small);
+    color: var(--ink-3);
+  }
+
+  a.irow:hover .irow__n {
     color: var(--signal);
   }
 
-  .work__list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-item);
+  /* Cover preview that follows the cursor (positioned by the script) */
+  .irow__preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    width: 300px;
+    pointer-events: none;
+    opacity: 0;
+    scale: 0.94;
+    transition:
+      opacity 0.25s,
+      scale 0.4s var(--ease-out);
+  }
+
+  .irow__preview :global(.cover) {
+    aspect-ratio: 4 / 3;
+  }
+
+  a.irow:global(.is-previewing) .irow__preview {
+    opacity: 1;
+    scale: 1;
+  }
+
+  @media (hover: none) {
+    .irow__preview {
+      display: none;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .work__title,
+    .work__count,
+    .work__filters,
+    .work__views {
+      grid-column: 1 / -1;
+      justify-content: flex-start;
+    }
+
+    .irow__title {
+      grid-column: 2 / span 7;
+    }
+
+    .irow__type {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .work__slot,
+    .work__slot[data-size='full'] {
+      grid-column: 1 / -1;
+      --card-ratio: 4 / 3;
+    }
+
+    .irow__n,
+    .irow__role {
+      display: none;
+    }
+
+    .irow__title {
+      grid-column: 1 / span 9;
+    }
+
+    .irow__year {
+      grid-column: 10 / -1;
+    }
   }
 
   /* Process -------------------------------------------------------------- */

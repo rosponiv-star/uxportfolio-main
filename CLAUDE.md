@@ -10,7 +10,7 @@ all site copy is in **English**.
 ## Stack
 
 - Astro 7 (static output) + MDX + sitemap. No CSS framework: hand-written CSS.
-- Fonts: Geist / Geist Mono via Fontsource (self-hosted).
+- Font: Geist only, via Fontsource (self-hosted). Geist Mono was removed.
 - Deploy: GitHub `rosponiv-star/uxportfolio-main` → Cloudflare (build `npm run build`, output `dist`).
   Domain: www.valeriorosponi.com.
 - Note: on this machine run `astro` commands from PowerShell. In Git Bash, Rolldown's native
@@ -18,7 +18,8 @@ all site copy is in **English**.
 
 ## Structure
 
-- `src/pages/index.astro`: Work page, which is also the home: hero, selected work, "How I work" principles.
+- `src/pages/index.astro`: Work page, which is also the home: full-screen hero, Selected work (filters, project count,
+  Grid/Index switch, grid of cards in a 12 / 6+6 rhythm), "How I work" principles.
 - `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
 - `src/pages/work/[slug].astro`: case study template.
 - `src/pages/about.astro`, `src/pages/playground.astro`, `src/pages/404.astro`.
@@ -71,23 +72,25 @@ and use `cover.video`.
 ## Type scale (strict)
 
 Use only the size tokens in global.css: mega, h2 (48), h3 (28), lead (~22), body (17), small (15)
-and label (12, mono). Never hard-code a font size. The only exceptions are graphics: the cover
+and label (12, Geist Medium uppercase, 8% tracking). Never hard-code a font size. The only exceptions are graphics: the cover
 title, the footer wordmark and the nav micro-numbers.
 
 - Section titles and project card titles use h2. Other item titles (principles, insights, rows) use h3.
 - Running text uses body. Navigation, index, notes, captions and secondary facts use small.
 - An item row (principles, insights, About rows) is always: title in track A, text in tracks B–C.
 
-## Project facts
+## Work section
 
-On the project card, the facts sit in a single mono label line above the title:
-"TYPE · YEAR · ROLE · ● IN PROGRESS". Below it come the title (h2) and the tagline, all in tracks A–B.
-
-The owner has rejected two other placements, so do not bring them back:
-- a facts block in track C, right-aligned under the cover;
-- facts unfolding inside the Work index.
-
-The Work index stays a plain numbered list.
+- Filters come from `categories` in each MDX file. The vocabulary is fixed in `lib/projects.ts → CATEGORIES` and in
+  the enum in `content.config.ts`. Only categories in use are shown, with their counts.
+- The selected filter or view turns ink and is underlined (name and count separately). The others stay grey.
+- Grid rhythm: full width (2:1), then two halves (4:3 each), repeating. A half left alone becomes full. The script
+  re-flows the rhythm on the filtered set.
+- Card: cover, then title (h3) with the year on the right, then "type, platform" in small grey text.
+- Index view: a table (No., project, type, role, year). On hover the cover follows the cursor. The chosen view is
+  remembered in localStorage.
+- The owner rejected these, so do not bring them back: a facts block right-aligned under the cover; facts unfolding
+  in an index; the sticky side index next to the cards.
 
 Status:
 - JustCook (01) is written with real data.
@@ -110,7 +113,8 @@ Status:
   touch of brutalism (oversized type) and one experimental gesture (the cursor-reactive registration field).
 - Background `#f5f5f0`. One accent `--signal` (#3d5a73), used sparingly. No gradients and no
   fluorescent colours.
-- Type: Geist Medium for headings (H2 ≈ 48px), Geist Mono Bold for small labels. Use contrast between
+- Type: Geist Medium for headings (H2 ≈ 48px), labels in Geist Medium at 12px, uppercase, 8% tracking,
+  tabular figures. Use contrast between
   ink and grey to build hierarchy.
 - Animation level is medium. Always respect `prefers-reduced-motion`.
 - Never use skill percentages, skill bars or proficiency ratings for skills or tools.

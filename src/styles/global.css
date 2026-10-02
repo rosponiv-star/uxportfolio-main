@@ -1,5 +1,4 @@
 @import '@fontsource-variable/geist/wght.css';
-@import '@fontsource-variable/geist-mono/wght.css';
 
 /* ==========================================================================
    Tokens
@@ -22,7 +21,6 @@
 
   /* Type */
   --font-sans: 'Geist Variable', 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'Geist Mono Variable', 'Geist Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   /* Type scale — the only sizes allowed on the site:
      mega    page titles, next-project band, footer wordmark
@@ -31,7 +29,7 @@
      lead    supporting statements under titles (≈22px)
      body    running text (17px)
      small   navigation, index, notes, captions, secondary facts (15px)
-     label   Geist Mono Bold uppercase labels and numbers (12px) */
+     label   Geist Medium, uppercase, wide tracking: labels and numbers (12px) */
   --fs-label: 0.75rem;
   --fs-small: 0.9375rem;
   --fs-body: 1.0625rem;
@@ -181,13 +179,15 @@ dd {
 /* ==========================================================================
    Type
    ========================================================================== */
+/* Second voice: same family, opposite treatment — small, uppercase, open tracking,
+   tabular figures — so it reads as metadata next to tight, large headings. */
 .label {
-  font-family: var(--font-mono);
   font-size: var(--fs-label);
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   line-height: 1.4;
   text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
 }
 
 .muted {
@@ -507,9 +507,10 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
   position: absolute;
   left: 0;
   top: 0.3em;
-  font-family: var(--font-mono);
   font-size: var(--fs-label);
-  font-weight: 700;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
   color: var(--signal);
 }
 
@@ -753,10 +754,9 @@ a:focus-visible .arrow--back {
   margin: 14px 0 0 14px;
   background: var(--ink);
   color: var(--paper);
-  font-family: var(--font-mono);
   font-size: var(--fs-label);
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
   opacity: 0;
