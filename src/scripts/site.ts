@@ -94,6 +94,8 @@ function initCursorLabel() {
   targets.forEach((el) => {
     el.addEventListener('pointerenter', (e) => {
       label.textContent = el.dataset.cursor || 'View';
+      // Light label over dark surfaces (e.g. a dark next-project band)
+      label.classList.toggle('is-light', el.dataset.cursorTheme === 'light');
       x = cx = e.clientX;
       y = cy = e.clientY;
       active = true;

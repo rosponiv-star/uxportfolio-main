@@ -5,12 +5,14 @@ interface Props {
   class?: string;
   spacing?: number;
   radius?: number;
+  // Mark colour override (hex), e.g. paper on dark backgrounds. Defaults to --ink.
+  ink?: string;
 }
-const { class: className, spacing = 30, radius = 170 } = Astro.props;
+const { class: className, spacing = 30, radius = 170, ink } = Astro.props;
 ---
 
 <div class:list={['regfield', className]} aria-hidden="true">
-  <canvas data-regfield data-spacing={spacing} data-radius={radius}></canvas>
+  <canvas data-regfield data-spacing={spacing} data-radius={radius} data-ink={ink}></canvas>
 </div>
 
 <style>
@@ -45,7 +47,6 @@ const { class: className, spacing = 30, radius = 170 } = Astro.props;
     const n = parseInt(hex.replace('#', ''), 16);
     return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
   }
-  const ink = hexToRgb(INK);
   const sig = hexToRgb(SIGNAL);
 
   document.querySelectorAll<HTMLCanvasElement>('canvas[data-regfield]').forEach((canvas) => {
@@ -54,6 +55,7 @@ const { class: className, spacing = 30, radius = 170 } = Astro.props;
     const host = canvas.parentElement!.parentElement || canvas.parentElement!;
     const spacing = Number(canvas.dataset.spacing) || 30;
     const radius = Number(canvas.dataset.radius) || 170;
+    const ink = hexToRgb(canvas.dataset.ink || INK);
 
     let marks: Mark[] = [];
     let w = 0;

@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Section from '../../components/Section.astro';
 import Cover from '../../components/Cover.astro';
+import RegistrationField from '../../components/RegistrationField.astro';
 import Chapter from '../../components/case/Chapter.astro';
 import Todo from '../../components/case/Todo.astro';
 import Figure from '../../components/case/Figure.astro';
@@ -121,18 +122,15 @@ const facts = [
     class:list={['next', { 'next--dark': next.data.toneDark }]}
     style={`--tone: ${next.data.tone}`}
     data-cursor="Open case study"
+    data-cursor-theme={next.data.toneDark ? 'light' : undefined}
     aria-label={`Next case study: ${next.data.title}`}
   >
-    <div class="next__grid" aria-hidden="true"></div>
+    <RegistrationField spacing={32} radius={220} ink={next.data.toneDark ? '#f5f5f0' : undefined} />
     <div class="wrap grid next__inner">
       <p class="next__label label">Next case study</p>
-      <p class="next__tagline col-text">{next.data.tagline}</p>
       <p class="next__title">{next.data.title}</p>
+      <p class="next__tagline">{next.data.tagline}</p>
     </div>
-    <span class="reg next__reg next__reg--tl" aria-hidden="true"></span>
-    <span class="reg next__reg next__reg--tr" aria-hidden="true"></span>
-    <span class="reg next__reg next__reg--bl" aria-hidden="true"></span>
-    <span class="reg next__reg next__reg--br" aria-hidden="true"></span>
   </a>
 </Base>
 
@@ -285,43 +283,23 @@ const facts = [
     color: var(--paper);
   }
 
-  .next__grid {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background-image:
-      linear-gradient(to right, color-mix(in srgb, currentColor 9%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in srgb, currentColor 9%, transparent) 1px, transparent 1px);
-    background-size: 64px 64px;
-    background-position: center;
-    mask-image: radial-gradient(ellipse at 50% 60%, #000 25%, transparent 80%);
-    transition: transform 1.4s var(--ease-out);
-  }
-
-  .next:hover .next__grid {
-    transform: scale(1.04);
-  }
-
+  /* One block anchored bottom-left: label → title → tagline. The space above is left to
+     the cursor-reactive registration field, the site's signature gesture. */
   .next__inner {
-    min-height: clamp(420px, 72vh, 760px);
-    align-content: space-between;
-    row-gap: var(--space-6);
+    position: relative;
+    min-height: clamp(440px, 76vh, 800px);
+    align-content: end;
     padding-block: var(--space-6);
+    pointer-events: none;
   }
 
   .next__label {
-    grid-column: 1 / span 3;
-  }
-
-  .next__tagline {
-    font-size: var(--fs-lead);
-    line-height: 1.35;
-    letter-spacing: -0.012em;
-    max-width: 34ch;
+    grid-column: 1 / -1;
   }
 
   .next__title {
     grid-column: 1 / -1;
+    margin-top: var(--space-3);
     margin-left: -0.05em;
     font-size: var(--fs-mega);
     font-weight: 500;
@@ -335,31 +313,14 @@ const facts = [
     transform: translateX(var(--space-3));
   }
 
-  .next__reg {
-    position: absolute;
-    width: 13px;
-    height: 13px;
-    opacity: 0.6;
-  }
-
-  .next__reg--tl {
-    top: var(--space-3);
-    left: var(--space-3);
-  }
-
-  .next__reg--tr {
-    top: var(--space-3);
-    right: var(--space-3);
-  }
-
-  .next__reg--bl {
-    bottom: var(--space-3);
-    left: var(--space-3);
-  }
-
-  .next__reg--br {
-    bottom: var(--space-3);
-    right: var(--space-3);
+  .next__tagline {
+    grid-column: 1 / span 6;
+    margin-top: var(--space-4);
+    max-width: 40ch;
+    font-size: var(--fs-lead);
+    line-height: 1.35;
+    letter-spacing: -0.012em;
+    opacity: 0.8;
   }
 
   /* The band already separates the page from the footer */
@@ -372,7 +333,6 @@ const facts = [
   }
 
   @media (max-width: 960px) {
-    .next__label,
     .next__tagline {
       grid-column: 1 / -1;
     }

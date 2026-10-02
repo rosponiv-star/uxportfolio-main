@@ -766,6 +766,11 @@ a:focus-visible .arrow--back {
     scale 0.35s var(--ease-out);
 }
 
+.cursor-label.is-light {
+  background: var(--paper);
+  color: var(--ink);
+}
+
 .cursor-label.is-visible {
   opacity: 1;
   scale: 1;
