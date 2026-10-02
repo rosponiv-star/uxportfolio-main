@@ -69,7 +69,7 @@ and use `cover.video`.
 ## Type scale (strict)
 
 Use only the size tokens in global.css: mega, h2 (48), h3 (28), lead (~22), body (17), small (15)
-and label (11, mono). Never hard-code a font size. The only exceptions are graphics: the cover
+and label (12, mono). Never hard-code a font size. The only exceptions are graphics: the cover
 title, the footer wordmark and the nav micro-numbers.
 
 - Section titles and project card titles use h2. Other item titles (principles, insights, rows) use h3.

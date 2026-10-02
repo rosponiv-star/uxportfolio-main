@@ -31,8 +31,8 @@
      lead    supporting statements under titles (≈22px)
      body    running text (17px)
      small   navigation, index, notes, captions, secondary facts (15px)
-     label   Geist Mono Bold uppercase labels and numbers (11px) */
-  --fs-label: 0.6875rem;
+     label   Geist Mono Bold uppercase labels and numbers (12px) */
+  --fs-label: 0.75rem;
   --fs-small: 0.9375rem;
   --fs-body: 1.0625rem;
   --fs-lead: clamp(1.1875rem, 1rem + 0.5vw, 1.4375rem);
