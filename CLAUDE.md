@@ -75,7 +75,7 @@ and use `cover.video`.
 
 ## Type scale (strict)
 
-Use only the size tokens in global.css: mega, h2 (48), h3 (28), lead (~22), body (17), small (15)
+Use only the size tokens in global.css: mega, display (36→60, page-opening statements, Geist Regular), h2 (48), h3 (28), lead (~22), body (17), small (15)
 and label (12, Geist Medium uppercase, 8% tracking). Never hard-code a font size. The only exceptions are graphics: the cover
 title, the footer wordmark and the nav micro-numbers.
 
@@ -98,7 +98,7 @@ title, the footer wordmark and the nav micro-numbers.
   the enum in `content.config.ts`. Only categories in use are shown, with their counts.
 - The selected filter or view turns ink and is underlined (name and count separately). The others stay grey.
 - Grid: two columns, every card half width (4:3). One column on phones.
-- Card: cover, then title (h3) with the year on the right, then "type, platform" in small grey text.
+- Card: title (lead size, Medium) with the year on the right and "type, platform" on one grey line ABOVE the cover.
 - Index view: a table (No., project, type, role, year). On hover the cover follows the cursor. The chosen view is
   remembered in localStorage.
 - The owner rejected these, so do not bring them back: a facts block right-aligned under the cover; facts unfolding
@@ -133,7 +133,8 @@ Status:
 - No filler: every label or element must carry real information. That rules out decorative counters,
   status chips, local clocks, "(01)" section indices and taglines that repeat nearby content.
   Exception, requested by the owner: the small numbers (01, 02…) in the nav and in the Work index stay.
-- Hero statement: short, a single dark colour, 48px.
+- Page-opening statements (home hero, About, Playground, 404) use `.display`: larger than section titles but Regular
+  and airier, so they read as a voice. Section titles stay h2 Medium.
 - Do not tell the owner's personal/educational backstory (school history, internships,
   certifications). The CV covers that. Keep the focus on projects and process.
 - Voice: professional, direct, human. Write about the product in the third person or impersonally,
