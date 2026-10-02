@@ -86,7 +86,7 @@ title, the footer wordmark and the nav micro-numbers.
   `.work__slot` (sizes from `gridSizes()` in `lib/collection.ts`). `components/Card.astro` is the generic card;
   `ProjectCard` wraps it with the project cover. Playground experiments are defined in `playground.astro`, with their
   own filter vocabulary, and their live demo is the card media.
-- Small text (filters, counts, meta, nav, notes) is 16px through `--fs-small`. The selected option has a 2px underline.
+- Small text (filters, counts, meta, nav, notes) is 16px through `--fs-small`. The selected option has a 1.5px underline.
 
 - Filters come from `categories` in each MDX file. The vocabulary is fixed in `lib/projects.ts → CATEGORIES` and in
   the enum in `content.config.ts`. Only categories in use are shown, with their counts.
