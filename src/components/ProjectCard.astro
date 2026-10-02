@@ -1,8 +1,8 @@
 ---
-// Grid card: cover, then title with the year on the right, then type and platform in grey.
-// Width/ratio come from the Work grid slot (data-size="full" | "half").
+// Project card for the Work grid: a Card with the project cover as media.
+import Card from './Card.astro';
 import Cover from './Cover.astro';
-import { categoryId, hrefOf, slugOf, type Project } from '../lib/projects';
+import { hrefOf, slugOf, type Project } from '../lib/projects';
 
 interface Props {
   project: Project;
@@ -10,66 +10,16 @@ interface Props {
 }
 
 const { project, eager } = Astro.props;
-const { title, year, type, platform, categories } = project.data;
+const { title, year, type, platform } = project.data;
 ---
 
-<article
-  class="pcard"
+<Card
   id={`p-${slugOf(project)}`}
-  data-work-item
-  data-cats={categories.map(categoryId).join(' ')}
+  title={title}
+  year={year}
+  meta={`${type}, ${platform}`}
+  href={hrefOf(project)}
+  cursor="Read case study"
 >
-  <a href={hrefOf(project)} class="pcard__link" data-cursor="Read case study">
-    <div class="pcard__cover" data-reveal="clip">
-      <Cover project={project} eager={eager} sizes="(min-width: 960px) 90vw, 100vw" />
-    </div>
-    <div class="pcard__info">
-      <h3 class="pcard__title">{title}</h3>
-      <span class="pcard__year">{year}</span>
-      <p class="pcard__meta">{type}, {platform}</p>
-    </div>
-  </a>
-</article>
-
-<style>
-  .pcard__link {
-    display: block;
-  }
-
-  .pcard__cover {
-    overflow: hidden;
-  }
-
-  /* Ratio is set by the grid slot: full = 2/1, half = 4/3 */
-  .pcard__cover :global(.cover) {
-    aspect-ratio: var(--card-ratio, 4 / 3);
-  }
-
-  .pcard__info {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    column-gap: var(--space-3);
-    row-gap: 6px;
-    align-items: baseline;
-    padding-top: var(--space-2);
-  }
-
-  .pcard__title {
-    font-size: var(--fs-h3);
-    font-weight: 500;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-  }
-
-  .pcard__year {
-    font-size: var(--fs-small);
-    color: var(--ink-3);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .pcard__meta {
-    grid-column: 1 / -1;
-    font-size: var(--fs-small);
-    color: var(--ink-3);
-  }
-</style>
+  <Cover project={project} eager={eager} sizes="(min-width: 960px) 90vw, 100vw" />
+</Card>

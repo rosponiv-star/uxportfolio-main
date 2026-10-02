@@ -1,0 +1,457 @@
+---
+// Filterable collection (Work, Playground): title, category filters with counts,
+// item count, Grid/Index switch, a 12 / 6+6 grid and an index table.
+//
+// The parent renders the grid items in the default slot, each wrapped in
+//   <div class="work__slot" data-size="full|half" data-year="…" data-cats="id id"> … </div>
+// (use gridSizes() and categoryId() from lib/collection).
+import Cover from './Cover.astro';
+import { categoryId, yearSpan } from '../lib/collection';
+import type { Project } from '../lib/projects';
+
+export interface CollectionItem {
+  title: string;
+  num: string;
+  year: string;
+  type: string;
+  role: string;
+  cats: string[];
+  href?: string;
+  project?: Project; // for the index preview cover
+  tone?: string; // preview tone when there is no project
+}
+
+interface Props {
+  id: string;
+  title: string;
+  noun: [string, string]; // singular, plural
+  categories: readonly string[];
+  items: CollectionItem[];
+}
+
+const { id, title, noun, categories, items } = Astro.props;
+const n = items.length;
+
+const filters = [
+  { id: 'all', label: 'All', count: n },
+  ...categories
+    .map((c) => ({ id: categoryId(c), label: c, count: items.filter((it) => it.cats.includes(c)).length }))
+    .filter((f) => f.count > 0),
+];
+const span = yearSpan(items.map((i) => i.year));
+---
+
+<section class="work" id={id} aria-labelledby={`${id}-title`} data-work data-noun={noun.join('|')}>
+  <header class="grid work__head">
+    <h2 class="work__title" id={`${id}-title`}>{title}</h2>
+
+    <div class="work__filters" role="group" aria-label={`Filter ${noun[1]} by type`}>
+      {
+        filters.map((f, i) => (
+          <button type="button" class="opt" data-filter={f.id} aria-pressed={i === 0 ? 'true' : 'false'}>
+            <span class="opt__name">{f.label}</span>
+            <span class="opt__count">{f.count}</span>
+          </button>
+        ))
+      }
+    </div>
+
+    <p class="work__count" aria-live="polite" data-work-count data-total={n}>
+      {n} of {n} {n === 1 ? noun[0] : noun[1]}{span && `, ${span}`}
+    </p>
+
+    <div class="work__views" role="group" aria-label="View">
+      <button type="button" class="opt" data-view="grid" aria-pressed="true"><span class="opt__name">Grid</span></button>
+      <button type="button" class="opt" data-view="index" aria-pressed="false"><span class="opt__name">Index</span></button>
+    </div>
+  </header>
+
+  <div class="grid work__grid" data-work-grid>
+    <slot />
+  </div>
+
+  <div class="work__index" data-work-index hidden>
+    <div class="grid irow irow--head label muted" aria-hidden="true">
+      <span class="irow__n">No.</span>
+      <span class="irow__title">Title</span>
+      <span class="irow__type">Type</span>
+      <span class="irow__role">Role</span>
+      <span class="irow__year">Year</span>
+    </div>
+    <ol>
+      {
+        items.map((it) => {
+          const Row = it.href ? 'a' : 'div';
+          return (
+            <li data-year={it.year} data-cats={it.cats.map(categoryId).join(' ')}>
+              <Row class="grid irow irow--item" href={it.href} data-preview-host>
+                <span class="irow__n label">{it.num}</span>
+                <span class="irow__title">{it.title}</span>
+                <span class="irow__type">{it.type}</span>
+                <span class="irow__role">{it.role}</span>
+                <span class="irow__year">{it.year}</span>
+                <span class="irow__preview" aria-hidden="true">
+                  {it.project ? (
+                    <Cover project={it.project} sizes="300px" />
+                  ) : (
+                    <span class="irow__tone" style={`background:${it.tone ?? 'var(--paper-2)'}`}>
+                      {it.title}
+                    </span>
+                  )}
+                </span>
+              </Row>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-work]').forEach((root) => {
+    const [single, plural] = (root.dataset.noun || 'item|items').split('|');
+    const key = `view:${root.id}`;
+    const slots = Array.from(root.querySelectorAll<HTMLElement>('.work__slot'));
+    const rows = Array.from(root.querySelectorAll<HTMLElement>('[data-work-index] li'));
+    const grid = root.querySelector<HTMLElement>('[data-work-grid]')!;
+    const index = root.querySelector<HTMLElement>('[data-work-index]')!;
+    const count = root.querySelector<HTMLElement>('[data-work-count]')!;
+    const total = Number(count.dataset.total);
+    const filterBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const viewBtns = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-view]'));
+
+    const press = (btns: HTMLButtonElement[], on: HTMLButtonElement) =>
+      btns.forEach((b) => b.setAttribute('aria-pressed', String(b === on)));
+
+    const enter = (el: HTMLElement) => {
+      el.classList.remove('is-entering');
+      void el.offsetWidth;
+      el.classList.add('is-entering');
+    };
+
+    const applyFilter = (id: string) => {
+      const match = (el: HTMLElement) => id === 'all' || (el.dataset.cats || '').split(' ').includes(id);
+      const visible = slots.filter(match);
+      slots.forEach((s) => (s.hidden = !visible.includes(s)));
+
+      // Re-flow the 12 / 6+6 rhythm on what is visible
+      const n = visible.length;
+      visible.forEach((s, i) => {
+        let size = i % 3 === 0 ? 'full' : 'half';
+        if (n % 3 === 2 && i === n - 1) size = 'full';
+        s.dataset.size = size;
+        s.querySelectorAll<HTMLElement>('[data-reveal]').forEach((r) => r.classList.add('is-in'));
+        enter(s);
+      });
+
+      rows.forEach((r) => {
+        r.hidden = !match(r);
+        if (!r.hidden) enter(r);
+      });
+
+      const years = visible.map((s) => Number(s.dataset.year)).filter(Number.isFinite);
+      const lo = Math.min(...years);
+      const hi = Math.max(...years);
+      const span = years.length ? (lo === hi ? `${lo}` : `${lo} to ${hi}`) : '';
+      count.textContent = `${n} of ${total} ${total === 1 ? single : plural}${span ? `, ${span}` : ''}`;
+    };
+
+    const applyView = (view: string) => {
+      grid.hidden = view !== 'grid';
+      index.hidden = view !== 'index';
+      try {
+        localStorage.setItem(key, view);
+      } catch {}
+    };
+
+    filterBtns.forEach((b) =>
+      b.addEventListener('click', () => {
+        press(filterBtns, b);
+        applyFilter(b.dataset.filter!);
+      }),
+    );
+
+    viewBtns.forEach((b) =>
+      b.addEventListener('click', () => {
+        press(viewBtns, b);
+        applyView(b.dataset.view!);
+      }),
+    );
+
+    try {
+      const saved = localStorage.getItem(key);
+      const btn = viewBtns.find((b) => b.dataset.view === saved);
+      if (btn && saved) {
+        press(viewBtns, btn);
+        applyView(saved);
+      }
+    } catch {}
+
+    // Index view: the preview follows the cursor
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      root.querySelectorAll<HTMLElement>('[data-preview-host]').forEach((row) => {
+        const prev = row.querySelector<HTMLElement>('.irow__preview')!;
+        row.addEventListener('pointerenter', () => row.classList.add('is-previewing'));
+        row.addEventListener('pointerleave', () => row.classList.remove('is-previewing'));
+        row.addEventListener('pointermove', (e) => {
+          prev.style.transform = `translate3d(${e.clientX + 24}px, ${e.clientY - 110}px, 0)`;
+        });
+      });
+    }
+  });
+</script>
+
+<style>
+  .work {
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .work__head {
+    row-gap: var(--space-2);
+    align-items: baseline;
+    margin-bottom: var(--space-6);
+  }
+
+  .work__title {
+    grid-column: 1 / span 5;
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: 1.04;
+    letter-spacing: -0.035em;
+  }
+
+  .work__filters,
+  .work__views {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-1) var(--space-3);
+  }
+
+  .work__filters {
+    grid-column: 6 / -1;
+  }
+
+  .work__count {
+    grid-column: 1 / span 6;
+    font-size: var(--fs-small);
+    color: var(--ink-3);
+  }
+
+  .work__views {
+    grid-column: 7 / -1;
+  }
+
+  /* Options (filters + view switch): grey until hover or selected. The selected one
+     turns ink and is underlined — name and count each get their own underline. */
+  .opt {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+    font-size: var(--fs-small);
+    color: var(--ink-3);
+    transition: color 0.2s;
+  }
+
+  .opt__count {
+    font-size: 0.8em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .opt__name,
+  .opt__count {
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 7px;
+    transition: text-decoration-color 0.25s;
+  }
+
+  .opt:hover,
+  .opt[aria-pressed='true'] {
+    color: var(--ink);
+  }
+
+  .opt[aria-pressed='true'] .opt__name,
+  .opt[aria-pressed='true'] .opt__count {
+    text-decoration-color: currentColor;
+  }
+
+  /* Grid view: 12 / 6+6 rhythm */
+  .work__grid {
+    row-gap: var(--space-item);
+  }
+
+  .work__grid :global(.work__slot) {
+    grid-column: span 6;
+    --card-ratio: 4 / 3;
+  }
+
+  .work__grid :global(.work__slot[data-size='full']) {
+    grid-column: 1 / -1;
+    --card-ratio: 2 / 1;
+  }
+
+  .work__grid[hidden],
+  .work__index[hidden],
+  .work__grid :global(.work__slot[hidden]),
+  .work__index li[hidden] {
+    display: none;
+  }
+
+  .work__grid :global(.work__slot.is-entering),
+  .work__index li:global(.is-entering) {
+    animation: work-in 0.6s var(--ease-out) both;
+  }
+
+  @keyframes work-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  /* Index view */
+  .irow {
+    position: relative;
+    align-items: baseline;
+    padding-block: var(--space-2);
+    border-top: 1px solid var(--rule);
+  }
+
+  .irow--head {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .work__index li:last-child .irow {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .irow__n {
+    grid-column: 1 / span 1;
+    color: var(--ink-4);
+    transition: color 0.2s;
+  }
+
+  .irow__title {
+    grid-column: 2 / span 4;
+  }
+
+  .irow--item .irow__title {
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+
+  .irow__type {
+    grid-column: 6 / span 3;
+  }
+
+  .irow__role {
+    grid-column: 9 / span 3;
+  }
+
+  .irow__year {
+    grid-column: 12 / span 1;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .irow--item .irow__type,
+  .irow--item .irow__role,
+  .irow--item .irow__year {
+    font-size: var(--fs-small);
+    color: var(--ink-3);
+  }
+
+  .irow--item:hover .irow__n {
+    color: var(--signal);
+  }
+
+  /* Preview that follows the cursor (positioned by the script) */
+  .irow__preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 40;
+    width: 300px;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    scale: 0.94;
+    transition:
+      opacity 0.25s,
+      scale 0.4s var(--ease-out);
+  }
+
+  .irow__preview :global(.cover) {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .irow__tone {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  .irow--item:global(.is-previewing) .irow__preview {
+    opacity: 1;
+    scale: 1;
+  }
+
+  @media (hover: none) {
+    .irow__preview {
+      display: none;
+    }
+  }
+
+  @media (max-width: 960px) {
+    .work__title,
+    .work__count,
+    .work__filters,
+    .work__views {
+      grid-column: 1 / -1;
+      justify-content: flex-start;
+    }
+
+    .irow__title {
+      grid-column: 2 / span 7;
+    }
+
+    .irow__type {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .work__grid :global(.work__slot),
+    .work__grid :global(.work__slot[data-size='full']) {
+      grid-column: 1 / -1;
+      --card-ratio: 4 / 3;
+    }
+
+    .irow__n,
+    .irow__role {
+      display: none;
+    }
+
+    .irow__title {
+      grid-column: 1 / span 9;
+    }
+
+    .irow__year {
+      grid-column: 10 / -1;
+    }
+  }
+</style>

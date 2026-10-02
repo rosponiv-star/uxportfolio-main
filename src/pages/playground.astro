@@ -1,7 +1,36 @@
 ---
 import Base from '../layouts/Base.astro';
-import Section from '../components/Section.astro';
+import Collection, { type CollectionItem } from '../components/Collection.astro';
+import Card from '../components/Card.astro';
 import RegistrationField from '../components/RegistrationField.astro';
+import { categoryId, gridSizes } from '../lib/collection';
+
+// Filter vocabulary for experiments, in display order (only categories in use are shown).
+const CATEGORIES = ['Interaction', 'Generative', 'Motion', 'Typography', 'Code'] as const;
+
+// Each experiment: card data + which live demo or media to render (see the switch below).
+const experiments = [
+  {
+    key: 'registration-field',
+    title: 'Registration field',
+    year: '2026',
+    type: 'Interactive canvas',
+    role: 'Design & code',
+    meta: 'Interactive canvas, TypeScript. Move your cursor over it.',
+    cats: ['Interaction', 'Code'],
+  },
+];
+
+const sizes = gridSizes(experiments.length);
+const items: CollectionItem[] = experiments.map((e, i) => ({
+  title: e.title,
+  num: String(i + 1).padStart(2, '0'),
+  year: e.year,
+  type: e.type,
+  role: e.role,
+  cats: e.cats,
+  tone: 'var(--paper-2)',
+}));
 ---
 
 <Base title="Playground" description="Experiments, side projects and things Valerio Rosponi made for the joy of it.">
@@ -13,51 +42,33 @@ import RegistrationField from '../components/RegistrationField.astro';
   </header>
 
   <div class="wrap">
-    <Section title="Experiments" id="experiments" stacked>
-      <article class="exp trio">
-        <div class="exp__stage span-2" data-reveal="clip">
-          <RegistrationField spacing={26} radius={200} />
-          <span class="exp__hint label">Move your cursor</span>
-        </div>
-        <div class="exp__info">
-          <h3 class="h3 trim">Registration field</h3>
-          <p>
-            The cursor-reactive grid that opened the first version of this site, given room to breathe. Print registration marks that turn and
-            warm up as you pass, a small nod to the precision behind every layout.
-          </p>
-          <p class="label muted">Canvas · TypeScript · 2026</p>
-        </div>
-      </article>
-    </Section>
+    <Collection id="experiments" title="Experiments" noun={['experiment', 'experiments']} categories={CATEGORIES} items={items}>
+      {
+        experiments.map((e, i) => (
+          <div class="work__slot" data-size={sizes[i]} data-year={e.year} data-cats={e.cats.map(categoryId).join(' ')}>
+            <Card id={`x-${e.key}`} title={e.title} year={e.year} meta={e.meta}>
+              {e.key === 'registration-field' && (
+                <div class="stage">
+                  <RegistrationField spacing={26} radius={200} />
+                </div>
+              )}
+            </Card>
+          </div>
+        ))
+      }
+    </Collection>
   </div>
 </Base>
 
 <style>
   .intro {
     padding-top: calc(var(--header-h) + var(--space-6) * 2);
+    padding-bottom: var(--space-section);
     row-gap: var(--space-4);
   }
 
-  .exp__stage {
-    position: relative;
-    aspect-ratio: 16 / 10;
+  .stage {
     background: var(--paper-2);
-    overflow: hidden;
     cursor: crosshair;
-  }
-
-  .exp__hint {
-    position: absolute;
-    left: var(--space-2);
-    bottom: var(--space-2);
-    color: var(--ink-3);
-    pointer-events: none;
-  }
-
-  .exp__info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    color: var(--ink-2);
   }
 </style>
