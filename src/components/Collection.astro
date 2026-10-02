@@ -272,6 +272,11 @@ const filters = [
     --card-ratio: 4 / 3;
   }
 
+  /* Second card of each row enters slightly later */
+  .work__grid :global(.work__slot:nth-child(even)) {
+    --card-delay: 120ms;
+  }
+
   .work__grid :global(.work__slot[data-size='full']) {
     grid-column: 1 / -1;
     --card-ratio: 2 / 1;

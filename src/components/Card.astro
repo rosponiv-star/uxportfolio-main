@@ -13,9 +13,9 @@ const { title, year, meta, href, cursor, id } = Astro.props;
 const Tag = href ? 'a' : 'div';
 ---
 
-<article class="card" id={id}>
+<article class="card" id={id} data-reveal="card">
   <Tag class="card__link" href={href} data-cursor={href ? cursor : undefined}>
-    <div class="card__media" data-reveal="clip">
+    <div class="card__media">
       <slot />
     </div>
     <div class="card__info">
@@ -29,6 +29,47 @@ const Tag = href ? 'a' : 'div';
 </article>
 
 <style>
+  /* Entrance (no change of footprint): the cover fades in at full size while the image inside
+     settles from a slight zoom; then title and meta rise a few pixels in sequence.
+     Driven by .is-in on [data-reveal='card'] (scripts/site.ts). Delay via --card-delay. */
+  :global(.js) .card .card__media {
+    opacity: 0;
+    transition: opacity 1s var(--ease-out) var(--card-delay, 0ms);
+  }
+
+  :global(.js) .card .card__media > :global(*) {
+    transform: scale(1.06);
+    transition: transform 1.6s var(--ease-out) var(--card-delay, 0ms);
+  }
+
+  :global(.js) .card .card__title,
+  :global(.js) .card .card__meta {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.8s var(--ease-out),
+      transform 0.8s var(--ease-out);
+  }
+
+  :global(.js) .card .card__title {
+    transition-delay: calc(var(--card-delay, 0ms) + 250ms);
+  }
+
+  :global(.js) .card .card__meta {
+    transition-delay: calc(var(--card-delay, 0ms) + 350ms);
+  }
+
+  :global(.js) .card:global(.is-in) .card__media,
+  :global(.js) .card:global(.is-in) .card__title,
+  :global(.js) .card:global(.is-in) .card__meta {
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(.js) .card:global(.is-in) .card__media > :global(*) {
+    transform: none;
+  }
+
   .card__link {
     display: block;
   }

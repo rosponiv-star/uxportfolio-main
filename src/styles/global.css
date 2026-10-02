@@ -672,6 +672,12 @@ a:focus-visible .arrow--back {
   clip-path: inset(0 0 0 0);
 }
 
+/* Cards animate their own parts (see Card.astro); the wrapper itself stays put */
+.js [data-reveal='card'] {
+  opacity: 1;
+  transform: none;
+}
+
 /* Sections: only the top rule draws in; content has its own reveals */
 .js [data-reveal='sec'] {
   opacity: 1;
