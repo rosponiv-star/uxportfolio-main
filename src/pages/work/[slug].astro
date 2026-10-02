@@ -3,7 +3,7 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Section from '../../components/Section.astro';
 import Cover from '../../components/Cover.astro';
-import RegistrationField from '../../components/RegistrationField.astro';
+import { Image } from 'astro:assets';
 import Chapter from '../../components/case/Chapter.astro';
 import Todo from '../../components/case/Todo.astro';
 import Figure from '../../components/case/Figure.astro';
@@ -30,6 +30,8 @@ const { title, tagline, role, timeline, team, type, platform, tools, glance } = 
 const { Content } = await render(project);
 const chapters = chaptersOf(project);
 const contentsRows = Math.ceil(chapters.length / 3);
+const nextCover = next.data.cover;
+const nextHasMedia = Boolean(nextCover?.image || nextCover?.video);
 
 const glanceItems = [
   { label: 'Problem', text: glance.problem },
@@ -119,13 +121,28 @@ const facts = [
   <!-- Next case study: full-bleed band in the next project's tone ---------- -->
   <a
     href={hrefOf(next)}
-    class:list={['next', { 'next--dark': next.data.toneDark }]}
+    class:list={['next', { 'next--dark': next.data.toneDark || nextHasMedia, 'next--media': nextHasMedia }]}
     style={`--tone: ${next.data.tone}`}
     data-cursor="Open case study"
-    data-cursor-theme={next.data.toneDark ? 'light' : undefined}
+    data-cursor-theme={next.data.toneDark || nextHasMedia ? 'light' : undefined}
     aria-label={`Next case study: ${next.data.title}`}
   >
-    <RegistrationField spacing={32} radius={220} ink={next.data.toneDark ? '#f5f5f0' : undefined} />
+    <!-- Background: the next project's cover (image/video), or its placeholder cover pattern -->
+    <div class="next__bg" aria-hidden="true">
+      {
+        nextCover?.video ? (
+          <video src={nextCover.video} poster={nextCover.image?.src} muted loop playsinline preload="metadata" data-autoplay />
+        ) : nextCover?.image ? (
+          <Image src={nextCover.image} alt="" widths={[960, 1600, 2400]} sizes="100vw" />
+        ) : (
+          <span class="next__grid" />
+        )
+      }
+    </div>
+    <span class="reg next__reg next__reg--tl" aria-hidden="true"></span>
+    <span class="reg next__reg next__reg--tr" aria-hidden="true"></span>
+    <span class="reg next__reg next__reg--bl" aria-hidden="true"></span>
+    <span class="reg next__reg next__reg--br" aria-hidden="true"></span>
     <div class="wrap grid next__inner">
       <p class="next__label label">Next case study</p>
       <p class="next__title">{next.data.title}</p>
@@ -283,8 +300,72 @@ const facts = [
     color: var(--paper);
   }
 
-  /* One block anchored bottom-left: label → title → tagline. The space above is left to
-     the cursor-reactive registration field, the site's signature gesture. */
+  /* Background layer: real cover media (with a flat scrim for legibility) or the
+     placeholder cover pattern. Scales slightly on hover. */
+  .next__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transition: transform 1.4s var(--ease-out);
+  }
+
+  .next:hover .next__bg {
+    transform: scale(1.03);
+  }
+
+  .next__bg :global(img),
+  .next__bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .next--media .next__bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 0.4);
+  }
+
+  .next__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, currentColor 9%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, currentColor 9%, transparent) 1px, transparent 1px);
+    background-size: 64px 64px;
+    background-position: center;
+    mask-image: radial-gradient(ellipse at 60% 40%, #000 25%, transparent 85%);
+  }
+
+  .next__reg {
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    opacity: 0.6;
+  }
+
+  .next__reg--tl {
+    top: var(--space-3);
+    left: var(--space-3);
+  }
+
+  .next__reg--tr {
+    top: var(--space-3);
+    right: var(--space-3);
+  }
+
+  .next__reg--bl {
+    bottom: var(--space-3);
+    left: var(--space-3);
+  }
+
+  .next__reg--br {
+    bottom: var(--space-3);
+    right: var(--space-3);
+  }
+
+  /* One block anchored bottom-left: label → title → tagline. */
   .next__inner {
     position: relative;
     min-height: clamp(440px, 76vh, 800px);
