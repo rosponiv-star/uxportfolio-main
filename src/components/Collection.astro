@@ -44,6 +44,11 @@ const filters = [
   <header class="grid work__head">
     <h2 class="work__title" id={`${id}-title`}>{title}</h2>
 
+    <div class="work__views" role="group" aria-label="View">
+      <button type="button" class="opt" data-view="grid" aria-pressed="true"><span class="opt__name">Grid</span></button>
+      <button type="button" class="opt" data-view="index" aria-pressed="false"><span class="opt__name">Index</span></button>
+    </div>
+
     <div class="work__filters" role="group" aria-label={`Filter ${noun[1]} by type`}>
       {
         filters.map((f, i) => (
@@ -53,11 +58,6 @@ const filters = [
           </button>
         ))
       }
-    </div>
-
-    <div class="work__views" role="group" aria-label="View">
-      <button type="button" class="opt" data-view="grid" aria-pressed="true"><span class="opt__name">Grid</span></button>
-      <button type="button" class="opt" data-view="index" aria-pressed="false"><span class="opt__name">Index</span></button>
     </div>
   </header>
 
@@ -191,14 +191,15 @@ const filters = [
     border-top: 1px solid var(--rule-strong);
   }
 
+  /* Row 1: title + view switch. Row 2: filters as their own toolbar. */
   .work__head {
-    row-gap: var(--space-2);
-    align-items: baseline;
-    margin-bottom: var(--space-6);
+    row-gap: var(--space-5);
+    align-items: end;
+    margin-bottom: var(--space-item);
   }
 
   .work__title {
-    grid-column: 1 / span 5;
+    grid-column: 1 / span 8;
     font-size: var(--fs-h2);
     font-weight: 500;
     line-height: 1.04;
@@ -209,16 +210,18 @@ const filters = [
   .work__views {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: var(--space-1) var(--space-3);
-  }
-
-  .work__filters {
-    grid-column: 6 / -1;
+    gap: var(--space-2) var(--space-4);
   }
 
   .work__views {
+    grid-column: 9 / -1;
+    justify-content: flex-end;
+    padding-bottom: 0.3em;
+  }
+
+  .work__filters {
     grid-column: 1 / -1;
+    justify-content: flex-start;
   }
 
   /* Options (filters + view switch): grey until hover or selected. The selected one
@@ -259,6 +262,7 @@ const filters = [
   /* Grid view: two columns (6 + 6) */
   .work__grid {
     row-gap: var(--space-item);
+    column-gap: clamp(32px, 3.4vw, 56px);
   }
 
   .work__grid :global(.work__slot) {
@@ -399,6 +403,10 @@ const filters = [
     .work__views {
       grid-column: 1 / -1;
       justify-content: flex-start;
+    }
+
+    .work__head {
+      row-gap: var(--space-3);
     }
 
     .irow__title {

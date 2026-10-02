@@ -98,7 +98,9 @@ title, the footer wordmark and the nav micro-numbers.
   the enum in `content.config.ts`. Only categories in use are shown, with their counts.
 - The selected filter or view turns ink and is underlined (name and count separately). The others stay grey.
 - Grid: two columns, every card half width (4:3). One column on phones.
-- Card: title (lead size, Medium) with the year on the right and "type, platform" on one grey line ABOVE the cover.
+- Collection header: row 1 = title (cols 1–8) + Grid/Index switch (right); row 2 = filters as a left-aligned toolbar.
+  The grid has a wider column gap (32–56px) than the page gutter.
+- Card: title (lead size, Medium), then one grey line "type, platform   year" (year lighter), ABOVE the cover.
 - Index view: a table (No., project, type, role, year). On hover the cover follows the cursor. The chosen view is
   remembered in localStorage.
 - The owner rejected these, so do not bring them back: a facts block right-aligned under the cover; facts unfolding
