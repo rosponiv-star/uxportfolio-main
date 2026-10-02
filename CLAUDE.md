@@ -18,7 +18,7 @@ all site copy is in **English**.
 
 ## Structure
 
-- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement centred + depth texture; at scroll 0 only the "Selected work" title peeks in at the bottom), Selected work (filters, project count,
+- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters, project count,
   Grid/Index switch, two-column grid of cards), "How I work" principles.
 - `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
 - `src/pages/work/[slug].astro`: case study template. After Overview comes `components/PhoneScroll.astro`: a sticky

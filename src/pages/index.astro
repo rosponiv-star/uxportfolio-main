@@ -121,13 +121,14 @@ const principles = [
      the first project are already visible at scroll 0. The depth texture fills this band. */
   /* The hero is its own tinted band (it holds the depth texture). The change of surface
      separates it from Selected work, so the section below needs no top rule. */
-  /* Near full-screen: the band fills the first view except a strip at the bottom where the
-     "Selected work" title shows, as an invitation to scroll. */
+  /* Near full-screen: the band fills the first view except a strip at the bottom that shows
+     the Selected work header and the top of the first row of covers, as an invitation to scroll.
+     --peek = gap above the section + header height + gap below it + visible slice of cover. */
   .hero {
-    --peek: clamp(132px, 17vh, 176px);
+    --peek: calc(clamp(56px, 9vh, 96px) + var(--work-head, 122px) + var(--space-item) + clamp(56px, 9vh, 96px));
     position: relative;
     display: flex;
-    min-height: max(520px, calc(100svh - var(--peek)));
+    min-height: max(360px, calc(100svh - var(--peek)));
     background: var(--paper-alt);
   }
 
@@ -164,6 +165,13 @@ const principles = [
       opacity: 1;
       filter: none;
       transform: none;
+    }
+  }
+
+  /* On narrow screens the filters wrap, so the Selected work header is taller */
+  @media (max-width: 960px) {
+    .hero {
+      --work-head: 180px;
     }
   }
 
