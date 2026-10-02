@@ -66,6 +66,25 @@ and use `cover.video`.
 - To verify alignment, measure element edges against the column lines in the browser (a JS audit).
   Do not judge it by eye.
 
+## Type scale (strict)
+
+Use only the size tokens in global.css: mega, h2 (48), h3 (28), lead (~22), body (17), small (15)
+and label (11, mono). Never hard-code a font size. The only exceptions are graphics: the cover
+title, the footer wordmark and the nav micro-numbers.
+
+- Section titles use h2; item titles (project cards, principles, insights, rows) use h3.
+- Running text uses body. Navigation, index, notes, captions and secondary facts use small.
+- An item row is always: title in track A, text in tracks B–C. Project cards follow the same rule.
+
+## Project facts
+
+On desktop, type, year, role and status are not shown under the cover. They live in the Work index:
+the project in view unfolds its facts (an animated row in `index.astro`). On screens ≤960px, where
+the index is hidden, they show as one small line under the tagline.
+
+The current facts in the five MDX files (year, type, platform, role, timeline, team, tools) are
+INVENTED placeholders. Replace them with the real ones when each case study is written.
+
 ## Design rules (agreed with the owner)
 
 - Swiss editorial base + tech precision (mono labels, registration marks, hairline rules), with a

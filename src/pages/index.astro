@@ -64,14 +64,30 @@ const principles = [
   <div class="wrap">
     <!-- Work ------------------------------------------------------------ -->
     <Section title="Selected work" id="work" class="work" stacked>
+      <!-- The index doubles as a spec sheet: the project in view unfolds its facts -->
       <nav slot="aside" class="work__index" aria-label="Case studies" data-spy>
         <ol>
           {
             projects.map((p) => (
               <li>
                 <a href={`#p-${slugOf(p)}`} data-spy-link={`p-${slugOf(p)}`} class="work__index-link">
-                  <span class="label">{numOf(p)}</span>
-                  <span>{p.data.title}</span>
+                  <span class="label work__index-n">{numOf(p)}</span>
+                  <span class="work__index-body">
+                    <span class="work__index-name">{p.data.title}</span>
+                    <span class="work__index-meta">
+                      <span class="work__index-meta-inner">
+                        <span>
+                          {p.data.type}, {p.data.year}
+                        </span>
+                        <span>{p.data.role}</span>
+                        {p.data.placeholder && (
+                          <span class="work__index-status">
+                            <span class="dot" /> Case study in progress
+                          </span>
+                        )}
+                      </span>
+                    </span>
+                  </span>
                 </a>
               </li>
             ))
@@ -155,22 +171,63 @@ const principles = [
 
   /* Work ----------------------------------------------------------------- */
   .work__index-link {
-    display: flex;
+    display: grid;
+    grid-template-columns: 2ch minmax(0, 1fr);
     align-items: baseline;
-    gap: var(--space-2);
+    column-gap: var(--space-2);
     padding-block: var(--space-1);
     border-top: 1px solid var(--rule);
     color: var(--ink-3);
-    font-size: 0.9375rem;
+    font-size: var(--fs-small);
     transition:
       color 0.25s,
       padding-left 0.4s var(--ease-out);
   }
 
-  .work__index-link .label {
-    min-width: 2ch;
+  .work__index-n {
     color: var(--ink-4);
     transition: color 0.25s;
+  }
+
+  .work__index-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Facts fold open on the active project (0fr → 1fr row animates height) */
+  .work__index-meta {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.6s var(--ease-out);
+  }
+
+  .work__index-meta-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    color: var(--ink-3);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .work__index-meta-inner > :first-child {
+    margin-top: var(--space-1);
+  }
+
+  .work__index-status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .work__index-link:global(.is-active) .work__index-meta {
+    grid-template-rows: 1fr;
+  }
+
+  .work__index-link:global(.is-active) .work__index-meta-inner {
+    opacity: 1;
+    transition-delay: 0.15s;
   }
 
   .work__index li:last-child .work__index-link {
@@ -186,7 +243,7 @@ const principles = [
     padding-left: 10px;
   }
 
-  .work__index-link:global(.is-active) .label {
+  .work__index-link:global(.is-active) .work__index-n {
     color: var(--signal);
   }
 
