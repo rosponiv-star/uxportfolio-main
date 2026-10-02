@@ -7,10 +7,10 @@
   color-scheme: light;
 
   /* Color */
-  --paper: #fafaf8;
-  --paper-2: #f0f0ed;
-  --paper-3: #e6e6e2;
-  --paper-alt: #f1f1ee; /* section bands */
+  --paper: #fcfcfb;
+  --paper-2: #f2f2ef;
+  --paper-3: #e8e8e4;
+  --paper-alt: #f3f3f0; /* section bands */
   --ink: #111111;
   --ink-2: #33332f;
   --ink-3: #6b6b65; /* secondary text, AA on paper */
