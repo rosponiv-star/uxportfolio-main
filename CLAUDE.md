@@ -72,15 +72,20 @@ Use only the size tokens in global.css: mega, h2 (48), h3 (28), lead (~22), body
 and label (11, mono). Never hard-code a font size. The only exceptions are graphics: the cover
 title, the footer wordmark and the nav micro-numbers.
 
-- Section titles use h2; item titles (project cards, principles, insights, rows) use h3.
+- Section titles and project card titles use h2. Other item titles (principles, insights, rows) use h3.
 - Running text uses body. Navigation, index, notes, captions and secondary facts use small.
-- An item row is always: title in track A, text in tracks B–C. Project cards follow the same rule.
+- An item row (principles, insights, About rows) is always: title in track A, text in tracks B–C.
 
 ## Project facts
 
-On desktop, type, year, role and status are not shown under the cover. They live in the Work index:
-the project in view unfolds its facts (an animated row in `index.astro`). On screens ≤960px, where
-the index is hidden, they show as one small line under the tagline.
+On the project card, the facts sit in a single mono label line above the title:
+"TYPE · YEAR · ROLE · ● IN PROGRESS". Below it come the title (h2) and the tagline, all in tracks A–B.
+
+The owner has rejected two other placements, so do not bring them back:
+- a facts block in track C, right-aligned under the cover;
+- facts unfolding inside the Work index.
+
+The Work index stays a plain numbered list.
 
 The current facts in the five MDX files (year, type, platform, role, timeline, team, tools) are
 INVENTED placeholders. Replace them with the real ones when each case study is written.

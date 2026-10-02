@@ -1,8 +1,7 @@
 ---
-// Sits in the body lane (cols 4–12). Cover spans all three tracks; below it the same
-// row pattern used across the site: item title in track A, description in tracks B–C.
-// Project facts live in the Work index (desktop); on smaller screens, where the index
-// is hidden, they appear as one quiet line under the description.
+// Sits in the body lane (cols 4–12). Cover spans all three tracks; below it one
+// left-aligned text block in tracks A–B: an eyebrow with the project facts
+// (same mono label used above titles across the site), the title, the tagline.
 import Cover from './Cover.astro';
 import { hrefOf, slugOf, type Project } from '../lib/projects';
 
@@ -12,7 +11,8 @@ interface Props {
 }
 
 const { project, eager } = Astro.props;
-const { title, tagline, role, type, year } = project.data;
+const { title, tagline, role, type, year, placeholder } = project.data;
+const facts = [type, year, role];
 ---
 
 <article class="pcard" id={`p-${slugOf(project)}`}>
@@ -22,10 +22,30 @@ const { title, tagline, role, type, year } = project.data;
     </div>
 
     <div class="pcard__info trio">
-      <h3 class="pcard__title h3 trim">{title}</h3>
       <div class="pcard__text span-2">
-        <p class="trim">{tagline}</p>
-        <p class="pcard__facts">{type}, {year} — {role}</p>
+        <p class="pcard__facts label">
+          {
+            facts.map((f, i) => (
+              <>
+                {i > 0 && <span aria-hidden="true">·</span>}
+                <span>{f}</span>
+              </>
+            ))
+          }
+          {
+            placeholder && (
+              <>
+                <span aria-hidden="true">·</span>
+                <span class="pcard__status">
+                  <span class="dot" />
+                  In progress
+                </span>
+              </>
+            )
+          }
+        </p>
+        <h3 class="pcard__title">{title}</h3>
+        <p class="pcard__tagline">{tagline}</p>
       </div>
     </div>
   </a>
@@ -42,27 +62,39 @@ const { title, tagline, role, type, year } = project.data;
 
   .pcard__info {
     padding-top: var(--space-3);
-    row-gap: var(--space-2);
   }
 
   .pcard__text {
-    color: var(--ink-2);
-  }
-
-  .pcard__text > p:first-child {
-    max-width: 58ch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
   }
 
   .pcard__facts {
-    display: none;
-    margin-top: var(--space-1);
-    font-size: var(--fs-small);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px var(--space-1);
     color: var(--ink-3);
+    text-box: trim-both cap alphabetic;
   }
 
-  @media (max-width: 960px) {
-    .pcard__facts {
-      display: block;
-    }
+  .pcard__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .pcard__title {
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .pcard__tagline {
+    max-width: 46ch;
+    color: var(--ink-2);
   }
 </style>
