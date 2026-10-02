@@ -19,7 +19,7 @@ all site copy is in **English**.
 ## Structure
 
 - `src/pages/index.astro`: Work page, which is also the home: compact hero (statement + depth texture; the top ~third of the first cover is visible at scroll 0), Selected work (filters, project count,
-  Grid/Index switch, grid of cards in a 12 / 6+6 rhythm), "How I work" principles.
+  Grid/Index switch, two-column grid of cards), "How I work" principles.
 - `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
 - `src/pages/work/[slug].astro`: case study template.
 - `src/pages/about.astro`, `src/pages/playground.astro`, `src/pages/404.astro`.
@@ -91,8 +91,7 @@ title, the footer wordmark and the nav micro-numbers.
 - Filters come from `categories` in each MDX file. The vocabulary is fixed in `lib/projects.ts → CATEGORIES` and in
   the enum in `content.config.ts`. Only categories in use are shown, with their counts.
 - The selected filter or view turns ink and is underlined (name and count separately). The others stay grey.
-- Grid rhythm: full width (2:1), then two halves (4:3 each), repeating. A half left alone becomes full. The script
-  re-flows the rhythm on the filtered set.
+- Grid: two columns, every card half width (4:3). One column on phones.
 - Card: cover, then title (h3) with the year on the right, then "type, platform" in small grey text.
 - Index view: a table (No., project, type, role, year). On hover the cover follows the cursor. The chosen view is
   remembered in localStorage.

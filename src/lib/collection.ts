@@ -2,11 +2,9 @@
 
 export const categoryId = (c: string) => c.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
-/** Grid rhythm: full, half, half, full… A half left without a partner becomes full. */
+/** Grid: two columns, every item half width. */
 export function gridSizes(n: number): ('full' | 'half')[] {
-  const out = Array.from({ length: n }, (_, i) => (i % 3 === 0 ? 'full' : 'half') as 'full' | 'half');
-  if (n % 3 === 2) out[n - 1] = 'full';
-  return out;
+  return Array.from({ length: n }, () => 'half' as const);
 }
 
 export function yearSpan(years: (string | number)[]) {

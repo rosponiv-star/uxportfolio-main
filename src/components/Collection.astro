@@ -135,12 +135,8 @@ const span = yearSpan(items.map((i) => i.year));
       const visible = slots.filter(match);
       slots.forEach((s) => (s.hidden = !visible.includes(s)));
 
-      // Re-flow the 12 / 6+6 rhythm on what is visible
       const n = visible.length;
-      visible.forEach((s, i) => {
-        let size = i % 3 === 0 ? 'full' : 'half';
-        if (n % 3 === 2 && i === n - 1) size = 'full';
-        s.dataset.size = size;
+      visible.forEach((s) => {
         s.querySelectorAll<HTMLElement>('[data-reveal]').forEach((r) => r.classList.add('is-in'));
         enter(s);
       });
@@ -279,7 +275,7 @@ const span = yearSpan(items.map((i) => i.year));
     text-decoration-color: currentColor;
   }
 
-  /* Grid view: 12 / 6+6 rhythm */
+  /* Grid view: two columns (6 + 6) */
   .work__grid {
     row-gap: var(--space-item);
   }
