@@ -7,11 +7,12 @@ import { chapterId } from '../../lib/projects';
 
 interface Props {
   title: string;
+  tone?: 'alt';
 }
-const { title } = Astro.props;
+const { title, tone } = Astro.props;
 ---
 
-<Section title={title} id={chapterId(title)} class="chapter" bodyClass="prose flow">
+<Section title={title} id={chapterId(title)} class="chapter" bodyClass="prose flow" tone={tone}>
   <span slot="pre" class="label chapter__n" aria-hidden="true"></span>
   <slot />
 </Section>

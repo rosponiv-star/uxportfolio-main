@@ -11,14 +11,16 @@ interface Props {
   class?: string;
   bodyClass?: string;
   stacked?: boolean;
+  // 'alt' sets the section on a slightly darker full-bleed band instead of a top rule.
+  tone?: 'alt';
 }
 
-const { title, id, class: className, bodyClass, stacked = false } = Astro.props;
+const { title, id, class: className, bodyClass, stacked = false, tone } = Astro.props;
 const titleId = id ? `${id}-title` : undefined;
 const hasAside = Astro.slots.has('aside');
 ---
 
-<section class:list={['sec', { 'sec--stacked': stacked }, className]} id={id} aria-labelledby={titleId} data-reveal="sec">
+<section class:list={['sec', { 'sec--stacked': stacked, 'sec--alt': tone === 'alt' }, className]} id={id} aria-labelledby={titleId} data-reveal="sec">
   <div class="sec__head">
     <div class="sec__sticky">
       <slot name="pre" />

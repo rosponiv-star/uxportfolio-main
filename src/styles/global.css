@@ -11,6 +11,7 @@
   --paper: #f5f5f0;
   --paper-2: #ebebe4;
   --paper-3: #e2e2da;
+  --paper-alt: #ecece6; /* section bands */
   --ink: #111111;
   --ink-2: #33332f;
   --ink-3: #6b6b65; /* secondary text, AA on paper */
@@ -316,10 +317,40 @@ dd {
   min-width: 0;
 }
 
-/* Stacked: title on its own row, content starts below it */
+/* Stacked: title on its own row (still inside the head lane), content starts below it */
 .sec--stacked .sec__head {
-  grid-column: 1 / -1;
+  grid-column: 1 / span 3;
   margin-bottom: var(--space-6);
+}
+
+/* Alt band: full-bleed tinted background replaces the top rule.
+   The section after a band doesn't need a rule either. */
+.sec--alt {
+  isolation: isolate;
+  padding-block: var(--space-item);
+}
+
+.sec--alt::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  background: var(--paper-alt);
+  z-index: -1;
+}
+
+.sec--alt::before,
+.sec--alt + .sec::before,
+main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact::before {
+  display: none;
+}
+
+.sec--alt + .sec,
+main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
+  padding-top: 0;
 }
 
 .sec--stacked .sec__head .sec__sticky {
@@ -395,8 +426,8 @@ dd {
 }
 
 .prose > p,
-.prose > ul,
-.prose > ol,
+.prose > ul:not([class]),
+.prose > ol:not([class]),
 .prose > h3,
 .prose > blockquote {
   max-width: calc((200% - var(--gutter)) / 3);
@@ -485,8 +516,8 @@ dd {
 
 @media (max-width: 640px) {
   .prose > p,
-  .prose > ul,
-  .prose > ol,
+  .prose > ul:not([class]),
+  .prose > ol:not([class]),
   .prose > h3,
   .prose > blockquote {
     max-width: none;

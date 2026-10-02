@@ -85,7 +85,7 @@ const principles = [
     </Section>
 
     <!-- How I work ------------------------------------------------------ -->
-    <Section title="How I work" id="process" bodyClass="flow">
+    <Section title="How I work" id="process" bodyClass="flow" tone="alt">
       <p class="lead measure" data-reveal>
         Every project asks for a different mix of methods, but the way I think about them stays the same. These are the
         principles I come back to, from the first question to the last pixel.
@@ -198,9 +198,16 @@ const principles = [
 
   /* Process -------------------------------------------------------------- */
   .principle {
-    padding-block: var(--space-3) var(--space-5);
-    border-top: 1px solid var(--rule);
+    padding-block: var(--space-4);
     row-gap: var(--space-2);
+  }
+
+  .principle:first-child {
+    padding-top: 0;
+  }
+
+  .principle + .principle {
+    border-top: 1px solid var(--rule);
   }
 
   .principle__head {

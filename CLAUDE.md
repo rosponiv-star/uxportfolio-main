@@ -55,6 +55,12 @@ and use `cover.video`.
 - The body lane splits into three equal tracks A (4–6), B (7–9) and C (10–12) through `.trio`.
   Every element must start and end on a track edge. Running text uses the A–B measure. Boxes, figures,
   metrics and rows span A–C.
+- Section separation: a rule by default, or a full-bleed tinted band (`tone="alt"` on `<Section>` or
+  `<Chapter>`). Neither a band nor the section after it has a rule. Use bands sparingly: Home → How I
+  work; case study → Overview, Key insights, Outcome; About → What I bring. Keep inner rules to a
+  minimum (only between repeated rows, never above the first one).
+- Collection sections (Selected work, Experiments) use `stacked`: the title sits on its own row inside
+  cols 1–3, with the content below.
 - Spacing comes only from the tokens in global.css: `--space-1…6`, `--space-block` (between blocks),
   `--space-item` (between cards) and `--space-section` (between sections).
 - To verify alignment, measure element edges against the column lines in the browser (a JS audit).

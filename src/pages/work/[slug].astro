@@ -67,7 +67,7 @@ const facts = [
 
     <div class="wrap">
       <!-- Overview: the 30-second read ----------------------------------- -->
-      <Section title="Overview" id="overview" bodyClass="flow">
+      <Section title="Overview" id="overview" bodyClass="flow" tone="alt">
         <div class="trio">
           {
             glanceItems.map((g, i) => (
@@ -203,8 +203,6 @@ const facts = [
 
   .facts-grid {
     row-gap: var(--space-3);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--rule);
   }
 
   .facts-grid dt {
@@ -224,8 +222,7 @@ const facts = [
     display: flex;
     align-items: baseline;
     gap: var(--space-2);
-    padding-block: var(--space-1);
-    border-top: 1px solid var(--rule);
+    padding-block: 6px;
     color: var(--ink-2);
     transition: color 0.2s;
   }
