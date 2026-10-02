@@ -18,7 +18,7 @@ all site copy is in **English**.
 
 ## Structure
 
-- `src/pages/index.astro`: Work page, which is also the home: full-screen hero, Selected work (filters, project count,
+- `src/pages/index.astro`: Work page, which is also the home: compact hero (statement + depth texture; the top ~third of the first cover is visible at scroll 0), Selected work (filters, project count,
   Grid/Index switch, grid of cards in a 12 / 6+6 rhythm), "How I work" principles.
 - `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
 - `src/pages/work/[slug].astro`: case study template.

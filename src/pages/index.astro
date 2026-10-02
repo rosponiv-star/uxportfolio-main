@@ -117,17 +117,16 @@ const principles = [
 
 <style>
   /* Hero ----------------------------------------------------------------- */
-  /* Scroll 0 shows only the statement; the work is revealed on scroll */
+  /* Compact: the statement takes only its own space, so Selected work and the top of
+     the first project are already visible at scroll 0. The depth texture fills this band. */
   .hero {
     position: relative;
-    display: flex;
-    min-height: 100svh;
   }
 
   .hero__inner {
     position: relative;
-    align-content: center;
-    padding-block: var(--header-h);
+    padding-top: calc(var(--header-h) + clamp(64px, 14vh, 140px));
+    padding-bottom: clamp(64px, 14vh, 140px);
   }
 
   /* Statement entrance: each word comes into focus in sequence — fade, de-blur and a
