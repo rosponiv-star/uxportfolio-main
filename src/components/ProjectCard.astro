@@ -1,0 +1,137 @@
+---
+import Cover from './Cover.astro';
+import { hrefOf, numOf, slugOf, type Project } from '../lib/projects';
+
+interface Props {
+  project: Project;
+  eager?: boolean;
+}
+
+const { project, eager } = Astro.props;
+const { title, tagline, role, type, year, platform, placeholder } = project.data;
+---
+
+<article class="pcard" id={`p-${slugOf(project)}`}>
+  <a href={hrefOf(project)} class="pcard__link" data-cursor="Read case study">
+    <div class="pcard__cover" data-reveal="clip">
+      <Cover project={project} eager={eager} />
+    </div>
+
+    <div class="pcard__info">
+      <div class="pcard__head">
+        <span class="pcard__num label">{numOf(project)}</span>
+        <h3 class="pcard__title">{title}</h3>
+        <span class="pcard__cta">
+          Read case study <span class="arrow" aria-hidden="true">→</span>
+        </span>
+      </div>
+
+      <p class="pcard__tagline">{tagline}</p>
+
+      <dl class="pcard__meta">
+        <div><dt class="label muted">Role</dt><dd>{role}</dd></div>
+        <div><dt class="label muted">Type</dt><dd>{type}</dd></div>
+        <div><dt class="label muted">Platform</dt><dd>{platform}</dd></div>
+        <div><dt class="label muted">Year</dt><dd>{year}</dd></div>
+      </dl>
+
+      {
+        placeholder && (
+          <p class="pcard__status label">
+            <span class="dot" /> Case study in progress
+          </p>
+        )
+      }
+    </div>
+  </a>
+</article>
+
+<style>
+  .pcard__link {
+    display: block;
+  }
+
+  .pcard__cover {
+    overflow: hidden;
+  }
+
+  .pcard__info {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    row-gap: 14px;
+    padding-top: 18px;
+  }
+
+  .pcard__head {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .pcard__num {
+    color: var(--signal);
+    min-width: 2ch;
+  }
+
+  .pcard__title {
+    flex: 1;
+    font-size: clamp(1.75rem, 1.2rem + 1.8vw, 2.75rem);
+    font-weight: 500;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .pcard__cta {
+    font-size: 0.9375rem;
+    color: var(--ink-3);
+    white-space: nowrap;
+    transition: color 0.25s;
+  }
+
+  .pcard__link:hover .pcard__cta {
+    color: var(--ink);
+  }
+
+  .pcard__tagline {
+    grid-column: 1 / span 5;
+    color: var(--ink-2);
+    max-width: 46ch;
+    padding-left: calc(2ch + 16px);
+  }
+
+  .pcard__meta {
+    grid-column: 6 / span 4;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px var(--gutter);
+    font-size: 0.875rem;
+  }
+
+  .pcard__meta dd {
+    margin-top: 2px;
+  }
+
+  .pcard__status {
+    grid-column: 1 / -1;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding-left: calc(2ch + 16px);
+    color: var(--ink-3);
+  }
+
+  @media (max-width: 860px) {
+    .pcard__tagline,
+    .pcard__meta,
+    .pcard__status {
+      grid-column: 1 / -1;
+      padding-left: 0;
+    }
+
+    .pcard__cta {
+      display: none;
+    }
+  }
+</style>

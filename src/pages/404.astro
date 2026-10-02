@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Page not found">
+  <section class="wrap nf">
+    <p class="label nf__code">(404)</p>
+    <h1 class="nf__title">This page is off the grid.</h1>
+    <p class="lead nf__text">The link may be outdated, or the page has moved. The work is still where it should be.</p>
+    <a href="/" class="nf__link">Back to the work <span class="arrow" aria-hidden="true">→</span></a>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: 70svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 24px;
+    padding-top: calc(var(--header-h) + 80px);
+  }
+
+  .nf__code {
+    color: var(--signal);
+  }
+
+  .nf__title {
+    font-size: var(--fs-mega);
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    max-width: 10em;
+  }
+
+  .nf__text {
+    max-width: 40ch;
+  }
+
+  .nf__link {
+    font-size: 1.125rem;
+  }
+</style>

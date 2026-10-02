@@ -1,0 +1,157 @@
+---
+// A field of print registration marks (+) that turn and grow toward the cursor.
+// Tech precision meets a small, playful gesture. Static on touch and reduced motion.
+interface Props {
+  class?: string;
+  spacing?: number;
+  radius?: number;
+}
+const { class: className, spacing = 30, radius = 170 } = Astro.props;
+---
+
+<div class:list={['regfield', className]} aria-hidden="true">
+  <canvas data-regfield data-spacing={spacing} data-radius={radius}></canvas>
+</div>
+
+<style>
+  .regfield {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 720px) {
+    .regfield {
+      opacity: 0.55;
+    }
+  }
+</style>
+
+<script>
+  type Mark = { x: number; y: number; s: number; r: number; a: number };
+
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const css = getComputedStyle(document.documentElement);
+  const INK = css.getPropertyValue('--ink').trim() || '#111111';
+  const SIGNAL = css.getPropertyValue('--signal').trim() || '#c93a14';
+
+  function hexToRgb(hex: string) {
+    const n = parseInt(hex.replace('#', ''), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  const ink = hexToRgb(INK);
+  const sig = hexToRgb(SIGNAL);
+
+  document.querySelectorAll<HTMLCanvasElement>('canvas[data-regfield]').forEach((canvas) => {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    const host = canvas.parentElement!.parentElement || canvas.parentElement!;
+    const spacing = Number(canvas.dataset.spacing) || 30;
+    const radius = Number(canvas.dataset.radius) || 170;
+
+    let marks: Mark[] = [];
+    let w = 0;
+    let h = 0;
+    let dpr = 1;
+    let mx = -9999;
+    let my = -9999;
+    let raf = 0;
+    let visible = true;
+
+    const build = () => {
+      const rect = canvas.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = rect.width;
+      h = rect.height;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      marks = [];
+      const cols = Math.ceil(w / spacing);
+      const rows = Math.ceil(h / spacing);
+      const ox = (w - (cols - 1) * spacing) / 2;
+      const oy = (h - (rows - 1) * spacing) / 2;
+      for (let j = 0; j < rows; j++) {
+        for (let i = 0; i < cols; i++) {
+          marks.push({ x: ox + i * spacing, y: oy + j * spacing, s: 0, r: 0, a: 0 });
+        }
+      }
+      draw(true);
+    };
+
+    // Returns true while marks are still easing.
+    const draw = (force = false) => {
+      ctx.clearRect(0, 0, w, h);
+      let moving = force;
+      for (const m of marks) {
+        const dx = m.x - mx;
+        const dy = m.y - my;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        const t = Math.max(0, 1 - d / radius);
+        const e = t * t * (3 - 2 * t); // smoothstep
+        const ts = e;
+        const tr = e * (Math.PI / 4);
+        m.s += (ts - m.s) * 0.14;
+        m.r += (tr - m.r) * 0.14;
+        if (Math.abs(ts - m.s) > 0.002) moving = true;
+
+        const arm = 2.5 + m.s * 5.5;
+        const c = m.s;
+        const r = Math.round(ink[0] + (sig[0] - ink[0]) * c);
+        const g = Math.round(ink[1] + (sig[1] - ink[1]) * c);
+        const b = Math.round(ink[2] + (sig[2] - ink[2]) * c);
+        const alpha = 0.16 + m.s * 0.74;
+
+        ctx.save();
+        ctx.translate(m.x, m.y);
+        ctx.rotate(m.r);
+        ctx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(-arm, 0);
+        ctx.lineTo(arm, 0);
+        ctx.moveTo(0, -arm);
+        ctx.lineTo(0, arm);
+        ctx.stroke();
+        ctx.restore();
+      }
+      return moving;
+    };
+
+    const loop = () => {
+      const moving = draw();
+      raf = moving && visible ? requestAnimationFrame(loop) : 0;
+    };
+
+    const kick = () => {
+      if (!raf && visible) raf = requestAnimationFrame(loop);
+    };
+
+    if (fine && !reduced) {
+      host.addEventListener('pointermove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        mx = e.clientX - rect.left;
+        my = e.clientY - rect.top;
+        kick();
+      });
+      host.addEventListener('pointerleave', () => {
+        mx = -9999;
+        my = -9999;
+        kick();
+      });
+    }
+
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) kick();
+    }).observe(canvas);
+
+    new ResizeObserver(build).observe(canvas);
+  });
+</script>

@@ -1,0 +1,41 @@
+---
+// Margin annotation ("designer's note"): sits in the right margin on wide
+// screens, inline on small ones. Place it right before the paragraph it annotates.
+interface Props {
+  label?: string;
+}
+const { label = 'Decision' } = Astro.props;
+---
+
+<aside class="note">
+  <p class="note__label label"><span class="reg"></span>{label}</p>
+  <div class="note__body"><slot /></div>
+</aside>
+
+<style>
+  .note {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--ink-2);
+    border-top: 1px solid var(--ink);
+    padding-top: 10px;
+    margin-block: 1.5em;
+  }
+
+  .note__label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    color: var(--signal);
+  }
+
+  @media (min-width: 1100px) {
+    .note {
+      float: right;
+      clear: right;
+      width: var(--aside-w);
+      margin: 0.35em calc(-1 * (var(--aside-w) + var(--aside-gap))) 1.5em 0;
+    }
+  }
+</style>

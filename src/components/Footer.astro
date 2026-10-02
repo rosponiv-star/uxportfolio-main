@@ -1,0 +1,165 @@
+---
+import { site } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__rule" data-reveal="rule"></div>
+
+    <div class="grid footer__cols">
+      <div class="footer__col footer__col--intro">
+        <p class="label muted">Colophon</p>
+        <p class="footer__note">
+          Designed and built by Valerio Rosponi. Set in Geist and Geist Mono. No trackers, no cookies.
+        </p>
+      </div>
+
+      <div class="footer__col">
+        <p class="label muted">Elsewhere</p>
+        <ul class="footer__list">
+          <li><a class="link" href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li>
+            <a href={site.linkedin} target="_blank" rel="noopener">
+              LinkedIn <span class="arrow arrow--ne" aria-hidden="true">↗</span>
+            </a>
+          </li>
+          <li>
+            <a href={site.cv} target="_blank" rel="noopener">
+              Résumé (PDF) <span class="arrow arrow--ne" aria-hidden="true">↗</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <p class="label muted">Local time</p>
+        <p class="mono">
+          Trentino, IT — <span data-clock>--:--</span>
+        </p>
+      </div>
+
+      <div class="footer__col footer__col--top">
+        <a href="#top" class="footer__top">
+          Back to top <span class="arrow footer__up" aria-hidden="true">↑</span>
+        </a>
+      </div>
+    </div>
+
+    <p class="footer__mega" aria-hidden="true">
+      <span>Valerio</span>
+      <span>Rosponi</span>
+    </p>
+
+    <div class="footer__base label muted">
+      <span>© {year} {site.name}</span>
+      <span class="footer__base-reg"><span class="reg"></span></span>
+      <span>UX · Digital Product · Visual Design</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    margin-top: clamp(96px, 14vw, 200px);
+    padding-bottom: 20px;
+    overflow: hidden;
+  }
+
+  .footer__rule {
+    height: 1px;
+    background: var(--rule-strong);
+  }
+
+  .footer__cols {
+    padding-top: 20px;
+    row-gap: 32px;
+  }
+
+  .footer__col {
+    grid-column: span 3;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 0.9375rem;
+  }
+
+  .footer__note {
+    color: var(--ink-3);
+    max-width: 30ch;
+  }
+
+  .footer__list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .footer__col--top {
+    align-items: flex-end;
+  }
+
+  .footer__top {
+    font-size: 0.9375rem;
+  }
+
+  a:hover .footer__up {
+    transform: translateY(-4px);
+  }
+
+  .footer__mega {
+    display: flex;
+    justify-content: space-between;
+    margin-top: clamp(64px, 10vw, 140px);
+    font-size: clamp(3.5rem, 14.6vw, 15.75rem);
+    font-weight: 500;
+    line-height: 0.8;
+    letter-spacing: -0.065em;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .footer__mega span:last-child {
+    color: var(--ink-4);
+  }
+
+  .footer__base {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  @media (max-width: 960px) {
+    .footer__col {
+      grid-column: span 6;
+    }
+
+    .footer__col--top {
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .footer__col {
+      grid-column: span 12;
+    }
+
+    .footer__mega {
+      flex-direction: column;
+      font-size: 24vw;
+      line-height: 0.82;
+    }
+
+    .footer__base-reg {
+      display: none;
+    }
+
+    .footer__base {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+  }
+</style>

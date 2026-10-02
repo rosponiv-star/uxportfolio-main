@@ -1,0 +1,106 @@
+---
+// Case-study figure. Pass `src` (imported image) or `video`; without either it
+// renders a sized placeholder frame that says what belongs there.
+// size: 'text' (prose width) | 'wide' (prose + margin column) | 'full' (page width)
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  src?: ImageMetadata;
+  video?: string;
+  alt?: string;
+  caption?: string;
+  ratio?: string;
+  size?: 'text' | 'wide' | 'full';
+  placeholder?: string;
+  bg?: string;
+}
+
+const {
+  src,
+  video,
+  alt = '',
+  caption,
+  ratio = '16/10',
+  size = 'wide',
+  placeholder = 'Image',
+  bg,
+} = Astro.props;
+---
+
+<figure class:list={['fig', `fig--${size}`]} data-reveal>
+  <div class="fig__frame" style={`aspect-ratio: ${ratio};${bg ? ` background:${bg};` : ''}`}>
+    {
+      video ? (
+        <video src={video} muted loop playsinline preload="metadata" data-autoplay aria-label={alt} />
+      ) : src ? (
+        <Image src={src} alt={alt} widths={[640, 1024, 1600, 2400]} sizes="(min-width: 1100px) 75vw, 100vw" />
+      ) : (
+        <div class="fig__ph">
+          <span class="reg fig__reg fig__reg--tl" />
+          <span class="reg fig__reg fig__reg--br" />
+          <span class="label">{placeholder}</span>
+          <span class="label muted">{ratio.replace('/', ':')}</span>
+        </div>
+      )
+    }
+  </div>
+  {caption && <figcaption class="fig__cap mono">{caption}</figcaption>}
+</figure>
+
+<style>
+  .fig {
+    margin-block: 2.5em;
+  }
+
+  .fig__frame {
+    position: relative;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+
+  .fig__frame :global(img),
+  .fig__frame video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .fig__ph {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-align: center;
+    padding: 24px;
+    background-image:
+      linear-gradient(to right, var(--paper-3) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--paper-3) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: center;
+  }
+
+  .fig__reg {
+    position: absolute;
+    color: var(--ink-4);
+  }
+
+  .fig__reg--tl {
+    top: 14px;
+    left: 14px;
+  }
+
+  .fig__reg--br {
+    bottom: 14px;
+    right: 14px;
+  }
+
+  .fig__cap {
+    margin-top: 12px;
+    color: var(--ink-3);
+    max-width: 62ch;
+  }
+</style>

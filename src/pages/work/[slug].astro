@@ -1,0 +1,512 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Cover from '../../components/Cover.astro';
+import Todo from '../../components/case/Todo.astro';
+import Figure from '../../components/case/Figure.astro';
+import Note from '../../components/case/Note.astro';
+import Metrics from '../../components/case/Metrics.astro';
+import Insights from '../../components/case/Insights.astro';
+import Chapter from '../../components/case/Chapter.astro';
+import { chaptersOf, getProjects, hrefOf, numOf, slugOf, type Project } from '../../lib/projects';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: slugOf(project) },
+    props: { project, next: projects[(i + 1) % projects.length], total: projects.length },
+  }));
+}
+
+interface Props {
+  project: Project;
+  next: Project;
+  total: number;
+}
+
+const { project, next, total } = Astro.props;
+const { title, tagline, role, timeline, team, type, platform, tools, glance, year } = project.data;
+const { Content } = await render(project);
+const chapters = chaptersOf(project);
+
+const meta = [
+  { label: 'Role', value: role },
+  { label: 'Timeline', value: timeline },
+  { label: 'Team', value: team },
+  { label: 'Type', value: type },
+  { label: 'Platform', value: platform },
+  { label: 'Tools', value: tools.join(', ') },
+];
+
+const glanceItems = [
+  { label: 'Problem', text: glance.problem },
+  { label: 'Approach', text: glance.approach },
+  { label: 'Outcome', text: glance.outcome },
+];
+---
+
+<Base title={title} description={`${title} — ${tagline}`}>
+  <div class="progress" aria-hidden="true"><span data-progress></span></div>
+
+  <article data-progress-target>
+    <!-- Intro ------------------------------------------------------------ -->
+    <header class="wrap intro">
+      <div class="intro__crumbs label">
+        <a href="/#work" class="intro__back"><span class="arrow intro__back-arrow" aria-hidden="true">←</span> All work</a>
+        <span class="muted">Case study {numOf(project)} / {String(total).padStart(2, '0')}</span>
+        <span class="muted">{year}</span>
+      </div>
+
+      <h1 class="intro__title">{title}</h1>
+
+      <div class="grid">
+        <p class="intro__tagline lead" data-reveal>{tagline}</p>
+      </div>
+
+      <dl class="intro__meta">
+        {
+          meta.map((m, i) => (
+            <div data-reveal style={`--d:${i}`}>
+              <dt class="label muted">{m.label}</dt>
+              <dd>{m.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </header>
+
+    <div class="wrap intro__cover" data-reveal="clip">
+      <Cover project={project} eager sizes="100vw" />
+    </div>
+
+    <!-- At a glance ------------------------------------------------------ -->
+    <section class="wrap glance" aria-label="At a glance">
+      <div class="glance__head">
+        <span class="label">TL;DR</span>
+        <span class="label muted">The 30-second version</span>
+      </div>
+      <div class="grid glance__grid">
+        {
+          glanceItems.map((g, i) => (
+            <div class="glance__item" data-reveal style={`--d:${i}`}>
+              <p class="label muted">
+                0{i + 1} — {g.label}
+              </p>
+              <p class="glance__text">{g.text}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <nav class="contents" aria-label="Chapters">
+        <p class="label muted">Contents</p>
+        <ol class="contents__list">
+          {
+            chapters.map((c, i) => (
+              <li>
+                <a href={`#${c.id}`}>
+                  <span class="label">{String(i + 1).padStart(2, '0')}</span>
+                  <span>{c.title}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+    </section>
+
+    <!-- Body ------------------------------------------------------------- -->
+    <div class="wrap">
+      <div class="case-body">
+        <Content components={{ Chapter, Todo, Figure, Note, Metrics, Insights }} />
+      </div>
+    </div>
+  </article>
+
+  <!-- Next ------------------------------------------------------------- -->
+  <nav class="wrap next" aria-label="Next case study">
+    <a href={hrefOf(next)} class="next__link" data-cursor="Next case study">
+      <span class="next__rule"></span>
+      <span class="next__top label">
+        <span class="muted">Next case study</span>
+        <span>{numOf(next)}</span>
+      </span>
+      <span class="next__title">
+        {next.data.title}
+        <span class="arrow" aria-hidden="true">→</span>
+      </span>
+    </a>
+  </nav>
+</Base>
+
+<style>
+  /* Progress ------------------------------------------------------------- */
+  .progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    height: 2px;
+    pointer-events: none;
+  }
+
+  .progress span {
+    display: block;
+    height: 100%;
+    background: var(--signal);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  /* Intro ---------------------------------------------------------------- */
+  .intro {
+    padding-top: calc(var(--header-h) + clamp(32px, 6vh, 72px));
+  }
+
+  .intro__crumbs {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .intro__back:hover .intro__back-arrow {
+    transform: translateX(-4px);
+  }
+
+  .intro__title {
+    margin-top: clamp(32px, 6vw, 80px);
+    font-size: var(--fs-mega);
+    font-weight: 500;
+    line-height: 0.88;
+    letter-spacing: -0.06em;
+    margin-left: -0.04em;
+  }
+
+  .intro__tagline {
+    grid-column: 4 / span 7;
+    margin-top: clamp(28px, 4vw, 56px);
+    color: var(--ink);
+    font-size: clamp(1.25rem, 1rem + 0.9vw, 1.75rem);
+    line-height: 1.3;
+  }
+
+  .intro__meta {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 20px var(--gutter);
+    margin-top: clamp(40px, 6vw, 88px);
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    font-size: 0.9375rem;
+  }
+
+  .intro__meta dd {
+    margin-top: 4px;
+  }
+
+  .intro__cover {
+    margin-top: 24px;
+  }
+
+  @media (max-width: 960px) {
+    .intro__tagline {
+      grid-column: 1 / -1;
+    }
+
+    .intro__meta {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .intro__crumbs > span:last-child {
+      display: none;
+    }
+
+    .intro__meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  /* Glance --------------------------------------------------------------- */
+  .glance {
+    margin-top: clamp(64px, 9vw, 140px);
+  }
+
+  .glance__head {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .glance__head .label:first-child {
+    color: var(--signal);
+  }
+
+  .glance__grid {
+    padding-top: 20px;
+    row-gap: 28px;
+  }
+
+  .glance__item {
+    grid-column: span 4;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .glance__text {
+    font-size: clamp(1.125rem, 1rem + 0.4vw, 1.375rem);
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    max-width: 30ch;
+  }
+
+  .contents {
+    margin-top: clamp(48px, 6vw, 88px);
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    row-gap: 14px;
+  }
+
+  .contents > .label {
+    grid-column: 1 / span 3;
+  }
+
+  .contents__list {
+    grid-column: 4 / span 9;
+    columns: 2;
+    column-gap: var(--gutter);
+  }
+
+  .contents__list li {
+    break-inside: avoid;
+  }
+
+  .contents__list a {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    padding-block: 7px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-2);
+    transition:
+      color 0.2s,
+      padding-left 0.4s var(--ease-out);
+  }
+
+  .contents__list a:hover {
+    color: var(--ink);
+    padding-left: 8px;
+  }
+
+  .contents__list .label {
+    color: var(--signal);
+  }
+
+  @media (max-width: 960px) {
+    .glance__item {
+      grid-column: 1 / -1;
+    }
+
+    .contents > .label,
+    .contents__list {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .contents__list {
+      columns: 1;
+    }
+  }
+
+  /* Body (chapters come from <Chapter> in the MDX) --------------------------- */
+  .case-body {
+    --col: calc((100cqi - 11 * var(--gutter)) / 12);
+    --aside-gap: var(--gutter);
+    --aside-w: calc(3 * var(--col) + 2 * var(--gutter));
+    container-type: inline-size;
+    counter-reset: chapter;
+    margin-top: clamp(64px, 9vw, 140px);
+  }
+
+  .case-body :global(.chapter) {
+    counter-increment: chapter;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-strong);
+    margin-top: clamp(80px, 10vw, 160px);
+  }
+
+  .case-body :global(.chapter:first-child) {
+    margin-top: 0;
+  }
+
+  .case-body :global(.chapter__head) {
+    grid-column: 1 / span 3;
+  }
+
+  .case-body :global(.chapter__head h2) {
+    position: sticky;
+    top: calc(var(--header-h) + 16px);
+    font-size: clamp(1.5rem, 1.1rem + 1.2vw, 2.25rem);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    padding-right: 1ch;
+  }
+
+  .case-body :global(.chapter__head h2::before) {
+    content: counter(chapter, decimal-leading-zero);
+    display: block;
+    margin-bottom: 10px;
+    font-family: var(--font-mono);
+    font-size: var(--fs-label);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--signal);
+  }
+
+  .case-body :global(.chapter__body) {
+    grid-column: 4 / span 9;
+    padding-right: calc(var(--aside-w) + var(--aside-gap));
+    color: var(--ink-2);
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .case-body :global(.chapter__body > :first-child) {
+    margin-top: 0;
+  }
+
+  .case-body :global(.chapter__body p + p) {
+    margin-top: 1em;
+  }
+
+  .case-body :global(.chapter__body h3) {
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    font-size: 1.375rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .case-body :global(.chapter__body strong) {
+    font-weight: 550;
+    color: var(--ink);
+  }
+
+  .case-body :global(.chapter__body a) {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  .case-body :global(.chapter__body ul),
+  .case-body :global(.chapter__body ol:not([class])) {
+    margin-block: 1em;
+    display: grid;
+    gap: 0.4em;
+  }
+
+  .case-body :global(.chapter__body ul > li) {
+    position: relative;
+    padding-left: 1.4em;
+  }
+
+  .case-body :global(.chapter__body ul > li::before) {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--ink-4);
+  }
+
+  .case-body :global(.chapter__body blockquote) {
+    margin-block: 1.6em;
+    padding-left: 20px;
+    border-left: 2px solid var(--signal);
+    font-size: 1.375rem;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+
+  /* Wide figures span the prose and the margin column */
+  .case-body :global(.fig--wide),
+  .case-body :global(.fig--full) {
+    clear: both;
+    margin-right: calc(-1 * (var(--aside-w) + var(--aside-gap)));
+  }
+
+  @media (max-width: 1099px) {
+    .case-body :global(.chapter__head),
+    .case-body :global(.chapter__body) {
+      grid-column: 1 / -1;
+    }
+
+    .case-body :global(.chapter__head h2) {
+      position: static;
+      margin-bottom: 28px;
+    }
+
+    .case-body :global(.chapter__body) {
+      padding-right: 0;
+    }
+
+    .case-body :global(.fig--wide),
+    .case-body :global(.fig--full) {
+      margin-right: 0;
+    }
+  }
+
+  /* Next ----------------------------------------------------------------- */
+  .next {
+    margin-top: clamp(120px, 14vw, 220px);
+  }
+
+  .next__link {
+    display: block;
+  }
+
+  .next__rule {
+    display: block;
+    height: 1px;
+    background: var(--rule-strong);
+  }
+
+  .next__top {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 14px;
+  }
+
+  .next__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 24px;
+    margin-top: 24px;
+    font-size: var(--fs-mega);
+    font-weight: 500;
+    line-height: 0.9;
+    letter-spacing: -0.06em;
+    transition: color 0.3s;
+  }
+
+  .next__link:hover .next__title {
+    color: var(--ink-3);
+  }
+
+  .next__title .arrow {
+    font-size: 0.6em;
+  }
+</style>

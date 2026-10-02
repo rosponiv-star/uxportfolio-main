@@ -1,0 +1,70 @@
+---
+// Numbered key insights. items: [{ title: '...', text: '...' }, ...]
+interface Props {
+  items: { title: string; text: string }[];
+}
+const { items } = Astro.props;
+---
+
+<ol class="insights">
+  {
+    items.map((it, i) => (
+      <li class="insight" data-reveal style={`--d: ${i}`}>
+        <span class="insight__n label">I—{String(i + 1).padStart(2, '0')}</span>
+        <p class="insight__title">{it.title}</p>
+        <p class="insight__text">{it.text}</p>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .insights {
+    display: grid;
+    gap: 0;
+    margin-block: 2em;
+  }
+
+  .insight {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    column-gap: 16px;
+    padding-block: 16px 20px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .insight:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .insight__n {
+    grid-row: span 2;
+    color: var(--signal);
+    padding-top: 0.35em;
+  }
+
+  .insight__title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    color: var(--ink);
+  }
+
+  .insight__text {
+    margin-top: 6px;
+    color: var(--ink-3);
+  }
+
+  @media (max-width: 560px) {
+    .insight {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .insight__n {
+      grid-row: auto;
+      margin-bottom: 8px;
+      padding-top: 0;
+    }
+  }
+</style>

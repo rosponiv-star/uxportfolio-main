@@ -1,0 +1,359 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import portrait from '../assets/valerio-rosponi.png';
+import { site } from '../data/site';
+
+const strengths = [
+  {
+    title: 'Visual & UI design',
+    text: 'Typography, layout, colour and the small decisions that make an interface feel considered.',
+  },
+  {
+    title: 'Information architecture',
+    text: 'Turning messy content and features into structures people can navigate without thinking.',
+  },
+  {
+    title: 'Interaction design',
+    text: 'Flows, states and feedback that make every step feel obvious and every action reversible.',
+  },
+  {
+    title: 'Design systems',
+    text: 'Components, variables and tokens that keep a product consistent as it grows.',
+  },
+  {
+    title: 'Working with developers',
+    text: 'I understand how interfaces get built, so my specs are realistic and my handoffs are clear.',
+  },
+  {
+    title: 'Prototyping & motion',
+    text: 'High-fidelity prototypes and motion that test ideas before they become expensive.',
+  },
+];
+
+const toolkit = [
+  { name: 'Figma', use: 'Interface design, prototyping, variables and design systems.' },
+  { name: 'Stitch & AI tools', use: 'Rapid exploration and generating directions to react to.' },
+  { name: 'Unity', use: 'Interactive, spatial and XR prototypes.' },
+  { name: 'IDEs', use: 'Building and testing what I design, in code.' },
+];
+---
+
+<Base title="About" description="About Valerio Rosponi — how he thinks about design, what he brings to a team and what he is looking for.">
+  <!-- Intro ------------------------------------------------------------ -->
+  <header class="wrap intro">
+    <div class="intro__crumbs label">
+      <span>(About)</span>
+      <span class="muted">Valerio Rosponi — Trentino, Italy</span>
+    </div>
+    <h1 class="intro__statement">
+      I design products that help as many people as possible solve real problems,{' '}
+      <span class="muted-ink">crafted with enough care that they choose to stay.</span>
+    </h1>
+  </header>
+
+  <!-- Portrait + approach ---------------------------------------------- -->
+  <section class="wrap section">
+    <div class="grid about">
+      <figure class="portrait" data-reveal="clip">
+        <Image
+          src={portrait}
+          alt="Portrait of Valerio Rosponi"
+          widths={[400, 640, 900, 1200]}
+          sizes="(min-width: 960px) 30vw, 100vw"
+          class="portrait__img"
+        />
+        <figcaption class="label muted portrait__cap">
+          <span>Fig. 01</span>
+          <span>Valerio Rosponi, 2026</span>
+        </figcaption>
+      </figure>
+
+      <div class="approach">
+        <p class="label muted approach__label">Approach</p>
+        <div class="approach__text">
+          <p class="lead" data-reveal>
+            For me, design is the point where usefulness and beauty stop being separate goals. A product should solve a
+            real problem for as many people as possible, and it should be crafted well enough that people trust it at
+            first sight.
+          </p>
+          <p data-reveal>
+            I start from evidence: who the people are, what gets in their way, and what the data says about it. From
+            there I work on structure before style, because a product that makes sense is already halfway to being a
+            product people enjoy.
+          </p>
+          <p data-reveal>
+            Then I obsess over the details, and I try to push a little further than the expected. New ways of
+            interacting, new visual languages: I like to explore them, and then test whether they really work for the
+            people they are meant for.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Strengths --------------------------------------------------------- -->
+  <section class="wrap section">
+    <SectionHead index="01" title="What I bring" aside="To a product team" />
+    <ol class="list">
+      {
+        strengths.map((s, i) => (
+          <li class="grid list__row">
+            <span class="list__rule" data-reveal="rule" />
+            <span class="list__n label">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="list__title h3" data-reveal>
+              {s.title}
+            </h3>
+            <p class="list__text" data-reveal style="--d:1">
+              {s.text}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Toolkit ----------------------------------------------------------- -->
+  <section class="wrap section">
+    <SectionHead index="02" title="Toolkit" aside="What I work with" />
+    <ul class="list">
+      {
+        toolkit.map((t) => (
+          <li class="grid list__row">
+            <span class="list__rule" data-reveal="rule" />
+            <span class="list__n label">
+              <span class="reg" />
+            </span>
+            <h3 class="list__title h3" data-reveal>
+              {t.name}
+            </h3>
+            <p class="list__text" data-reveal style="--d:1">
+              {t.use}
+            </p>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+
+  <!-- Contact ----------------------------------------------------------- -->
+  <section class="wrap section" id="contact">
+    <SectionHead index="03" title="Get in touch" aside="Contact" />
+    <div class="grid contact">
+      <p class="contact__intro lead" data-reveal>
+        I’m looking for junior roles in UX, digital product and visual design, remotely or on-site in Trentino. If
+        something here resonates with your team, email is the best way to reach me.
+      </p>
+      <ul class="contact__links" data-reveal style="--d:1">
+        <li>
+          <span class="label muted">Email</span>
+          <a class="link" href={`mailto:${site.email}`}>{site.email}</a>
+        </li>
+        <li>
+          <span class="label muted">LinkedIn</span>
+          <a href={site.linkedin} target="_blank" rel="noopener">
+            Valerio Rosponi <span class="arrow arrow--ne" aria-hidden="true">↗</span>
+          </a>
+        </li>
+        <li>
+          <span class="label muted">Résumé</span>
+          <a href={site.cv} target="_blank" rel="noopener">
+            Download PDF <span class="arrow arrow--ne" aria-hidden="true">↗</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-top: calc(var(--header-h) + clamp(32px, 6vh, 72px));
+  }
+
+  .intro__crumbs {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .intro__crumbs > span:first-child {
+    color: var(--signal);
+  }
+
+  .intro__statement {
+    margin-top: clamp(40px, 8vw, 120px);
+    max-width: 19em;
+    font-size: var(--fs-display);
+    font-weight: 500;
+    line-height: 1.06;
+    letter-spacing: -0.038em;
+    text-wrap: pretty;
+  }
+
+  .muted-ink {
+    color: var(--ink-4);
+  }
+
+  .section {
+    padding-top: clamp(80px, 11vw, 160px);
+  }
+
+  /* Portrait + approach */
+  .about {
+    row-gap: 48px;
+  }
+
+  .portrait {
+    grid-column: 1 / span 4;
+    align-self: start;
+    background: var(--paper);
+  }
+
+  .portrait__img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: 50% 30%;
+    filter: grayscale(1) contrast(1.05);
+    mix-blend-mode: multiply;
+    transition: filter 0.8s var(--ease-out);
+  }
+
+  .portrait:hover .portrait__img {
+    filter: grayscale(0) contrast(1);
+  }
+
+  .portrait__cap {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .approach {
+    grid-column: 6 / span 7;
+    align-content: start;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    column-gap: var(--gutter);
+  }
+
+  .approach__label {
+    grid-column: 1 / -1;
+    padding-top: 14px;
+    margin-bottom: 28px;
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .approach__text {
+    grid-column: 1 / span 6;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1em;
+    color: var(--ink-2);
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .approach__text .lead {
+    color: var(--ink);
+    font-size: var(--fs-lead);
+    line-height: 1.4;
+  }
+
+  @media (max-width: 960px) {
+    .portrait {
+      grid-column: 1 / span 8;
+    }
+
+    .approach {
+      grid-column: 1 / -1;
+    }
+
+    .approach__text {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .portrait {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* Lists */
+  .list__row {
+    position: relative;
+    padding-block: 20px 28px;
+    row-gap: 10px;
+  }
+
+  .list__rule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .list__row:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .list__n {
+    grid-column: 1 / span 3;
+    color: var(--signal);
+    padding-top: 0.55em;
+  }
+
+  .list__title {
+    grid-column: 4 / span 4;
+  }
+
+  .list__text {
+    grid-column: 8 / span 5;
+    color: var(--ink-2);
+    max-width: 44ch;
+  }
+
+  @media (max-width: 960px) {
+    .list__n,
+    .list__title,
+    .list__text {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* Contact */
+  .contact {
+    row-gap: 40px;
+  }
+
+  .contact__intro {
+    grid-column: 4 / span 5;
+  }
+
+  .contact__links {
+    grid-column: 10 / span 3;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .contact__links li {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  @media (max-width: 960px) {
+    .contact__intro,
+    .contact__links {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

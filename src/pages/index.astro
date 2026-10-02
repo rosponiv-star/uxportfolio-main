@@ -1,0 +1,440 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import RegistrationField from '../components/RegistrationField.astro';
+import { getProjects, numOf, slugOf } from '../lib/projects';
+
+const projects = await getProjects();
+
+// Hero statement: one block of text, two tones. `ink` segments carry the key facts.
+const statement: { text: string; ink?: boolean }[] = [
+  { text: 'Valerio Rosponi', ink: true },
+  { text: 'is a designer working across' },
+  { text: 'UX, digital product and visual design,', ink: true },
+  { text: 'currently studying Interfaces & Communication at the University of Trento. He designs products that help people solve real problems —' },
+  { text: 'grounded in evidence, precise to the last detail, and curious enough to try what hasn’t been done yet.', ink: true },
+];
+
+let wordIndex = 0;
+const words = statement.flatMap((seg) =>
+  seg.text.split(' ').map((w) => ({ w, ink: !!seg.ink, i: wordIndex++ })),
+);
+
+const principles = [
+  {
+    title: 'Problem before pixels',
+    text: 'I don’t open Figma until I can describe the problem in one sentence and say who has it. Research, data and constraints come first, because they make every later decision easier to defend.',
+    practice: ['Desk & competitor research', 'Interviews', 'Problem statements', 'How might we'],
+  },
+  {
+    title: 'Structure is the first interface',
+    text: 'Before anything looks good, it has to make sense. I map content, flows and hierarchy early: most usability problems are architecture problems in disguise.',
+    practice: ['Information architecture', 'User flows', 'Card sorting', 'Wireframes'],
+  },
+  {
+    title: 'Details are the product',
+    text: 'Spacing, states, motion, microcopy. The details are where people decide whether to trust a product, and that trust is what turns a first visit into a habit.',
+    practice: ['UI design', 'Interaction states', 'Motion', 'Accessibility checks'],
+  },
+  {
+    title: 'Design as a system',
+    text: 'I build components and tokens that scale and that developers can actually ship. Clear specs and a shared language save more time than any handoff tool.',
+    practice: ['Design systems', 'Variables & tokens', 'Dev handoff', 'Documentation'],
+  },
+  {
+    title: 'Dare, then prove it',
+    text: 'I like exploring interactions and aesthetics that feel new, then putting them in front of people to see if they hold up. Ambition without validation is just decoration.',
+    practice: ['Concept exploration', 'Prototyping', 'Usability testing', 'Iteration'],
+  },
+];
+
+const now = [
+  { label: 'Studying', text: 'BSc in Interfaces & Communication, University of Trento. Third year.' },
+  { label: 'Looking for', text: 'Junior roles in UX, digital product and visual design.' },
+  { label: 'Working', text: 'Remotely, or on-site in Trentino, Italy.' },
+  { label: 'Drawn to', text: 'Health, fintech, fashion and wellbeing — and products used by many.' },
+];
+---
+
+<Base>
+  <!-- Hero -------------------------------------------------------------- -->
+  <section class="hero">
+    <RegistrationField />
+    <div class="wrap hero__inner">
+      <h1 class="hero__text">
+        {
+          words.map(({ w, ink, i }) => (
+            <>
+              <span class:list={['w', { 'w--ink': ink }]}>
+                <span class="w__i" style={`--i:${i}`}>
+                  {w}
+                </span>
+              </span>{' '}
+            </>
+          ))
+        }
+      </h1>
+
+      <div class="hero__meta grid">
+        <a href="#work" class="hero__meta-item hero__cue">
+          <span class="label">Selected work ({String(projects.length).padStart(2, '0')})</span>
+          <span class="arrow hero__down" aria-hidden="true">↓</span>
+        </a>
+        <p class="hero__meta-item label muted">
+          <span>Based in Trentino, IT</span>
+          <span class="hero__clock" data-clock>--:--</span>
+        </p>
+        <p class="hero__meta-item label muted">
+          <span class="dot"></span>
+          <span>Open to junior roles</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work -------------------------------------------------------------- -->
+  <section class="wrap section" id="work" aria-labelledby="work-title">
+    <SectionHead id="work-title" index="01" title="Selected case studies" aside={`${projects.length} projects`} />
+
+    <div class="grid work">
+      <nav class="work__index" aria-label="Case studies index" data-spy>
+        <p class="label muted work__index-title">Index</p>
+        <ol>
+          {
+            projects.map((p) => (
+              <li>
+                <a href={`#p-${slugOf(p)}`} data-spy-link={`p-${slugOf(p)}`} class="work__index-link">
+                  <span class="label">{numOf(p)}</span>
+                  <span>{p.data.title}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="work__list">
+        {projects.map((p, i) => <ProjectCard project={p} eager={i === 0} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- How I work -------------------------------------------------------- -->
+  <section class="wrap section" id="process" aria-labelledby="process-title">
+    <SectionHead id="process-title" index="02" title="How I work" aside="5 principles" />
+
+    <div class="grid">
+      <p class="process__intro lead" data-reveal>
+        Every project asks for a different mix of methods, but the way I think about them stays the same. These are the
+        principles I come back to, from the first question to the last pixel.
+      </p>
+    </div>
+
+    <ol class="principles">
+      {
+        principles.map((p, i) => (
+          <li class="principle grid">
+            <span class="principle__rule" data-reveal="rule" />
+            <span class="principle__n label">P—{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="principle__title h3" data-reveal>
+              {p.title}
+            </h3>
+            <div class="principle__body" data-reveal style="--d: 1">
+              <p>{p.text}</p>
+              <p class="principle__practice mono">
+                <span class="label muted">In practice</span>
+                <span>{p.practice.join(' · ')}</span>
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Now --------------------------------------------------------------- -->
+  <section class="wrap section" id="now">
+    <SectionHead index="03" title="Now" aside="Updated 2026" />
+    <dl class="grid now">
+      {
+        now.map((n, i) => (
+          <div class="now__item" data-reveal style={`--d:${i}`}>
+            <dt class="label muted">{n.label}</dt>
+            <dd>{n.text}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+</Base>
+
+<style>
+  /* Hero ----------------------------------------------------------------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 64px;
+    padding-top: calc(var(--header-h) + clamp(48px, 12vh, 140px));
+    padding-bottom: 24px;
+  }
+
+  .hero__text {
+    max-width: 22.5em;
+    font-size: var(--fs-display);
+    font-weight: 500;
+    line-height: 1.06;
+    letter-spacing: -0.038em;
+    color: var(--ink-4);
+    text-wrap: pretty;
+  }
+
+  .w {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    /* room for descenders inside the mask */
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+
+  .w--ink {
+    color: var(--ink);
+  }
+
+  .w__i {
+    display: inline-block;
+  }
+
+  :global(.js) .w__i {
+    transform: translateY(105%);
+    animation: word-up 1.1s var(--ease-out) forwards;
+    animation-delay: calc(120ms + var(--i) * 22ms);
+  }
+
+  @keyframes word-up {
+    to {
+      transform: none;
+    }
+  }
+
+  .hero__meta {
+    border-top: 1px solid var(--rule-strong);
+    padding-top: 14px;
+    row-gap: 10px;
+  }
+
+  .hero__meta-item {
+    grid-column: span 4;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero__meta-item:nth-child(2) {
+    justify-content: center;
+  }
+
+  .hero__meta-item:last-child {
+    justify-content: flex-end;
+  }
+
+  .hero__clock {
+    color: var(--ink);
+  }
+
+  .hero__down {
+    animation: nudge 2.4s var(--ease-in-out) infinite;
+  }
+
+  @keyframes nudge {
+    0%,
+    60%,
+    100% {
+      transform: none;
+    }
+    30% {
+      transform: translateY(4px);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .hero__meta-item {
+      grid-column: 1 / -1;
+      justify-content: flex-start !important;
+    }
+  }
+
+  /* Sections ------------------------------------------------------------- */
+  .section {
+    padding-top: clamp(96px, 12vw, 180px);
+  }
+
+  #work {
+    padding-top: clamp(48px, 6vw, 96px);
+  }
+
+  /* Work ----------------------------------------------------------------- */
+  .work__index {
+    grid-column: 1 / span 3;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--header-h) + 24px);
+  }
+
+  .work__index-title {
+    margin-bottom: 14px;
+  }
+
+  .work__index-link {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-block: 7px;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-3);
+    font-size: 0.9375rem;
+    transition:
+      color 0.25s,
+      padding-left 0.4s var(--ease-out);
+  }
+
+  .work__index li:last-child .work__index-link {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .work__index-link:hover,
+  .work__index-link:global(.is-active) {
+    color: var(--ink);
+  }
+
+  .work__index-link:global(.is-active) {
+    padding-left: 10px;
+  }
+
+  .work__index-link:global(.is-active) .label {
+    color: var(--signal);
+  }
+
+  .work__list {
+    grid-column: 4 / span 9;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(72px, 9vw, 140px);
+  }
+
+  @media (max-width: 960px) {
+    .work__index {
+      display: none;
+    }
+
+    .work__list {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* Process -------------------------------------------------------------- */
+  .process__intro {
+    grid-column: 4 / span 7;
+    margin-bottom: clamp(48px, 6vw, 88px);
+  }
+
+  .principle {
+    position: relative;
+    padding-block: 22px 36px;
+    row-gap: 14px;
+  }
+
+  .principle__rule {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  .principle:last-child {
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .principle__n {
+    grid-column: 1 / span 3;
+    color: var(--signal);
+    padding-top: 0.55em;
+  }
+
+  .principle__title {
+    grid-column: 4 / span 4;
+  }
+
+  .principle__body {
+    grid-column: 8 / span 5;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    color: var(--ink-2);
+  }
+
+  .principle__practice {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--ink-3);
+    font-size: 0.8125rem;
+  }
+
+  @media (max-width: 960px) {
+    .process__intro {
+      grid-column: 1 / -1;
+    }
+
+    .principle__n {
+      grid-column: 1 / -1;
+    }
+
+    .principle__title,
+    .principle__body {
+      grid-column: 1 / -1;
+    }
+  }
+
+  /* Now ------------------------------------------------------------------ */
+  .now {
+    row-gap: 32px;
+  }
+
+  .now__item {
+    grid-column: span 3;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .now__item dd {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    letter-spacing: -0.012em;
+    max-width: 24ch;
+  }
+
+  @media (max-width: 960px) {
+    .now__item {
+      grid-column: span 6;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .now__item {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
