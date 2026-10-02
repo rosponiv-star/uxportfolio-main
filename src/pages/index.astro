@@ -121,8 +121,13 @@ const principles = [
      the first project are already visible at scroll 0. The depth texture fills this band. */
   /* The hero is its own tinted band (it holds the depth texture). The change of surface
      separates it from Selected work, so the section below needs no top rule. */
+  /* Near full-screen: the band fills the first view except a strip at the bottom where the
+     "Selected work" title shows, as an invitation to scroll. */
   .hero {
+    --peek: clamp(132px, 17vh, 176px);
     position: relative;
+    display: flex;
+    min-height: max(520px, calc(100svh - var(--peek)));
     background: var(--paper-alt);
   }
 
@@ -134,8 +139,9 @@ const principles = [
 
   .hero__inner {
     position: relative;
-    padding-top: calc(var(--header-h) + clamp(48px, 10vh, 112px));
-    padding-bottom: clamp(48px, 10vh, 112px);
+    align-content: center;
+    padding-top: calc(var(--header-h) + var(--space-5));
+    padding-bottom: var(--space-5);
   }
 
   /* Statement entrance: each word comes into focus in sequence — fade, de-blur and a
