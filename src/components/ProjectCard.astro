@@ -1,6 +1,8 @@
 ---
-// Sits in the body lane (cols 4–12). Cover spans all three tracks;
-// title + tagline take tracks A–B, facts take track C.
+// Sits in the body lane (cols 4–12). Cover spans all three tracks.
+// Below it, two rows mirror each other: title | type · year, tagline | role · status.
+// Left items take tracks A–B; the facts sit in track C, right-aligned to the cover edge
+// and on the same baselines as the title and tagline.
 import Cover from './Cover.astro';
 import { hrefOf, slugOf, type Project } from '../lib/projects';
 
@@ -20,26 +22,24 @@ const { title, tagline, role, type, year, placeholder } = project.data;
     </div>
 
     <div class="pcard__info trio">
-      <div class="pcard__main span-2">
-        <h3 class="pcard__title trim">{title}</h3>
-        <p class="pcard__tagline">{tagline}</p>
-      </div>
+      <h3 class="pcard__title span-2">{title}</h3>
+      <p class="pcard__meta label">
+        <span>{type}</span>
+        <span aria-hidden="true">·</span>
+        <span>{year}</span>
+      </p>
 
-      <dl class="facts pcard__facts">
-        <div><dt class="label muted">Role</dt><dd>{role}</dd></div>
-        <div><dt class="label muted">Type</dt><dd>{type}</dd></div>
-        <div><dt class="label muted">Year</dt><dd>{year}</dd></div>
+      <p class="pcard__tagline span-2">{tagline}</p>
+      <p class="pcard__role">
+        <span class="visually-hidden">Role: </span>{role}
         {
           placeholder && (
-            <div>
-              <dt class="label muted">Status</dt>
-              <dd class="pcard__status">
-                <span class="dot" /> In progress
-              </dd>
-            </div>
+            <span class="pcard__status">
+              <span class="dot" /> In progress
+            </span>
           )
         }
-      </dl>
+      </p>
     </div>
   </a>
 </article>
@@ -55,14 +55,8 @@ const { title, tagline, role, type, year, placeholder } = project.data;
 
   .pcard__info {
     padding-top: var(--space-3);
-    row-gap: var(--space-4);
-  }
-
-  .pcard__main {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
+    row-gap: var(--space-2);
+    align-items: baseline;
   }
 
   .pcard__title {
@@ -77,33 +71,52 @@ const { title, tagline, role, type, year, placeholder } = project.data;
     color: var(--ink-2);
   }
 
-  /* Quiet key/value block: no rules, two aligned columns, tight rhythm */
-  .pcard__facts {
-    display: grid;
-    grid-template-columns: max-content minmax(0, 1fr);
-    column-gap: var(--space-3);
-    row-gap: var(--space-1);
-    align-items: baseline;
-    align-content: start;
+  .pcard__meta,
+  .pcard__role {
+    justify-self: end;
+    text-align: right;
+  }
+
+  .pcard__meta {
+    display: flex;
+    gap: var(--space-1);
+    color: var(--ink-3);
+  }
+
+  .pcard__role {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
     font-size: var(--fs-small);
-    line-height: 1.5;
-  }
-
-  .pcard__facts > div {
-    display: contents;
-  }
-
-  .pcard__facts dt {
-    margin: 0;
-  }
-
-  .pcard__facts > div:first-child > * {
-    text-box: trim-start cap alphabetic;
+    color: var(--ink-2);
   }
 
   .pcard__status {
     display: inline-flex;
     align-items: center;
     gap: var(--space-1);
+    color: var(--ink-3);
+  }
+
+  @media (max-width: 640px) {
+    .pcard__info {
+      row-gap: var(--space-1);
+    }
+
+    .pcard__meta {
+      order: -1;
+    }
+
+    .pcard__meta,
+    .pcard__role {
+      justify-self: start;
+      text-align: left;
+      align-items: flex-start;
+    }
+
+    .pcard__role {
+      margin-top: var(--space-1);
+    }
   }
 </style>
