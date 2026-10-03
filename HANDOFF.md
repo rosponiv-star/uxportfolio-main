@@ -63,7 +63,7 @@ and Rovereto (TN).
   git push
   ```
   Commit messages contain quotes, so use `git commit -F -` with a heredoc. PowerShell `-m @'...'@` broke once.
-- **Dev server:** `.claude/launch.json` defines `portfolio` (`npm run dev -- --port 4321`). Start it with
+- **Dev server:** `.claude/launch.json` defines `portfolio` (`npm run dev -- --ignore-lock`, `autoPort`; `astro.config.mjs` reads `PORT`), so it can run next to another chat's server. Start it with
   `mcp__Claude_Browser__preview_start {name:"portfolio"}`.
   - **Known issue:** the dev server often serves **stale CSS/data** after edits (Vite cache). If a screenshot doesn't
     reflect a change, `preview_stop` then `preview_start`.
