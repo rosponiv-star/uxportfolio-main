@@ -1,5 +1,7 @@
 # Valerio Rosponi — Portfolio
 
+> New session? Read HANDOFF.md first: it has the full history, decisions, rejected ideas and open items.
+
 Personal portfolio of Valerio Rosponi (UX / digital product / visual designer, junior).
 The site exists to show **case studies, process and mindset** to recruiters and hiring
 managers. It is not a self-promotion or "hire me" site: contact stays discreet.
@@ -18,7 +20,7 @@ all site copy is in **English**.
 
 ## Structure
 
-- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters, project count,
+- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters,
   Grid/Index switch, two-column grid of cards), "How I work" principles.
 - `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
 - `src/pages/work/[slug].astro`: case study template. After Overview comes `components/PhoneScroll.astro`: a sticky
@@ -66,8 +68,6 @@ and use `cover.video`.
   `<Chapter>`). Neither a band nor the section after it has a rule. Use bands sparingly: Home → How I
   work; case study → Overview, Key insights, Outcome; About → What I bring. Keep inner rules to a
   minimum (only between repeated rows, never above the first one).
-- Collection sections (Selected work, Experiments) use `stacked`: the title sits on its own row inside
-  cols 1–3, with the content below.
 - Spacing comes only from the tokens in global.css: `--space-1…6`, `--space-block` (between blocks),
   `--space-item` (between cards) and `--space-section` (between sections).
 - To verify alignment, measure element edges against the column lines in the browser (a JS audit).
@@ -75,11 +75,11 @@ and use `cover.video`.
 
 ## Type scale (strict)
 
-Use only the size tokens in global.css: mega, display (30→60, page-opening statements, Geist Regular), h2 (48), h3 (28), lead (~22), body (17), small (15)
+Use only the size tokens in global.css: mega, display (30→60, page-opening statements, Geist Regular), h2 (48), h3 (28), lead (~22), body (17), small (16)
 and label (12, Geist Medium uppercase, 8% tracking). Never hard-code a font size. The only exceptions are graphics: the cover
 title, the footer wordmark and the nav micro-numbers.
 
-- Section titles and project card titles use h2. Other item titles (principles, insights, rows) use h3.
+- Section titles use h2. Item titles (principles, insights, rows, index) use h3. Card titles use lead (Medium).
 - Running text uses body. Navigation, index, notes, captions and secondary facts use small.
 - An item row (principles, insights, About rows) is always: title in track A, text in tracks B–C.
 
