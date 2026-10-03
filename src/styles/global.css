@@ -311,6 +311,7 @@ dd {
 .sec__sticky {
   position: sticky;
   top: calc(var(--header-h) + var(--space-3));
+  transition: top 0.6s var(--ease-out);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);

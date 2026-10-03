@@ -38,9 +38,11 @@ role, timeline, team, tools, tone (placeholder cover colour), toneDark, cover {i
 glance {problem, approach, outcome} (one short sentence each), result {text, media [{label, image?, kind: screen|wide}],
 metricsLabel, metrics}, placeholder (set to `false` once the content is real).
 
-Page order (owner, 2026-10-03): title + tagline → cover → Overview (3 one-sentence glance items + facts, no band) →
-**Result** (alt band: screens/boards, 1–2 sentences, key numbers; placeholders until images exist) → Process (chapter
-list) → chapters. Recruiters must see interface and result first; the full process stays one scroll away.
+Page order (owner, 2026-10-03): title + tagline → cover → Overview (open spec sheet: ink top rule, gutter hairlines
+between the 3 tracks, 3 one-sentence glance items above the facts; no band, no box) →
+**Result** (alt band: screens/boards, 1–2 sentences, key numbers; placeholders until images exist) → Process (`case/ProcessIndex.astro`:
+steps hanging from an ink line; once it scrolls away a slim fixed bar under the header shows the steps, fills each
+segment in --signal as its chapter is read and replaces the progress bar) → chapters. Recruiters must see interface and result first; the full process stays one scroll away.
 
 Chapters: Challenge, Research, Insights (tone="alt"), Define, Ideate, Design, [Validate, only if tested], Reflection.
 Each chapter opens with a `<Key>` sentence (lead size, ink), then SHORT paragraphs (2–3 lines). Running text in

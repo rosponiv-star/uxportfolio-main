@@ -1,0 +1,307 @@
+---
+// The case-study process as a line of steps.
+// - `inline` (default): sits in the "Process" section. A hairline runs across the body lane; each
+//   chapter hangs from it on a tick with its number and title.
+// - `bar`: the same steps, fixed under the header while the chapters are being read. Each step's
+//   segment of the line fills with the signal colour as its chapter is read (it replaces the
+//   page progress bar). Hidden before the first chapter and after the last one.
+interface Props {
+  chapters: { title: string; id: string }[];
+  bar?: boolean;
+}
+const { chapters, bar = false } = Astro.props;
+const n = (i: number) => String(i + 1).padStart(2, '0');
+---
+
+{
+  bar ? (
+    <nav class="pbar" aria-label="Process" data-pbar>
+      <div class="wrap grid pbar__inner">
+        <ol class="steps steps--bar" style={`--count: ${chapters.length}`}>
+          {chapters.map((c, i) => (
+            <li class="step" data-step={c.id}>
+              <a href={`#${c.id}`}>
+                <span class="step__line" aria-hidden="true">
+                  <span class="step__fill" />
+                </span>
+                <span class="step__n label">{n(i)}</span>
+                <span class="step__t">{c.title}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+        <p class="pbar__now label" aria-hidden="true" data-pbar-now />
+      </div>
+    </nav>
+  ) : (
+    <ol class="steps" style={`--count: ${chapters.length}`}>
+      {chapters.map((c, i) => (
+        <li class="step" data-reveal style={`--d: ${i}`}>
+          <a href={`#${c.id}`}>
+            <span class="step__tick" aria-hidden="true" />
+            <span class="step__n label">{n(i)}</span>
+            <span class="step__t">{c.title}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+<style>
+  /* Shared: equal steps across the body lane, hanging from one hairline. */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(var(--count), minmax(0, 1fr));
+  }
+
+  .step a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-right: var(--space-2);
+    color: var(--ink-3);
+    transition: color 0.25s;
+  }
+
+  .step__n {
+    color: var(--signal);
+  }
+
+  .step__t {
+    font-size: var(--fs-small);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  .step a:hover,
+  .step a:focus-visible {
+    color: var(--ink);
+  }
+
+  /* Inline ---------------------------------------------------------------- */
+  .steps:not(.steps--bar) {
+    border-top: 1px solid var(--ink);
+  }
+
+  .steps:not(.steps--bar) .step a {
+    padding-top: var(--space-3);
+  }
+
+  .step__tick {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 10px;
+    background: var(--ink);
+    transition: height 0.4s var(--ease-out);
+  }
+
+  .step a:hover .step__tick,
+  .step a:focus-visible .step__tick {
+    height: 18px;
+  }
+
+  .steps:not(.steps--bar) .step__n {
+    padding-left: 10px;
+  }
+
+  .steps:not(.steps--bar) .step__t {
+    padding-left: 10px;
+    color: var(--ink);
+  }
+
+  /* Bar ------------------------------------------------------------------- */
+  .pbar {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    z-index: 45;
+    padding-block: 10px 12px;
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    backdrop-filter: blur(10px) saturate(1.2);
+    -webkit-backdrop-filter: blur(10px) saturate(1.2);
+    border-bottom: 1px solid var(--rule);
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition:
+      top 0.6s var(--ease-out),
+      opacity 0.3s,
+      transform 0.4s var(--ease-out);
+  }
+
+  :global([data-header-hidden]) .pbar {
+    top: 0;
+  }
+
+  .pbar.is-on {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+
+  .steps--bar {
+    grid-column: 4 / -1;
+    column-gap: 4px;
+  }
+
+  .steps--bar .step a {
+    gap: 5px;
+    padding-right: 0;
+  }
+
+  .step__line {
+    position: relative;
+    display: block;
+    height: 2px;
+    margin-bottom: 3px;
+    background: var(--rule);
+    overflow: hidden;
+  }
+
+  .step__fill {
+    position: absolute;
+    inset: 0;
+    background: var(--signal);
+    transform: scaleX(var(--p, 0));
+    transform-origin: left;
+  }
+
+  .steps--bar .step__n {
+    color: var(--ink-4);
+  }
+
+  .steps--bar .step__t {
+    color: var(--ink-4);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .steps--bar .step.is-current .step__n {
+    color: var(--signal);
+  }
+
+  .steps--bar .step.is-current .step__t,
+  .steps--bar .step a:hover .step__t {
+    color: var(--ink);
+  }
+
+  .pbar__now {
+    display: none;
+  }
+
+  /* While the bar is on, sticky chapter titles and anchor jumps clear it. */
+  :global(.has-pbar) {
+    scroll-padding-top: calc(var(--header-h) + var(--pbar-h, 0px) + var(--space-3));
+  }
+
+  :global(.has-pbar:not([data-header-hidden]) .sec__sticky) {
+    top: calc(var(--header-h) + var(--pbar-h, 0px) + var(--space-3));
+  }
+
+  :global(.has-pbar[data-header-hidden] .sec__sticky) {
+    top: calc(var(--pbar-h, 0px) + var(--space-3));
+  }
+
+  /* Phones ---------------------------------------------------------------- */
+  @media (max-width: 640px) {
+    .steps:not(.steps--bar) {
+      grid-template-columns: minmax(0, 1fr);
+      border-top: 0;
+      border-left: 1px solid var(--ink);
+    }
+
+    .steps:not(.steps--bar) .step a {
+      flex-direction: row;
+      align-items: baseline;
+      gap: var(--space-2);
+      padding: 6px 0 6px var(--space-2);
+    }
+
+    .steps:not(.steps--bar) .step__n,
+    .steps:not(.steps--bar) .step__t {
+      padding-left: 0;
+    }
+
+    .step__tick {
+      top: 50%;
+      width: 10px;
+      height: 1px;
+    }
+
+    .step a:hover .step__tick {
+      height: 1px;
+    }
+
+    /* Bar: segments only, plus the current chapter as text. */
+    .steps--bar {
+      grid-column: 1 / -1;
+    }
+
+    .steps--bar .step__n,
+    .steps--bar .step__t {
+      display: none;
+    }
+
+    .pbar__now {
+      display: block;
+      grid-column: 1 / -1;
+      margin-top: 8px;
+      color: var(--ink);
+    }
+  }
+</style>
+
+<script>
+  // Bar: show it while the chapters are on screen, mark the current chapter and fill each
+  // step with how much of its chapter has been read.
+  const bar = document.querySelector<HTMLElement>('[data-pbar]');
+  if (bar) {
+    const steps = Array.from(bar.querySelectorAll<HTMLElement>('[data-step]'));
+    const sections = steps.map((s) => document.getElementById(s.dataset.step!));
+    const now = bar.querySelector<HTMLElement>('[data-pbar-now]');
+    const inline = document.querySelector<HTMLElement>('.steps:not(.steps--bar)');
+    const root = document.documentElement;
+    const update = () => {
+      const line = window.innerHeight * 0.35;
+      let current = -1;
+      sections.forEach((sec, i) => {
+        if (!sec) return;
+        const r = sec.getBoundingClientRect();
+        const p = Math.min(1, Math.max(0, (line - r.top) / r.height));
+        steps[i].style.setProperty('--p', p.toFixed(3));
+        if (r.top <= line) current = i;
+      });
+      const last = sections[sections.length - 1]?.getBoundingClientRect();
+      // Only once the inline index has left the screen, so the two never show together.
+      const inlineGone = !inline || inline.getBoundingClientRect().bottom < bar.offsetTop;
+      const on = current >= 0 && inlineGone && Boolean(last && last.bottom > line);
+      bar.classList.toggle('is-on', on);
+      root.classList.toggle('has-pbar', on);
+      root.style.setProperty('--pbar-h', `${bar.offsetHeight}px`);
+      steps.forEach((s, i) => s.classList.toggle('is-current', i === current));
+      if (now && current >= 0) {
+        const t = steps[current].querySelector('.step__t')?.textContent ?? '';
+        now.textContent = `${String(current + 1).padStart(2, '0')} / ${String(steps.length).padStart(2, '0')}  ${t}`;
+      }
+    };
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        update();
+        ticking = false;
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  }
+</script>

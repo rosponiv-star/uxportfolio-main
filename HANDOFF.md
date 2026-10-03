@@ -213,11 +213,18 @@ can dig into the whole process and way of thinking if they want".
 1. **Back button**: outlined pill with a static chevron (animated arrow rejected).
 2. **Title** (mega) + **tagline** (lead, one sentence).
 3. **Cover** (16:10).
-4. **Overview** (no band): Problem / Approach / Outcome, one short sentence each, plus the facts grid.
+4. **Overview** (no band): an open spec sheet (owner picked "scheda incorniciata" but "less box"): ink top rule,
+   hairlines centred in the gutters between the three tracks, Problem / Approach / Outcome (one sentence each) above
+   a hairline, then the facts grid.
 5. **Result** (alt band): `result` frontmatter. Three phone-ratio screens + one wide board (placeholders until real
    images: the owner chose placeholders for now, NOT the prepared JustCook boards), 1–2 sentences, key numbers
    (JustCook: "Targets for a pilot"). On phones the screens become a horizontal swipe row.
-6. **Process**: numbered chapter list (was "Contents").
+6. **Process** (`case/ProcessIndex.astro`, owner picked option C "process line", in house style): steps hang from an
+   ink line on 10px ticks. When the inline index has scrolled away, a slim fixed bar under the header shows the same
+   steps; each segment fills in --signal as its chapter is read (replaces the 2px progress bar), current step in ink.
+   Sticky chapter titles and scroll-padding move down while the bar is on (`html.has-pbar`, `--pbar-h`). Phones:
+   vertical list; bar = segments + "04 / 07 DEFINE". Rejected alternatives shown: row TOC with key sentence, dotted
+   book TOC, sticky side index; Overview as dark band, stacked sentences, text + data column.
 7. **Chapters**: Challenge, Research, Insights (alt), Define, Ideate, Design, [Validate], Reflection. Each opens with
    `<Key>` (lead, ink), then short paragraphs at --fs-read (19px). Archetypes trimmed to quote + 2 traits; Reframes to
    3 of 6 cycles. Owner chose short paragraphs over bullets or collapsible details.
