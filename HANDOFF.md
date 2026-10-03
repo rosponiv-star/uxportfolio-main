@@ -258,7 +258,7 @@ Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is
 | 02 Rehab | placeholder | invented facts (Digital health service, 2026, Product Designer, team lead…) |
 | 03 Smart Home Ecosystem | placeholder | invented facts |
 | 04 Realiti | placeholder | invented facts, dark tone |
-| 05 AuraWake | placeholder text, **real cover** | cover = Home + AlarmSet1 side by side, 3840×2400, from the 3x PNGs in `Media/05-AuraWake/OfficialMedia/Interfaces`. Photo-set shadows (2026-10-03): flat #f4f4f2 ground (= tone; the owner rejected a vignette/radial light and the darker tone, which showed a dark frame on hover). Each phone casts two shadows from its alpha in #1d1e22: soft σ80 / 34% / +110px and contact σ16 / 30% / +22px. Script: old scratchpad `render/aura-shadow.cjs`. Reuse for future device covers. Note: in dev the image URL has no hash, so the browser may show the old cover until a hard refresh. |
+| 05 AuraWake | placeholder text, **real cover** | cover = Home + AlarmSet1 side by side, 3840×2400, from the 3x PNGs in `Media/05-AuraWake/OfficialMedia/Interfaces`. Flat #f4f4f2 ground (= tone), phones only. Depth experiments were REJECTED (2026-10-03): radial studio light/vignette, cast shadows under the phones, diffuse halo. Do not re-propose. Note: in dev the image URL has no hash, so after replacing an image the browser may need a hard refresh. |
 
 ### JustCook facts (verified with the owner)
 - University project, Sept 2024 – May 2025, across three courses: semiotics of visual representation, sociology of
