@@ -780,48 +780,6 @@ a:focus-visible .arrow--back {
   color: var(--ink);
 }
 
-/* Rich label on cards: title, type and year, a hairline, then the action. */
-.cursor-label.is-rich {
-  display: flex;
-  flex-direction: column;
-  min-width: 180px;
-  max-width: 320px;
-  padding: 0;
-  letter-spacing: normal;
-  text-transform: none;
-  white-space: normal;
-  transform-origin: 0 0;
-}
-
-.cursor-label__title {
-  padding: 10px 12px 0;
-  font-size: var(--fs-small);
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
-}
-
-.cursor-label__meta {
-  display: flex;
-  gap: var(--space-2);
-  padding: 3px 12px 10px;
-  font-weight: 400;
-  color: color-mix(in srgb, var(--paper) 70%, transparent);
-}
-
-.cursor-label__year {
-  margin-left: auto;
-  color: color-mix(in srgb, var(--paper) 50%, transparent);
-  font-variant-numeric: tabular-nums;
-}
-
-.cursor-label__action {
-  padding: 8px 12px 7px;
-  border-top: 1px solid color-mix(in srgb, var(--paper) 20%, transparent);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .cursor-label.is-visible {
   opacity: 1;
   scale: 1;

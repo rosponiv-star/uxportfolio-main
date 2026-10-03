@@ -195,12 +195,11 @@ The selected filter or view underline is **1.5px** (he asked for something betwe
    - Filters: `All 5 · UX/UI 5 · Service design 1 · Product 3 · XR 1 · Research 1` (counts come from each project's
      `categories`). UX/UI is on every project, so the owner was told it doesn't discriminate; it is unresolved.
    - **Grid:** two equal columns of 4:3 covers with an **8px gap in both directions**.
-   - **Card hover (E2, chosen 2026-10-03):** no caption bar. The cursor label grows into a small ink card that
-     follows the pointer: title, "type, platform   year", a hairline, "READ CASE STUDY". Image zooms 1.03, never
-     darkened. Keyboard focus pins the same label bottom-left of the card. Unlinked cards (Playground) show text below.
-     Rejected on the way: the paper bar covering the cover; the cover shrinking to make room for the bar; corner tag,
-     free text, slim line. Tech-editorial variants explored and NOT chosen: E3 tabbed card, E4 crosshair, E5
-     typographic, B4 spec sheet, B5 traced frame, B6 ruler strip (B3 translucent corner tag was the runner-up).
+   - **Card hover (chips, 2026-10-03):** inspired by a reference the owner sent. The cover zooms out to 0.95 over
+     the project tone and three square paper chips (1px --rule inset) rise in bottom-left, staggered 60ms: title, type +
+     platform, year. Cursor label stays plain "Read case study". Focus-visible = hover. Unlinked cards: text below.
+     Rejected on the way: paper bar covering the cover; cover shrinking to fit the bar; E2 rich cursor label ("too
+     particular vs simple"); corner tag, free text, slim line; tech-editorial variants E3/E4/E5/B4/B5/B6.
    - **Touch:** text sits below the cover and rows get a 48px gap.
    - **Card entrance:** full-size fade with the inner image settling from scale 1.06; the 2nd card of a row is delayed
      120ms. The old clip-path "curtain" made cards look narrow before animating and was rejected.

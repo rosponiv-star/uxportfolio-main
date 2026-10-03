@@ -102,11 +102,11 @@ title, the footer wordmark and the nav micro-numbers.
   Cards sit close together: 8px gap in both directions (rows open up to 48px on touch, where text is below). Card
   entrance never changes the footprint: cover fades in at full size while its image settles from scale 1.06; the
   second card of a row is delayed 120ms.
-- Card: the cover fills the card and nothing ever covers it. On hover devices the cursor label becomes a small ink
-  card (title, then "type, platform   year", a hairline, READ CASE STUDY) that follows the pointer (data-cursor-* on
-  the link, built in scripts/site.ts). Keyboard focus shows the same label pinned bottom-left. Touch devices and
-  unlinked cards (Playground) keep the text below the cover. The image is never darkened (dark scrim rejected).
-  Rejected hover treatments: caption bar covering the cover; cover shrinking to make room for the bar.
+- Card: the cover fills the card. On hover/focus the cover zooms out to 0.95 over the project tone (Card `tone`) and
+  three square paper chips rise in at the bottom-left, staggered: title (Medium, ink), "type, platform", year (greys).
+  The cursor label still says "Read case study". Touch devices and unlinked cards (Playground) keep the text below the
+  cover. The image is never darkened. Rejected: caption bar covering the cover; cover shrinking to fit the bar; info
+  inside the cursor label (E2).
 - Home hero is a tinted band (--paper-alt) holding the depth texture; the band edge separates it from Selected work,
   which therefore has no top rule on the home page.
 - Index view: a table (No., project, type, role, year). On hover the cover follows the cursor. The chosen view is
