@@ -196,7 +196,9 @@ The selected filter or view underline is **1.5px** (he asked for something betwe
      `categories`). UX/UI is on every project, so the owner was told it doesn't discriminate; it is unresolved.
    - **Grid:** two equal columns of 4:3 covers with an **8px gap in both directions**.
    - **Card hover:** a paper-coloured caption bar slides up from the bottom edge, carrying the title (lead, Medium) and
-     a line "type, platform   year". The image zooms 1.03 and is **never darkened**: a dark scrim was rejected.
+     a line "type, platform   year". The bar **must not cover the cover** (owner, 2026-10-03): the cover shrinks towards the top by exactly the bar height
+     (`--card-shrink` from a ResizeObserver in Card.astro), revealing the project tone at the sides. No zoom, **never
+     darkened**: a dark scrim was rejected.
    - **Touch:** text sits below the cover and rows get a 48px gap.
    - **Card entrance:** full-size fade with the inner image settling from scale 1.06; the 2nd card of a row is delayed
      120ms. The old clip-path "curtain" made cards look narrow before animating and was rejected.
@@ -261,7 +263,7 @@ without link.
 | 02 Rehab | placeholder | invented facts (Digital health service, 2026, Product Designer, team lead…) |
 | 03 Smart Home Ecosystem | placeholder | invented facts |
 | 04 Realiti | placeholder | invented facts, dark tone |
-| 05 AuraWake | placeholder text, **real cover** | cover = Home + AlarmSet1 screens side by side on #f4f4f2 (1920×1200, composed with sharp from `Media/05-AuraWake/OfficialMedia/Interfaces`; source PNGs are only 450×920, so phones are kept at native size). |
+| 05 AuraWake | placeholder text, **real cover** | cover = Home + AlarmSet1 screens side by side on #f4f4f2 (= tone), 3840×2400, composed with sharp from the 3x PNGs (1350×2760) in `Media/05-AuraWake/OfficialMedia/Interfaces`. |
 
 ### JustCook facts (verified with the owner)
 - University project, Sept 2024 – May 2025, across three courses: semiotics of visual representation, sociology of

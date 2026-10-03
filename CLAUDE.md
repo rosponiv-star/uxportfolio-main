@@ -103,7 +103,9 @@ title, the footer wordmark and the nav micro-numbers.
   entrance never changes the footprint: cover fades in at full size while its image settles from scale 1.06; the
   second card of a row is delayed 120ms.
 - Card: the cover fills the card. On hover/focus a paper-coloured caption bar slides up from the bottom edge carrying
-  the title, then "type, platform   year" in ink; the image is never darkened (the owner rejected a dark scrim). On touch
+  the title, then "type, platform   year" in ink. The bar must never cover the cover: as it rises, the cover shrinks towards
+  the top edge by exactly the bar height (--card-shrink, set by a ResizeObserver in Card.astro) over the project tone. The
+  image is never darkened (the owner rejected a dark scrim) nor zoomed. On touch
   devices the text sits below the cover instead.
 - Home hero is a tinted band (--paper-alt) holding the depth texture; the band edge separates it from Selected work,
   which therefore has no top rule on the home page.
