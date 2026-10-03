@@ -1,8 +1,9 @@
 ---
-// Generic collection card. The media (slot) fills the card; title, type and year sit inside it
-// on a paper caption bar that slides up on hover/focus (no darkening). As the bar rises, the
-// media shrinks towards the top edge by exactly the bar's height, so the bar never covers it;
-// `tone` fills the card behind the shrunk media. Without hover (touch), the text stays below.
+// Generic collection card. The media (slot) fills the card and nothing ever covers it.
+// Linked cards on hover devices: title, type and year travel with the pointer inside the
+// cursor label (scripts/site.ts, data-cursor-*), above the action. Keyboard focus shows the
+// same label pinned to the card's bottom-left corner. Touch devices and cards without a link
+// keep the text below the media.
 // The media ratio comes from the grid slot (--card-ratio). With `href` the whole card is a link.
 interface Props {
   title: string;
@@ -11,14 +12,20 @@ interface Props {
   href?: string;
   cursor?: string;
   id?: string;
-  tone?: string;
 }
-const { title, year, meta, href, cursor, id, tone } = Astro.props;
+const { title, year, meta, href, cursor, id } = Astro.props;
 const Tag = href ? 'a' : 'div';
 ---
 
-<article class="card" id={id} data-reveal="card" style={tone ? `--card-bg: ${tone}` : undefined}>
-  <Tag class="card__link" href={href} data-cursor={href ? cursor : undefined}>
+<article class:list={['card', { 'card--linked': href }]} id={id} data-reveal="card">
+  <Tag
+    class="card__link"
+    href={href}
+    data-cursor={href ? cursor : undefined}
+    data-cursor-title={href ? title : undefined}
+    data-cursor-meta={href ? meta : undefined}
+    data-cursor-year={href ? year : undefined}
+  >
     <div class="card__media">
       <slot />
     </div>
@@ -28,6 +35,7 @@ const Tag = href ? 'a' : 'div';
         {meta && <span class="card__type">{meta}</span>}
         {year && <span class="card__year">{year}</span>}
       </p>
+      {href && cursor && <span class="card__action">{cursor}</span>}
     </div>
   </Tag>
 </article>
@@ -36,14 +44,13 @@ const Tag = href ? 'a' : 'div';
   .card__link {
     position: relative;
     display: block;
-    overflow: hidden;
   }
 
   .card__media {
     position: relative;
     aspect-ratio: var(--card-ratio, 4 / 3);
     overflow: hidden;
-    background: var(--card-bg, var(--paper-2));
+    background: var(--paper-2);
   }
 
   .card__media > :global(*) {
@@ -52,6 +59,13 @@ const Tag = href ? 'a' : 'div';
     width: 100%;
     height: 100%;
     aspect-ratio: auto;
+  }
+
+  .card__info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-top: var(--space-2);
   }
 
   .card__title {
@@ -65,6 +79,7 @@ const Tag = href ? 'a' : 'div';
     display: flex;
     gap: var(--space-3);
     font-size: var(--fs-small);
+    color: var(--ink-3);
   }
 
   .card__type {
@@ -76,7 +91,12 @@ const Tag = href ? 'a' : 'div';
 
   .card__year {
     flex: none;
+    color: var(--ink-4);
     font-variant-numeric: tabular-nums;
+  }
+
+  .card__action {
+    display: none;
   }
 
   /* Entrance (footprint never changes): the cover fades in at full size while the image
@@ -99,107 +119,61 @@ const Tag = href ? 'a' : 'div';
     transform: none;
   }
 
-  /* Hover devices: a paper-coloured caption bar slides up from the bottom edge of the cover,
-     carrying the text in ink. The image is never darkened; contrast is the page's own. */
+  /* Hover devices, linked cards: the text lives in the cursor label, so the card is the cover
+     alone. The info stays in the DOM for screen readers and appears, styled like the cursor
+     label, only on keyboard focus. */
   @media (hover: hover) and (pointer: fine) {
-    .card__info {
+    .card--linked .card__info {
       position: absolute;
+      left: var(--space-2);
+      bottom: var(--space-2);
       z-index: 1;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      padding: var(--space-3) var(--space-3) var(--space-3);
-      background: var(--paper);
-      transform: translateY(101%);
-      transition: transform 0.7s var(--ease-out);
+      width: max-content;
+      max-width: calc(100% - var(--space-4));
+      gap: 0;
+      padding: 0;
+      background: var(--ink);
+      color: var(--paper);
+      clip-path: inset(50%);
       pointer-events: none;
     }
 
-    .card__title,
-    .card__meta {
-      opacity: 0;
-      transform: translateY(8px);
-      transition:
-        opacity 0.45s var(--ease-out),
-        transform 0.6s var(--ease-out);
+    .card--linked .card__link:focus-visible .card__info {
+      clip-path: none;
     }
 
-    .card__meta {
-      color: var(--ink-3);
+    .card--linked .card__title {
+      padding: 10px 12px 0;
+      font-size: var(--fs-small);
     }
 
-    .card__year {
-      color: var(--ink-4);
+    .card--linked .card__meta {
+      padding: 2px 12px 10px;
+      font-size: var(--fs-label);
+      color: color-mix(in srgb, var(--paper) 70%, transparent);
     }
 
-    .card__media > :global(*) {
-      transform-origin: 50% 0;
-      transition: transform 0.7s var(--ease-out);
+    .card--linked .card__year {
+      color: color-mix(in srgb, var(--paper) 50%, transparent);
     }
 
-    /* The cover keeps its own hover zoom out of the card: the shrink is the only motion. */
-    .card__link:hover .card__media :global(.cover__media),
-    .card__link:hover .card__media :global(.cover__ph) {
-      transform: none;
+    .card--linked .card__action {
+      display: block;
+      padding: 8px 12px 7px;
+      border-top: 1px solid color-mix(in srgb, var(--paper) 20%, transparent);
+      font-size: var(--fs-label);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    .card__link:hover .card__info,
-    .card__link:focus-visible .card__info {
-      transform: none;
-    }
-
-    .card__link:hover .card__title,
-    .card__link:focus-visible .card__title {
-      opacity: 1;
-      transform: none;
-      transition-delay: 0.12s;
-    }
-
-    .card__link:hover .card__meta,
-    .card__link:focus-visible .card__meta {
-      opacity: 1;
-      transform: none;
-      transition-delay: 0.2s;
+    .card--linked .card__media > :global(*) {
+      transition: transform 1.2s var(--ease-out);
     }
 
     :global(.js) .card:global(.is-in) .card__link:hover .card__media > :global(*),
     .card__link:hover .card__media > :global(*) {
-      transform: scale(var(--card-shrink, 0.84));
-    }
-  }
-
-  /* Touch devices: text below the media */
-  @media not ((hover: hover) and (pointer: fine)) {
-    .card__info {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-1);
-      padding-top: var(--space-2);
-    }
-
-    .card__meta {
-      color: var(--ink-3);
-    }
-
-    .card__year {
-      color: var(--ink-4);
+      transform: scale(1.03);
     }
   }
 </style>
-
-<script>
-  // --card-shrink = share of the media left visible above the caption bar, so the bar
-  // takes the freed space instead of covering the cover.
-  const fit = (card: HTMLElement) => {
-    const media = card.querySelector<HTMLElement>('.card__media');
-    const info = card.querySelector<HTMLElement>('.card__info');
-    if (!media || !info || !media.offsetHeight) return;
-    const s = 1 - info.offsetHeight / media.offsetHeight;
-    card.style.setProperty('--card-shrink', Math.max(0.5, s).toFixed(4));
-  };
-  const ro = new ResizeObserver((entries) => entries.forEach((e) => fit(e.target as HTMLElement)));
-  document.querySelectorAll<HTMLElement>('.card').forEach((c) => ro.observe(c));
-</script>

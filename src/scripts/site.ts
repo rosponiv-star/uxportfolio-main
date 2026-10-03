@@ -80,10 +80,18 @@ function initCursorLabel() {
   let raf = 0;
   let active = false;
 
+  // Label size, measured on enter, keeps a rich label inside the viewport near the edges.
+  let w = 0;
+  let h = 0;
+  const OFFSET = 14;
+  const EDGE = 8;
+
   const loop = () => {
     cx += (x - cx) * (reducedMotion ? 1 : 0.22);
     cy += (y - cy) * (reducedMotion ? 1 : 0.22);
-    label.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
+    const tx = Math.min(cx, window.innerWidth - w - OFFSET - EDGE);
+    const ty = Math.min(cy, window.innerHeight - h - OFFSET - EDGE);
+    label.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
     if (active || Math.abs(x - cx) > 0.5 || Math.abs(y - cy) > 0.5) {
       raf = requestAnimationFrame(loop);
     } else {
@@ -91,14 +99,41 @@ function initCursorLabel() {
     }
   };
 
+  // Plain label: the action alone. Rich label (cards): title, then type and year, then a
+  // hairline and the action. Built with textContent only.
+  const line = (cls: string, text?: string) => {
+    const node = document.createElement('span');
+    node.className = cls;
+    if (text) node.textContent = text;
+    return node;
+  };
+  const fill = (el: HTMLElement) => {
+    const { cursor, cursorTitle, cursorMeta, cursorYear } = el.dataset;
+    label.replaceChildren();
+    label.classList.toggle('is-rich', Boolean(cursorTitle));
+    if (!cursorTitle) {
+      label.textContent = cursor || 'View';
+      return;
+    }
+    label.append(line('cursor-label__title', cursorTitle));
+    if (cursorMeta || cursorYear) {
+      const meta = line('cursor-label__meta', cursorMeta);
+      if (cursorYear) meta.append(line('cursor-label__year', cursorYear));
+      label.append(meta);
+    }
+    if (cursor) label.append(line('cursor-label__action', cursor));
+  };
+
   targets.forEach((el) => {
     el.addEventListener('pointerenter', (e) => {
-      label.textContent = el.dataset.cursor || 'View';
+      fill(el);
       // Light label over dark surfaces (e.g. a dark next-project band)
       label.classList.toggle('is-light', el.dataset.cursorTheme === 'light');
       x = cx = e.clientX;
       y = cy = e.clientY;
       active = true;
+      w = label.offsetWidth;
+      h = label.offsetHeight;
       label.classList.add('is-visible');
       if (!raf) raf = requestAnimationFrame(loop);
     });
