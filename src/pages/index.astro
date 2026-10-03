@@ -59,7 +59,7 @@ const principles = [
   <section class="hero">
     <DepthTexture intensity={0.5} />
     <div class="wrap grid hero__inner">
-      <h1 class="hero__title display col-wide">
+      <h1 class="hero__title display">
         {
           words.map((w, i) => (
             <>
@@ -136,6 +136,17 @@ const principles = [
     margin-top: clamp(56px, 9vh, 96px);
     padding-top: 0;
     border-top: 0;
+  }
+
+  /* Wider measure: cols 1–11, so lines run longer */
+  .hero__title {
+    grid-column: 1 / span 11;
+  }
+
+  @media (max-width: 960px) {
+    .hero__title {
+      grid-column: 1 / -1;
+    }
   }
 
   .hero__inner {
