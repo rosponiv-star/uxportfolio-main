@@ -258,7 +258,7 @@ Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is
 | 02 Rehab | placeholder | invented facts (Digital health service, 2026, Product Designer, team lead…) |
 | 03 Smart Home Ecosystem | placeholder | invented facts |
 | 04 Realiti | placeholder | invented facts, dark tone |
-| 05 AuraWake | placeholder text, **real cover** | cover = Home + AlarmSet1 screens side by side on #f4f4f2 (= tone), 3840×2400, composed with sharp from the 3x PNGs (1350×2760) in `Media/05-AuraWake/OfficialMedia/Interfaces`. |
+| 05 AuraWake | placeholder text, **real cover** | cover = Home + AlarmSet1 side by side, 3840×2400, from the 3x PNGs in `Media/05-AuraWake/OfficialMedia/Interfaces`. "Cinematic" pass (2026-10-03): radial light on the ground (#f7f7f5 centre → #e6e6e2 edges, light from above-centre) and two shadows per phone from its alpha (ambient σ70 / 30% / +90px, contact σ14 / 28% / +18px, #16171a). Tone #ebebe7 = the image corners, so the hover zoom-out frame continues the vignette. Script: old scratchpad `render/aura-cine.cjs`. Use the same recipe for future device covers. |
 
 ### JustCook facts (verified with the owner)
 - University project, Sept 2024 – May 2025, across three courses: semiotics of visual representation, sociology of
