@@ -432,10 +432,16 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
 /* ==========================================================================
    Long-form text (case-study chapter bodies)
    ========================================================================== */
+/* Text levels in a chapter: <Key> (lead, ink) → paragraphs (read, ink-2) → text inside
+   blocks such as archetypes, insights and reframes (body) → notes and captions (small). */
 .prose {
   color: var(--ink-2);
   font-size: var(--fs-read);
-  line-height: 1.6;
+  line-height: 1.55;
+}
+
+.prose > .key + * {
+  margin-top: var(--space-4);
 }
 
 .prose > p,

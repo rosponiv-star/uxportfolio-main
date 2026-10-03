@@ -22,12 +22,14 @@ export const chapterId = (title: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-/** Chapter titles in order, read from the `<Chapter title="…">` tags in the MDX source. */
+/** Chapters in order, read from the `<Chapter title="…" summary="…">` tags in the MDX source.
+ *  `summary` (optional, a few words) is shown under the step in the Process index. */
 export const chaptersOf = (p: Project) =>
-  Array.from((p.body ?? '').matchAll(/<Chapter\s+title=["']([^"']+)["']/g), (m) => ({
-    title: m[1],
-    id: chapterId(m[1]),
-  }));
+  Array.from((p.body ?? '').matchAll(/<Chapter\b([^>]*)>/g), (m) => {
+    const attr = (name: string) => m[1].match(new RegExp(`${name}=["']([^"']+)["']`))?.[1];
+    const title = attr('title') ?? '';
+    return { title, id: chapterId(title), summary: attr('summary') };
+  }).filter((c) => c.title);
 
 export async function getProjects() {
   const all = await getCollection('projects');

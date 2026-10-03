@@ -244,39 +244,15 @@ const facts = [
     max-width: 30ch;
   }
 
-  /* An open spec sheet: an ink rule on top, hairlines between the three tracks (centred in
-     the gutters, so text stays on the track edges) and between the sentences and the facts. */
+  /* Set apart by an ink rule instead of the usual grey one; inside, only space separates
+     the three sentences from the facts. */
   :global(.overview)::before {
     background: var(--ink);
   }
 
-  .sheet {
-    position: relative;
-  }
-
-  .sheet::before,
-  .sheet::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: var(--rule);
-    left: calc((100% - 2 * var(--gutter)) / 3 + var(--gutter) / 2);
-  }
-
-  .sheet::after {
-    left: calc(2 * (100% - 2 * var(--gutter)) / 3 + 1.5 * var(--gutter));
-  }
-
-  .sheet__glance {
-    padding-bottom: var(--space-4);
-  }
-
   .sheet__facts {
+    margin-top: var(--space-6);
     row-gap: var(--space-3);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--rule);
   }
 
   .sheet__facts dt {
@@ -284,13 +260,12 @@ const facts = [
   }
 
   @media (max-width: 640px) {
-    .sheet::before,
-    .sheet::after {
-      display: none;
-    }
-
     .sheet__glance {
       row-gap: var(--space-4);
+    }
+
+    .sheet__facts {
+      margin-top: var(--space-5);
     }
   }
 

@@ -6,7 +6,7 @@
 //   segment of the line fills with the signal colour as its chapter is read (it replaces the
 //   page progress bar). Hidden before the first chapter and after the last one.
 interface Props {
-  chapters: { title: string; id: string }[];
+  chapters: { title: string; id: string; summary?: string }[];
   bar?: boolean;
 }
 const { chapters, bar = false } = Astro.props;
@@ -41,6 +41,7 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
             <span class="step__tick" aria-hidden="true" />
             <span class="step__n label">{n(i)}</span>
             <span class="step__t">{c.title}</span>
+            {c.summary && <span class="step__s">{c.summary}</span>}
           </a>
         </li>
       ))}
@@ -111,7 +112,22 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
 
   .steps:not(.steps--bar) .step__t {
     padding-left: 10px;
+    font-size: var(--fs-lead);
+    letter-spacing: -0.02em;
     color: var(--ink);
+  }
+
+  .step__s {
+    padding-left: 10px;
+    padding-right: var(--space-1);
+    font-size: var(--fs-small);
+    line-height: 1.4;
+    color: var(--ink-3);
+    text-wrap: pretty;
+  }
+
+  .steps:not(.steps--bar) .step a {
+    gap: var(--space-1);
   }
 
   /* Bar ------------------------------------------------------------------- */
@@ -224,13 +240,25 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
       padding: 6px 0 6px var(--space-2);
     }
 
+    .steps:not(.steps--bar) .step a {
+      display: grid;
+      grid-template-columns: 2.5em minmax(0, 1fr);
+      column-gap: var(--space-1);
+      row-gap: 2px;
+    }
+
     .steps:not(.steps--bar) .step__n,
-    .steps:not(.steps--bar) .step__t {
+    .steps:not(.steps--bar) .step__t,
+    .step__s {
       padding-left: 0;
     }
 
+    .step__s {
+      grid-column: 2;
+    }
+
     .step__tick {
-      top: 50%;
+      top: 0.95em;
       width: 10px;
       height: 1px;
     }

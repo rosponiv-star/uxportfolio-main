@@ -213,14 +213,14 @@ can dig into the whole process and way of thinking if they want".
 1. **Back button**: outlined pill with a static chevron (animated arrow rejected).
 2. **Title** (mega) + **tagline** (lead, one sentence).
 3. **Cover** (16:10).
-4. **Overview** (no band): an open spec sheet (owner picked "scheda incorniciata" but "less box"): ink top rule,
-   hairlines centred in the gutters between the three tracks, Problem / Approach / Outcome (one sentence each) above
-   a hairline, then the facts grid.
+4. **Overview** (no band): ink top rule (other sections have a grey one), Problem / Approach / Outcome (one sentence
+   each), then the facts grid, separated by space only. Gutter hairlines were tried and judged "too many lines".
 5. **Result** (alt band): `result` frontmatter. Three phone-ratio screens + one wide board (placeholders until real
    images: the owner chose placeholders for now, NOT the prepared JustCook boards), 1–2 sentences, key numbers
    (JustCook: "Targets for a pilot"). On phones the screens become a horizontal swipe row.
 6. **Process** (`case/ProcessIndex.astro`, owner picked option C "process line", in house style): steps hang from an
-   ink line on 10px ticks. When the inline index has scrolled away, a slim fixed bar under the header shows the same
+   ink line on 10px ticks, each with number, title (lead) and a 2–4 word `summary` from the MDX Chapter tag (the
+   bare version looked "scarna"). When the inline index has scrolled away, a slim fixed bar under the header shows the same
    steps; each segment fills in --signal as its chapter is read (replaces the 2px progress bar), current step in ink.
    Sticky chapter titles and scroll-padding move down while the bar is on (`html.has-pbar`, `--pbar-h`). Phones:
    vertical list; bar = segments + "04 / 07 DEFINE". Rejected alternatives shown: row TOC with key sentence, dotted

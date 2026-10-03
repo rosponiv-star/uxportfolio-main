@@ -69,12 +69,15 @@ const last = items.length - 1;
     flex-direction: column;
     gap: var(--space-1);
     max-width: 62ch;
+    font-size: var(--fs-body);
+    line-height: 1.5;
     color: var(--ink-3);
   }
 
+  /* Fixed label column so values line up across every row. */
   .reframe__body p {
     display: grid;
-    grid-template-columns: 9ch minmax(0, 1fr);
+    grid-template-columns: 88px minmax(0, 1fr);
     align-items: baseline;
     column-gap: var(--space-1);
   }
@@ -91,7 +94,5 @@ const last = items.length - 1;
 
   .reframe--final .reframe__body {
     color: var(--ink);
-    font-size: var(--fs-lead);
-    line-height: 1.4;
   }
 </style>

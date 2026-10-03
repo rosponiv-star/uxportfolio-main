@@ -7,6 +7,8 @@ import { chapterId } from '../../lib/projects';
 
 interface Props {
   title: string;
+  // A few words for the Process index (read from the MDX source by chaptersOf).
+  summary?: string;
   tone?: 'alt';
 }
 const { title, tone } = Astro.props;

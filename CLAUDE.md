@@ -38,18 +38,19 @@ role, timeline, team, tools, tone (placeholder cover colour), toneDark, cover {i
 glance {problem, approach, outcome} (one short sentence each), result {text, media [{label, image?, kind: screen|wide}],
 metricsLabel, metrics}, placeholder (set to `false` once the content is real).
 
-Page order (owner, 2026-10-03): title + tagline → cover → Overview (open spec sheet: ink top rule, gutter hairlines
-between the 3 tracks, 3 one-sentence glance items above the facts; no band, no box) →
+Page order (owner, 2026-10-03): title + tagline → cover → Overview (ink top rule instead of the grey one; 3
+one-sentence glance items, then the facts, separated by space only: the owner found inner hairlines too busy) →
 **Result** (alt band: screens/boards, 1–2 sentences, key numbers; placeholders until images exist) → Process (`case/ProcessIndex.astro`:
-steps hanging from an ink line; once it scrolls away a slim fixed bar under the header shows the steps, fills each
+steps hanging from an ink line, each with number, title (lead) and the chapter `summary` (2–4 words); once it scrolls away a slim fixed bar under the header shows the steps, fills each
 segment in --signal as its chapter is read and replaces the progress bar) → chapters. Recruiters must see interface and result first; the full process stays one scroll away.
 
 Chapters: Challenge, Research, Insights (tone="alt"), Define, Ideate, Design, [Validate, only if tested], Reflection.
 Each chapter opens with a `<Key>` sentence (lead size, ink), then SHORT paragraphs (2–3 lines). Running text in
-chapters is `--fs-read` (17→19px). No filler: cut anything that doesn't carry a fact, a decision or a reason.
+chapters is `--fs-read` (17→19px, line-height 1.55). Text levels: Key (lead, ink) → paragraphs (read, ink-2) →
+text inside blocks: archetype quotes/traits, insight evidence, reframe values (body 17) → notes, captions (small). No filler: cut anything that doesn't carry a fact, a decision or a reason.
 
 Components available in MDX without imports:
-- `<Chapter title="…">…</Chapter>`: a numbered chapter. Titles feed the Process list automatically.
+- `<Chapter title="…" summary="2–4 words">…</Chapter>`: a numbered chapter. Title and summary feed the Process index.
 - `<Key>…</Key>`: the chapter's key sentence, first thing in a chapter.
 - `<Note label="Decision" text="Why…">paragraph(s)</Note>`: wraps the content it annotates. The content
   goes in tracks A–B and the note in track C, top-aligned.
