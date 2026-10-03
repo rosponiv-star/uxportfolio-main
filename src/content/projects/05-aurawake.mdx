@@ -19,32 +19,36 @@ glance:
   problem: 'The problem in one sentence: who struggles, with what, and why it matters.'
   approach: 'How I tackled it: the key methods and the turning-point decision.'
   outcome: 'What changed: results, validation or feedback, in one sentence.'
+result:
+  text: 'What was made and what it does for people, in one or two sentences.'
+  media:
+    - label: 'Key screen 1'
+    - label: 'Key screen 2'
+    - label: 'Key screen 3'
+  metricsLabel: 'Results'
+  metrics:
+    - value: '—'
+      label: 'Key result'
+    - value: '—'
+      label: 'Key result'
+    - value: '—'
+      label: 'Key result'
 placeholder: true
 ---
 
-<Chapter title="Context">
+<Chapter title="Challenge">
+
+<Key>Todo: the problem in one sentence, as I reframed it.</Key>
 
 <Todo>
-  Where this project comes from: brief or client, course or competition, timeframe, team and constraints.
-  Two short paragraphs, product described in the third person, my process in the first.
+  Context in two or three lines (brief, course or client, team, my role), then the reframe and one "How might we".
 </Todo>
-
-</Chapter>
-
-<Chapter title="The problem">
-
-<Note label="Reframe" text="How the original brief changed after the first round of research, in one or two sentences.">
-
-<Todo>
-  The brief as received, then the problem as I reframed it. Close with the problem statement and one or two
-  "How might we" questions that guided the rest of the work.
-</Todo>
-
-</Note>
 
 </Chapter>
 
 <Chapter title="Research">
+
+<Key>Todo: what I needed to learn and where I went to learn it.</Key>
 
 <Metrics
   items={[
@@ -54,21 +58,17 @@ placeholder: true
   ]}
 />
 
-<Todo>
-  Which methods I used and why those, who took part, and what I was trying to learn. Keep the numbers honest.
-</Todo>
-
-<Figure placeholder="Research synthesis — affinity map" ratio="16/9" caption="Caption: what the image shows and why it matters." />
+<Todo>Methods and why those, in two short paragraphs. Keep the numbers honest.</Todo>
 
 </Chapter>
 
-<Chapter title="Key insights" tone="alt">
+<Chapter title="Insights" tone="alt">
 
 <Insights
   items={[
-    { title: 'Insight one, phrased as a finding', text: 'The evidence behind it and what it implied for the design.' },
-    { title: 'Insight two, phrased as a finding', text: 'The evidence behind it and what it implied for the design.' },
-    { title: 'Insight three, phrased as a finding', text: 'The evidence behind it and what it implied for the design.' },
+    { title: 'Insight one, as a finding', text: 'The evidence and what it implied, in one sentence.' },
+    { title: 'Insight two, as a finding', text: 'The evidence and what it implied, in one sentence.' },
+    { title: 'Insight three, as a finding', text: 'The evidence and what it implied, in one sentence.' },
   ]}
 />
 
@@ -76,77 +76,48 @@ placeholder: true
 
 <Chapter title="Define">
 
-<Todo>
-  How the insights became a direction: personas or archetypes, journey map, information architecture and
-  core user flows. Show the structure before the screens.
-</Todo>
+<Key>Todo: the direction the insights pointed to.</Key>
 
-<Figure placeholder="Information architecture / core user flow" ratio="21/9" />
+<Todo>Archetypes or personas, flows or architecture: the structure before the screens.</Todo>
 
 </Chapter>
 
 <Chapter title="Ideate">
 
-<Note label="Discarded" text="An alternative direction I explored and the reason it was dropped.">
+<Key>Todo: how I explored, and what I threw away.</Key>
 
-<Todo>
-  The explorations: sketches, low-fidelity concepts, interaction ideas. Include at least one path that did not
-  make it, and why.
-</Todo>
+<Note label="Discarded" text="An alternative direction and why it was dropped.">
+
+<Todo>The explorations in two or three lines.</Todo>
 
 </Note>
-
-<Figure placeholder="Sketches & low-fidelity explorations" ratio="16/9" />
 
 </Chapter>
 
 <Chapter title="Design">
 
+<Key>Todo: the idea that holds the design together.</Key>
+
 <Note label="Trade-off" text="A decision where I gave something up to gain something more important.">
 
-<Todo>
-  The two or three decisions that shaped the product, each with its rationale and trade-off. Then the visual
-  language and the components or design system behind it.
-</Todo>
+<Todo>Two or three decisions, each with its rationale, as short bold-led paragraphs.</Todo>
 
 </Note>
-
-<Figure placeholder="Key screens — high fidelity" ratio="16/9" />
-
-<Figure placeholder="Design system — tokens & components" ratio="16/9" />
 
 </Chapter>
 
 <Chapter title="Validate">
 
-<Todo>
-  Usability testing: participants, tasks, what broke, and what I changed as a result. Before/after where possible.
-</Todo>
+<Key>Todo: what testing proved or broke. Remove this chapter if no testing was done.</Key>
 
-<Figure placeholder="Before / after iteration" ratio="16/9" />
-
-</Chapter>
-
-<Chapter title="Outcome" tone="alt">
-
-<Metrics
-  items={[
-    { value: '—', label: 'Task success' },
-    { value: '—', label: 'Time on task' },
-    { value: '—', label: 'SUS score' },
-  ]}
-/>
-
-<Todo>
-  Results, feedback, recognition. If there are no hard numbers, say what the project proved and how you know.
-</Todo>
+<Todo>Participants, tasks, what broke and what changed.</Todo>
 
 </Chapter>
 
 <Chapter title="Reflection">
 
-<Todo>
-  What I learned, what I would do differently with more time or data, and what I am taking into the next project.
-</Todo>
+<Key>Todo: the one lesson to take into the next project.</Key>
+
+<Todo>What I would do differently with more time or data, in two or three lines.</Todo>
 
 </Chapter>

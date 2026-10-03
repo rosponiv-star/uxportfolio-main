@@ -6,6 +6,7 @@ import Cover from '../../components/Cover.astro';
 import { Image } from 'astro:assets';
 import Chapter from '../../components/case/Chapter.astro';
 import Todo from '../../components/case/Todo.astro';
+import Key from '../../components/case/Key.astro';
 import Figure from '../../components/case/Figure.astro';
 import Note from '../../components/case/Note.astro';
 import Metrics from '../../components/case/Metrics.astro';
@@ -28,7 +29,7 @@ interface Props {
 }
 
 const { project, next } = Astro.props;
-const { title, tagline, role, timeline, team, type, platform, tools, glance } = project.data;
+const { title, tagline, role, timeline, team, type, platform, tools, glance, result } = project.data;
 const { Content } = await render(project);
 const chapters = chaptersOf(project);
 const contentsRows = Math.ceil(chapters.length / 3);
@@ -75,7 +76,7 @@ const facts = [
 
     <div class="wrap">
       <!-- Overview: the 30-second read ----------------------------------- -->
-      <Section title="Overview" id="overview" bodyClass="flow" tone="alt">
+      <Section title="Overview" id="overview" bodyClass="flow">
         <div class="trio">
           {
             glanceItems.map((g, i) => (
@@ -99,8 +100,36 @@ const facts = [
         </dl>
       </Section>
 
-      <!-- Contents ------------------------------------------------------- -->
-      <Section title="Contents" id="contents">
+      <!-- Result: what was made and what it achieves, before the process ---- -->
+      {
+        result && (
+          <Section title="Result" id="result" bodyClass="flow" tone="alt">
+            {result.media.length > 0 && (
+              <div class="trio result__media">
+                {result.media.map((m) =>
+                  m.kind === 'wide' ? (
+                    <div class="result__wide">
+                      <Figure src={m.image} alt={m.alt} ratio="16/9" placeholder={m.label} />
+                    </div>
+                  ) : (
+                    <Figure src={m.image} alt={m.alt} ratio="9/19.5" placeholder={m.label} />
+                  ),
+                )}
+              </div>
+            )}
+            <p class="result__text">{result.text}</p>
+            {result.metrics.length > 0 && (
+              <div class="result__metrics">
+                {result.metricsLabel && <p class="label muted result__metrics-label">{result.metricsLabel}</p>}
+                <Metrics items={result.metrics} />
+              </div>
+            )}
+          </Section>
+        )
+      }
+
+      <!-- Process: the chapters below ----------------------------------- -->
+      <Section title="Process" id="contents">
         <ol class="contents" style={`--rows:${contentsRows}`}>
           {
             chapters.map((c, i) => (
@@ -117,7 +146,7 @@ const facts = [
 
       <!-- Chapters (from MDX) ---------------------------------------------- -->
       <div class="chapters">
-        <Content components={{ Chapter, Todo, Figure, Note, Metrics, Insights, Reframes, Archetypes }} />
+        <Content components={{ Chapter, Key, Todo, Figure, Note, Metrics, Insights, Reframes, Archetypes }} />
       </div>
 
     </div>
@@ -249,6 +278,56 @@ const facts = [
 
   .facts-grid dt {
     margin-bottom: 4px;
+  }
+
+  /* Result --------------------------------------------------------------- */
+  .result__media {
+    row-gap: var(--gutter);
+  }
+
+  .result__wide {
+    grid-column: 1 / -1;
+  }
+
+  .result__text {
+    max-width: calc((200% - var(--gutter)) / 3);
+    font-size: var(--fs-lead);
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+
+  .result__metrics-label {
+    margin-bottom: var(--space-3);
+  }
+
+  /* Phones: screens become a swipeable row (wide boards stay full width, after it). */
+  @media (max-width: 640px) {
+    .result__text {
+      max-width: none;
+    }
+
+    .result__media {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 62%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      margin-inline: calc(var(--margin) * -1);
+      padding-inline: var(--margin);
+      scroll-padding-inline: var(--margin);
+    }
+
+    .result__media > :global(*) {
+      scroll-snap-align: start;
+    }
+
+    .result__wide {
+      grid-column: auto;
+      grid-auto-columns: 100%;
+      width: calc(100vw - 2 * var(--margin));
+    }
   }
 
   /* Contents ------------------------------------------------------------- */

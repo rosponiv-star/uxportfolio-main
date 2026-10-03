@@ -1,0 +1,28 @@
+---
+// The chapter's key sentence: the one idea to remember, in lead size and ink, before the
+// supporting paragraphs. Usually the first element of a <Chapter>.
+//   <Key>The problem was never motivation: it was the effort between intention and plate.</Key>
+---
+
+<p class="key" data-reveal><slot /></p>
+
+<style>
+  .key {
+    max-width: calc((200% - var(--gutter)) / 3);
+    font-size: var(--fs-lead);
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+
+  .key + :global(p) {
+    margin-top: var(--space-3);
+  }
+
+  @media (max-width: 640px) {
+    .key {
+      max-width: none;
+    }
+  }
+</style>

@@ -35,6 +35,26 @@ const projects = defineCollection({
         approach: z.string(),
         outcome: z.string(),
       }),
+      // The result, shown right after the Overview: what was made (screens and boards, placeholders
+      // until `image` is set), what it does in one or two sentences, and the key numbers.
+      result: z
+        .object({
+          text: z.string(),
+          media: z
+            .array(
+              z.object({
+                label: z.string(),
+                image: image().optional(),
+                alt: z.string().default(''),
+                // 'screen' = one track, phone ratio; 'wide' = the whole body lane.
+                kind: z.enum(['screen', 'wide']).default('screen'),
+              }),
+            )
+            .default([]),
+          metricsLabel: z.string().optional(),
+          metrics: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
+        })
+        .optional(),
       // True while the case study still contains placeholder content.
       placeholder: z.boolean().default(false),
     }),

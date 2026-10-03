@@ -109,7 +109,6 @@ src/components/
   Cover.astro               project cover: real image/video or placeholder (tone colour + faint grid + title)
   DepthTexture.astro        hero background: 3-layer grain, parallax + "breath" near cursor (intensity 0.5)
   RegistrationField.astro   old cursor-reactive "+" field; now only the Playground experiment
-  PhoneScroll.astro         case-study device scene (see §6)
   case/*.astro              Chapter, Note, Figure, Metrics, Insights, Reframes, Archetypes, Todo
 src/lib/projects.ts         getProjects, slugOf/hrefOf/numOf, chapterId/chaptersOf, CATEGORIES (re-exports categoryId)
 src/lib/collection.ts       categoryId, gridSizes (all 'half'), yearSpan (unused now)
@@ -208,20 +207,23 @@ The selected filter or view underline is **1.5px** (he asked for something betwe
 3. **How I work** (band `tone="alt"`): five principles, each with an "In practice" line.
 4. **Footer**: contact row, wordmark, ©. "Back to top" was removed.
 
-### Case study `/work/[slug]` (in order)
-1. **Back button**: outlined pill (40px, 1px `--rule` border, 16px Medium text) with a static SVG **chevron**. The
-   arrow animation was rejected as useless. Hover: ink border and text, `--paper-2` fill.
-2. **Title**: mega size. **Tagline**: lead.
-3. **Cover** (16:10, placeholder unless `cover.image`).
-4. **Overview** (alt band): Problem / Approach / Outcome glance, plus a facts grid (Role, Timeline, Team, Type,
-   Platform, Tools).
-5. **PhoneScroll**: sticky device scene (§6).
-6. **Contents**: list of the chapters.
-7. **Chapters** from MDX: numbered, title in cols 1–3, body in 4–12.
-8. **Next case study band**:
-   - full-bleed, in the next project's tone (or its real cover with a 72% ink scrim);
-   - text block bottom-left: "Next case study" label, mega title, tagline;
-   - corner marks were removed.
+### Case study `/work/[slug]` (in order; restructured 2026-10-03)
+Owner's brief: "more concise, more impactful, no filler; a recruiter sees interface and result at first glance, and
+can dig into the whole process and way of thinking if they want".
+1. **Back button**: outlined pill with a static chevron (animated arrow rejected).
+2. **Title** (mega) + **tagline** (lead, one sentence).
+3. **Cover** (16:10).
+4. **Overview** (no band): Problem / Approach / Outcome, one short sentence each, plus the facts grid.
+5. **Result** (alt band): `result` frontmatter. Three phone-ratio screens + one wide board (placeholders until real
+   images: the owner chose placeholders for now, NOT the prepared JustCook boards), 1–2 sentences, key numbers
+   (JustCook: "Targets for a pilot"). On phones the screens become a horizontal swipe row.
+6. **Process**: numbered chapter list (was "Contents").
+7. **Chapters**: Challenge, Research, Insights (alt), Define, Ideate, Design, [Validate], Reflection. Each opens with
+   `<Key>` (lead, ink), then short paragraphs at --fs-read (19px). Archetypes trimmed to quote + 2 traits; Reframes to
+   3 of 6 cycles. Owner chose short paragraphs over bullets or collapsible details.
+8. **Next case study band** (unchanged).
+
+PhoneScroll (sticky device scene) was **removed** by the owner on 2026-10-03.
 
 ### About `/about`
 `.display` statement, Approach (portrait in grayscale that turns colour on hover, plus 3 paragraphs), What I bring
@@ -235,24 +237,9 @@ without link.
 
 ---
 
-## 6. PhoneScroll (case-study device scene)
+## 6. PhoneScroll
 
-- **Behaviour:**
-  - the section height is 100svh + (n−1)·50svh;
-  - a sticky stage holds a CSS-drawn iPhone (titanium frame, bezel, Dynamic Island, side buttons) at
-    `--h: min(78svh, 760px)` (68svh on mobile);
-  - **one screen change per half viewport** of scroll;
-  - **proximity snap** is enabled on `<html>` only while the stage is ≥60% visible;
-  - indicator "01 / 05" plus a slate bar, bottom-right (bottom-left on mobile).
-- **Transition: dissolve.** The owner tested vertical, horizontal and dissolve demos and picked dissolve. Implemented as
-  "everything up to the current screen fully opaque underneath; the next fades in on top while settling from scale
-  1.06". There is no dip to black; the outgoing screen does not shrink, because that showed a dark edge.
-- **Screens are solid placeholder colours** (project tone, `#e9e6df`, `#3d5a73`, `#cfd6d1`, `#1c1c1a`). Pass
-  `{ image: '/path.png' }` per screen when real UIs exist.
-- **The owner wanted a realistic HAND holding the phone.** Not done: Higgsfield needs a paid plan. Options given to
-  him: (1) upgrade and generate (`gpt_image_2_5` or `recraft_v4_1`; prompt ready: right hand, frontal upright iPhone,
-  chroma-green screen, background #fdfdfc), (2) he supplies a photo or mockup, (3) keep the phone only.
-- Placed **after Overview**, by the owner's choice.
+Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is moot. Do not reintroduce.
 
 ---
 
@@ -291,8 +278,8 @@ without link.
 ### Process for the next case studies (what worked for JustCook)
 1. Read everything in `Media/0N-*`, writing facts to a notes file as you go.
 2. **Interview the owner** about contradictions and gaps: team, role, numbers, testing, results, materials.
-3. Write the MDX with the chapter skeleton: Context, The problem, Research, Key insights (alt), Define, Ideate, Design,
-   Outcome (alt), Reflection.
+3. Write the MDX with the chapter skeleton: Challenge, Research, Insights (alt), Define, Ideate, Design, [Validate],
+   Reflection, plus the `result` frontmatter. Keep it concise: Key sentence + short paragraphs.
 4. Replace the invented frontmatter facts, set `placeholder: false` and update `categories`.
 5. Build, verify with puppeteer, push.
 
@@ -327,9 +314,9 @@ without link.
 
 1. **Hero glimpse at 1280×720** is 38px (target ~80). Offer a tweak to --peek if the owner cares.
 2. **LinkedIn URL** in `src/data/site.ts` is still a placeholder (`https://www.linkedin.com/in/`). Ask for it.
-3. **Hand photo** for PhoneScroll: pending the owner's choice (see §6).
+3. ~~Hand photo for PhoneScroll~~: moot, PhoneScroll removed.
 4. **Real interfaces** for JustCook: the owner will add them to `Media/01-JustCook/OfficialMedia/Interfaces`. Use them
-   for PhoneScroll screens and figures. Re-add media to JustCook only when he decides which and how.
+   for the Result screens and figures. Re-add media to JustCook only when he decides which and how.
 5. **Covers:** real covers to replace the placeholders. A composed JustCook cover exists in assets (4 boxes + phone),
    unused.
 6. **Case studies 02–05**: the full interview-then-write process.

@@ -35,18 +35,28 @@ all site copy is in **English**.
 
 Frontmatter is validated by `src/content.config.ts`: title, order, tagline, year, type, platform,
 role, timeline, team, tools, tone (placeholder cover colour), toneDark, cover {image|video, alt},
-glance {problem, approach, outcome}, placeholder (set to `false` once the content is real).
+glance {problem, approach, outcome} (one short sentence each), result {text, media [{label, image?, kind: screen|wide}],
+metricsLabel, metrics}, placeholder (set to `false` once the content is real).
+
+Page order (owner, 2026-10-03): title + tagline → cover → Overview (3 one-sentence glance items + facts, no band) →
+**Result** (alt band: screens/boards, 1–2 sentences, key numbers; placeholders until images exist) → Process (chapter
+list) → chapters. Recruiters must see interface and result first; the full process stays one scroll away.
+
+Chapters: Challenge, Research, Insights (tone="alt"), Define, Ideate, Design, [Validate, only if tested], Reflection.
+Each chapter opens with a `<Key>` sentence (lead size, ink), then SHORT paragraphs (2–3 lines). Running text in
+chapters is `--fs-read` (17→19px). No filler: cut anything that doesn't carry a fact, a decision or a reason.
 
 Components available in MDX without imports:
-- `<Chapter title="…">…</Chapter>`: a numbered chapter. Titles feed the Contents list automatically.
+- `<Chapter title="…">…</Chapter>`: a numbered chapter. Titles feed the Process list automatically.
+- `<Key>…</Key>`: the chapter's key sentence, first thing in a chapter.
 - `<Note label="Decision" text="Why…">paragraph(s)</Note>`: wraps the content it annotates. The content
   goes in tracks A–B and the note in track C, top-aligned.
 - `<Figure src={img} alt="" caption="" ratio="16/9" size="wide|text" />`: `wide` (the default) spans the
   whole body lane. Import the image at the top of the MDX file. A `video="/media/x.mp4"` prop is also
   supported.
 - `<Metrics items={[{ value, label }]} />` and `<Insights items={[{ title, text }]} />`.
-- `<Reframes items={[{ client, problem, idea? }]} />`: problem-reframing cycles. The last item is shown as the final framing.
-- `<Archetypes items={[{ name, alias?, quote, traits: [{ label, text }] }]} />`: behavioural archetypes.
+- `<Reframes items={[{ client, problem, idea? }]} />`: problem-reframing cycles (show ~3 key ones). The last item is the final framing.
+- `<Archetypes items={[{ name, alias?, quote, traits: [{ label, text }] }]} />`: behavioural archetypes (quote + 2 traits).
 - `<Todo>…</Todo>`: visible placeholder. Remove these as the real content arrives.
 
 Cover media: put the image in `src/assets/projects/<name>/` and reference it in the frontmatter
@@ -62,7 +72,7 @@ and use `cover.video`.
   metrics and rows span A–C.
 - Section separation: a rule by default, or a full-bleed tinted band (`tone="alt"` on `<Section>` or
   `<Chapter>`). Neither a band nor the section after it has a rule. Use bands sparingly: Home → How I
-  work; case study → Overview, Key insights, Outcome; About → What I bring. Keep inner rules to a
+  work; case study → Result, Insights; About → What I bring. Keep inner rules to a
   minimum (only between repeated rows, never above the first one).
 - Spacing comes only from the tokens in global.css: `--space-1…6`, `--space-block` (between blocks),
   `--space-item` (between cards) and `--space-section` (between sections).
@@ -72,7 +82,7 @@ and use `cover.video`.
 ## Type scale (strict)
 
 Use only the size tokens in global.css: mega, display (30→60, page-opening statements, Geist Regular), h2 (48), h3 (28), lead (~22), body (17), small (16)
-and label (12, Geist Medium uppercase, 8% tracking). Never hard-code a font size. The only exceptions are graphics: the cover
+and label (12, Geist Medium uppercase, 8% tracking); read (17→19) is case-study chapter text only. Never hard-code a font size. The only exceptions are graphics: the cover
 title, the footer wordmark and the nav micro-numbers.
 
 - Section titles use h2. Item titles (principles, insights, rows, index) use h3. Card titles use lead (Medium).

@@ -1,7 +1,7 @@
 ---
 title: 'JustCook'
 order: 1
-tagline: 'A meal-kit service for off-site students. Pre-portioned boxes and an adaptive planning app turn “I should eat better” into a balanced dinner in twenty minutes.'
+tagline: 'Pre-portioned boxes and an adaptive planning app that turn “I should eat better” into a balanced dinner in twenty minutes.'
 year: '2025'
 type: 'Service design'
 categories: ['Service design', 'UX/UI', 'Research']
@@ -13,35 +13,47 @@ tools: ['Figma', 'Miro']
 tone: '#d9ccaf'
 toneDark: false
 glance:
-  problem: 'Off-site students want to eat well, but time, tight budgets, shared kitchens and family-sized packs push them toward the path of least resistance.'
-  approach: 'Mixed-methods research in students’ own kitchens, six cycles of problem reframing and a value proposition map, before any screen was drawn.'
-  outcome: 'A service that pairs pre-dosed single-portion boxes with an adaptive planning app, together with the brand, the packaging and the launch campaign.'
+  problem: 'Off-site students want to eat well, but time, budget and family-sized packs get in the way.'
+  approach: 'Research in students’ own kitchens, six reframing cycles, then a value proposition map.'
+  outcome: 'Single-portion boxes paired with a planning app, plus brand, packaging and launch campaign.'
+result:
+  text: 'Four pre-dosed boxes cover the week; the app plans around the days students actually cook and nudges them before a delivery app wins.'
+  media:
+    - label: 'App · Weekly plan'
+    - label: 'App · Focus-mode recipe'
+    - label: 'App · Streaks with friends'
+    - label: 'The four boxes'
+      kind: wide
+  metricsLabel: 'Targets for a pilot'
+  metrics:
+    - value: '−40%'
+      label: 'Food waste in the first month'
+    - value: '<20 min'
+      label: 'From box to plate'
+    - value: '>60%'
+      label: 'Users still active at day 30'
 placeholder: false
 ---
 
-<Chapter title="Context">
+<Chapter title="Challenge">
 
-JustCook started as a university project at the University of Trento and grew across three courses — semiotics of visual representation, sociology of communication and psychology of communication — between September 2024 and May 2025. We were a team of four students, and I worked across every phase: research, synthesis, service concept, interface design, packaging and campaign.
+<Key>Students know what a balanced meal looks like. What stops them is the effort between intention and plate.</Key>
 
-The brief was open: pick a real problem in our own community and design a response to it. We chose the one we were living every day as off-site students in Rovereto: eating well when you are away from home for the first time. The project is framed by two UN Sustainable Development Goals, good health (SDG 3) and responsible consumption (SDG 12).
+A university project at the University of Trento, across three courses (semiotics, sociology and psychology of communication). A team of four; I worked on every phase, from research to packaging.
 
-</Chapter>
+The brief: pick a real problem in our own community. We chose the one we lived as off-site students: more than 60% eat take-away weekly, only 44% eat fruit daily, and 92% change their eating habits after moving out.
 
-<Chapter title="The problem">
+<Note label="Reframe" text="From “how do we teach students to eat healthily?” to “how do we make the healthy option the easiest one?”">
 
-<Note label="Reframe" text="The question changed from “how do we teach students to eat healthily?” to “how do we make the healthy option the easiest one to execute?”">
-
-Desk research painted a familiar picture. More than 60% of off-site students eat take-away at least once a week, only 44% eat a portion of fruit a day, and 92% change their eating habits after moving out. Knowledge was not the issue: students know what a balanced meal looks like.
-
-What gets in the way is structural. Time is scarce and unpredictable, budgets are tight, cooking confidence is low and planning a week of meals is one more cognitive load on top of studying. The problem was never motivation. It was the effort between intention and plate.
+> How might we make a balanced, home-cooked meal the path of least resistance for students short on time, money and kitchen space?
 
 </Note>
-
-> How might we make a balanced, home-cooked meal the path of least resistance for students who are short on time, money and kitchen space?
 
 </Chapter>
 
 <Chapter title="Research">
+
+<Key>I moved the research into students’ kitchens, where the problem actually happens.</Key>
 
 <Metrics
   items={[
@@ -51,35 +63,31 @@ What gets in the way is structural. Time is scarce and unpredictable, budgets ar
   ]}
 />
 
-I wanted to see the problem where it happens, so the research moved into students’ apartments. A closed-question survey, shared in student WhatsApp groups and through QR flyers in study rooms, gave us the broad picture. Semi-structured interviews, held in the participants’ own kitchens and supported by photo elicitation, explained the why behind it. Participant observation covered the three moments that shape a meal: the grocery run, the cooking and the way fridge and pantry are organised.
+A survey, shared in student WhatsApp groups and through QR flyers, gave the broad picture. Interviews in participants’ kitchens, with photo elicitation, explained the why. Observation covered the three moments that shape a meal: shopping, cooking and storing.
 
-Every interview and field note was coded in a thematic grid of 8 themes and 36 codes, from autonomy and weekly planning to budget, shared living and food waste. The grid turned four conversations and three observations into patterns we could compare and defend.
+Everything was coded in a thematic grid of 8 themes and 36 codes, so four conversations became patterns we could compare and defend.
 
 </Chapter>
 
-<Chapter title="Key insights" tone="alt">
+<Chapter title="Insights" tone="alt">
 
 <Insights
   items={[
     {
-      title: 'Time is the filter for everything',
-      text: 'Time decides what, how and when students eat. Piadine, frozen vegetables and ready-made burgers are not a lack of knowledge but a survival strategy. Anything we design has to fit a fifteen-to-twenty-minute window.',
+      title: 'Time filters everything',
+      text: 'Frozen vegetables and ready-made burgers are a survival strategy, not ignorance. A solution has to fit fifteen to twenty minutes.',
     },
     {
-      title: 'Rigid plans break on contact with the week',
-      text: 'Over 60% shop once a week, calibrated on the days they will actually be in town. Day-by-day meal plans get abandoned as soon as lectures, exams or a trip home get in the way. Planning has to bend, not break.',
+      title: 'Rigid plans break',
+      text: 'Over 60% shop once a week, around the days they will be in town. Day-by-day plans collapse at the first exam or trip home.',
     },
     {
       title: 'Retail is built for families',
-      text: 'Of the students who try to avoid waste, 95% name the same obstacle: packs are too big for one person, so food expires before it is eaten. Portion size is a design problem, not a discipline problem.',
+      text: '95% of students who try to avoid waste blame the same thing: packs too big for one person.',
     },
     {
       title: 'The shared kitchen has no rules',
-      text: 'One to three people cook at the same time, the first to arrive gets the stove, and attempts at cooking shifts are rejected. Less prep and less counter space make cooking more likely to happen at all.',
-    },
-    {
-      title: 'Skill is situational',
-      text: 'Nobody felt unable to cook, and nobody felt like an expert. Students cook when the effort feels worth it. Lowering the threshold matters more than teaching recipes.',
+      text: 'Up to three people cook at once and the first one gets the stove. Less prep means cooking actually happens.',
     },
   ]}
 />
@@ -88,62 +96,53 @@ Every interview and field note was coded in a thematic grid of 8 themes and 36 c
 
 <Chapter title="Define">
 
-<Note label="Method" text="Archetypes synthesised from the original interview, survey and observation data.">
-
-The insights pointed to two distinct ways of living the same problem. I captured them as behavioural archetypes rather than demographic personas: what drives each one matters more than who they are.
-
-</Note>
+<Key>Two archetypes live the same problem in opposite ways: one wants less effort, the other less waste.</Key>
 
 <Archetypes
   items={[
     {
       name: 'The efficiency seeker',
       alias: 'Survivalist',
-      quote: 'University life is unpredictable. If cooking takes more than fifteen minutes or means fighting for space in the kitchen, I’ll take the path of least resistance.',
+      quote: 'If cooking takes more than fifteen minutes or means fighting for the kitchen, I’ll take the path of least resistance.',
       traits: [
-        { label: 'Mindset', text: 'Survival mode. Food is fuel, and shared living feels chaotic.' },
-        { label: 'Behaviour', text: 'Assembles rather than cooks, and skips anything complex.' },
-        { label: 'Friction', text: 'A hostile, unpredictable kitchen and no time to plan.' },
-        { label: 'Opportunity', text: 'Minimal cognitive load and meals that fit a fifteen-minute window.' },
+        { label: 'Friction', text: 'A chaotic shared kitchen and no time to plan.' },
+        { label: 'Opportunity', text: 'Minimal decisions and meals that fit fifteen minutes.' },
       ],
     },
     {
       name: 'The conscious aspirer',
       alias: 'Manager',
-      quote: 'I want to be a responsible adult who eats well and doesn’t waste food, but the retail system is designed for families, not for me.',
+      quote: 'I want to eat well and not waste food, but the shop is designed for families, not for me.',
       traits: [
-        { label: 'Mindset', text: 'Food as identity. Cares about quality and variety.' },
-        { label: 'Behaviour', text: 'Waste anxiety, with the freezer used as a strategic buffer.' },
         { label: 'Friction', text: 'A gap between principles and reality, and guilt about forgotten food.' },
-        { label: 'Opportunity', text: 'Buying exactly what will be cooked, and precise weekly plans.' },
+        { label: 'Opportunity', text: 'Buying exactly what will be cooked, planned for the real week.' },
       ],
     },
   ]}
 />
 
-To decide what the service had to deliver, I mapped the students’ jobs, pains and gains in a value proposition canvas and prioritised them. The must-haves were clear: a balanced diet, low cost and time saved. Variety from the same ingredients, a predictable execution time and clear recipes came right after.
+A value proposition canvas set the must-haves: a balanced diet, low cost and time saved. Variety from the same ingredients and a predictable cooking time came next.
 
 </Chapter>
 
 <Chapter title="Ideate">
 
-<Note label="Discarded" text="Healthy ready-made food. It solved time, but it took away the autonomy students told us they were proud of building, and it did nothing for cost or waste.">
+<Key>Six reframing cycles, each one discarding an idea the previous framing had made look reasonable.</Key>
 
-We used Client–Problem–Solution cycles to stress-test our own framing. Each cycle redefined who we were designing for and what their real problem was, and each one discarded an idea that the previous framing had made look reasonable.
+<Note label="Discarded" text="Healthy ready-made food. It saved time but took away the autonomy students were proud of, and did nothing for cost or waste.">
+
+Three of the six Client–Problem–Solution cycles, from the first framing to the final one.
 
 </Note>
 
 <Reframes
   items={[
     { client: 'Students who eat out', problem: 'Meals are rarely balanced.' },
-    { client: 'Students in general', problem: 'Poor food awareness.' },
-    { client: 'Students who prefer ready meals', problem: 'Ready food is mostly unhealthy.', idea: 'Healthy ready-made food.' },
-    { client: 'Students on a budget', problem: 'Healthy food feels expensive.' },
-    { client: 'Students short on time', problem: 'Cooking takes too long.', idea: 'Ready-made food, again.' },
+    { client: 'Students short on time', problem: 'Cooking takes too long.', idea: 'Healthy ready-made food.' },
     {
       client: 'Off-site students, 18–28, cooking for themselves',
       problem: 'Little time and limited skills make balanced, portioned meals hard to put together.',
-      idea: 'Pre-dosed single-portion boxes with several recipes each, planned through an app that keeps the week on track.',
+      idea: 'Pre-dosed single-portion boxes, planned through an app that keeps the week on track.',
     },
   ]}
 />
@@ -152,56 +151,36 @@ We used Client–Problem–Solution cycles to stress-test our own framing. Each 
 
 <Chapter title="Design">
 
-JustCook is a service with two layers that work together. The app reduces the decisions; the box reduces the effort.
+<Key>Two layers that work together: the app reduces the decisions, the box reduces the effort.</Key>
 
-### The box: mise en place, delivered
+### The box
 
-Each box holds four or five fresh, pre-dosed ingredients for a single portion, and every box unlocks up to ten different recipes, so the same base never means the same dinner. Everything is ready in about twenty minutes. Four boxes cover the week with different nutritional profiles: A is high-protein, B is energising, C is light and D is comfort food.
+Four or five fresh, pre-dosed ingredients for one portion, ready in about twenty minutes. Each box unlocks up to ten recipes, so the same base never means the same dinner. Four profiles cover the week: protein, energy, light and comfort. A code inside registers the box and updates the pantry.
 
-Boxes are reserved in the app and collected at a partner supermarket. A code inside each box registers it, unlocks its recipes and updates the user’s pantry.
+### The app
 
-### The app: a planner that bends
+<Note label="Decision" text="The plan adapts to the week, not the other way round: students mark the days they’re away and the app plans around them.">
 
-<Note label="Decision" text="The plan adapts to the week, not the other way round. Students mark the days they’re away or overloaded, and the app simply plans around them.">
+**Adaptive planning.** Boxes go on the days students will actually cook; the app says whether the week is covered.
 
-**Adaptive weekly planning.** Students assign boxes to the days they will actually cook. The app checks the plan against what they own and gives a binary answer: the week is covered, or some boxes are missing, with one tap to buy or scan them.
+**A timely nudge.** Reminders are timed backwards from the recipe’s duration and dinner time, before a delivery app wins.
 
-**A nudge at the right time.** Reminders are timed backwards from the recipe’s duration and the user’s dinner time, before decision fatigue and delivery apps win. Cooking for tomorrow’s lunchbox moves the reminder to the evening before.
+**Focus mode.** Recipes play as a vertical, step-by-step video feed, a pattern students already know.
 
-**Focus mode.** Recipes play as a vertical, step-by-step video feed, a pattern students already know from social media, and only show what can be cooked with the box or the ingredients at hand.
-
-**Streaks with friends.** A weekly score and a small leaderboard with flatmates reward showing up, which is what turns cooking into a habit, without judging what is on the plate.
+**Streaks with friends.** A weekly score with flatmates rewards showing up, not what is on the plate.
 
 </Note>
 
 ### Brand and launch
 
-The name is a wink at Just Eat. Where delivery asks you to do nothing, JustCook asks you to do just one thing, and makes it easy. The tone is reassuring and empowering: cooking for yourself is presented as a small act of independence, not a chore. The campaign used the channels where students already are: Instagram, WhatsApp groups and QR flyers in study rooms. The flyers show the same maze twice, the long way around without JustCook and straight through with it.
-
-</Chapter>
-
-<Chapter title="Outcome" tone="alt">
-
-The project delivered a complete service concept: a behavioural research report, a high-fidelity Figma prototype of the app, packaging for four boxes, and the brand and campaign to launch them.
-
-We translated the goals into targets that a pilot would have to meet:
-
-<Metrics
-  items={[
-    { value: '−40%', label: 'Food waste in the first month' },
-    { value: '<20 min', label: 'From box to plate' },
-    { value: '>60%', label: 'Users still active at day 30' },
-  ]}
-/>
-
-Box codes and in-app check-ins make each target measurable: boxes registered per user, balanced meals cooked per week and how often students still order in.
+The name winks at Just Eat: delivery asks you to do nothing, JustCook asks for one easy thing. The campaign runs where students already are: Instagram, WhatsApp groups and QR flyers showing the same maze twice, the long way and the JustCook way.
 
 </Chapter>
 
 <Chapter title="Reflection">
 
-JustCook taught me that the most useful design decision can be a reframing. The project only moved when we stopped trying to change what students knew and started changing what was easy for them to do.
+<Key>The most useful design decision was a reframing: changing what was easy to do, not what students knew.</Key>
 
-Doing it again, I would invest more in the evidence. I would run more interviews and a more structured analysis, test the prototype with real students before polishing it, and build the targets from data rather than ambition. The concept is strong; the next version would be a validated one.
+Next time I would invest more in evidence: more interviews, a more structured analysis, usability tests with real students before polishing, and targets built from data rather than ambition.
 
 </Chapter>
