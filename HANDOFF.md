@@ -181,14 +181,14 @@ The selected filter or view underline is **1.5px** (he asked for something betwe
 1. **Hero band**: full-bleed `--paper-alt`, `DepthTexture` (intensity 0.5), statement in `.display` spanning
    **cols 1–11**:
    > I'm Valerio Rosponi, a UX and digital product designer studying Interfaces & Communication at the University of
-   > Trento, based in Trento, Italy.
+   > Trento, based in Trentino, Italy.
 
    Height is `min-height: max(360px, 100svh − --peek)`, where `--peek` = gap + `--work-head` (122px; 180px under
    960px) + space-item + ~56–96px. The goal: at scroll 0 the hero dominates and the Selected work header plus the top
    **~80px of the first row of covers** peek in. Measured last: 80px on laptop, 84px on mobile, 95px at 1920, 41px at
    1280×720.
-   - "Trento" appears twice. Offer the alternatives "…University of Trento, Italy." or "based in Trentino, Italy".
-   - Not yet re-measured after the cols-1–11 change: check the cover glimpse.
+   - Location reads "based in Trentino" (owner's choice, to avoid repeating "Trento").
+   - Re-measured after cols 1–11 (2026-10-03): 80px at 1440, 95px at 1920, 84px mobile, only 38px at 1280×720.
 2. **Selected work** (`Collection`): no top rule on home, because the band edge separates it.
    - Row 1: title.
    - Row 2: filters on the left (cols 1–9) and the Grid/Index switch on the right (cols 10–12), on one baseline.
@@ -322,8 +322,7 @@ without link.
 
 ## 9. Open items / next steps
 
-1. **Check the hero after the cols 1–11 change**: the cover glimpse at scroll 0 (~80px target) and the "Trento"
-   repetition.
+1. **Hero glimpse at 1280×720** is 38px (target ~80). Offer a tweak to --peek if the owner cares.
 2. **LinkedIn URL** in `src/data/site.ts` is still a placeholder (`https://www.linkedin.com/in/`). Ask for it.
 3. **Hand photo** for PhoneScroll: pending the owner's choice (see §6).
 4. **Real interfaces** for JustCook: the owner will add them to `Media/01-JustCook/OfficialMedia/Interfaces`. Use them
