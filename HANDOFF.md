@@ -322,8 +322,20 @@ Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is
 1. **Hero glimpse at 1280×720** is 38px (target ~80). Offer a tweak to --peek if the owner cares.
 2. **LinkedIn URL** in `src/data/site.ts` is still a placeholder (`https://www.linkedin.com/in/`). Ask for it.
 3. ~~Hand photo for PhoneScroll~~: moot, PhoneScroll removed.
-4. **Real interfaces** for JustCook: the owner will add them to `Media/01-JustCook/OfficialMedia/Interfaces`. Use them
-   for the Result screens and figures. Re-add media to JustCook only when he decides which and how.
+4. **JustCook interfaces redesigned in Figma** (2026-10-03): file `9kVAJhXfvlz569AYMRGGCn`
+   (https://www.figma.com/design/9kVAJhXfvlz569AYMRGGCn), page **"JustCook — Redesign"**. The owner asked to turn his
+   junior screens into senior-level ones; original screens stay untouched on "Page 1". Choices: English copy, refined
+   brand green (not a new direction), full flow + mini design system, Conad kept as pickup store.
+   - Variables "JustCook / Color" (brand green 900/700/500/100/50, neutrals, text, box A–D strong/tint/ink, warning,
+     dark); SF Pro text styles on the iOS scale ("JustCook/…"); components: Status Bar, Home Indicator, Button (Label,
+     Icon swap, Show icon), Tab Bar (Active=Today/Plan/Boxes/Profile), Box Badge (A–D), 25 Icon/* components.
+   - Screens (402×874): 01 Today, 02 Plan, 03 Boxes, 04 Focus mode, 05 Buy · method (sheet), 06 Buy · choose boxes,
+     07 Review order, 08 Reminder notification. Boards: 00 Foundations, Components.
+   - One consistent story across screens: Thu 14, Box D tonight at 20:00, Friday + next Monday without a box, pantry
+     A1 B1 C1 D3, cart A2 C2 D1, pickup tomorrow at Conad, Via Rosmini 56.
+   - Gotcha: when binding a colour variable in the plugin API, also set the paint's colour to the resolved value, or
+     Figma may render the black fallback.
+   - Next: owner review; then export screens (2x/3x PNG) for the JustCook Result section and figures.
 5. **Covers:** real covers to replace the placeholders. A composed JustCook cover exists in assets (4 boxes + phone),
    unused.
 6. **Case studies 02–05**: the full interview-then-write process.
