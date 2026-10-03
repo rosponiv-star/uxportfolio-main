@@ -261,7 +261,7 @@ without link.
 | 02 Rehab | placeholder | invented facts (Digital health service, 2026, Product Designer, team lead…) |
 | 03 Smart Home Ecosystem | placeholder | invented facts |
 | 04 Realiti | placeholder | invented facts, dark tone |
-| 05 AuraWake | placeholder | invented facts |
+| 05 AuraWake | placeholder text, **real cover** | cover = Home + AlarmSet1 screens side by side on #f4f4f2 (1920×1200, composed with sharp from `Media/05-AuraWake/OfficialMedia/Interfaces`; source PNGs are only 450×920, so phones are kept at native size). |
 
 ### JustCook facts (verified with the owner)
 - University project, Sept 2024 – May 2025, across three courses: semiotics of visual representation, sociology of
