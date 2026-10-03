@@ -132,7 +132,7 @@ CLAUDE.md                   persistent rules (auto-loaded)
 ### Colour (`global.css :root`)
 | Token | Value | Use |
 |---|---|---|
-| `--paper` | `#fcfcfb` | page background (near-white, slightly cool) |
+| `--paper` | `#fdfdfc` | page background (near-white, slightly cool) |
 | `--paper-2` | `#f2f2ef` | placeholder surfaces, hover fills |
 | `--paper-3` | `#e8e8e4` | |
 | `--paper-alt` | `#f3f3f0` | tinted bands (home hero, How I work, case Overview/Key insights/Outcome, About "What I bring") |
@@ -142,7 +142,7 @@ CLAUDE.md                   persistent rules (auto-loaded)
 | `--rule-strong` | `rgb(17 17 17 / .22)` | section rules |
 | `--signal` | `#3d5a73` slate | single accent, sparingly (active numbers, progress bars) |
 
-History: the background went `#f5f5f0` → `#fafaf8` → `#fcfcfb`. The accent went orange `#c93a14` → green `#2b9e4d`
+History: the background went `#f5f5f0` → `#fafaf8` → `#fcfcfb` → `#fdfdfc` (2026-10-03, "ancora leggermente più bianco"). The accent went orange `#c93a14` → green `#2b9e4d`
 (he didn't like it) → slate `#3d5a73`, chosen from colours derived from the cover tones. No gradients, no
 fluorescent colours.
 
@@ -248,7 +248,7 @@ without link.
   `{ image: '/path.png' }` per screen when real UIs exist.
 - **The owner wanted a realistic HAND holding the phone.** Not done: Higgsfield needs a paid plan. Options given to
   him: (1) upgrade and generate (`gpt_image_2_5` or `recraft_v4_1`; prompt ready: right hand, frontal upright iPhone,
-  chroma-green screen, background #fcfcfb), (2) he supplies a photo or mockup, (3) keep the phone only.
+  chroma-green screen, background #fdfdfc), (2) he supplies a photo or mockup, (3) keep the phone only.
 - Placed **after Overview**, by the owner's choice.
 
 ---

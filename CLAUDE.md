@@ -131,7 +131,7 @@ Status:
 
 - Swiss editorial base + tech precision (mono labels, registration marks, hairline rules), with a
   touch of brutalism (oversized type) and one experimental gesture (the hero depth texture: three layers of near-invisible grain that drift in parallax with the cursor and surface slightly around it, components/DepthTexture.astro; the old registration field lives on in Playground).
-- Background `#fcfcfb` (near-white, slightly cool). One accent `--signal` (#3d5a73), used sparingly. No gradients and no
+- Background `#fdfdfc` (near-white, slightly cool). One accent `--signal` (#3d5a73), used sparingly. No gradients and no
   fluorescent colours.
 - Type: Geist Medium for headings (H2 ≈ 48px), labels in Geist Medium at 12px, uppercase, 8% tracking,
   tabular figures. Use contrast between
