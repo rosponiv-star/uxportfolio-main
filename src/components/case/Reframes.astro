@@ -21,7 +21,7 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
     <div class="funnel__head trio" data-reveal>
       <p class="funnel__ratio span-2">
         <Stat value={String(cycles)} />
-        <span class="funnel__arrow" aria-hidden="true">→</span>
+        <span class="funnel__arrow" aria-hidden="true" />
         <Stat value="1" />
       </p>
       <p class="funnel__cap">
@@ -86,9 +86,26 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
     letter-spacing: -0.06em;
   }
 
+  /* A drawn arrow: one hairline and a chevron head, nothing else. */
   .funnel__arrow {
-    font-size: var(--fs-h2);
-    color: var(--signal);
+    position: relative;
+    flex: none;
+    width: clamp(48px, 6vw, 96px);
+    height: 1.5px;
+    background: var(--ink);
+  }
+
+  .funnel__arrow::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    border-top: 1.5px solid var(--ink);
+    border-right: 1.5px solid var(--ink);
+    transform: translate(1px, -50%) rotate(45deg);
+    transform-origin: center;
   }
 
   .funnel__cap {

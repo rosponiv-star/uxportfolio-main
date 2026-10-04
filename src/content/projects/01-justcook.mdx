@@ -88,6 +88,10 @@ import boxA from '../../assets/projects/justcook/boxes/box-a.png';
 import boxB from '../../assets/projects/justcook/boxes/box-b.png';
 import boxC from '../../assets/projects/justcook/boxes/box-c.png';
 import boxD from '../../assets/projects/justcook/boxes/box-d.png';
+import boxA3 from '../../assets/projects/justcook/boxes/box-a-3q.png';
+import boxB3 from '../../assets/projects/justcook/boxes/box-b-3q.png';
+import boxC3 from '../../assets/projects/justcook/boxes/box-c-3q.png';
+import boxD3 from '../../assets/projects/justcook/boxes/box-d-3q.png';
 import plan from '../../assets/projects/justcook/screens/plan.png';
 import widgetMedium from '../../assets/projects/justcook/screens/widget-medium.png';
 import focusMode from '../../assets/projects/justcook/screens/focus-mode.png';
@@ -283,10 +287,10 @@ Three of the six Client–Problem–Solution cycles, from the first framing to t
   label="Four profiles"
   intro="One colour per box, so the week reads at a glance on the shelf and in the app."
   items={[
-    { label: 'A · Protein', color: '#ffa91e', image: boxA, note: 'Box A, the protein base' },
-    { label: 'B · Energy', color: '#488863', image: boxB, note: 'Box B, for long study days' },
-    { label: 'C · Light', color: '#ff7257', image: boxC, note: 'Box C, the light one' },
-    { label: 'D · Comfort', color: '#29bcff', image: boxD, note: 'Box D, comfort food' },
+    { label: 'A · Protein', color: '#ffa91e', image: boxA3, note: 'Box A, the protein base' },
+    { label: 'B · Energy', color: '#488863', image: boxB3, note: 'Box B, for long study days' },
+    { label: 'C · Light', color: '#ff7257', image: boxC3, note: 'Box C, the light one' },
+    { label: 'D · Comfort', color: '#29bcff', image: boxD3, note: 'Box D, comfort food' },
   ]}
 />
 
@@ -333,11 +337,16 @@ The name winks at Just Eat. The tone is reassuring and empowering: cooking for y
       label: 'Packaging',
       kind: 'cutout',
       items: [
-        { image: boxA, alt: 'Box A, orange, protein.', caption: 'A · Protein' },
-        { image: boxB, alt: 'Box B, green, energy.', caption: 'B · Energy' },
-        { image: boxC, alt: 'Box C, red, light.', caption: 'C · Light' },
-        { image: boxD, alt: 'Box D, blue, comfort.', caption: 'D · Comfort' },
+        { image: boxA, alt: 'Box A, orange, protein, front.', caption: 'A · Protein' },
+        { image: boxB, alt: 'Box B, green, energy, front.', caption: 'B · Energy' },
+        { image: boxC, alt: 'Box C, red, light, front.', caption: 'C · Light' },
+        { image: boxD, alt: 'Box D, blue, comfort, front.', caption: 'D · Comfort' },
+        { image: boxA3, alt: 'Box A in perspective: four ingredients, ten recipes on the side.' },
+        { image: boxB3, alt: 'Box B in perspective.' },
+        { image: boxC3, alt: 'Box C in perspective.' },
+        { image: boxD3, alt: 'Box D in perspective.' },
       ],
+      cols: 4,
     },
     {
       label: 'Flyers',

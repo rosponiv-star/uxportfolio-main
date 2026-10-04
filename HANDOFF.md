@@ -70,6 +70,11 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-05 · LOCAL** · "6 → 1" arrow is now a drawn hairline + chevron (the text arrow was rejected). All Stat numbers
+  use proportional figures (clean "1", no tabular foot). Perspective box renders (`boxes/box-*-3q.png`, old
+  render/box-*-R.png) added: gallery shows front + perspective rows, box chips preview the perspective view.
+  Ideate redesign concepts shown (A sieve of 6 rows, B manifesto of 6 numerals, C before → after): waiting for the
+  owner. Pushed `main`.
 - **2026-10-04 · LOCAL** · JustCook ends with a `Closing`: "JustCook is still a concept… The next version would be a
   tested one." in display size, then "What I take with me — Design the easy path, and people will take it." (owner picked it over "Make the right thing the easy thing.") Pushed `main`.
 - **2026-10-04 · LOCAL** · Third pass on JustCook: BigStat, Research groups, archetype leaders, Chips with hover
@@ -235,7 +240,7 @@ src/pages/about.astro, playground.astro, 404.astro
 src/assets/valerio-rosponi.png   portrait (About)
 src/assets/projects/justcook/    cover-app.png (cover: 3 redesigned screens), screens/*.png (14 cut-out devices for the
                                  Result showcase); cover.jpg, fieldwork.jpg, box-family.jpg, flyers.jpg, social.jpg UNUSED
-src/assets/projects/justcook/boxes/   box-a…d.png (packaging cut-outs, 800px; hover images + gallery)
+src/assets/projects/justcook/boxes/   box-a…d.png (front cut-outs, 800px) + box-a…d-3q.png (perspective, 900px)
 src/assets/projects/justcook/brand/   posts (post-box-a…d, post-so-good, post-tris, post-4box, post-app-verde) and
                                  flyers (volantino-pubblicita-*, questionare-flyer), resized JPGs from the old render/out
 src/assets/projects/aurawake/    cover.png (2 screens on #f4f4f2)

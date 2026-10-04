@@ -38,7 +38,8 @@ const counts = parts ? !/[–-]/.test(parts.num) : false;
     font-weight: 500;
     line-height: 0.95;
     letter-spacing: -0.05em;
-    font-variant-numeric: tabular-nums;
+    /* Proportional figures: a clean "1" without the tabular foot. The counter reserves the final width. */
+    font-variant-numeric: proportional-nums;
     color: var(--ink);
     white-space: nowrap;
   }
