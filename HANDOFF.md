@@ -70,6 +70,10 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-04 · CLOUD** · Home hero: removed the grey `--paper-alt` band; depth texture intensity 0.5 → 0.7; the
+  texture now runs into the gap above Selected work and fades out (mask, opaque to 50%) before it. Verified at
+  1440×900 (headless Chromium): hero background transparent, fade ends at the Selected work top, cover glimpse still
+  ~81px. → LOCAL: merge `origin/claude/stoic-ride-lj7woi` into `main` to put it live. No other requests.
 - **2026-10-04 · CLOUD** · Merged `origin/main` (fast-forward). Added the owner's rule to §00 "Handing work across":
   cloud says explicitly when the local chat is needed, does all it can first, then hands over. No site changes.
   → LOCAL: merge `origin/claude/stoic-ride-lj7woi` at your next start. No open requests.
@@ -194,7 +198,7 @@ src/components/
   Card.astro                generic card: media slot; hover = cover zooms out to .95 + paper chips (title/type/year)
   ProjectCard.astro         Card + Cover for a project
   Cover.astro               project cover: real image/video or placeholder (tone colour + faint grid + title)
-  DepthTexture.astro        hero background: 3-layer grain, parallax + "breath" near cursor (intensity 0.5)
+  DepthTexture.astro        hero background: 3-layer grain, parallax + "breath" near cursor (home: intensity 0.7)
   RegistrationField.astro   old cursor-reactive "+" field; now only the Playground experiment
   case/*.astro              Chapter (title + summary), Key, Note, Figure, Metrics, Insights, Reframes, Archetypes, Todo,
                             ProcessIndex (process line + fixed reading bar), Showcase (Result interface presentation)
@@ -227,7 +231,7 @@ CLAUDE.md                   persistent rules (auto-loaded)
 | `--paper` | `#fdfdfc` | page background (near-white, slightly cool) |
 | `--paper-2` | `#f2f2ef` | placeholder surfaces, hover fills |
 | `--paper-3` | `#e8e8e4` | |
-| `--paper-alt` | `#f3f3f0` | tinted bands (home hero, How I work, case Result + Insights, About "What I bring") |
+| `--paper-alt` | `#f3f3f0` | tinted bands (How I work, case Result + Insights, About "What I bring") |
 | `--ink` | `#111111` | text |
 | `--ink-2/3/4` | `#33332f / #6b6b65 / #8a8a84` | secondary text greys |
 | `--rule` | `rgb(17 17 17 / .08)` | row hairlines |
@@ -273,7 +277,8 @@ The selected filter or view underline is **1.5px** (he asked for something betwe
 ## 5. Pages (current state)
 
 ### Home `/`
-1. **Hero band**: full-bleed `--paper-alt`, `DepthTexture` (intensity 0.5), statement in `.display` spanning
+1. **Hero**: NO background since 2026-10-04 (the grey `--paper-alt` band was removed); `DepthTexture` (intensity
+   0.7, was 0.5) extends ~56–96px below the hero and fades out with a mask before Selected work. Statement in `.display` spanning
    **cols 1–11**:
    > I'm Valerio Rosponi, a UX and digital product designer studying Interfaces & Communication at the University of
    > Trento, based in Trentino, Italy.
@@ -284,7 +289,7 @@ The selected filter or view underline is **1.5px** (he asked for something betwe
    1280×720.
    - Location reads "based in Trentino" (owner's choice, to avoid repeating "Trento").
    - Re-measured after cols 1–11 (2026-10-03): 80px at 1440, 95px at 1920, 84px mobile, only 38px at 1280×720.
-2. **Selected work** (`Collection`): no top rule on home, because the band edge separates it.
+2. **Selected work** (`Collection`): no top rule on home: the texture fade separates it.
    - Row 1: title.
    - Row 2: filters on the left (cols 1–9) and the Grid/Index switch on the right (cols 10–12), on one baseline.
    - Filters: `All 5 · UX/UI 5 · Service design 1 · Product 3 · XR 1 · Research 1` (counts come from each project's

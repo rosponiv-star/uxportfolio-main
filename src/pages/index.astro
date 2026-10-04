@@ -57,7 +57,7 @@ const principles = [
 <Base>
   <!-- Hero -------------------------------------------------------------- -->
   <section class="hero">
-    <DepthTexture intensity={0.5} />
+    <DepthTexture intensity={0.7} />
     <div class="wrap grid hero__inner">
       <h1 class="hero__title display">
         {
@@ -119,8 +119,9 @@ const principles = [
   /* Hero ----------------------------------------------------------------- */
   /* Compact: the statement takes only its own space, so Selected work and the top of
      the first project are already visible at scroll 0. The depth texture fills this band. */
-  /* The hero is its own tinted band (it holds the depth texture). The change of surface
-     separates it from Selected work, so the section below needs no top rule. */
+  /* The hero sits on the plain page paper; only the depth texture marks it. The texture runs
+     on into the gap above Selected work and fades out before it, so there is no hard edge and
+     the section below needs no top rule. */
   /* Near full-screen: the band fills the first view except a strip at the bottom that shows
      the Selected work header and the top of the first row of covers, as an invitation to scroll.
      --peek = gap above the section + header height + gap below it + visible slice of cover. */
@@ -129,7 +130,12 @@ const principles = [
     position: relative;
     display: flex;
     min-height: max(360px, calc(100svh - var(--peek)));
-    background: var(--paper-alt);
+  }
+
+  .hero :global(.dtex) {
+    bottom: calc(-1 * clamp(56px, 9vh, 96px));
+    -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent);
+    mask-image: linear-gradient(to bottom, #000 50%, transparent);
   }
 
   .hero + :global(.wrap) > :global(.work) {

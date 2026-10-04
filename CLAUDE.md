@@ -121,8 +121,9 @@ title, the footer wordmark and the nav micro-numbers.
   The cursor label still says "Read case study". Touch devices and unlinked cards (Playground) keep the text below the
   cover. The image is never darkened. Rejected: caption bar covering the cover; cover shrinking to fit the bar; info
   inside the cursor label (E2).
-- Home hero is a tinted band (--paper-alt) holding the depth texture; the band edge separates it from Selected work,
-  which therefore has no top rule on the home page.
+- Home hero has no background (owner, 2026-10-04: the --paper-alt band was removed). Only the depth texture
+  (intensity 0.7) marks it; it runs into the gap above Selected work and fades out (mask) before the section, which
+  therefore has no top rule on the home page.
 - Index view: a table (No., project, type, role, year). On hover the cover follows the cursor. The chosen view is
   remembered in localStorage.
 - The owner rejected these, so do not bring them back: a facts block right-aligned under the cover; facts unfolding
