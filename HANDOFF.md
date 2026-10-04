@@ -51,6 +51,10 @@ every change**, as if the next message came from the other side.
 4. CLOUD only: tell the owner when his change is **not live yet** and needs a local session (or a merged PR) to deploy.
 
 ### Handing work across
+- **Owner's rule (2026-10-04):** when a request needs the local session, the CLOUD session must **say so explicitly**
+  in its reply (in Italian: what is missing and why it needs `Media/` or the local machine), do **everything it can**
+  first (code, layout, MDX with `<Todo>` placeholders, asset paths wired up), leave a precise `REQUEST → LOCAL` entry
+  in §01, push, and give the owner a ready-to-paste message for the local chat. The local chat finishes the job.
 - **Cloud needs something from `Media/`:** write a `REQUEST → LOCAL` entry in §01 saying exactly what to produce and
   where to put it (e.g. "Rehab cover 3840×2400 → `src/assets/projects/rehab/cover.png`"; "facts from the Rehab report →
   `notes/02-rehab.md`"). Tell the owner in Italian what to ask the local chat.
@@ -66,6 +70,9 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-04 · CLOUD** · Merged `origin/main` (fast-forward). Added the owner's rule to §00 "Handing work across":
+  cloud says explicitly when the local chat is needed, does all it can first, then hands over. No site changes.
+  → LOCAL: merge `origin/claude/stoic-ride-lj7woi` at your next start. No open requests.
 - **2026-10-04 · LOCAL** · First run of the §00 protocol: `git fetch`, fast-forward merge of
   `origin/claude/stoic-ride-lj7woi` into `main` (only HANDOFF/CLAUDE.md), build OK, pushed. No other unmerged
   `claude/*` branches. No site changes. No open requests.
