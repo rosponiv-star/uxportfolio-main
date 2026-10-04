@@ -70,6 +70,9 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-04 · LOCAL** · Owner: show more of the existing texture (no new divider effect: concepts "dot horizon",
+  "rippling line", "halftone dissolve" were shown and declined). Hero texture mask now opaque to 78% (was 50%), so the
+  fade happens only near the bottom, in the gap above Selected work. Pushed `main`.
 - **2026-10-04 · LOCAL** · Owner: "rendili più visibili" → home texture intensity 0.85 → 1.25. Pushed `main`.
 - **2026-10-04 · LOCAL** · Home texture a bit more visible (intensity 0.7 → 0.85) and stronger pointer parallax:
   new `parallax` prop on DepthTexture (layer travel × P), home uses 1.6 (near layer 34 → ~54px). Pushed `main`.
