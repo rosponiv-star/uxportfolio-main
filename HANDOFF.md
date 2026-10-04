@@ -217,7 +217,7 @@ can dig into the whole process and way of thinking if they want".
    each), then the facts grid, separated by space only. Gutter hairlines were tried and judged "too many lines".
 5. **Result** (alt band): `result` frontmatter. When `result.showcase` exists (JustCook), the section is stacked
    and full width: one-line text (body lane) → `case/Showcase.astro` → targets. Showcase (owner, 2026-10-04: grey band (a dark ink band was tried and REJECTED, "era meglio prima"),
-   small numbered labels, inside the grid, light parallax): 01 Tonight (Home, Change box, Focus mode, Streak; quad, staggered — was a trio on tracks
+   small numbered labels, inside the grid, light parallax): 01 Tonight (Home, Focus mode, Streak; trio on tracks
    A/B/C, staggered), 02 Live Activity (pair, full 12 cols, devices cropped to the top 40% on a hairline), 03 Widgets
    (trio cropped to 50%), 04 Buy boxes (quad, 12 cols), 05 The week (Home scrolled, Plan, Boxes, Ingredients; quad, staggered). Shots are
    the Figma "… · device" frames exported 3x into `Media/01-JustCook/OfficialMedia/Interfaces/*.png`, cut out from the
