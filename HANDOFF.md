@@ -41,8 +41,8 @@ and Rovereto (TN).
 - No filler: every element must carry information. The exception he asked for is the small 01/02/03 numbers in the
   nav and in the index.
 - Case studies use real numbers only. Projected metrics are presented as **targets**. Show a confident result and the
-  process; keep limits for the Reflection chapter. Don't narrate setbacks (for example, the Conad supermarket did not
-  join JustCook: never mention it).
+  process; keep limits for the Reflection chapter. Don't narrate setbacks. Conad: the owner decided on 2026-10-04 to
+  NAME Conad as the JustCook pickup store (it appears in the UI and in the Design chapter); still never say it didn't join.
 
 ---
 
@@ -215,7 +215,14 @@ can dig into the whole process and way of thinking if they want".
 3. **Cover** (16:10).
 4. **Overview** (no band): ink top rule (other sections have a grey one), Problem / Approach / Outcome (one sentence
    each), then the facts grid, separated by space only. Gutter hairlines were tried and judged "too many lines".
-5. **Result** (alt band): `result` frontmatter. Three phone-ratio screens + one wide board (placeholders until real
+5. **Result** (alt band): `result` frontmatter. When `result.showcase` exists (JustCook), the section is stacked
+   and full width: one-line text (body lane) → `case/Showcase.astro` → targets. Showcase (owner, 2026-10-04: grey band,
+   small numbered labels, inside the grid, light parallax): 01 Tonight (Home, Change box, Focus mode; trio on tracks
+   A/B/C, staggered), 02 Live Activity (pair, full 12 cols, devices cropped to the top 40% on a hairline), 03 Widgets
+   (trio cropped to 50%), 04 Buy boxes (quad, 12 cols), 05 The week (Plan, Streak, Ingredients; staggered). Shots are
+   the Figma "… · device" frames exported 3x into `Media/01-JustCook/OfficialMedia/Interfaces/*.png`, cut out from the
+   #f5f5f5 frame fill (flood fill + rim un-blend, old scratchpad `render/cutout.cjs`) and resized to 960px wide into
+   `src/assets/projects/justcook/screens/`. Phones: one swipe row per group. Otherwise (placeholder projects): Three phone-ratio screens + one wide board (placeholders until real
    images: the owner chose placeholders for now, NOT the prepared JustCook boards), 1–2 sentences, key numbers
    (JustCook: "Targets for a pilot"). On phones the screens become a horizontal swipe row.
 6. **Process** (`case/ProcessIndex.astro`, owner picked option C "process line", in house style): steps hang from an
@@ -254,7 +261,7 @@ Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is
 
 | Project | Status | Notes |
 |---|---|---|
-| 01 JustCook | **Written, real data; real cover** | Cover (2026-10-04) = 3 device screens from Figma page "JustCook — Redesign v3" (frames "Home · first screen · device", "Home · scrolled · device", "Boxes · device", exported PNG 3x = 1342×2741, saved as `Media/01-JustCook/OfficialMedia/Interfaces/HomeFirstScreen.png`, `HomeScrolled.png`, `Boxes.png`). The exports carry the Figma frame fill #f5f5f5, so the cover ground and tone are #f5f5f5 (no cut-out needed). `src/assets/projects/justcook/cover-app.png`, 3840×2400, phones 1800px tall, 96px gaps. Older prepared boards stay unused in the same folder. Result screens are still placeholders. |
+| 01 JustCook | **Written, real data; real cover** | Cover (2026-10-04) = 3 device screens from Figma page "JustCook — Redesign v3" (frames "Home · first screen · device", "Home · scrolled · device", "Boxes · device", exported PNG 3x = 1342×2741, saved as `Media/01-JustCook/OfficialMedia/Interfaces/HomeFirstScreen.png`, `HomeScrolled.png`, `Boxes.png`). The exports carry the Figma frame fill #f5f5f5, so the cover ground and tone are #f5f5f5 (no cut-out needed). `src/assets/projects/justcook/cover-app.png`, 3840×2400, phones 1800px tall, 96px gaps. Older prepared boards stay unused in the same folder. Result = interface showcase (see §5). |
 | 02 Rehab | placeholder | invented facts (Digital health service, 2026, Product Designer, team lead…) |
 | 03 Smart Home Ecosystem | placeholder | invented facts |
 | 04 Realiti | placeholder | invented facts, dark tone |

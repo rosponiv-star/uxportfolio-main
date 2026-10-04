@@ -51,6 +51,21 @@ const projects = defineCollection({
               }),
             )
             .default([]),
+          // Interface presentation (replaces `media` when present): labelled groups of device shots.
+          // layout: 'trio' = tracks A/B/C beside the label; 'pair' / 'quad' = the full 12 columns.
+          // crop: share of the device height shown from the top (e.g. 0.45 for Dynamic Island / widgets).
+          // stagger: trio shots step down one after the other.
+          showcase: z
+            .array(
+              z.object({
+                label: z.string(),
+                layout: z.enum(['trio', 'pair', 'quad']),
+                crop: z.number().min(0.2).max(1).optional(),
+                stagger: z.boolean().default(false),
+                items: z.array(z.object({ image: image(), alt: z.string() })),
+              }),
+            )
+            .optional(),
           metricsLabel: z.string().optional(),
           metrics: z.array(z.object({ value: z.string(), label: z.string() })).default([]),
         })

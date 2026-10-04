@@ -8,6 +8,7 @@ import Chapter from '../../components/case/Chapter.astro';
 import Todo from '../../components/case/Todo.astro';
 import Key from '../../components/case/Key.astro';
 import ProcessIndex from '../../components/case/ProcessIndex.astro';
+import Showcase from '../../components/case/Showcase.astro';
 import Figure from '../../components/case/Figure.astro';
 import Note from '../../components/case/Note.astro';
 import Metrics from '../../components/case/Metrics.astro';
@@ -103,8 +104,22 @@ const facts = [
       <!-- Result: what was made and what it achieves, before the process ---- -->
       {
         result && (
-          <Section title="Result" id="result" bodyClass="flow" tone="alt">
-            {result.media.length > 0 && (
+          <Section
+            title="Result"
+            id="result"
+            bodyClass="flow"
+            tone="alt"
+            stacked={Boolean(result.showcase)}
+            class={result.showcase ? 'result--showcase' : undefined}
+          >
+            {result.showcase ? (
+              <>
+                <p class="result__text">{result.text}</p>
+                <div class="result__showcase">
+                  <Showcase groups={result.showcase} />
+                </div>
+              </>
+            ) : result.media.length > 0 && (
               <div class="trio result__media">
                 {result.media.map((m) =>
                   m.kind === 'wide' ? (
@@ -117,7 +132,7 @@ const facts = [
                 )}
               </div>
             )}
-            <p class="result__text">{result.text}</p>
+            {!result.showcase && <p class="result__text">{result.text}</p>}
             {result.metrics.length > 0 && (
               <div class="result__metrics">
                 {result.metricsLabel && <p class="label muted result__metrics-label">{result.metricsLabel}</p>}
@@ -284,6 +299,34 @@ const facts = [
     line-height: 1.35;
     letter-spacing: -0.015em;
     color: var(--ink);
+  }
+
+  /* With a showcase the body takes all 12 columns: text and numbers keep the body lane,
+     the interface groups use the whole grid. */
+  :global(.result--showcase > .sec__body) {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--gutter);
+  }
+
+  :global(.result--showcase > .sec__body) > * {
+    grid-column: 4 / -1;
+  }
+
+  :global(.result--showcase > .sec__body) > .result__showcase {
+    grid-column: 1 / -1;
+    margin-top: var(--space-section);
+  }
+
+  :global(.result--showcase > .sec__body) > .result__metrics {
+    margin-top: var(--space-section);
+  }
+
+  @media (max-width: 960px) {
+    :global(.result--showcase > .sec__body) > * {
+      grid-column: 1 / -1;
+    }
   }
 
   .result__metrics-label {

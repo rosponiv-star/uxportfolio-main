@@ -36,7 +36,7 @@ all site copy is in **English**.
 Frontmatter is validated by `src/content.config.ts`: title, order, tagline, year, type, platform,
 role, timeline, team, tools, tone (placeholder cover colour), toneDark, cover {image|video, alt},
 glance {problem, approach, outcome} (one short sentence each), result {text, media [{label, image?, kind: screen|wide}],
-metricsLabel, metrics}, placeholder (set to `false` once the content is real).
+showcase?, metricsLabel, metrics}, placeholder (set to `false` once the content is real).
 
 Page order (owner, 2026-10-03): title + tagline → cover → Overview (ink top rule instead of the grey one; 3
 one-sentence glance items, then the facts, separated by space only: the owner found inner hairlines too busy) →
@@ -60,6 +60,9 @@ Components available in MDX without imports:
 - `<Metrics items={[{ value, label }]} />` and `<Insights items={[{ title, text }]} />`.
 - `<Reframes items={[{ client, problem, idea? }]} />`: problem-reframing cycles (show ~3 key ones). The last item is the final framing.
 - `<Archetypes items={[{ name, alias?, quote, traits: [{ label, text }] }]} />`: behavioural archetypes (quote + 2 traits).
+- `result.showcase` (frontmatter, not MDX): labelled groups of device shots rendered by `case/Showcase.astro`:
+  `{ label, layout: trio|pair|quad, crop?, stagger?, items: [{ image, alt }] }`. Trio = tracks A/B/C beside the label;
+  pair/quad = all 12 columns; crop shows the top share of the device on a hairline. Use cut-out device PNGs (960px).
 - `<Todo>…</Todo>`: visible placeholder. Remove these as the real content arrives.
 
 Cover media: put the image in `src/assets/projects/<name>/` and reference it in the frontmatter
@@ -132,8 +135,8 @@ Status:
 
 - Use the official numbers from the project reports. Never inflate them.
 - Present projected metrics as targets, never as results.
-- Show a confident result and the process behind it. Don't narrate every setback (e.g. a partner who
-  didn't join). Keep honest limits for the Reflection chapter.
+- Show a confident result and the process behind it. Don't narrate every setback. Keep honest limits for the
+  Reflection chapter. JustCook's pickup partner Conad may be named (owner, 2026-10-04).
 - Cover and figure boards are composed from the owner's official media (renders, posts, flyers) on a warm
   #e9e3d6 ground. Source PDFs are rendered with headless Chrome + pdf.js (scripts live in the session
   scratchpad, not in the repo).
