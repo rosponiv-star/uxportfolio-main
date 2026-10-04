@@ -120,7 +120,7 @@ src/pages/about.astro, playground.astro, 404.astro
 src/assets/valerio-rosponi.png   portrait (About)
 src/assets/projects/justcook/    cover.jpg, fieldwork.jpg, box-family.jpg, flyers.jpg, social.jpg (prepared, CURRENTLY UNUSED)
 public/cv/Valerio-Rosponi-CV.pdf  CV (contains his phone number — owner was told; may want a version without it)
-Media/                      raw owner material, git-ignored (01-JustCook/... reports, OfficialMedia/ packaging, flyers, posts; Interfaces/ empty)
+Media/                      raw owner material, git-ignored (01-JustCook/... reports, OfficialMedia/ packaging, flyers, posts, Interfaces/)
 CLAUDE.md                   persistent rules (auto-loaded)
 ```
 
@@ -254,7 +254,7 @@ Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is
 
 | Project | Status | Notes |
 |---|---|---|
-| 01 JustCook | **Written, real data, text only** | Media removed by request ("togli tutte le immagini"); prepared boards stay unused in `src/assets/projects/justcook/`. |
+| 01 JustCook | **Written, real data; real cover** | Cover (2026-10-04) = 3 device screens from Figma page "JustCook — Redesign v3" (frames "Home · first screen · device", "Home · scrolled · device", "Boxes · device", exported PNG 3x = 1342×2741, saved as `Media/01-JustCook/OfficialMedia/Interfaces/HomeFirstScreen.png`, `HomeScrolled.png`, `Boxes.png`). The exports carry the Figma frame fill #f5f5f5, so the cover ground and tone are #f5f5f5 (no cut-out needed). `src/assets/projects/justcook/cover-app.png`, 3840×2400, phones 1800px tall, 96px gaps. Older prepared boards stay unused in the same folder. Result screens are still placeholders. |
 | 02 Rehab | placeholder | invented facts (Digital health service, 2026, Product Designer, team lead…) |
 | 03 Smart Home Ecosystem | placeholder | invented facts |
 | 04 Realiti | placeholder | invented facts, dark tone |
@@ -336,8 +336,7 @@ Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is
    - Gotcha: when binding a colour variable in the plugin API, also set the paint's colour to the resolved value, or
      Figma may render the black fallback.
    - Next: owner review; then export screens (2x/3x PNG) for the JustCook Result section and figures.
-5. **Covers:** real covers to replace the placeholders. A composed JustCook cover exists in assets (4 boxes + phone),
-   unused.
+5. **Covers:** JustCook and AuraWake have real covers; Rehab, Smart Home, Realiti still placeholders.
 6. **Case studies 02–05**: the full interview-then-write process.
 7. **Filters:** decide whether to drop UX/UI (it is on every project). Confirm the categories per project.
 8. **CV** may contain his phone number; he may want a version without it.
