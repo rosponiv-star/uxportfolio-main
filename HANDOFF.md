@@ -216,8 +216,7 @@ can dig into the whole process and way of thinking if they want".
 4. **Overview** (no band): ink top rule (other sections have a grey one), Problem / Approach / Outcome (one sentence
    each), then the facts grid, separated by space only. Gutter hairlines were tried and judged "too many lines".
 5. **Result** (alt band): `result` frontmatter. When `result.showcase` exists (JustCook), the section is stacked
-   and full width: one-line text (body lane) → `case/Showcase.astro` → targets. Showcase (owner, 2026-10-04: first grey band, then trying a DARK band: ink ground, paper text, paper-grey numbers and
-   hairline, styled in [slug].astro under .result--showcase;
+   and full width: one-line text (body lane) → `case/Showcase.astro` → targets. Showcase (owner, 2026-10-04: grey band,
    small numbered labels, inside the grid, light parallax): 01 Tonight (Home, Change box, Focus mode; trio on tracks
    A/B/C, staggered), 02 Live Activity (pair, full 12 cols, devices cropped to the top 40% on a hairline), 03 Widgets
    (trio cropped to 50%), 04 Buy boxes (quad, 12 cols), 05 The week (Plan, Streak, Ingredients; staggered). Shots are

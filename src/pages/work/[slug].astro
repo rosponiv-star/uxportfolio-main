@@ -114,7 +114,7 @@ const facts = [
           >
             {result.showcase ? (
               <>
-                <p class="result__text result--showcase-text">{result.text}</p>
+                <p class="result__text">{result.text}</p>
                 <div class="result__showcase">
                   <Showcase groups={result.showcase} />
                 </div>
@@ -321,34 +321,6 @@ const facts = [
 
   :global(.result--showcase > .sec__body) > .result__metrics {
     margin-top: var(--space-section);
-  }
-
-  /* Dark band: the interfaces read like a product presentation; text turns to paper greys. */
-  :global(.result--showcase) {
-    color: var(--paper);
-  }
-
-  :global(.result--showcase.sec--alt::after) {
-    background: var(--ink);
-  }
-
-  :global(.result--showcase .muted) {
-    color: color-mix(in srgb, var(--paper) 55%, transparent);
-  }
-
-  :global(.result--showcase .metric__value),
-  :global(.result--showcase .group__label),
-  .result--showcase-text {
-    color: var(--paper);
-  }
-
-  /* The slate accent is too dark on ink: numbers go to a paper grey. */
-  :global(.result--showcase .group__n) {
-    color: color-mix(in srgb, var(--paper) 55%, transparent);
-  }
-
-  :global(.result--showcase .group--crop .group__shots::after) {
-    background: color-mix(in srgb, var(--paper) 22%, transparent);
   }
 
   @media (max-width: 960px) {
