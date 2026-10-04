@@ -70,6 +70,12 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-05 · LOCAL** · Design chapter made visually impactful (owner meant Design, not Ideate; typographic
+  concepts were declined: "intendo impattante visivamente"). The box opens with a BoxStrip: four solid panels in the box
+  colours, perspective box inside, hover turns it to the front view (replaces the profile chips; no drop shadow).
+  Features: alternate sides, crop .72, devices one full track wide. Gallery: "Campaign" mosaic (the 4-box post as a 2×2
+  tile + 4 box posts + So good + Tris + 2 app posts), then the 4 maze flyers; packaging group dropped (the strip shows
+  the boxes). Ideate unchanged apart from the arrow. Pushed `main`.
 - **2026-10-05 · LOCAL** · "6 → 1" arrow is now a drawn hairline + chevron (the text arrow was rejected). All Stat numbers
   use proportional figures (clean "1", no tabular foot). Perspective box renders (`boxes/box-*-3q.png`, old
   render/box-*-R.png) added: gallery shows front + perspective rows, box chips preview the perspective view.
@@ -229,7 +235,8 @@ src/components/
   case/*.astro              Chapter (title + summary), Key, Note, Figure, Metrics, Insights, Reframes, Archetypes, Todo,
                             ProcessIndex (process line + fixed reading bar), Showcase (Result interface presentation),
                             Stat (big number with a one-time count-up, used by Metrics and Insights), Chips (row or
-                            cards, hover note/image), BigStat, Features (feature + cropped screen), Gallery, Closing
+                            cards, hover note/image), BigStat, Features (feature + cropped screen, alternate), Gallery
+                            (span-2 mosaic tiles), Closing, BoxStrip (colour-block product panels)
 src/lib/projects.ts         getProjects, slugOf/hrefOf/numOf, chapterId/chaptersOf, CATEGORIES (re-exports categoryId)
 src/lib/collection.ts       categoryId, gridSizes (all 'half'), yearSpan (unused now)
 src/content.config.ts       projects schema (categories enum, glance, result {text, media|showcase, metrics})

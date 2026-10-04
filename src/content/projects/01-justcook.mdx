@@ -107,6 +107,8 @@ import flyerOrange from '../../assets/projects/justcook/brand/volantino-pubblici
 import flyerGreen from '../../assets/projects/justcook/brand/volantino-pubblicita-verde.jpg';
 import flyerRed from '../../assets/projects/justcook/brand/volantino-pubblicita-rosso.jpg';
 import flyerBlue from '../../assets/projects/justcook/brand/volantino-pubblicita-azzurro.jpg';
+import post4box from '../../assets/projects/justcook/brand/post-4box.jpg';
+import postAppOrange from '../../assets/projects/justcook/brand/post-app-arancione.jpg';
 
 
 <Chapter title="Challenge" summary="Effort, not knowledge">
@@ -275,6 +277,17 @@ Three of the six Client–Problem–Solution cycles, from the first framing to t
 
 ### The box
 
+<BoxStrip
+  items={[
+    { name: 'Box A', role: 'Protein', color: '#ffa91e', image: boxA3, hover: boxA, alt: 'Box A in perspective on an orange panel.' },
+    { name: 'Box B', role: 'Energy', color: '#488863', image: boxB3, hover: boxB, alt: 'Box B in perspective on a green panel.' },
+    { name: 'Box C', role: 'Light', color: '#ff7257', image: boxC3, hover: boxC, alt: 'Box C in perspective on a red panel.' },
+    { name: 'Box D', role: 'Comfort', color: '#29bcff', image: boxD3, hover: boxD, alt: 'Box D in perspective on a blue panel.' },
+  ]}
+/>
+
+One colour per box, so the week reads at a glance on the shelf and in the app.
+
 <Metrics
   items={[
     { value: '4–5', label: 'Ingredients per box', text: 'Fresh and pre-dosed for one portion.' },
@@ -283,16 +296,6 @@ Three of the six Client–Problem–Solution cycles, from the first framing to t
   ]}
 />
 
-<Chips
-  label="Four profiles"
-  intro="One colour per box, so the week reads at a glance on the shelf and in the app."
-  items={[
-    { label: 'A · Protein', color: '#ffa91e', image: boxA3, note: 'Box A, the protein base' },
-    { label: 'B · Energy', color: '#488863', image: boxB3, note: 'Box B, for long study days' },
-    { label: 'C · Light', color: '#ff7257', image: boxC3, note: 'Box C, the light one' },
-    { label: 'D · Comfort', color: '#29bcff', image: boxD3, note: 'Box D, comfort food' },
-  ]}
-/>
 
 Boxes are reserved in the app and collected at Conad; a code inside registers each one and updates the pantry.
 
@@ -305,6 +308,8 @@ Four features, each one removing a decision from the student’s evening.
 </Note>
 
 <Features
+  alternate
+  crop={0.72}
   items={[
     { title: 'Adaptive planning', text: 'Boxes go on the days students will actually cook; the app says whether the week is covered.', image: plan, alt: 'Plan screen: the week with a box on each dinner.' },
     { title: 'A timely nudge', text: 'Reminders are timed backwards from the recipe’s duration and dinner time, before a delivery app wins.', image: widgetMedium, alt: 'Home Screen widget: start cooking in 45 minutes.' },
@@ -334,19 +339,19 @@ The name winks at Just Eat. The tone is reassuring and empowering: cooking for y
 <Gallery
   groups={[
     {
-      label: 'Packaging',
-      kind: 'cutout',
-      items: [
-        { image: boxA, alt: 'Box A, orange, protein, front.', caption: 'A · Protein' },
-        { image: boxB, alt: 'Box B, green, energy, front.', caption: 'B · Energy' },
-        { image: boxC, alt: 'Box C, red, light, front.', caption: 'C · Light' },
-        { image: boxD, alt: 'Box D, blue, comfort, front.', caption: 'D · Comfort' },
-        { image: boxA3, alt: 'Box A in perspective: four ingredients, ten recipes on the side.' },
-        { image: boxB3, alt: 'Box B in perspective.' },
-        { image: boxC3, alt: 'Box C in perspective.' },
-        { image: boxD3, alt: 'Box D in perspective.' },
-      ],
+      label: 'Campaign',
       cols: 4,
+      items: [
+        { image: post4box, alt: 'Instagram post: the four boxes, the box sized for off-site students.', span: 2 },
+        { image: postA, alt: 'Instagram post: Box A, the protein one.' },
+        { image: postB, alt: 'Instagram post: Box B, the energy one.' },
+        { image: postC, alt: 'Instagram post: Box C, the light one.' },
+        { image: postD, alt: 'Instagram post: Box D, the comfort one.' },
+        { image: postGood, alt: 'Instagram post: So good, yeah it is Just Cook.' },
+        { image: postTris, alt: 'Instagram post: noughts and crosses with plates, good food always wins.' },
+        { image: postApp, alt: 'Instagram post: download the app and eat healthy challenging your friends, green.' },
+        { image: postAppOrange, alt: 'Instagram post: download the app and eat healthy challenging your friends, orange.' },
+      ],
     },
     {
       label: 'Flyers',
@@ -355,18 +360,6 @@ The name winks at Just Eat. The tone is reassuring and empowering: cooking for y
         { image: flyerGreen, alt: 'Maze flyer, green.' },
         { image: flyerRed, alt: 'Maze flyer, red.' },
         { image: flyerBlue, alt: 'Maze flyer, blue.' },
-      ],
-    },
-    {
-      label: 'Social posts',
-      cols: 3,
-      items: [
-        { image: postA, alt: 'Instagram post: Box A, the protein one.' },
-        { image: postB, alt: 'Instagram post: Box B, the energy one.' },
-        { image: postGood, alt: 'Instagram post: So good, yeah it is Just Cook.' },
-        { image: postC, alt: 'Instagram post: Box C, the light one.' },
-        { image: postD, alt: 'Instagram post: Box D, the comfort one.' },
-        { image: postTris, alt: 'Instagram post: noughts and crosses with plates, good food always wins.' },
       ],
     },
   ]}

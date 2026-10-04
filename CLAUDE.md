@@ -67,6 +67,10 @@ Components available in MDX without imports:
   (e.g. the box) with the note as caption. `cards` = boxes with the note visible (channels).
 - `<Closing kicker? line?>statement</Closing>`: the case study's last word, at the end of Reflection: statement in
   display size (plain = grey, **bold** = ink), then a hairline and the one lesson to remember in h2.
+- `<BoxStrip items={[{ name, role, color, image, hover?, alt }]} />`: a product line as solid colour panels (one per
+  product, its own colour), the product cut-out large inside; hover cross-fades to a second view (front ↔ perspective).
+- `<Features … alternate crop={0.72} />`: bigger devices that switch side row by row.
+- Gallery items may take `span: 2` (a 2×2 hero tile; the grid packs densely around it).
 - `<BigStat value label source? />`: the one number a chapter hinges on, mega size in A–B, caption + source in C.
 - `<Features items={[{ title, text, image, alt }]} />`: product features, each with its screen cropped to the top in
   track A, number/title/text in B–C.
