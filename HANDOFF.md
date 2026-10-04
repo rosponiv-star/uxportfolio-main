@@ -70,6 +70,10 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-04 · LOCAL** · Case-study text with more character: new `Stat` (count-up), `--fs-stat` token, Metrics
+  redesigned, Insights `stat`, Archetypes as a side-by-side comparison of two light boxes, Reframes as a stepped
+  funnel with an ink final box. JustCook: Challenge desk-research numbers pulled into Metrics, insight stats added.
+  Pushed `main`.
 - **2026-10-04 · LOCAL** · Owner: show more of the existing texture (no new divider effect: concepts "dot horizon",
   "rippling line", "halftone dissolve" were shown and declined). Hero texture mask now opaque to 78% (was 50%), so the
   fade happens only near the bottom, in the gap above Selected work. Pushed `main`.
@@ -210,7 +214,8 @@ src/components/
   DepthTexture.astro        hero background: 3-layer grain, parallax + "breath" near cursor (home: intensity 1.25, parallax 1.6×)
   RegistrationField.astro   old cursor-reactive "+" field; now only the Playground experiment
   case/*.astro              Chapter (title + summary), Key, Note, Figure, Metrics, Insights, Reframes, Archetypes, Todo,
-                            ProcessIndex (process line + fixed reading bar), Showcase (Result interface presentation)
+                            ProcessIndex (process line + fixed reading bar), Showcase (Result interface presentation),
+                            Stat (big number with a one-time count-up, used by Metrics and Insights)
 src/lib/projects.ts         getProjects, slugOf/hrefOf/numOf, chapterId/chaptersOf, CATEGORIES (re-exports categoryId)
 src/lib/collection.ts       categoryId, gridSizes (all 'half'), yearSpan (unused now)
 src/content.config.ts       projects schema (categories enum, glance, result {text, media|showcase, metrics})
@@ -261,6 +266,7 @@ fluorescent colours.
 | `--fs-lead` | ~19→23px | leads; **card titles** use lead/Medium |
 | `--fs-body` | 17px | running text |
 | `--fs-read` | 17→19px, lh 1.55 | case-study chapter paragraphs only |
+| `--fs-stat` | 44→72px, Medium, tight | key numbers (Metrics, insight stats) |
 | `--fs-small` | **16px** | nav, filters, meta, notes, captions |
 | `--fs-label` | 12px | `.label`: Geist **Medium 500**, uppercase, 8% tracking, tabular figures |
 
@@ -349,6 +355,12 @@ can dig into the whole process and way of thinking if they want".
 7. **Chapters**: Challenge, Research, Insights (alt), Define, Ideate, Design, [Validate], Reflection. Each opens with
    `<Key>` (lead, ink), then short paragraphs at --fs-read (19px). Archetypes trimmed to quote + 2 traits; Reframes to
    3 of 6 cycles. Owner chose short paragraphs over bullets or collapsible details.
+   Data with character (owner, 2026-10-04: numbers must catch the eye, archetypes/reframing more impactful, with boxes):
+   Metrics = big bare numbers on a hairline with a ~1.2s one-time count-up (picked over boxed numbers and number +
+   bar); numbers buried in paragraphs were pulled out (Challenge: >60% / 44% / 92% desk research; Insights: >60%, 95%,
+   ≤3 via `stat`). Archetypes = two LIGHT boxes compared side by side (picked over light+dark boxes and a spectrum).
+   Reframes = stepped funnel A–C → B–C → C, discarded ideas struck through, final framing in an ink box (picked over
+   a timeline and before→after).
 8. **Next case study band** (unchanged).
 
 PhoneScroll (sticky device scene) was **removed** by the owner on 2026-10-03.

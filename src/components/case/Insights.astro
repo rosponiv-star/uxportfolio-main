@@ -1,8 +1,11 @@
 ---
 // Numbered key insights: number + finding in track A, evidence in tracks B–C.
-// items: [{ title: '...', text: '...' }, ...]
+// An insight backed by a number shows it first, large (`stat`, with an optional short `statLabel`).
+// items: [{ title: '...', text: '...', stat?: '95%', statLabel?: '…' }, ...]
+import Stat from './Stat.astro';
+
 interface Props {
-  items: { title: string; text: string }[];
+  items: { title: string; text: string; stat?: string; statLabel?: string }[];
 }
 const { items } = Astro.props;
 ---
@@ -15,7 +18,15 @@ const { items } = Astro.props;
           <span class="insight__n label">{String(i + 1).padStart(2, '0')}</span>
           <p class="insight__title">{it.title}</p>
         </div>
-        <p class="insight__text span-2">{it.text}</p>
+        <div class="insight__body span-2">
+          {it.stat && (
+            <p class="insight__stat">
+              <Stat value={it.stat} />
+              {it.statLabel && <span class="label muted">{it.statLabel}</span>}
+            </p>
+          )}
+          <p class="insight__text">{it.text}</p>
+        </div>
       </li>
     ))
   }
@@ -51,6 +62,20 @@ const { items } = Astro.props;
     letter-spacing: -0.022em;
     line-height: 1.15;
     color: var(--ink);
+  }
+
+  .insight__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .insight__stat {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    column-gap: var(--space-2);
+    row-gap: var(--space-1);
   }
 
   .insight__text {

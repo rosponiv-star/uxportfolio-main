@@ -59,9 +59,13 @@ Components available in MDX without imports:
 - `<Figure src={img} alt="" caption="" ratio="16/9" size="wide|text" />`: `wide` (the default) spans the
   whole body lane. Import the image at the top of the MDX file. A `video="/media/x.mp4"` prop is also
   supported.
-- `<Metrics items={[{ value, label }]} />` and `<Insights items={[{ title, text }]} />`.
-- `<Reframes items={[{ client, problem, idea? }]} />`: problem-reframing cycles (show ~3 key ones). The last item is the final framing.
-- `<Archetypes items={[{ name, alias?, quote, traits: [{ label, text }] }]} />`: behavioural archetypes (quote + 2 traits).
+- `<Metrics items={[{ value, label }]} />`: large bare numbers (`--fs-stat`) on a hairline; digits count up once
+  (~1.2s, `case/Stat.astro`). Use it wherever there are numbers, instead of burying them in a paragraph.
+- `<Insights items={[{ title, text, stat?, statLabel? }]} />`: an insight with a number shows it first, large.
+- `<Reframes items={[{ client, problem, idea? }]} />`: stepped funnel of boxes (A–C → B–C → C); earlier ideas are
+  struck through as discarded; the last item is the final framing in an ink box. Show ~3 key cycles.
+- `<Archetypes items={[{ name, alias?, quote, traits: [{ label, text }] }]} />`: two light boxes compared side by side
+  (row labels in track A, archetypes in B and C; quote in lead size). Same trait labels, same order, for both.
 - `result.showcase` (frontmatter, not MDX): labelled groups of device shots rendered by `case/Showcase.astro`:
   `{ label, layout: trio|pair|quad, crop?, stagger?, items: [{ image, alt }] }`. Trio = tracks A/B/C beside the label;
   pair/quad = all 12 columns; crop shows the top share of the device on a hairline. Use cut-out device PNGs (960px).
@@ -90,7 +94,7 @@ and use `cover.video`.
 ## Type scale (strict)
 
 Use only the size tokens in global.css: mega, display (30→60, page-opening statements, Geist Regular), h2 (48), h3 (28), lead (~22), body (17), small (16)
-and label (12, Geist Medium uppercase, 8% tracking); read (17→19) is case-study chapter text only. Never hard-code a font size. The only exceptions are graphics: the cover
+and label (12, Geist Medium uppercase, 8% tracking); read (17→19) is case-study chapter text only; stat (44→72, Medium) is for key numbers only. Never hard-code a font size. The only exceptions are graphics: the cover
 title, the footer wordmark and the nav micro-numbers.
 
 - Section titles use h2. Item titles (principles, insights, rows, index) use h3. Card titles use lead (Medium).

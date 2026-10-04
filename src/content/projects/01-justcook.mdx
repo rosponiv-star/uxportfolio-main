@@ -90,7 +90,15 @@ placeholder: false
 
 A university project at the University of Trento, across three courses (semiotics, sociology and psychology of communication). A team of four; I worked on every phase, from research to packaging.
 
-The brief: pick a real problem in our own community. We chose the one we lived as off-site students: more than 60% eat take-away weekly, only 44% eat fruit daily, and 92% change their eating habits after moving out.
+The brief: pick a real problem in our own community. We chose the one we were living ourselves as off-site students, and desk research confirmed it.
+
+<Metrics
+  items={[
+    { value: '>60%', label: 'Off-site students eating take-away every week' },
+    { value: '44%', label: 'Eat a portion of fruit a day' },
+    { value: '92%', label: 'Change their eating habits after moving out' },
+  ]}
+/>
 
 <Note label="Reframe" text="From “how do we teach students to eat healthily?” to “how do we make the healthy option the easiest one?”">
 
@@ -128,15 +136,21 @@ Everything was coded in a thematic grid of 8 themes and 36 codes, so four conver
     },
     {
       title: 'Rigid plans break',
-      text: 'Over 60% shop once a week, around the days they will be in town. Day-by-day plans collapse at the first exam or trip home.',
+      stat: '>60%',
+      statLabel: 'shop once a week',
+      text: 'They shop around the days they will be in town. Day-by-day plans collapse at the first exam or trip home.',
     },
     {
       title: 'Retail is built for families',
-      text: '95% of students who try to avoid waste blame the same thing: packs too big for one person.',
+      stat: '95%',
+      statLabel: 'blame packs too big for one',
+      text: 'Of the students who try to avoid waste, almost all name the same obstacle: food sized for families expires before it is eaten.',
     },
     {
       title: 'The shared kitchen has no rules',
-      text: 'Up to three people cook at once and the first one gets the stove. Less prep means cooking actually happens.',
+      stat: '≤3',
+      statLabel: 'people cooking at once',
+      text: 'The first one in gets the stove. Less prep and less counter space make cooking more likely to happen at all.',
     },
   ]}
 />

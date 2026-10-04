@@ -1,0 +1,89 @@
+---
+// A key number. The value string is split into prefix / number / suffix ("−40%", "<20 min", ">60%", "41")
+// so only the digits count up, once, when the number comes into view (≈1.2s, easing out; static with
+// reduced motion or without JS). The final value is in the HTML and its width is reserved, so nothing
+// shifts while it counts.
+interface Props {
+  value: string;
+  class?: string;
+}
+const { value, class: className } = Astro.props;
+const m = value.match(/^(\D*?)(\d+(?:[.,]\d+)?)(.*)$/);
+const parts = m ? { prefix: m[1], num: m[2], suffix: m[3] } : null;
+---
+
+<span class:list={['stat', className]}>
+  {
+    parts ? (
+      <>
+        {parts.prefix && <span class="stat__affix">{parts.prefix}</span>}
+        <span class="stat__num" data-count={parts.num}>
+          {parts.num}
+        </span>
+        {parts.suffix && <span class="stat__affix">{parts.suffix}</span>}
+      </>
+    ) : (
+      value
+    )
+  }
+</span>
+
+<style>
+  .stat {
+    display: inline-flex;
+    align-items: baseline;
+    font-size: var(--fs-stat);
+    font-weight: 500;
+    line-height: 0.95;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  .stat__num {
+    display: inline-block;
+    text-align: right;
+  }
+
+  .stat__affix {
+    letter-spacing: -0.03em;
+  }
+</style>
+
+<script>
+  const nums = document.querySelectorAll<HTMLElement>('[data-count]');
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (nums.length && !still && 'IntersectionObserver' in window) {
+    const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+    const run = (el: HTMLElement) => {
+      const raw = el.dataset.count!;
+      const target = parseFloat(raw.replace(',', '.'));
+      const decimals = (raw.split(/[.,]/)[1] || '').length;
+      const sep = raw.includes(',') ? ',' : '.';
+      el.style.minWidth = `${el.getBoundingClientRect().width}px`;
+      const start = performance.now();
+      const DUR = 1200;
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / DUR);
+        el.textContent = (target * ease(t)).toFixed(decimals).replace('.', sep);
+        if (t < 1) requestAnimationFrame(step);
+        else el.textContent = raw;
+      };
+      el.textContent = (0).toFixed(decimals).replace('.', sep);
+      requestAnimationFrame(step);
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            run(e.target as HTMLElement);
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.6 },
+    );
+    nums.forEach((el) => io.observe(el));
+  }
+</script>

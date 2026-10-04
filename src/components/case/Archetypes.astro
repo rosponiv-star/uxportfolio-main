@@ -1,5 +1,7 @@
 ---
-// Behavioural archetypes. Each row: name + quote in track A, traits in tracks B–C.
+// Behavioural archetypes side by side, as a comparison: row labels in track A, one light box per archetype
+// in tracks B and C, so every row (quote, friction, opportunity…) reads across. Trait labels come from the
+// first archetype; give both the same labels in the same order. On phones each archetype is its own box.
 interface Props {
   items: {
     name: string;
@@ -9,91 +11,147 @@ interface Props {
   }[];
 }
 const { items } = Astro.props;
+const rows = ['In their words', ...items[0].traits.map((t) => t.label)];
+const n = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
-<ol class="archetypes">
+<div class="arch" style={`--rows: ${rows.length + 1}`} data-reveal>
+  {items.slice(0, 2).map((_, c) => <span class="arch__box" style={`grid-column: ${c + 2}`} aria-hidden="true" />)}
+
+  {rows.map((r, ri) => <p class="arch__rowlabel label muted" style={`grid-row: ${ri + 2}`}>{r}</p>)}
+
   {
-    items.map((a, i) => (
-      <li class="archetype trio" data-reveal style={`--d: ${i}`}>
-        <div class="archetype__head">
-          <span class="label archetype__n">{String(i + 1).padStart(2, '0')}{a.alias && ` — ${a.alias}`}</span>
-          <h3 class="archetype__name">{a.name}</h3>
-          <blockquote class="archetype__quote">“{a.quote}”</blockquote>
+    items.slice(0, 2).map((a, c) => (
+      <>
+        <div class="arch__cell arch__head" style={`grid-column: ${c + 2}; grid-row: 1; --o: ${c * 10}`}>
+          <span class="label arch__alias">
+            {n(c)}
+            {a.alias && ` — ${a.alias}`}
+          </span>
+          <h3 class="arch__name">{a.name}</h3>
         </div>
-        <dl class="archetype__traits span-2">
-          {a.traits.map((t) => (
-            <div>
-              <dt class="label muted">{t.label}</dt>
-              <dd>{t.text}</dd>
-            </div>
-          ))}
-        </dl>
-      </li>
+        <blockquote class="arch__cell arch__quote" style={`grid-column: ${c + 2}; grid-row: 2; --o: ${c * 10 + 1}`}>
+          <span class="arch__mlabel label muted">{rows[0]}</span>“{a.quote}”
+        </blockquote>
+        {a.traits.map((t, ti) => (
+          <div
+            class:list={['arch__cell arch__trait', { 'is-last': ti === a.traits.length - 1 }]}
+            style={`grid-column: ${c + 2}; grid-row: ${ti + 3}; --o: ${c * 10 + ti + 2}`}
+          >
+            <span class="arch__mlabel label muted">{t.label}</span>
+            {t.text}
+          </div>
+        ))}
+      </>
     ))
   }
-</ol>
+</div>
 
 <style>
-  .archetype {
-    row-gap: var(--space-3);
-    padding-block: var(--space-4);
+  .arch {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(var(--rows), auto);
+    column-gap: var(--gutter);
   }
 
-  .archetype:first-child {
-    padding-top: 0;
+  /* One light box per archetype, behind its column. */
+  .arch__box {
+    grid-row: 1 / -1;
+    border: 1px solid var(--rule-strong);
+    background: var(--paper);
   }
 
-  .archetype + .archetype {
+  .arch__cell {
+    position: relative;
+    padding: var(--space-3);
+  }
+
+  .arch__quote,
+  .arch__trait {
     border-top: 1px solid var(--rule);
   }
 
-  .archetype__head {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+  .arch__rowlabel {
+    padding-top: var(--space-3);
+    text-box: trim-start cap alphabetic;
   }
 
-  .archetype__n {
+  .arch__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-block: var(--space-3);
+  }
+
+  .arch__alias {
     color: var(--signal);
   }
 
-  .archetype__name {
+  .arch__name {
+    margin: 0;
     font-size: var(--fs-h3);
+    font-weight: 500;
     line-height: 1.15;
     letter-spacing: -0.022em;
     color: var(--ink);
-    margin: 0;
   }
 
-  .archetype__quote {
-    padding: 0;
-    border: 0;
-    font-size: var(--fs-body);
-    line-height: 1.5;
-    color: var(--ink-2);
+  /* The quote is the voice of the archetype: the largest text in the box. */
+  .arch__quote {
+    margin: 0;
+    border-left: 0;
+    padding-left: var(--space-3);
+    font-size: var(--fs-lead);
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    color: var(--ink);
     max-width: none;
   }
 
-  .archetype__traits {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-3) var(--gutter);
-    margin: 0;
-  }
-
-  .archetype__traits dt {
-    margin-bottom: 4px;
-  }
-
-  .archetype__traits dd {
+  .arch__trait {
     font-size: var(--fs-body);
     line-height: 1.5;
     color: var(--ink-2);
   }
 
+  .arch__mlabel {
+    display: none;
+  }
+
+  /* Phones: one box per archetype, labels inside. */
   @media (max-width: 640px) {
-    .archetype__traits {
-      grid-template-columns: minmax(0, 1fr);
+    .arch {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .arch__box,
+    .arch__rowlabel {
+      display: none;
+    }
+
+    .arch__cell {
+      order: var(--o);
+      border-inline: 1px solid var(--rule-strong);
+    }
+
+    .arch__head {
+      border-top: 1px solid var(--rule-strong);
+    }
+
+    .arch__head:not(:first-of-type) {
+      margin-top: var(--space-4);
+    }
+
+    .arch__trait.is-last {
+      border-bottom: 1px solid var(--rule-strong);
+    }
+
+    .arch__mlabel {
+      display: block;
+      margin-bottom: var(--space-1);
     }
   }
 </style>

@@ -1,5 +1,9 @@
 ---
-// Key numbers on the three body-lane tracks. items: [{ value: '8', label: 'User interviews' }, ...]
+// Key numbers on the three body-lane tracks: each stands on a hairline, large and bare, with a short label
+// below. Digits count up once when they come into view (see Stat.astro).
+// items: [{ value: '41', label: 'Survey responses' }, { value: '−40%', label: '…' }]
+import Stat from './Stat.astro';
+
 interface Props {
   items: { value: string; label: string }[];
 }
@@ -10,8 +14,10 @@ const { items } = Astro.props;
   {
     items.map((m, i) => (
       <div class="metric" data-reveal style={`--d: ${i}`}>
-        <dt class="label muted">{m.label}</dt>
-        <dd class="metric__value">{m.value}</dd>
+        <dt class="metric__label label muted">{m.label}</dt>
+        <dd class="metric__value">
+          <Stat value={m.value} />
+        </dd>
       </div>
     ))
   }
@@ -23,13 +29,15 @@ const { items } = Astro.props;
     flex-direction: column-reverse;
     justify-content: flex-end;
     gap: var(--space-2);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule-strong);
   }
 
   .metric__value {
-    font-size: var(--fs-h2);
-    font-weight: 500;
-    letter-spacing: -0.045em;
-    line-height: 1;
-    color: var(--ink);
+    margin: 0;
+  }
+
+  .metric__label {
+    max-width: 24ch;
   }
 </style>

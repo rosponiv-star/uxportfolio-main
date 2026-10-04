@@ -1,98 +1,147 @@
 ---
-// Problem-reframing cycles (e.g. Client–Problem–Solution iterations).
-// Each row: cycle number + who in track A, problem and idea in tracks B–C.
-// The last item is the final framing and is emphasised.
+// Problem-reframing cycles (e.g. Client–Problem–Solution iterations) as a stepped funnel: each cycle is a box
+// that starts one track further right than the previous one (A–C → B–C → C), narrowing towards the final
+// framing, which is the dark box. Ideas from earlier cycles were discarded, so they are struck through.
 interface Props {
   items: { client: string; problem: string; idea?: string }[];
 }
 const { items } = Astro.props;
 const last = items.length - 1;
+// Start track per step, spread over A (1), B (2), C (3).
+const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last));
 ---
 
-<ol class="reframes">
+<ol class="funnel">
   {
     items.map((it, i) => (
-      <li class:list={['reframe trio', { 'reframe--final': i === last }]} data-reveal style={`--d: ${i}`}>
-        <div class="reframe__head">
-          <span class="reframe__n label">{i === last ? 'Final framing' : `Cycle ${String(i + 1).padStart(2, '0')}`}</span>
-          <p class="reframe__client">{it.client}</p>
-        </div>
-        <div class="reframe__body span-2">
-          <p>
-            <span class="label muted">Problem</span>
-            {it.problem}
-          </p>
+      <li
+        class:list={['step', { 'step--final': i === last }]}
+        data-reveal
+        style={`--d: ${i}; --i: ${i}; grid-column: ${startOf(i)} / -1`}
+      >
+        <span class="step__n label">{i === last ? 'Final framing' : `Cycle ${String(i + 1).padStart(2, '0')}`}</span>
+        <p class="step__client">{it.client}</p>
+        <dl class="step__rows">
+          <div>
+            <dt class="label">Problem</dt>
+            <dd>{it.problem}</dd>
+          </div>
           {it.idea && (
-            <p>
-              <span class="label muted">Idea</span>
-              {it.idea}
-            </p>
+            <div class:list={{ 'is-discarded': i !== last }}>
+              <dt class="label">{i === last ? 'Idea' : 'Idea · discarded'}</dt>
+              <dd>{i === last ? it.idea : <s>{it.idea}</s>}</dd>
+            </div>
           )}
-        </div>
+        </dl>
       </li>
     ))
   }
 </ol>
 
 <style>
-  .reframe {
+  .funnel {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: var(--gutter);
     row-gap: var(--space-2);
-    padding-block: var(--space-3);
   }
 
-  .reframe:first-child {
-    padding-top: 0;
-  }
-
-  .reframe + .reframe {
-    border-top: 1px solid var(--rule);
-  }
-
-  .reframe__head {
+  .step {
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
+    padding: var(--space-3);
+    border: 1px solid var(--rule-strong);
+    background: var(--paper);
   }
 
-  .reframe__n {
+  .step__n {
     color: var(--ink-3);
   }
 
-  .reframe__client {
-    color: var(--ink);
+  .step__client {
+    font-size: var(--fs-body);
     font-weight: 500;
     letter-spacing: -0.01em;
-  }
-
-  .reframe__body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    max-width: 62ch;
-    font-size: var(--fs-body);
-    line-height: 1.5;
-    color: var(--ink-3);
-  }
-
-  /* Fixed label column so values line up across every row. */
-  .reframe__body p {
-    display: grid;
-    grid-template-columns: 88px minmax(0, 1fr);
-    align-items: baseline;
-    column-gap: var(--space-1);
-  }
-
-  .reframe--final .reframe__n {
-    color: var(--signal);
-  }
-
-  .reframe--final .reframe__client {
-    font-size: var(--fs-h3);
-    line-height: 1.15;
-    letter-spacing: -0.022em;
-  }
-
-  .reframe--final .reframe__body {
     color: var(--ink);
+  }
+
+  .step__rows {
+    display: grid;
+    gap: var(--space-1);
+    margin: var(--space-1) 0 0;
+    font-size: var(--fs-body);
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+
+  .step__rows > div {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    align-items: baseline;
+    column-gap: var(--space-2);
+  }
+
+  .step__rows dt {
+    color: var(--ink-4);
+  }
+
+  .step__rows dd {
+    margin: 0;
+  }
+
+  .is-discarded dd {
+    color: var(--ink-4);
+  }
+
+  .is-discarded s {
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--ink-3);
+  }
+
+  /* The final framing: the one box that is inked in, its text the largest of the funnel. */
+  .step--final {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .step--final .step__n {
+    color: color-mix(in srgb, var(--paper) 60%, transparent);
+  }
+
+  .step--final .step__client {
+    font-size: var(--fs-lead);
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--paper);
+  }
+
+  .step--final .step__rows {
+    color: var(--paper);
+  }
+
+  .step--final .step__rows > div {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2px;
+  }
+
+  .step--final .step__rows dt {
+    color: color-mix(in srgb, var(--paper) 60%, transparent);
+  }
+
+  /* Narrower screens: full-width boxes, the funnel kept as a growing left indent. */
+  @media (max-width: 960px) {
+    .step {
+      grid-column: 1 / -1 !important;
+      margin-left: calc(var(--i) * var(--space-4));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .step__rows > div {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 2px;
+    }
   }
 </style>
