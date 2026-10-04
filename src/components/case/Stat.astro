@@ -8,8 +8,10 @@ interface Props {
   class?: string;
 }
 const { value, class: className } = Astro.props;
-const m = value.match(/^(\D*?)(\d+(?:[.,]\d+)?)(.*)$/);
+// A range ("4–5") stays one number and does not count.
+const m = value.match(/^(\D*?)(\d+(?:[.,]\d+)?(?:[–-]\d+)?)(.*)$/);
 const parts = m ? { prefix: m[1], num: m[2], suffix: m[3] } : null;
+const counts = parts ? !/[–-]/.test(parts.num) : false;
 ---
 
 <span class:list={['stat', className]}>
@@ -17,7 +19,7 @@ const parts = m ? { prefix: m[1], num: m[2], suffix: m[3] } : null;
     parts ? (
       <>
         {parts.prefix && <span class="stat__affix">{parts.prefix}</span>}
-        <span class="stat__num" data-count={parts.num}>
+        <span class="stat__num" data-count={counts ? parts.num : undefined}>
           {parts.num}
         </span>
         {parts.suffix && <span class="stat__affix">{parts.suffix}</span>}
@@ -31,7 +33,7 @@ const parts = m ? { prefix: m[1], num: m[2], suffix: m[3] } : null;
 <style>
   .stat {
     display: inline-flex;
-    align-items: baseline;
+    align-items: flex-start;
     font-size: var(--fs-stat);
     font-weight: 500;
     line-height: 0.95;
@@ -46,8 +48,24 @@ const parts = m ? { prefix: m[1], num: m[2], suffix: m[3] } : null;
     text-align: right;
   }
 
+  /* Signs and units sit small at cap height, so the digits carry the weight. */
   .stat__affix {
-    letter-spacing: -0.03em;
+    margin-top: 0.1em;
+    font-size: 0.42em;
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+
+  /* A leading sign (−, <, >, ~) reads as part of the value: centred on the digits, not raised. */
+  .stat__affix:first-child {
+    align-self: center;
+    margin-top: 0;
+    margin-right: 0.06em;
+    font-size: 0.55em;
+  }
+
+  .stat__affix:last-child {
+    margin-left: 0.06em;
   }
 </style>
 

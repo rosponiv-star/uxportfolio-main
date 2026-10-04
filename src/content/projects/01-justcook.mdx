@@ -114,15 +114,20 @@ The brief: pick a real problem in our own community. We chose the one we were li
 
 <Metrics
   items={[
-    { value: '41', label: 'Survey responses' },
-    { value: '4', label: 'In-kitchen interviews' },
-    { value: '3', label: 'Field observations' },
+    { value: '41', label: 'Survey responses', text: 'Shared in student WhatsApp groups and through QR flyers: the broad picture.' },
+    { value: '4', label: 'In-kitchen interviews', text: 'In participants’ own kitchens, with photo elicitation: the why.' },
+    { value: '3', label: 'Field observations', text: 'The three moments that shape a meal: shopping, cooking and storing.' },
   ]}
 />
 
-A survey, shared in student WhatsApp groups and through QR flyers, gave the broad picture. Interviews in participants’ kitchens, with photo elicitation, explained the why. Observation covered the three moments that shape a meal: shopping, cooking and storing.
+Everything was coded in one thematic grid, so four conversations became patterns we could compare and defend.
 
-Everything was coded in a thematic grid of 8 themes and 36 codes, so four conversations became patterns we could compare and defend.
+<Metrics
+  items={[
+    { value: '8', label: 'Themes', text: 'From autonomy and weekly planning to budget, shared living and food waste.' },
+    { value: '36', label: 'Codes', text: 'Every interview and field note, coded against the same grid.' },
+  ]}
+/>
 
 </Chapter>
 
@@ -166,6 +171,7 @@ Everything was coded in a thematic grid of 8 themes and 36 codes, so four conver
     {
       name: 'The efficiency seeker',
       alias: 'Survivalist',
+      goal: 'Less effort',
       quote: 'If cooking takes more than fifteen minutes or means fighting for the kitchen, I’ll take the path of least resistance.',
       traits: [
         { label: 'Friction', text: 'A chaotic shared kitchen and no time to plan.' },
@@ -175,6 +181,7 @@ Everything was coded in a thematic grid of 8 themes and 36 codes, so four conver
     {
       name: 'The conscious aspirer',
       alias: 'Manager',
+      goal: 'Less waste',
       quote: 'I want to eat well and not waste food, but the shop is designed for families, not for me.',
       traits: [
         { label: 'Friction', text: 'A gap between principles and reality, and guilt about forgotten food.' },
@@ -184,7 +191,11 @@ Everything was coded in a thematic grid of 8 themes and 36 codes, so four conver
   ]}
 />
 
-A value proposition canvas set the must-haves: a balanced diet, low cost and time saved. Variety from the same ingredients and a predictable cooking time came next.
+A value proposition canvas turned jobs, pains and gains into priorities.
+
+<Chips label="Must-haves" items={[{ label: 'Balanced diet' }, { label: 'Low cost' }, { label: 'Time saved' }]} />
+
+<Chips label="Next" items={[{ label: 'Variety from the same ingredients' }, { label: 'Predictable cooking time' }]} />
 
 </Chapter>
 
@@ -218,25 +229,50 @@ Three of the six Client–Problem–Solution cycles, from the first framing to t
 
 ### The box
 
-Four or five fresh, pre-dosed ingredients for one portion, ready in about twenty minutes. Each box unlocks up to ten recipes, so the same base never means the same dinner. Four profiles cover the week: protein, energy, light and comfort. Boxes are reserved in the app and collected at Conad; a code inside registers each one and updates the pantry.
+<Metrics
+  items={[
+    { value: '4–5', label: 'Ingredients per box', text: 'Fresh and pre-dosed for one portion.' },
+    { value: '10', label: 'Recipes per box', text: 'Up to ten, so the same base never means the same dinner.' },
+    { value: '~20 min', label: 'From box to plate', text: 'Sized for the window students actually have.' },
+  ]}
+/>
+
+<Chips
+  label="Four profiles cover the week"
+  items={[
+    { label: 'A · Protein', color: '#e2843a' },
+    { label: 'B · Energy', color: '#3f8f5b' },
+    { label: 'C · Light', color: '#d8503d' },
+    { label: 'D · Comfort', color: '#3b7fc4' },
+  ]}
+/>
+
+Boxes are reserved in the app and collected at Conad; a code inside registers each one and updates the pantry.
 
 ### The app
 
 <Note label="Decision" text="The plan adapts to the week, not the other way round: students mark the days they’re away and the app plans around them.">
 
-**Adaptive planning.** Boxes go on the days students will actually cook; the app says whether the week is covered.
-
-**A timely nudge.** Reminders are timed backwards from the recipe’s duration and dinner time, before a delivery app wins.
-
-**Focus mode.** Recipes play as a vertical, step-by-step video feed, a pattern students already know.
-
-**Streaks with friends.** A weekly score with flatmates rewards showing up, not what is on the plate.
+Four features, each one removing a decision from the student’s evening.
 
 </Note>
 
+<Insights
+  items={[
+    { title: 'Adaptive planning', text: 'Boxes go on the days students will actually cook; the app says whether the week is covered.' },
+    { title: 'A timely nudge', text: 'Reminders are timed backwards from the recipe’s duration and dinner time, before a delivery app wins.' },
+    { title: 'Focus mode', text: 'Recipes play as a vertical, step-by-step video feed, a pattern students already know.' },
+    { title: 'Streaks with friends', text: 'A weekly score with flatmates rewards showing up, not what is on the plate.' },
+  ]}
+/>
+
 ### Brand and launch
 
-The name winks at Just Eat: delivery asks you to do nothing, JustCook asks for one easy thing. The campaign runs where students already are: Instagram, WhatsApp groups and QR flyers showing the same maze twice, the long way and the JustCook way.
+> Delivery asks you to do nothing. JustCook asks for one easy thing.
+
+The name winks at Just Eat. The campaign runs where students already are, and its flyers show the same maze twice: the long way and the JustCook way.
+
+<Chips label="Channels" items={[{ label: 'Instagram' }, { label: 'WhatsApp groups' }, { label: 'QR flyers in study rooms' }]} />
 
 </Chapter>
 
@@ -244,6 +280,11 @@ The name winks at Just Eat: delivery asks you to do nothing, JustCook asks for o
 
 <Key>The most useful design decision was a reframing: changing what was easy to do, not what students knew.</Key>
 
-Next time I would invest more in evidence: more interviews, a more structured analysis, usability tests with real students before polishing, and targets built from data rather than ambition.
+Next time I would invest more in evidence:
+
+1. More interviews, beyond the four in-kitchen ones.
+2. A more structured analysis of what they said.
+3. Usability tests with real students before polishing.
+4. Targets built from data rather than ambition.
 
 </Chapter>

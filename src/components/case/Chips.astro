@@ -1,0 +1,56 @@
+---
+// A short list pulled out of a sentence so it can be scanned: a group label, then square chips in a row.
+// A chip may carry a colour swatch (e.g. the four box profiles).
+//   <Chips label="Must-haves" items={[{ label: 'Balanced diet' }, { label: 'Box A · Protein', color: '#e07b39' }]} />
+interface Props {
+  label?: string;
+  items: { label: string; color?: string }[];
+}
+const { label, items } = Astro.props;
+---
+
+<div class="chips" data-reveal>
+  {label && <p class="chips__label label label--group">{label}</p>}
+  <ul class="chips__list">
+    {
+      items.map((c) => (
+        <li class="chip">
+          {c.color && <span class="chip__swatch" style={`background: ${c.color}`} aria-hidden="true" />}
+          {c.label}
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .chips {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .chips__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 7px 12px 8px;
+    border: 1px solid var(--rule-strong);
+    background: var(--paper);
+    font-size: var(--fs-small);
+    line-height: 1.2;
+    color: var(--ink);
+  }
+
+  .chip__swatch {
+    width: 10px;
+    height: 10px;
+    flex: none;
+  }
+</style>

@@ -22,7 +22,7 @@ const { items } = Astro.props;
           {it.stat && (
             <p class="insight__stat">
               <Stat value={it.stat} />
-              {it.statLabel && <span class="label muted">{it.statLabel}</span>}
+              {it.statLabel && <span class="field">{it.statLabel}</span>}
             </p>
           )}
           <p class="insight__text">{it.text}</p>

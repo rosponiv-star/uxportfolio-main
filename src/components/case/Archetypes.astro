@@ -1,24 +1,28 @@
 ---
 // Behavioural archetypes side by side, as a comparison: row labels in track A, one light box per archetype
 // in tracks B and C, so every row (quote, friction, opportunity…) reads across. Trait labels come from the
-// first archetype; give both the same labels in the same order. On phones each archetype is its own box.
+// first archetype; give both the same labels in the same order. `goal` (2–3 words) opens each box in large type:
+// it is what the two disagree on, so it is the first thing to compare. On phones each archetype is its own box.
 interface Props {
   items: {
     name: string;
     alias?: string;
+    goal?: string;
     quote: string;
     traits: { label: string; text: string }[];
   }[];
 }
 const { items } = Astro.props;
-const rows = ['In their words', ...items[0].traits.map((t) => t.label)];
+const hasGoal = items.every((a) => a.goal);
+const rows = [...(hasGoal ? ['Wants'] : []), 'In their words', ...items[0].traits.map((t) => t.label)];
+const off = hasGoal ? 1 : 0;
 const n = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 <div class="arch" style={`--rows: ${rows.length + 1}`} data-reveal>
   {items.slice(0, 2).map((_, c) => <span class="arch__box" style={`grid-column: ${c + 2}`} aria-hidden="true" />)}
 
-  {rows.map((r, ri) => <p class="arch__rowlabel label muted" style={`grid-row: ${ri + 2}`}>{r}</p>)}
+  {rows.map((r, ri) => <p class="arch__rowlabel label label--group" style={`grid-row: ${ri + 2}`}>{r}</p>)}
 
   {
     items.slice(0, 2).map((a, c) => (
@@ -30,15 +34,21 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
           </span>
           <h3 class="arch__name">{a.name}</h3>
         </div>
-        <blockquote class="arch__cell arch__quote" style={`grid-column: ${c + 2}; grid-row: 2; --o: ${c * 10 + 1}`}>
-          <span class="arch__mlabel label muted">{rows[0]}</span>“{a.quote}”
+        {hasGoal && (
+          <p class="arch__cell arch__goal" style={`grid-column: ${c + 2}; grid-row: 2; --o: ${c * 10 + 1}`}>
+            <span class="arch__mlabel field">Wants</span>
+            {a.goal}
+          </p>
+        )}
+        <blockquote class="arch__cell arch__quote" style={`grid-column: ${c + 2}; grid-row: ${2 + off}; --o: ${c * 10 + 2}`}>
+          <span class="arch__mlabel field">In their words</span>“{a.quote}”
         </blockquote>
         {a.traits.map((t, ti) => (
           <div
             class:list={['arch__cell arch__trait', { 'is-last': ti === a.traits.length - 1 }]}
-            style={`grid-column: ${c + 2}; grid-row: ${ti + 3}; --o: ${c * 10 + ti + 2}`}
+            style={`grid-column: ${c + 2}; grid-row: ${ti + 3 + off}; --o: ${c * 10 + ti + 3}`}
           >
-            <span class="arch__mlabel label muted">{t.label}</span>
+            <span class="arch__mlabel field">{t.label}</span>
             {t.text}
           </div>
         ))}
@@ -74,15 +84,32 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
   }
 
   .arch__rowlabel {
+    align-self: start;
+  }
+
+  .arch__rowlabel {
     padding-top: var(--space-3);
     text-box: trim-start cap alphabetic;
   }
 
+  /* Tinted header band: the two boxes read as two opposing cards. */
   .arch__head {
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
     padding-block: var(--space-3);
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  /* What they want: the largest text in the box, the first thing to compare. */
+  .arch__goal {
+    margin: 0;
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--ink);
   }
 
   .arch__alias {

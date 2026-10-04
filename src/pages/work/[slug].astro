@@ -7,6 +7,7 @@ import { Image } from 'astro:assets';
 import Chapter from '../../components/case/Chapter.astro';
 import Todo from '../../components/case/Todo.astro';
 import Key from '../../components/case/Key.astro';
+import Chips from '../../components/case/Chips.astro';
 import ProcessIndex from '../../components/case/ProcessIndex.astro';
 import Showcase from '../../components/case/Showcase.astro';
 import Figure from '../../components/case/Figure.astro';
@@ -81,7 +82,7 @@ const facts = [
           {
             glanceItems.map((g, i) => (
               <div class="glance" data-reveal style={`--d:${i}`}>
-                <p class="label muted">{g.label}</p>
+                <p class="label label--group">{g.label}</p>
                 <p class="glance__text">{g.text}</p>
               </div>
             ))
@@ -135,7 +136,7 @@ const facts = [
             {!result.showcase && <p class="result__text">{result.text}</p>}
             {result.metrics.length > 0 && (
               <div class="result__metrics">
-                {result.metricsLabel && <p class="label muted result__metrics-label">{result.metricsLabel}</p>}
+                {result.metricsLabel && <p class="label label--group result__metrics-label">{result.metricsLabel}</p>}
                 <Metrics items={result.metrics} />
               </div>
             )}
@@ -150,7 +151,7 @@ const facts = [
 
       <!-- Chapters (from MDX) ---------------------------------------------- -->
       <div class="chapters">
-        <Content components={{ Chapter, Key, Todo, Figure, Note, Metrics, Insights, Reframes, Archetypes }} />
+        <Content components={{ Chapter, Key, Chips, Todo, Figure, Note, Metrics, Insights, Reframes, Archetypes }} />
       </div>
 
     </div>

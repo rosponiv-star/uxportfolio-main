@@ -70,6 +70,9 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-04 · LOCAL** · Second pass on the case-study text: label roles (sequence / group / field), bigger
+  numbers with context lines, archetype "Wants" row + tinted headers, Chips component, plain paragraphs turned into
+  metrics, chips, rows, a pull quote and a list (no content removed). Pushed `main`.
 - **2026-10-04 · LOCAL** · Case-study text with more character: new `Stat` (count-up), `--fs-stat` token, Metrics
   redesigned, Insights `stat`, Archetypes as a side-by-side comparison of two light boxes, Reframes as a stepped
   funnel with an ink final box. JustCook: Challenge desk-research numbers pulled into Metrics, insight stats added.
@@ -215,7 +218,7 @@ src/components/
   RegistrationField.astro   old cursor-reactive "+" field; now only the Playground experiment
   case/*.astro              Chapter (title + summary), Key, Note, Figure, Metrics, Insights, Reframes, Archetypes, Todo,
                             ProcessIndex (process line + fixed reading bar), Showcase (Result interface presentation),
-                            Stat (big number with a one-time count-up, used by Metrics and Insights)
+                            Stat (big number with a one-time count-up, used by Metrics and Insights), Chips
 src/lib/projects.ts         getProjects, slugOf/hrefOf/numOf, chapterId/chaptersOf, CATEGORIES (re-exports categoryId)
 src/lib/collection.ts       categoryId, gridSizes (all 'half'), yearSpan (unused now)
 src/content.config.ts       projects schema (categories enum, glance, result {text, media|showcase, metrics})
@@ -266,7 +269,7 @@ fluorescent colours.
 | `--fs-lead` | ~19→23px | leads; **card titles** use lead/Medium |
 | `--fs-body` | 17px | running text |
 | `--fs-read` | 17→19px, lh 1.55 | case-study chapter paragraphs only |
-| `--fs-stat` | 44→72px, Medium, tight | key numbers (Metrics, insight stats) |
+| `--fs-stat` | 56→104px, Medium, tight | key numbers (Metrics, insight stats); sign/unit at .42–.55em |
 | `--fs-small` | **16px** | nav, filters, meta, notes, captions |
 | `--fs-label` | 12px | `.label`: Geist **Medium 500**, uppercase, 8% tracking, tabular figures |
 
@@ -361,6 +364,13 @@ can dig into the whole process and way of thinking if they want".
    ≤3 via `stat`). Archetypes = two LIGHT boxes compared side by side (picked over light+dark boxes and a spectrum).
    Reframes = stepped funnel A–C → B–C → C, discarded ideas struck through, final framing in an ink box (picked over
    a timeline and before→after).
+   Second pass (owner: "Cycle 01 and Problem look the same", more impact, less plain text, keep all content):
+   label roles fixed site-wide (see CLAUDE.md); numbers bigger (56→104) on ink hairlines, with captions + context
+   lines; archetypes get a tinted header and a "Wants" row (Less effort / Less waste, h2); plain text turned into
+   scannable blocks: Research methods into the metrics + 8 themes / 36 codes, VPC priorities and launch channels as
+   Chips, box specs as Metrics (4–5 / 10 / ~20 min) + profile Chips with box colours (approximate: A #e2843a,
+   B #3f8f5b, C #d8503d, D #3b7fc4), app features as numbered rows, the Just Eat line as a pull quote, Reflection
+   as a numbered list.
 8. **Next case study band** (unchanged).
 
 PhoneScroll (sticky device scene) was **removed** by the owner on 2026-10-03.

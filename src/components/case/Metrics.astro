@@ -1,11 +1,11 @@
 ---
 // Key numbers on the three body-lane tracks: each stands on a hairline, large and bare, with a short label
-// below. Digits count up once when they come into view (see Stat.astro).
-// items: [{ value: '41', label: 'Survey responses' }, { value: '−40%', label: '…' }]
+// and, optionally, one line of context below. Digits count up once when they come into view (Stat.astro).
+// items: [{ value: '41', label: 'Survey responses', text?: 'Shared in WhatsApp groups…' }]
 import Stat from './Stat.astro';
 
 interface Props {
-  items: { value: string; label: string }[];
+  items: { value: string; label: string; text?: string }[];
 }
 const { items } = Astro.props;
 ---
@@ -14,10 +14,11 @@ const { items } = Astro.props;
   {
     items.map((m, i) => (
       <div class="metric" data-reveal style={`--d: ${i}`}>
-        <dt class="metric__label label muted">{m.label}</dt>
+        <dt class="metric__label field">{m.label}</dt>
         <dd class="metric__value">
           <Stat value={m.value} />
         </dd>
+        {m.text && <dd class="metric__text">{m.text}</dd>}
       </div>
     ))
   }
@@ -26,18 +27,33 @@ const { items } = Astro.props;
 <style>
   .metric {
     display: flex;
-    flex-direction: column-reverse;
-    justify-content: flex-end;
+    flex-direction: column;
     gap: var(--space-2);
     padding-top: var(--space-3);
-    border-top: 1px solid var(--rule-strong);
+    border-top: 1px solid var(--ink);
   }
 
-  .metric__value {
+  .metric__value,
+  .metric__text {
     margin: 0;
   }
 
+  .metric__value {
+    order: -1;
+    margin-bottom: var(--space-1);
+  }
+
+  /* Caption of the number: a field, not a heading (group headings stay in uppercase labels). */
   .metric__label {
-    max-width: 24ch;
+    max-width: 26ch;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .metric__text {
+    max-width: 34ch;
+    font-size: var(--fs-small);
+    line-height: 1.45;
+    color: var(--ink-3);
   }
 </style>

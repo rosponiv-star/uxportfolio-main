@@ -23,12 +23,12 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
         <p class="step__client">{it.client}</p>
         <dl class="step__rows">
           <div>
-            <dt class="label">Problem</dt>
+            <dt class="field">Problem</dt>
             <dd>{it.problem}</dd>
           </div>
           {it.idea && (
             <div class:list={{ 'is-discarded': i !== last }}>
-              <dt class="label">{i === last ? 'Idea' : 'Idea · discarded'}</dt>
+              <dt class="field">{i === last ? 'Idea' : 'Idea, discarded'}</dt>
               <dd>{i === last ? it.idea : <s>{it.idea}</s>}</dd>
             </div>
           )}
@@ -56,7 +56,7 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
   }
 
   .step__n {
-    color: var(--ink-3);
+    color: var(--signal);
   }
 
   .step__client {
@@ -77,13 +77,13 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
 
   .step__rows > div {
     display: grid;
-    grid-template-columns: 7.5rem minmax(0, 1fr);
+    grid-template-columns: 9rem minmax(0, 1fr);
     align-items: baseline;
     column-gap: var(--space-2);
   }
 
   .step__rows dt {
-    color: var(--ink-4);
+    color: var(--ink-3);
   }
 
   .step__rows dd {
