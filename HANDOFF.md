@@ -71,7 +71,7 @@ every change**, as if the next message came from the other side.
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
 - **2026-10-04 · LOCAL** · JustCook ends with a `Closing`: "JustCook is still a concept… The next version would be a
-  tested one." in display size, then "What I take with me — Make the right thing the easy thing." Pushed `main`.
+  tested one." in display size, then "What I take with me — Design the easy path, and people will take it." (owner picked it over "Make the right thing the easy thing.") Pushed `main`.
 - **2026-10-04 · LOCAL** · Third pass on JustCook: BigStat, Research groups, archetype leaders, Chips with hover
   notes/images, Ideate "6 → 1" + giant cycle numbers, Features with screens, channel cards, brand Gallery, launch
   plan (as a plan), human Reflection; cursor label gains note/image variants. Pushed `main`.
