@@ -66,6 +66,9 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-04 · LOCAL** · First run of the §00 protocol: `git fetch`, fast-forward merge of
+  `origin/claude/stoic-ride-lj7woi` into `main` (only HANDOFF/CLAUDE.md), build OK, pushed. No other unmerged
+  `claude/*` branches. No site changes. No open requests.
 - **2026-10-04 · CLOUD** · Added §00 (cloud/local protocol) and this log; one line in `CLAUDE.md` points to it. No site
   changes. Cloud branch `claude/stoic-ride-lj7woi` = `main` + this HANDOFF/CLAUDE.md update → LOCAL: merge it at your
   next start. No open requests.
