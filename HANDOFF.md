@@ -222,7 +222,12 @@ can dig into the whole process and way of thinking if they want".
    (trio cropped to 50%), 04 Buy boxes (quad, 12 cols), 05 The week (Plan, Streak, Ingredients; staggered). Shots are
    the Figma "… · device" frames exported 3x into `Media/01-JustCook/OfficialMedia/Interfaces/*.png`, cut out from the
    #f5f5f5 frame fill (flood fill + rim un-blend, old scratchpad `render/cutout.cjs`) and resized to 960px wide into
-   `src/assets/projects/justcook/screens/`. Phones: one swipe row per group. Otherwise (placeholder projects): Three phone-ratio screens + one wide board (placeholders until real
+   `src/assets/projects/justcook/screens/`. Phones: one swipe row per group.
+   Motion ("more evident, smooth, premium, never attention-grabbing", 2026-10-04): each group reveals as a whole once
+   20% into the viewport (own IntersectionObserver). Full devices rise 80px and settle from scale .96 (1.6s ease-out,
+   140ms apart); cropped groups draw their hairline, then the devices emerge from behind it (translateY 42% → 0,
+   1.7s). Inertial parallax (lerp .09, speeds .02/.1/.05/.13, max 72px) on uncropped groups, desktop only. Hover lifts
+   a device 8px. Everything off with reduced motion. Otherwise (placeholder projects): Three phone-ratio screens + one wide board (placeholders until real
    images: the owner chose placeholders for now, NOT the prepared JustCook boards), 1–2 sentences, key numbers
    (JustCook: "Targets for a pilot"). On phones the screens become a horizontal swipe row.
 6. **Process** (`case/ProcessIndex.astro`, owner picked option C "process line", in house style): steps hang from an
