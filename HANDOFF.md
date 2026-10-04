@@ -70,6 +70,9 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-04 · LOCAL** · Merged `origin/claude/stoic-ride-lj7woi` (fast-forward: hero without band + handover
+  rule), build OK, checked with puppeteer at 1440 and 390 (hero transparent, texture fade, cover glimpse 80/84px),
+  pushed `main` → live. Note: the dev server served the old hero until restarted (Vite cache). No open requests.
 - **2026-10-04 · CLOUD** · Home hero: removed the grey `--paper-alt` band; depth texture intensity 0.5 → 0.7; the
   texture now runs into the gap above Selected work and fades out (mask, opaque to 50%) before it. Verified at
   1440×900 (headless Chromium): hero background transparent, fade ends at the Selected work top, cover glimpse still
