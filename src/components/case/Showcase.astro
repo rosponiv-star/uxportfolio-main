@@ -3,9 +3,9 @@
 // - trio: label in the head lane (cols 1–3), three shots on tracks A/B/C; `stagger` steps them down.
 // - pair / quad: the full 12 columns, label above.
 // - crop: only the top share of the device is shown (Dynamic Island, widgets); the cut sits on a hairline.
-// Motion (all off with reduced motion): each group reveals as a whole. Full devices rise and settle
-// from a slight scale one after the other; cropped devices emerge from behind their hairline, which
-// draws in first. While scrolling, shots drift at different speeds with a little inertia.
+// Motion (all off with reduced motion), deliberately quiet: each group fades in with a short rise, one
+// device after the other; cropped devices lift slightly behind their hairline, which draws in first.
+// While scrolling, shots drift a few pixels at different speeds with a little inertia.
 // On phones every group becomes a horizontal swipe row.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -22,7 +22,7 @@ interface Props {
 const { groups } = Astro.props;
 const n = (i: number) => String(i + 1).padStart(2, '0');
 // Parallax speeds per position: neighbours never move together.
-const speeds = [0.02, 0.1, 0.05, 0.13];
+const speeds = [0.01, 0.035, 0.02, 0.045];
 const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px) 48vw, 62vw', quad: '(min-width: 960px) 24vw, 62vw' };
 ---
 
@@ -117,7 +117,7 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
   /* A barely-there lift under the pointer. */
   @media (hover: hover) and (pointer: fine) {
     .group:not(.group--crop) .shot:hover .shot__frame {
-      transform: translateY(-8px);
+      transform: translateY(-4px);
     }
   }
 
@@ -160,12 +160,12 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
   /* Full devices: rise, settle from a slight scale, one after the other. */
   :global(.js) .group:not(.group--crop) .shot {
     opacity: 0;
-    transform: translateY(80px) scale(0.96);
+    transform: translateY(24px);
     transform-origin: 50% 100%;
     transition:
-      opacity 1s var(--ease-out),
-      transform 1.6s var(--ease-out);
-    transition-delay: calc(0.1s + var(--i) * 0.14s);
+      opacity 1.2s var(--ease-out),
+      transform 1.4s var(--ease-out);
+    transition-delay: calc(var(--i) * 0.1s);
   }
 
   :global(.js) .group:not(.group--crop):global(.is-in) .shot {
@@ -186,11 +186,11 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
 
   :global(.js) .group--crop .shot__frame :global(img) {
     opacity: 0;
-    transform: translateY(42%);
+    transform: translateY(8%);
     transition:
-      opacity 0.9s var(--ease-out),
-      transform 1.7s var(--ease-out);
-    transition-delay: calc(0.35s + var(--i) * 0.16s);
+      opacity 1.2s var(--ease-out),
+      transform 1.4s var(--ease-out);
+    transition-delay: calc(0.2s + var(--i) * 0.1s);
   }
 
   :global(.js) .group--crop:global(.is-in) .shot__frame :global(img) {
@@ -275,7 +275,7 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
   const desktop = window.matchMedia('(min-width: 641px)');
   if (drifts.length && !reduce) {
     let raf = 0;
-    const MAX = 72;
+    const MAX = 24;
     const frame = () => {
       raf = 0;
       if (!desktop.matches) {
