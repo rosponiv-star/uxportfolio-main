@@ -84,6 +84,27 @@ result:
 placeholder: false
 ---
 
+import boxA from '../../assets/projects/justcook/boxes/box-a.png';
+import boxB from '../../assets/projects/justcook/boxes/box-b.png';
+import boxC from '../../assets/projects/justcook/boxes/box-c.png';
+import boxD from '../../assets/projects/justcook/boxes/box-d.png';
+import plan from '../../assets/projects/justcook/screens/plan.png';
+import widgetMedium from '../../assets/projects/justcook/screens/widget-medium.png';
+import focusMode from '../../assets/projects/justcook/screens/focus-mode.png';
+import homeStreak from '../../assets/projects/justcook/screens/home-streak.png';
+import postA from '../../assets/projects/justcook/brand/post-box-a.jpg';
+import postB from '../../assets/projects/justcook/brand/post-box-b.jpg';
+import postC from '../../assets/projects/justcook/brand/post-box-c.jpg';
+import postD from '../../assets/projects/justcook/brand/post-box-d.jpg';
+import postGood from '../../assets/projects/justcook/brand/post-so-good.jpg';
+import postTris from '../../assets/projects/justcook/brand/post-tris.jpg';
+import postApp from '../../assets/projects/justcook/brand/post-app-verde.jpg';
+import flyerOrange from '../../assets/projects/justcook/brand/volantino-pubblicita-arancione.jpg';
+import flyerGreen from '../../assets/projects/justcook/brand/volantino-pubblicita-verde.jpg';
+import flyerRed from '../../assets/projects/justcook/brand/volantino-pubblicita-rosso.jpg';
+import flyerBlue from '../../assets/projects/justcook/brand/volantino-pubblicita-azzurro.jpg';
+
+
 <Chapter title="Challenge" summary="Effort, not knowledge">
 
 <Key>Students know what a balanced meal looks like. What stops them is the effort between intention and plate.</Key>
@@ -92,11 +113,12 @@ A university project at the University of Trento, across three courses (semiotic
 
 The brief: pick a real problem in our own community. We chose the one we were living ourselves as off-site students, and desk research confirmed it.
 
+<BigStat value="92%" label="of off-site students change their eating habits after moving out." source="Lupi et al., 2015 (258 students)" />
+
 <Metrics
   items={[
-    { value: '>60%', label: 'Off-site students eating take-away every week' },
+    { value: '>60%', label: 'Eat take-away at least once a week' },
     { value: '44%', label: 'Eat a portion of fruit a day' },
-    { value: '92%', label: 'Change their eating habits after moving out' },
   ]}
 />
 
@@ -113,6 +135,7 @@ The brief: pick a real problem in our own community. We chose the one we were li
 <Key>I moved the research into students’ kitchens, where the problem actually happens.</Key>
 
 <Metrics
+  title="Methods"
   items={[
     { value: '41', label: 'Survey responses', text: 'Shared in student WhatsApp groups and through QR flyers: the broad picture.' },
     { value: '4', label: 'In-kitchen interviews', text: 'In participants’ own kitchens, with photo elicitation: the why.' },
@@ -123,6 +146,8 @@ The brief: pick a real problem in our own community. We chose the one we were li
 Everything was coded in one thematic grid, so four conversations became patterns we could compare and defend.
 
 <Metrics
+  title="What came out of it"
+  variant="boxed"
   items={[
     { value: '8', label: 'Themes', text: 'From autonomy and weekly planning to budget, shared living and food waste.' },
     { value: '36', label: 'Codes', text: 'Every interview and field note, coded against the same grid.' },
@@ -193,9 +218,24 @@ Everything was coded in one thematic grid, so four conversations became patterns
 
 A value proposition canvas turned jobs, pains and gains into priorities.
 
-<Chips label="Must-haves" items={[{ label: 'Balanced diet' }, { label: 'Low cost' }, { label: 'Time saved' }]} />
+<Chips
+  label="Must-haves"
+  intro="What the service could not do without."
+  items={[
+    { label: 'Balanced diet', note: 'The core job: a balanced week, not one healthy dinner.' },
+    { label: 'Low cost', note: 'On a student budget, a box has to compete with a take-away.' },
+    { label: 'Time saved', note: 'Everything has to fit a fifteen-to-twenty-minute window.' },
+  ]}
+/>
 
-<Chips label="Next" items={[{ label: 'Variety from the same ingredients' }, { label: 'Predictable cooking time' }]} />
+<Chips
+  label="Next"
+  intro="The gains that would make it a habit."
+  items={[
+    { label: 'Variety from the same ingredients', note: 'One box, several recipes: the same base never means the same dinner.' },
+    { label: 'Predictable cooking time', note: 'Students plan around lectures and exams: knowing it takes twenty minutes matters.' },
+  ]}
+/>
 
 </Chapter>
 
@@ -210,10 +250,12 @@ Three of the six Client–Problem–Solution cycles, from the first framing to t
 </Note>
 
 <Reframes
+  cycles={6}
   items={[
-    { client: 'Students who eat out', problem: 'Meals are rarely balanced.' },
-    { client: 'Students short on time', problem: 'Cooking takes too long.', idea: 'Healthy ready-made food.' },
+    { n: 1, client: 'Students who eat out', problem: 'Meals are rarely balanced.' },
+    { n: 5, client: 'Students short on time', problem: 'Cooking takes too long.', idea: 'Healthy ready-made food.' },
     {
+      n: 6,
       client: 'Off-site students, 18–28, cooking for themselves',
       problem: 'Little time and limited skills make balanced, portioned meals hard to put together.',
       idea: 'Pre-dosed single-portion boxes, planned through an app that keeps the week on track.',
@@ -238,12 +280,13 @@ Three of the six Client–Problem–Solution cycles, from the first framing to t
 />
 
 <Chips
-  label="Four profiles cover the week"
+  label="Four profiles"
+  intro="One colour per box, so the week reads at a glance on the shelf and in the app."
   items={[
-    { label: 'A · Protein', color: '#e2843a' },
-    { label: 'B · Energy', color: '#3f8f5b' },
-    { label: 'C · Light', color: '#d8503d' },
-    { label: 'D · Comfort', color: '#3b7fc4' },
+    { label: 'A · Protein', color: '#ffa91e', image: boxA, note: 'Box A, the protein base' },
+    { label: 'B · Energy', color: '#488863', image: boxB, note: 'Box B, for long study days' },
+    { label: 'C · Light', color: '#ff7257', image: boxC, note: 'Box C, the light one' },
+    { label: 'D · Comfort', color: '#29bcff', image: boxD, note: 'Box D, comfort food' },
   ]}
 />
 
@@ -257,12 +300,12 @@ Four features, each one removing a decision from the student’s evening.
 
 </Note>
 
-<Insights
+<Features
   items={[
-    { title: 'Adaptive planning', text: 'Boxes go on the days students will actually cook; the app says whether the week is covered.' },
-    { title: 'A timely nudge', text: 'Reminders are timed backwards from the recipe’s duration and dinner time, before a delivery app wins.' },
-    { title: 'Focus mode', text: 'Recipes play as a vertical, step-by-step video feed, a pattern students already know.' },
-    { title: 'Streaks with friends', text: 'A weekly score with flatmates rewards showing up, not what is on the plate.' },
+    { title: 'Adaptive planning', text: 'Boxes go on the days students will actually cook; the app says whether the week is covered.', image: plan, alt: 'Plan screen: the week with a box on each dinner.' },
+    { title: 'A timely nudge', text: 'Reminders are timed backwards from the recipe’s duration and dinner time, before a delivery app wins.', image: widgetMedium, alt: 'Home Screen widget: start cooking in 45 minutes.' },
+    { title: 'Focus mode', text: 'Recipes play as a vertical, step-by-step video feed, a pattern students already know.', image: focusMode, alt: 'Focus mode: step four of six with a timer.' },
+    { title: 'Streaks with friends', text: 'A weekly score with flatmates rewards showing up, not what is on the plate.', image: homeStreak, alt: 'Streak: four days in a row and the points earned.' },
   ]}
 />
 
@@ -270,9 +313,72 @@ Four features, each one removing a decision from the student’s evening.
 
 > Delivery asks you to do nothing. JustCook asks for one easy thing.
 
-The name winks at Just Eat. The campaign runs where students already are, and its flyers show the same maze twice: the long way and the JustCook way.
+The name winks at Just Eat. The tone is reassuring and empowering: cooking for yourself as a small act of independence in your first year away from home, not a chore. The campaign runs where students already are, and its flyers show the same maze twice: the long way and the JustCook way.
 
-<Chips label="Channels" items={[{ label: 'Instagram' }, { label: 'WhatsApp groups' }, { label: 'QR flyers in study rooms' }]} />
+<Chips
+  label="Channels"
+  intro="Where off-site students already spend their attention."
+  variant="cards"
+  items={[
+    { label: 'Instagram', note: 'One post per box, and a challenge to cook against your friends.', image: postA },
+    { label: 'WhatsApp groups', note: 'Student group chats: first for the survey link, then for the launch.', image: postApp },
+    { label: 'QR flyers', note: 'The maze flyers in study rooms and student housing, with a QR code to the app.', image: flyerOrange },
+    { label: 'Short videos', note: 'TikTok-style clips that show a box turning into dinner in twenty minutes.' },
+  ]}
+/>
+
+<Gallery
+  groups={[
+    {
+      label: 'Packaging',
+      kind: 'cutout',
+      items: [
+        { image: boxA, alt: 'Box A, orange, protein.', caption: 'A · Protein' },
+        { image: boxB, alt: 'Box B, green, energy.', caption: 'B · Energy' },
+        { image: boxC, alt: 'Box C, red, light.', caption: 'C · Light' },
+        { image: boxD, alt: 'Box D, blue, comfort.', caption: 'D · Comfort' },
+      ],
+    },
+    {
+      label: 'Flyers',
+      items: [
+        { image: flyerOrange, alt: 'Maze flyer, orange: the long way without JustCook and the short way with it.' },
+        { image: flyerGreen, alt: 'Maze flyer, green.' },
+        { image: flyerRed, alt: 'Maze flyer, red.' },
+        { image: flyerBlue, alt: 'Maze flyer, blue.' },
+      ],
+    },
+    {
+      label: 'Social posts',
+      cols: 3,
+      items: [
+        { image: postA, alt: 'Instagram post: Box A, the protein one.' },
+        { image: postB, alt: 'Instagram post: Box B, the energy one.' },
+        { image: postGood, alt: 'Instagram post: So good, yeah it is Just Cook.' },
+        { image: postC, alt: 'Instagram post: Box C, the light one.' },
+        { image: postD, alt: 'Instagram post: Box D, the comfort one.' },
+        { image: postTris, alt: 'Instagram post: noughts and crosses with plates, good food always wins.' },
+      ],
+    },
+  ]}
+/>
+
+### Launch plan: one city first
+
+<Note label="Plan" text="A pilot sized to be measured: one community, one pickup point, a few signals that say whether it works.">
+
+The launch was planned small and local, where the research happened, so every box could be traced back to a student.
+
+</Note>
+
+<Insights
+  items={[
+    { title: 'One city', text: 'Rovereto, starting with the off-site students of the Department of Psychology and Cognitive Sciences: the community we researched, and our own.' },
+    { title: 'One pickup point', text: 'Boxes would be reserved in the app and collected at Conad in Rovereto, a short walk from student housing and study rooms.' },
+    { title: 'Word of mouth first', text: 'The same channels that filled the survey: student group chats, flyers in study rooms, posts that friends share and challenge each other on.' },
+    { title: 'Signals to watch', text: 'Boxes collected, codes registered, shelves emptied at the store, streaks kept: the evidence the pilot targets would be measured against.' },
+  ]}
+/>
 
 </Chapter>
 
@@ -280,11 +386,17 @@ The name winks at Just Eat. The campaign runs where students already are, and it
 
 <Key>The most useful design decision was a reframing: changing what was easy to do, not what students knew.</Key>
 
-Next time I would invest more in evidence:
+What surprised me most was how little the problem had to do with knowledge. Every student we spoke to knew what a balanced meal looks like. They were busy, tired and cooking in a kitchen shared with flatmates. Sitting in those kitchens taught me more than any statistic.
 
-1. More interviews, beyond the four in-kitchen ones.
-2. A more structured analysis of what they said.
-3. Usability tests with real students before polishing.
-4. Targets built from data rather than ambition.
+It was also my own problem. I was one of those off-site students, and designing for people like me made it easy to assume. The research kept correcting me, and I learned to let it.
+
+If I started again tomorrow, I would:
+
+1. Talk to more students, beyond the four in-kitchen interviews.
+2. Analyse what they said in a more structured way.
+3. Put the prototype in students’ hands before polishing it.
+4. Build the targets from data rather than ambition.
+
+JustCook is still a concept, on paper and in Figma. The next version would be a tested one.
 
 </Chapter>

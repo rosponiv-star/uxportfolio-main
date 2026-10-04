@@ -1,0 +1,109 @@
+---
+// Brand and campaign material, presented like the Result showcase but smaller: a tinted panel across tracks
+// A–C holding labelled groups. kind 'cutout' = transparent objects (boxes) standing on a hairline;
+// kind 'tile' = flat artwork (flyers, posts) in an even grid. `cols` sets the grid per group.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  groups: {
+    label: string;
+    kind?: 'cutout' | 'tile';
+    cols?: number;
+    items: { image: ImageMetadata; alt: string; caption?: string }[];
+  }[];
+}
+const { groups } = Astro.props;
+const n = (i: number) => String(i + 1).padStart(2, '0');
+---
+
+<div class="gallery" data-reveal>
+  {
+    groups.map((g, gi) => (
+      <section class:list={['gal', `gal--${g.kind ?? 'tile'}`]} aria-label={g.label}>
+        <p class="gal__label label">
+          <span class="gal__n">{n(gi)}</span>
+          {g.label}
+        </p>
+        <ul class="gal__grid" style={`--cols: ${g.cols ?? g.items.length}`}>
+          {g.items.map((it) => (
+            <li class="gal__item">
+              <Image src={it.image} alt={it.alt} widths={[320, 480, 720]} sizes="(min-width: 960px) 20vw, 45vw" />
+              {it.caption && <span class="gal__cap field">{it.caption}</span>}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding: var(--space-5);
+    background: var(--paper-alt);
+  }
+
+  .gal {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .gal__label {
+    display: flex;
+    gap: var(--space-1);
+    color: var(--ink);
+  }
+
+  .gal__n {
+    color: var(--signal);
+  }
+
+  .gal__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: var(--space-2);
+  }
+
+  .gal__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .gal__item :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Cut-out objects stand on one hairline, bottoms aligned. */
+  .gal--cutout .gal__grid {
+    align-items: end;
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .gal--cutout .gal__item {
+    justify-content: flex-end;
+  }
+
+  .gal--tile .gal__item :global(img) {
+    box-shadow: 0 0 0 1px var(--rule);
+  }
+
+  @media (max-width: 640px) {
+    .gallery {
+      padding: var(--space-3);
+      margin-inline: calc(var(--margin) * -1);
+    }
+
+    .gal__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

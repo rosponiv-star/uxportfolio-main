@@ -70,6 +70,9 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-04 · LOCAL** · Third pass on JustCook: BigStat, Research groups, archetype leaders, Chips with hover
+  notes/images, Ideate "6 → 1" + giant cycle numbers, Features with screens, channel cards, brand Gallery, launch
+  plan (as a plan), human Reflection; cursor label gains note/image variants. Pushed `main`.
 - **2026-10-04 · LOCAL** · Second pass on the case-study text: label roles (sequence / group / field), bigger
   numbers with context lines, archetype "Wants" row + tinted headers, Chips component, plain paragraphs turned into
   metrics, chips, rows, a pull quote and a list (no content removed). Pushed `main`.
@@ -218,7 +221,8 @@ src/components/
   RegistrationField.astro   old cursor-reactive "+" field; now only the Playground experiment
   case/*.astro              Chapter (title + summary), Key, Note, Figure, Metrics, Insights, Reframes, Archetypes, Todo,
                             ProcessIndex (process line + fixed reading bar), Showcase (Result interface presentation),
-                            Stat (big number with a one-time count-up, used by Metrics and Insights), Chips
+                            Stat (big number with a one-time count-up, used by Metrics and Insights), Chips (row or
+                            cards, hover note/image), BigStat, Features (feature + cropped screen), Gallery
 src/lib/projects.ts         getProjects, slugOf/hrefOf/numOf, chapterId/chaptersOf, CATEGORIES (re-exports categoryId)
 src/lib/collection.ts       categoryId, gridSizes (all 'half'), yearSpan (unused now)
 src/content.config.ts       projects schema (categories enum, glance, result {text, media|showcase, metrics})
@@ -229,6 +233,9 @@ src/pages/about.astro, playground.astro, 404.astro
 src/assets/valerio-rosponi.png   portrait (About)
 src/assets/projects/justcook/    cover-app.png (cover: 3 redesigned screens), screens/*.png (14 cut-out devices for the
                                  Result showcase); cover.jpg, fieldwork.jpg, box-family.jpg, flyers.jpg, social.jpg UNUSED
+src/assets/projects/justcook/boxes/   box-a…d.png (packaging cut-outs, 800px; hover images + gallery)
+src/assets/projects/justcook/brand/   posts (post-box-a…d, post-so-good, post-tris, post-4box, post-app-verde) and
+                                 flyers (volantino-pubblicita-*, questionare-flyer), resized JPGs from the old render/out
 src/assets/projects/aurawake/    cover.png (2 screens on #f4f4f2)
 public/cv/Valerio-Rosponi-CV.pdf  CV (contains his phone number — owner was told; may want a version without it)
 Media/                      raw owner material, git-ignored. 01-JustCook: reports, OfficialMedia/{Packaging,Flyers,
@@ -371,6 +378,15 @@ can dig into the whole process and way of thinking if they want".
    Chips, box specs as Metrics (4–5 / 10 / ~20 min) + profile Chips with box colours (approximate: A #e2843a,
    B #3f8f5b, C #d8503d, D #3b7fc4), app features as numbered rows, the Just Eat line as a pull quote, Reflection
    as a numbered list.
+   Third pass (2026-10-04): 92% as a BigStat (Lupi et al. 2015, 258 students); Research split into "Methods" and
+   "What came out of it" (boxed); archetype row labels right-aligned with hairline leaders to the boxes; Chips as
+   item rows with context and hover notes; Ideate opens with "6 → 1", real cycle numbers 01/05/06 large and faint;
+   Design: app features with their screens (Plan, widget, Focus mode, Streak), box chips show the box photo on
+   hover (real colours sampled: A #ffa91e, B #488863, C #ff7257, D #29bcff), channel cards (Instagram, WhatsApp,
+   QR flyers, short videos) with post/flyer on hover, a Gallery (packaging, maze flyers, 6 posts), a "Launch plan:
+   one city first" block (Rovereto/DiPSCo, pickup at Conad Rovereto, word of mouth, signals) written as a PLAN in the
+   conditional: the Conad collaboration was proposed but never confirmed, and the owner chose to present it as the
+   launch plan; Reflection rewritten in a warmer first person (surprise, own bias, what I'd do, honest close).
 8. **Next case study band** (unchanged).
 
 PhoneScroll (sticky device scene) was **removed** by the owner on 2026-10-03.

@@ -2,15 +2,35 @@
 // Problem-reframing cycles (e.g. Client–Problem–Solution iterations) as a stepped funnel: each cycle is a box
 // that starts one track further right than the previous one (A–C → B–C → C), narrowing towards the final
 // framing, which is the dark box. Ideas from earlier cycles were discarded, so they are struck through.
+// `n` is the real cycle number (shown large behind each box); `cycles` opens the funnel with "6 → 1".
+import Stat from './Stat.astro';
+
 interface Props {
-  items: { client: string; problem: string; idea?: string }[];
+  items: { client: string; problem: string; idea?: string; n?: number }[];
+  cycles?: number;
 }
-const { items } = Astro.props;
+const { items, cycles } = Astro.props;
 const last = items.length - 1;
+const pad = (v: number) => String(v).padStart(2, '0');
 // Start track per step, spread over A (1), B (2), C (3).
 const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last));
 ---
 
+{
+  cycles && (
+    <div class="funnel__head trio" data-reveal>
+      <p class="funnel__ratio span-2">
+        <Stat value={String(cycles)} />
+        <span class="funnel__arrow" aria-hidden="true">→</span>
+        <Stat value="1" />
+      </p>
+      <p class="funnel__cap">
+        <span class="label label--group">Reframing</span>
+        {cycles} Client–Problem–Solution cycles, one final framing.
+      </p>
+    </div>
+  )
+}
 <ol class="funnel">
   {
     items.map((it, i) => (
@@ -19,7 +39,10 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
         data-reveal
         style={`--d: ${i}; --i: ${i}; grid-column: ${startOf(i)} / -1`}
       >
-        <span class="step__n label">{i === last ? 'Final framing' : `Cycle ${String(i + 1).padStart(2, '0')}`}</span>
+        <span class="step__big" aria-hidden="true">{pad(it.n ?? i + 1)}</span>
+        <span class="step__n label">
+          {i === last ? `Cycle ${pad(it.n ?? i + 1)} · Final framing` : `Cycle ${pad(it.n ?? i + 1)}`}
+        </span>
         <p class="step__client">{it.client}</p>
         <dl class="step__rows">
           <div>
@@ -46,7 +69,40 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
     row-gap: var(--space-2);
   }
 
+  .funnel__head {
+    align-items: end;
+    margin-bottom: var(--space-5);
+  }
+
+  .funnel__ratio {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .funnel__ratio :global(.stat) {
+    font-size: var(--fs-mega);
+    line-height: 0.82;
+    letter-spacing: -0.06em;
+  }
+
+  .funnel__arrow {
+    font-size: var(--fs-h2);
+    color: var(--signal);
+  }
+
+  .funnel__cap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-size: var(--fs-small);
+    line-height: 1.45;
+    color: var(--ink-3);
+  }
+
   .step {
+    position: relative;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
@@ -57,6 +113,28 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
 
   .step__n {
     color: var(--signal);
+  }
+
+  /* The real cycle number, oversized and faint, behind the box content. */
+  .step__big {
+    position: absolute;
+    bottom: -0.18em;
+    right: var(--space-2);
+    font-size: var(--fs-mega);
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--ink) 6%, transparent);
+    pointer-events: none;
+  }
+
+  .step--final .step__big {
+    color: color-mix(in srgb, var(--paper) 12%, transparent);
+  }
+
+  .step > :not(.step__big) {
+    position: relative;
   }
 
   .step__client {

@@ -62,8 +62,18 @@ Components available in MDX without imports:
 - `<Metrics items={[{ value, label, text? }]} />`: large bare numbers (`--fs-stat`) on an ink hairline, sign/unit
   small (unit raised, leading sign centred), caption below, optional context line; digits count up once (~1.2s,
   `case/Stat.astro`; ranges like "4–5" do not count). Use it wherever there are numbers, never bury them in prose.
-- `<Chips label="…" items={[{ label, color? }]} />`: a short list pulled out of a sentence (priorities, profiles,
-  channels) as square chips, with an optional colour swatch.
+- `<Chips label="…" intro="…" items={[{ label, note?, color?, image? }]} variant="chips|cards" />`: a short list as an
+  item row (label + one line of context in track A, chips in B–C). Hover shows `note` in the cursor label, or `image`
+  (e.g. the box) with the note as caption. `cards` = boxes with the note visible (channels).
+- `<BigStat value label source? />`: the one number a chapter hinges on, mega size in A–B, caption + source in C.
+- `<Features items={[{ title, text, image, alt }]} />`: product features, each with its screen cropped to the top in
+  track A, number/title/text in B–C.
+- `<Gallery groups={[{ label, kind: cutout|tile, cols?, items: [{ image, alt, caption? }] }]} />`: brand material
+  (packaging cut-outs on a hairline, flyers, posts) in a tinted panel across A–C.
+- Metrics also take `title` (group heading) and `variant="boxed"` (tinted boxes, for a second kind of number).
+  Reframes take `cycles` (opens with a big "6 → 1") and a real cycle number `n` per item (shown large, faint).
+- Cursor label variants (scripts/site.ts): `data-cursor` text; `data-cursor-style="note"` = sentence-case note;
+  `data-cursor-image="url"` = image preview with `data-cursor` as caption. Clamped inside the viewport.
 - `<Insights items={[{ title, text, stat?, statLabel? }]} />`: an insight with a number shows it first, large.
 - `<Reframes items={[{ client, problem, idea? }]} />`: stepped funnel of boxes (A–C → B–C → C); earlier ideas are
   struck through as discarded; the last item is the final framing in an ink box. Show ~3 key cycles.

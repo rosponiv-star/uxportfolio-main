@@ -83,8 +83,22 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     border-top: 1px solid var(--rule);
   }
 
+  /* Row labels sit against the boxes (right-aligned in track A), so they read as the rows' headings,
+     joined to them by a short hairline across the gutter. */
   .arch__rowlabel {
+    position: relative;
     align-self: start;
+    text-align: right;
+  }
+
+  .arch__rowlabel::after {
+    content: '';
+    position: absolute;
+    top: calc(var(--space-3) + 0.45em);
+    right: calc(var(--gutter) * -1);
+    width: calc(var(--gutter) - 6px);
+    height: 1px;
+    background: var(--rule-strong);
   }
 
   .arch__rowlabel {

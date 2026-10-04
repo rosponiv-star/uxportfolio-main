@@ -1,0 +1,59 @@
+---
+// The one number a chapter hinges on: mega size in tracks A–B, caption and source in track C, on an ink
+// rule. Counts up once like every other stat.
+//   <BigStat value="92%" label="of off-site students change their eating habits after moving out" source="Lupi et al., 2015" />
+import Stat from './Stat.astro';
+
+interface Props {
+  value: string;
+  label: string;
+  source?: string;
+}
+const { value, label, source } = Astro.props;
+---
+
+<figure class="bigstat trio" data-reveal>
+  <div class="bigstat__value span-2">
+    <Stat value={value} class="bigstat__stat" />
+  </div>
+  <figcaption class="bigstat__cap">
+    <p class="bigstat__label">{label}</p>
+    {source && <p class="bigstat__source field">Source: {source}</p>}
+  </figcaption>
+</figure>
+
+<style>
+  .bigstat {
+    align-items: end;
+    row-gap: var(--space-3);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--ink);
+  }
+
+  .bigstat .bigstat__value :global(.stat.bigstat__stat) {
+    font-size: var(--fs-mega);
+    line-height: 0.82;
+    letter-spacing: -0.06em;
+  }
+
+  .bigstat__cap {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding-bottom: 0.4em;
+  }
+
+  .bigstat__label {
+    font-size: var(--fs-lead);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+
+  @media (max-width: 640px) {
+    .bigstat__cap {
+      padding-bottom: 0;
+    }
+  }
+</style>

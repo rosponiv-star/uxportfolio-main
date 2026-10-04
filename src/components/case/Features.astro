@@ -1,0 +1,95 @@
+---
+// Product features with the screen that delivers each one. Each row: the device, cropped to its top part and
+// standing on a hairline, in track A; number, title and text in tracks B–C. Rows are separated by hairlines.
+// items: [{ title, text, image, alt }]; crop = share of the device height shown (default 0.55).
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  items: { title: string; text: string; image: ImageMetadata; alt: string }[];
+  crop?: number;
+}
+const { items, crop = 0.55 } = Astro.props;
+---
+
+<ol class="features">
+  {
+    items.map((it, i) => (
+      <li class="feature trio" data-reveal style={`--d: ${i}`}>
+        <div class="feature__shot" style={`aspect-ratio: ${it.image.width} / ${Math.round(it.image.height * crop)}`}>
+          <Image src={it.image} alt={it.alt} widths={[320, 480, 640]} sizes="(min-width: 960px) 22vw, 60vw" />
+        </div>
+        <div class="feature__body span-2">
+          <span class="feature__n label">{String(i + 1).padStart(2, '0')}</span>
+          <p class="feature__title">{it.title}</p>
+          <p class="feature__text">{it.text}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .feature {
+    align-items: end;
+    padding-block: var(--space-5) 0;
+  }
+
+  .feature + .feature {
+    border-top: 1px solid var(--rule);
+  }
+
+  .feature:first-child {
+    padding-top: 0;
+  }
+
+  /* The device stands on the row's bottom edge: cropped, it reads like a phone rising from the line. */
+  .feature__shot {
+    position: relative;
+    overflow: hidden;
+    max-width: 80%;
+  }
+
+  .feature__shot :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .feature__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    align-self: center;
+    padding-block: var(--space-4);
+  }
+
+  .feature__n {
+    color: var(--signal);
+  }
+
+  .feature__title {
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+    color: var(--ink);
+  }
+
+  .feature__text {
+    max-width: 52ch;
+    font-size: var(--fs-body);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 640px) {
+    .feature__shot {
+      max-width: 62%;
+    }
+
+    .feature__body {
+      padding-block: var(--space-2) var(--space-4);
+    }
+  }
+</style>

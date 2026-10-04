@@ -806,6 +806,37 @@ a:focus-visible .arrow--back {
   color: var(--ink);
 }
 
+/* A short explanation (chips): sentence case, wraps. */
+.cursor-label.is-note {
+  max-width: 280px;
+  padding: 10px 12px 11px;
+  font-size: var(--fs-small);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  text-transform: none;
+  white-space: normal;
+}
+
+/* An image preview (box, flyer, post) with an optional caption below. */
+.cursor-label.is-image {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 220px;
+  padding: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--rule-strong);
+  white-space: normal;
+}
+
+.cursor-label.is-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .cursor-label.is-visible {
   opacity: 1;
   scale: 1;

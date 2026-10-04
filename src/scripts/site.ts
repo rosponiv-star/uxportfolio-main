@@ -83,7 +83,10 @@ function initCursorLabel() {
   const loop = () => {
     cx += (x - cx) * (reducedMotion ? 1 : 0.22);
     cy += (y - cy) * (reducedMotion ? 1 : 0.22);
-    label.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
+    // Keep wider labels (notes, image previews) inside the viewport.
+    const tx = Math.min(cx, window.innerWidth - label.offsetWidth - 28);
+    const ty = Math.min(cy, window.innerHeight - label.offsetHeight - 28);
+    label.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
     if (active || Math.abs(x - cx) > 0.5 || Math.abs(y - cy) > 0.5) {
       raf = requestAnimationFrame(loop);
     } else {
@@ -93,7 +96,25 @@ function initCursorLabel() {
 
   targets.forEach((el) => {
     el.addEventListener('pointerenter', (e) => {
-      label.textContent = el.dataset.cursor || 'View';
+      // Variants: plain action ("Read case study"), a short note in sentence case
+      // (data-cursor-style="note"), or an image with an optional caption (data-cursor-image).
+      const { cursor, cursorStyle, cursorImage } = el.dataset;
+      label.replaceChildren();
+      if (cursorImage) {
+        const img = document.createElement('img');
+        img.src = cursorImage;
+        img.alt = '';
+        label.append(img);
+        if (cursor) {
+          const cap = document.createElement('span');
+          cap.textContent = cursor;
+          label.append(cap);
+        }
+      } else {
+        label.textContent = cursor || 'View';
+      }
+      label.classList.toggle('is-note', cursorStyle === 'note' && !cursorImage);
+      label.classList.toggle('is-image', Boolean(cursorImage));
       // Light label over dark surfaces (e.g. a dark next-project band)
       label.classList.toggle('is-light', el.dataset.cursorTheme === 'light');
       x = cx = e.clientX;

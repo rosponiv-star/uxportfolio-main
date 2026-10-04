@@ -2,15 +2,20 @@
 // Key numbers on the three body-lane tracks: each stands on a hairline, large and bare, with a short label
 // and, optionally, one line of context below. Digits count up once when they come into view (Stat.astro).
 // items: [{ value: '41', label: 'Survey responses', text?: 'Shared in WhatsApp groups…' }]
+// title: a group heading above the row. variant 'boxed': each number in a tinted box (to tell a second kind
+// of number, e.g. what came out of the research, apart from the first).
 import Stat from './Stat.astro';
 
 interface Props {
   items: { value: string; label: string; text?: string }[];
+  title?: string;
+  variant?: 'plain' | 'boxed';
 }
-const { items } = Astro.props;
+const { items, title, variant = 'plain' } = Astro.props;
 ---
 
-<dl class="metrics trio">
+{title && <p class="metrics__title label label--group">{title}</p>}
+<dl class:list={['metrics trio', `metrics--${variant}`]}>
   {
     items.map((m, i) => (
       <div class="metric" data-reveal style={`--d: ${i}`}>
@@ -25,6 +30,21 @@ const { items } = Astro.props;
 </dl>
 
 <style>
+  /* A group heading opens a new block: full block spacing above, close to its numbers below. */
+  .metrics__title {
+    margin-top: var(--space-block);
+  }
+
+  .metrics__title + .metrics {
+    margin-top: var(--space-3);
+  }
+
+  .metrics--boxed .metric {
+    padding: var(--space-3);
+    border-top: 0;
+    background: var(--paper-2);
+  }
+
   .metric {
     display: flex;
     flex-direction: column;
