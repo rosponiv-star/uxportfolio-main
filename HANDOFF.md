@@ -1,7 +1,7 @@
 # HANDOFF — Valerio Rosponi portfolio
 
 This file hands the project over between Claude sessions. Read it fully, then read `CLAUDE.md`, the persistent
-rules that load automatically. Where the two disagree, this file is newer (last update: 2026-10-03).
+rules that load automatically. Where the two disagree, this file is newer (last update: 2026-10-04).
 
 ---
 
@@ -77,6 +77,14 @@ and Rovereto (TN).
     `isMobile/hasTouch`), and to **measure** things in JS: alignment to columns, gaps, how much of the first cover is
     visible at scroll 0.
   - Before screenshots, add class `is-in` to `[data-reveal]` elements, otherwise entrance animations hide content.
+  - Images are lazy-loaded: before a full-page screenshot, scroll through the page (or set `loading='eager'` on the
+    imgs) and wait, otherwise they come out blank.
+  - In dev, an image keeps the same URL when its file changes, so the browser shows the old one: hard refresh, or
+    `rm -rf .astro node_modules/.astro node_modules/.vite` and restart the server. Production URLs are hashed.
+- **Figma** (official MCP, tools `mcp__242ab3dc-…__*`): `get_metadata` to find nodes, `download_assets` with
+  `defaultFormat: png, defaultScale: 3` to export, then `curl` the URL (short-lived). JustCook file
+  `9kVAJhXfvlz569AYMRGGCn`, canvas "JustCook — Redesign v3" (node 2056:180): use the "… · device" frames (with bezel).
+  Exports carry the frame fill #f5f5f5: cut it out with `render/cutout.cjs` (old scratchpad) for use on other grounds.
 - **PDF tooling** (for the owner's media), all in the scratchpad and never in the repo:
   - poppler and python are absent;
   - `pdf-lib` splits PDFs and dumps embedded images;
@@ -97,30 +105,37 @@ astro.config.mjs            site URL, mdx, sitemap, prefetch, devToolbar off
 src/styles/global.css       ALL tokens (colour, type scale, spacing), grid primitives, prose, reveals, view transitions
 src/layouts/Base.astro      <head>, Header, Footer(showContact), global script
 src/scripts/site.ts         reveals (IntersectionObserver rootMargin -1%), header hide-on-scroll, cursor label
-                            (data-cursor / data-cursor-theme), scroll-spy, progress bar, video autoplay
+                            (data-cursor / data-cursor-theme), scroll-spy, progress bar (no longer used on case pages:
+                            ProcessIndex's bar replaces it), video autoplay
 src/data/site.ts            name, email rosponiv@gmail.com, LinkedIn (STILL A PLACEHOLDER URL), CV path, nav
 src/components/
   Header.astro              name left; nav 01 Work / 02 Playground / 03 About (micro numbers, active = signal colour)
   Footer.astro              Contact row (email, LinkedIn, Résumé PDF), giant "Valerio Rosponi" wordmark, ©
   Section.astro             THE section pattern (rule, title cols 1–3 sticky, body cols 4–12; `stacked`, `tone="alt"`)
   Collection.astro          shared Work/Playground block: title, filters, Grid/Index switch, grid slot, index table + script
-  Card.astro                generic card (media slot + hover caption bar)
+  Card.astro                generic card: media slot; hover = cover zooms out to .95 + paper chips (title/type/year)
   ProjectCard.astro         Card + Cover for a project
   Cover.astro               project cover: real image/video or placeholder (tone colour + faint grid + title)
   DepthTexture.astro        hero background: 3-layer grain, parallax + "breath" near cursor (intensity 0.5)
   RegistrationField.astro   old cursor-reactive "+" field; now only the Playground experiment
-  case/*.astro              Chapter, Note, Figure, Metrics, Insights, Reframes, Archetypes, Todo
+  case/*.astro              Chapter (title + summary), Key, Note, Figure, Metrics, Insights, Reframes, Archetypes, Todo,
+                            ProcessIndex (process line + fixed reading bar), Showcase (Result interface presentation)
 src/lib/projects.ts         getProjects, slugOf/hrefOf/numOf, chapterId/chaptersOf, CATEGORIES (re-exports categoryId)
 src/lib/collection.ts       categoryId, gridSizes (all 'half'), yearSpan (unused now)
-src/content.config.ts       projects schema (incl. categories enum)
+src/content.config.ts       projects schema (categories enum, glance, result {text, media|showcase, metrics})
 src/content/projects/       01-justcook.mdx (REAL), 02-rehab, 03-smart-home-ecosystem, 04-realiti, 05-aurawake (PLACEHOLDERS)
 src/pages/index.astro       home: hero band + Collection(work) + How I work
 src/pages/work/[slug].astro case study template
 src/pages/about.astro, playground.astro, 404.astro
 src/assets/valerio-rosponi.png   portrait (About)
-src/assets/projects/justcook/    cover.jpg, fieldwork.jpg, box-family.jpg, flyers.jpg, social.jpg (prepared, CURRENTLY UNUSED)
+src/assets/projects/justcook/    cover-app.png (cover: 3 redesigned screens), screens/*.png (14 cut-out devices for the
+                                 Result showcase); cover.jpg, fieldwork.jpg, box-family.jpg, flyers.jpg, social.jpg UNUSED
+src/assets/projects/aurawake/    cover.png (2 screens on #f4f4f2)
 public/cv/Valerio-Rosponi-CV.pdf  CV (contains his phone number — owner was told; may want a version without it)
-Media/                      raw owner material, git-ignored (01-JustCook/... reports, OfficialMedia/ packaging, flyers, posts, Interfaces/)
+Media/                      raw owner material, git-ignored. 01-JustCook: reports, OfficialMedia/{Packaging,Flyers,
+                            SocialPosts,Interfaces}; Interfaces holds 17 Figma device exports (3x, 1342×2741), named
+                            like HomeFirstScreen.png, FocusMode.png, LiveActivityExpanded.png, BuyReviewOrder.png.
+                            05-AuraWake/OfficialMedia/Interfaces: Home.png, AlarmSet1.png (3x).
 CLAUDE.md                   persistent rules (auto-loaded)
 ```
 
@@ -134,7 +149,7 @@ CLAUDE.md                   persistent rules (auto-loaded)
 | `--paper` | `#fdfdfc` | page background (near-white, slightly cool) |
 | `--paper-2` | `#f2f2ef` | placeholder surfaces, hover fills |
 | `--paper-3` | `#e8e8e4` | |
-| `--paper-alt` | `#f3f3f0` | tinted bands (home hero, How I work, case Overview/Key insights/Outcome, About "What I bring") |
+| `--paper-alt` | `#f3f3f0` | tinted bands (home hero, How I work, case Result + Insights, About "What I bring") |
 | `--ink` | `#111111` | text |
 | `--ink-2/3/4` | `#33332f / #6b6b65 / #8a8a84` | secondary text greys |
 | `--rule` | `rgb(17 17 17 / .08)` | row hairlines |
@@ -154,6 +169,7 @@ fluorescent colours.
 | `--fs-h3` | 22→28px | item titles (principles, insights, rows, index titles) |
 | `--fs-lead` | ~19→23px | leads; **card titles** use lead/Medium |
 | `--fs-body` | 17px | running text |
+| `--fs-read` | 17→19px, lh 1.55 | case-study chapter paragraphs only |
 | `--fs-small` | **16px** | nav, filters, meta, notes, captions |
 | `--fs-label` | 12px | `.label`: Geist **Medium 500**, uppercase, 8% tracking, tabular figures |
 
@@ -171,6 +187,8 @@ The selected filter or view underline is **1.5px** (he asked for something betwe
 - Hero words: blur-fade focus-in per word. The earlier masked slide-up cut the letters and was rejected.
 - Page view transitions are on.
 - Cursor label "Read case study" follows the pointer over links; it inverts on dark next-bands.
+- The owner's latest motion calibration (2026-10-04): motion must be barely noticeable — "se uno non ci vuole fare caso
+  non ci fa caso". Big rises, scale-ins and reveal choreography were rejected on the case-study showcase.
 
 ---
 
@@ -225,7 +243,8 @@ can dig into the whole process and way of thinking if they want".
    `src/assets/projects/justcook/screens/`. Phones: one swipe row per group.
    Motion: NO entrance/reveal animation (owner, 2026-10-04: "leggere animazioni fluide brevemente visibili, se uno
    non ci vuole fare caso non ci fa caso"). Only a quiet inertial parallax on uncropped groups (max 24px, speeds
-   .01/.035/.02/.045, desktop) and a 4px hover lift. Rejected: 80px rises + scale, 24px fade-up reveals, crop emerge. Otherwise (placeholder projects): Three phone-ratio screens + one wide board (placeholders until real
+   .01/.035/.02/.045, desktop) and a 4px hover lift. Rejected: 80px rises + scale, 24px fade-up reveals, crop emerge.
+   Without a showcase (placeholder projects): three phone-ratio screens + one wide board (placeholders until real
    images: the owner chose placeholders for now, NOT the prepared JustCook boards), 1–2 sentences, key numbers
    (JustCook: "Targets for a pilot"). On phones the screens become a horizontal swipe row.
 6. **Process** (`case/ProcessIndex.astro`, owner picked option C "process line", in house style): steps hang from an
@@ -264,7 +283,7 @@ Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is
 
 | Project | Status | Notes |
 |---|---|---|
-| 01 JustCook | **Written, real data; real cover** | Cover (2026-10-04) = 3 device screens from Figma page "JustCook — Redesign v3" (frames "Home · first screen · device", "Home · scrolled · device", "Boxes · device", exported PNG 3x = 1342×2741, saved as `Media/01-JustCook/OfficialMedia/Interfaces/HomeFirstScreen.png`, `HomeScrolled.png`, `Boxes.png`). The exports carry the Figma frame fill #f5f5f5, so the cover ground and tone are #f5f5f5 (no cut-out needed). `src/assets/projects/justcook/cover-app.png`, 3840×2400, phones 1800px tall, 96px gaps. Older prepared boards stay unused in the same folder. Result = interface showcase (see §5). |
+| 01 JustCook | **Written, real data; real cover** | Cover (2026-10-04) = 3 device screens from Figma page "JustCook — Redesign v3" (frames "Home · first screen · device", "Home · scrolled · device", "Boxes · device", exported PNG 3x = 1342×2741, saved as `Media/01-JustCook/OfficialMedia/Interfaces/HomeFirstScreen.png`, `HomeScrolled.png`, `Boxes.png`). The exports carry the Figma frame fill #f5f5f5, so the cover ground and tone are #f5f5f5 (no cut-out needed). `src/assets/projects/justcook/cover-app.png`, 3840×2400, phones 1800px tall, 96px gaps. Older prepared boards stay unused in the same folder. Result = interface showcase (see §5); "Home · change box" was removed from it by the owner. "Home · scrolled" was updated in Figma on 2026-10-04 and re-exported (cover + showcase). |
 | 02 Rehab | placeholder | invented facts (Digital health service, 2026, Product Designer, team lead…) |
 | 03 Smart Home Ecosystem | placeholder | invented facts |
 | 04 Realiti | placeholder | invented facts, dark tone |
@@ -323,7 +342,15 @@ Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is
 - Animated back arrow; "Back to top" link.
 - Next-project band: the in-page "Next" section with an arrow; a registration-field background in the band
   (the cover image background was restored).
-- Media boards inside JustCook (removed for now: "ci penseremo dopo").
+- Media boards inside JustCook (removed for now: "ci penseremo dopo"). The Result showcase uses app screens instead.
+- Card hover: paper caption bar covering the cover; cover shrinking to fit the bar; title/meta inside the cursor
+  label (E2) and its tech-editorial variants (E3 tabbed card, E4 crosshair, E5 typographic); corner tag (B, B3
+  translucent was runner-up), B4 spec sheet, B5 traced frame, B6 ruler strip; free text; slim line. Chips won.
+- Case study: PhoneScroll device scene; Overview with gutter hairlines ("too many lines"), as a dark band, as stacked
+  sentences, as text + data column; process index as row TOC, dotted book TOC, sticky side index.
+- Covers: any "depth" (radial studio light / vignette, cast shadows under phones, diffuse halo). Flat ground only.
+- Result showcase: dark ink band ("era meglio prima"); entrance animations of any size (80px + scale, then 24px
+  fade-ups, crop emerge); breaking out of the grid (he chose "dentro la griglia").
 
 ---
 
@@ -345,16 +372,17 @@ Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is
      A1 B1 C1 D3, cart A2 C2 D1, pickup tomorrow at Conad, Via Rosmini 56.
    - Gotcha: when binding a colour variable in the plugin API, also set the paint's colour to the resolved value, or
      Figma may render the black fallback.
-   - Next: owner review; then export screens (2x/3x PNG) for the JustCook Result section and figures.
+   - DONE (2026-10-04): the screens of canvas "JustCook — Redesign v3" were exported and used for the cover and the
+     Result showcase. Further edits in Figma → re-export the changed frame and replace it everywhere it appears.
 5. **Covers:** JustCook and AuraWake have real covers; Rehab, Smart Home, Realiti still placeholders.
 6. **Case studies 02–05**: the full interview-then-write process.
 7. **Filters:** decide whether to drop UX/UI (it is on every project). Confirm the categories per project.
 8. **CV** may contain his phone number; he may want a version without it.
 9. **Tools** list for JustCook: ask whether to add others besides Figma and Miro.
-10. Keep `CLAUDE.md` in sync after every change. It has a few stale lines to fix:
-    - the Structure section still mentions "project count";
-    - the Type scale says "small (15)" (it is 16) and "project card titles use h2" (cards use lead size);
-    - "Collection sections use `stacked`" is outdated (Collection has its own header).
+10. Keep `CLAUDE.md` AND this file in sync after every change, including the file map (§3), the design tables (§4)
+    and the rejected list (§8), not only the section being worked on. (The old stale CLAUDE.md lines were fixed.)
+11. JustCook: chapter figures are still text-only; the Design chapter could use a few of the exported screens if the
+    owner wants (none is placed in the chapters yet).
 
 ---
 
