@@ -3,9 +3,8 @@
 // - trio: label in the head lane (cols 1–3), three shots on tracks A/B/C; `stagger` steps them down.
 // - pair / quad: the full 12 columns, label above.
 // - crop: only the top share of the device is shown (Dynamic Island, widgets); the cut sits on a hairline.
-// Motion (all off with reduced motion), deliberately quiet: each group fades in with a short rise, one
-// device after the other; cropped devices lift slightly behind their hairline, which draws in first.
-// While scrolling, shots drift a few pixels at different speeds with a little inertia.
+// Motion, deliberately quiet: no entrance animation (everything is simply there). While scrolling,
+// uncropped shots drift a few pixels at different speeds with a little inertia. Off with reduced motion.
 // On phones every group becomes a horizontal swipe row.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -32,7 +31,6 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
       <section
         class:list={['group', `group--${g.layout}`, { 'group--crop': g.crop, 'group--stagger': g.stagger }]}
         aria-label={g.label}
-        data-group
       >
         <p class="group__label label">
           <span class="group__n">{n(gi)}</span>
@@ -143,61 +141,6 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
     background: var(--rule-strong);
   }
 
-  /* Reveal ------------------------------------------------------------------ */
-  :global(.js) .group__label {
-    opacity: 0;
-    transform: translateY(12px);
-    transition:
-      opacity 0.8s var(--ease-out),
-      transform 1s var(--ease-out);
-  }
-
-  :global(.js) .group:global(.is-in) .group__label {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* Full devices: rise, settle from a slight scale, one after the other. */
-  :global(.js) .group:not(.group--crop) .shot {
-    opacity: 0;
-    transform: translateY(24px);
-    transform-origin: 50% 100%;
-    transition:
-      opacity 1.2s var(--ease-out),
-      transform 1.4s var(--ease-out);
-    transition-delay: calc(var(--i) * 0.1s);
-  }
-
-  :global(.js) .group:not(.group--crop):global(.is-in) .shot {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* Cropped devices: the hairline draws in, then each device emerges from behind it. */
-  :global(.js) .group--crop .group__shots::after {
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 1.2s var(--ease-out);
-  }
-
-  :global(.js) .group--crop:global(.is-in) .group__shots::after {
-    transform: none;
-  }
-
-  :global(.js) .group--crop .shot__frame :global(img) {
-    opacity: 0;
-    transform: translateY(8%);
-    transition:
-      opacity 1.2s var(--ease-out),
-      transform 1.4s var(--ease-out);
-    transition-delay: calc(0.2s + var(--i) * 0.1s);
-  }
-
-  :global(.js) .group--crop:global(.is-in) .shot__frame :global(img) {
-    opacity: 1;
-    transform: none;
-  }
-
   @media (max-width: 960px) {
     .group__label {
       grid-column: 1 / -1;
@@ -245,27 +188,6 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
 </style>
 
 <script>
-  // Groups reveal once a fifth of the way into the viewport, later than the site-wide reveals, so the
-  // devices animate where they can actually be seen.
-  const groups = document.querySelectorAll<HTMLElement>('[data-group]');
-  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (still || !('IntersectionObserver' in window)) {
-    groups.forEach((g) => g.classList.add('is-in'));
-  } else {
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-in');
-            io.unobserve(e.target);
-          }
-        }
-      },
-      { rootMargin: '0px 0px -20% 0px' },
-    );
-    groups.forEach((g) => io.observe(g));
-  }
-
   // Parallax with inertia: every frame each shot eases towards a target offset proportional to its
   // distance from the viewport centre, so it trails the scroll slightly instead of being locked to it.
   const drifts = Array.from(document.querySelectorAll<HTMLElement>('[data-drift]'))

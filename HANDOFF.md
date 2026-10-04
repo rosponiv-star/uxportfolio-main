@@ -223,10 +223,9 @@ can dig into the whole process and way of thinking if they want".
    the Figma "… · device" frames exported 3x into `Media/01-JustCook/OfficialMedia/Interfaces/*.png`, cut out from the
    #f5f5f5 frame fill (flood fill + rim un-blend, old scratchpad `render/cutout.cjs`) and resized to 960px wide into
    `src/assets/projects/justcook/screens/`. Phones: one swipe row per group.
-   Motion: the owner asked for "more evident, premium" motion, then found 80px rises / 42% emerges / 72px parallax
-   "far too evident". Current, quiet values: group reveals once 20% into view; full devices fade + rise 24px (1.4s,
-   100ms apart); cropped devices rise 8% behind the hairline, which draws in first; inertial parallax max 24px
-   (speeds .01/.035/.02/.045); hover lift 4px. Everything off with reduced motion. Do not make it bigger. Otherwise (placeholder projects): Three phone-ratio screens + one wide board (placeholders until real
+   Motion: NO entrance/reveal animation (owner, 2026-10-04: "leggere animazioni fluide brevemente visibili, se uno
+   non ci vuole fare caso non ci fa caso"). Only a quiet inertial parallax on uncropped groups (max 24px, speeds
+   .01/.035/.02/.045, desktop) and a 4px hover lift. Rejected: 80px rises + scale, 24px fade-up reveals, crop emerge. Otherwise (placeholder projects): Three phone-ratio screens + one wide board (placeholders until real
    images: the owner chose placeholders for now, NOT the prepared JustCook boards), 1–2 sentences, key numbers
    (JustCook: "Targets for a pilot"). On phones the screens become a horizontal swipe row.
 6. **Process** (`case/ProcessIndex.astro`, owner picked option C "process line", in house style): steps hang from an
