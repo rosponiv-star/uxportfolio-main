@@ -1,0 +1,64 @@
+---
+// The last word of a case study: a statement in display size across tracks A–C (plain text in grey,
+// <strong> in ink), then, below a hairline, the one lesson to remember, large.
+//   <Closing kicker="What I take with me" line="Make the right thing the easy thing.">
+//     JustCook is still a concept. **The next version would be a tested one.**
+//   </Closing>
+interface Props {
+  kicker?: string;
+  line?: string;
+}
+const { kicker, line } = Astro.props;
+---
+
+<div class="closing" data-reveal>
+  <div class="closing__statement"><slot /></div>
+  {
+    line && (
+      <div class="closing__lesson trio">
+        {kicker && <p class="label label--group">{kicker}</p>}
+        <p class="closing__line span-2">{line}</p>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .closing {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--ink);
+  }
+
+  .closing__statement :global(p) {
+    max-width: none;
+    font-size: var(--fs-display);
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--ink-4);
+    text-wrap: balance;
+  }
+
+  .closing__statement :global(strong) {
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  .closing__lesson {
+    align-items: baseline;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .closing__line {
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    color: var(--ink);
+  }
+</style>

@@ -65,6 +65,8 @@ Components available in MDX without imports:
 - `<Chips label="…" intro="…" items={[{ label, note?, color?, image? }]} variant="chips|cards" />`: a short list as an
   item row (label + one line of context in track A, chips in B–C). Hover shows `note` in the cursor label, or `image`
   (e.g. the box) with the note as caption. `cards` = boxes with the note visible (channels).
+- `<Closing kicker? line?>statement</Closing>`: the case study's last word, at the end of Reflection: statement in
+  display size (plain = grey, **bold** = ink), then a hairline and the one lesson to remember in h2.
 - `<BigStat value label source? />`: the one number a chapter hinges on, mega size in A–B, caption + source in C.
 - `<Features items={[{ title, text, image, alt }]} />`: product features, each with its screen cropped to the top in
   track A, number/title/text in B–C.
