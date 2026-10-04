@@ -70,6 +70,7 @@ every change**, as if the next message came from the other side.
 
 ## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
 
+- **2026-10-04 · LOCAL** · Owner: "rendili più visibili" → home texture intensity 0.85 → 1.25. Pushed `main`.
 - **2026-10-04 · LOCAL** · Home texture a bit more visible (intensity 0.7 → 0.85) and stronger pointer parallax:
   new `parallax` prop on DepthTexture (layer travel × P), home uses 1.6 (near layer 34 → ~54px). Pushed `main`.
 - **2026-10-04 · LOCAL** · Merged `origin/claude/stoic-ride-lj7woi` (fast-forward: hero without band + handover
@@ -203,7 +204,7 @@ src/components/
   Card.astro                generic card: media slot; hover = cover zooms out to .95 + paper chips (title/type/year)
   ProjectCard.astro         Card + Cover for a project
   Cover.astro               project cover: real image/video or placeholder (tone colour + faint grid + title)
-  DepthTexture.astro        hero background: 3-layer grain, parallax + "breath" near cursor (home: intensity 0.85, parallax 1.6×)
+  DepthTexture.astro        hero background: 3-layer grain, parallax + "breath" near cursor (home: intensity 1.25, parallax 1.6×)
   RegistrationField.astro   old cursor-reactive "+" field; now only the Playground experiment
   case/*.astro              Chapter (title + summary), Key, Note, Figure, Metrics, Insights, Reframes, Archetypes, Todo,
                             ProcessIndex (process line + fixed reading bar), Showcase (Result interface presentation)
@@ -283,7 +284,7 @@ The selected filter or view underline is **1.5px** (he asked for something betwe
 
 ### Home `/`
 1. **Hero**: NO background since 2026-10-04 (the grey `--paper-alt` band was removed); `DepthTexture` (intensity
-   0.85, parallax 1.6×; was 0.5 / 1×) extends ~56–96px below the hero and fades out with a mask before Selected work. Statement in `.display` spanning
+   1.25, parallax 1.6×; was 0.5 / 1×) extends ~56–96px below the hero and fades out with a mask before Selected work. Statement in `.display` spanning
    **cols 1–11**:
    > I'm Valerio Rosponi, a UX and digital product designer studying Interfaces & Communication at the University of
    > Trento, based in Trentino, Italy.

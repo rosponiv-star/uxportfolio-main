@@ -4,7 +4,7 @@
 // Static on touch devices and with reduced motion.
 interface Props {
   class?: string;
-  intensity?: number; // 0–1
+  intensity?: number; // multiplier on dot opacity (0.5 = barely visible, >1 = clearly visible)
   parallax?: number; // multiplier on each layer's travel (1 = default depths)
 }
 const { class: className, intensity = 0.5, parallax = 1 } = Astro.props;

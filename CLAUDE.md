@@ -122,7 +122,7 @@ title, the footer wordmark and the nav micro-numbers.
   cover. The image is never darkened. Rejected: caption bar covering the cover; cover shrinking to fit the bar; info
   inside the cursor label (E2).
 - Home hero has no background (owner, 2026-10-04: the --paper-alt band was removed). Only the depth texture
-  (intensity 0.85, parallax 1.6×) marks it; it runs into the gap above Selected work and fades out (mask) before the section, which
+  (intensity 1.25, parallax 1.6×) marks it; it runs into the gap above Selected work and fades out (mask) before the section, which
   therefore has no top rule on the home page.
 - Index view: a table (No., project, type, role, year). On hover the cover follows the cursor. The chosen view is
   remembered in localStorage.
