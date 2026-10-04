@@ -1,6 +1,8 @@
 # Valerio Rosponi — Portfolio
 
 > New session? Read HANDOFF.md first: it has the full history, decisions, rejected ideas and open items.
+> Work is split between CLOUD sessions (no `Media/`, push a `claude/*` branch) and LOCAL ones (have `Media/`, push
+> `main`). Before anything, sync git as HANDOFF §00 says; after every change, add an entry to the HANDOFF §01 log.
 
 Personal portfolio of Valerio Rosponi (UX / digital product / visual designer, junior).
 The site exists to show **case studies, process and mindset** to recruiters and hiring

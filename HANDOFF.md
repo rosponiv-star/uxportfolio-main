@@ -3,6 +3,73 @@
 This file hands the project over between Claude sessions. Read it fully, then read `CLAUDE.md`, the persistent
 rules that load automatically. Where the two disagree, this file is newer (last update: 2026-10-04).
 
+**First: sync git (§00), THEN read this file again.** Another session may have pushed a newer HANDOFF.
+
+---
+
+## 00. Two kinds of session: CLOUD and LOCAL (read first, every time)
+
+The owner works with Claude in two places, and alternates between them. This file is the only memory they share.
+
+| | **CLOUD session** | **LOCAL session** |
+|---|---|---|
+| Where | claude.ai/code, Linux container, fresh clone | the owner's Windows 11 PC (Claude Code desktop/CLI) |
+| How to tell | working dir `/home/user/...`, no `Media/` folder | path `C:\Users\rospo\...`, `Media/` folder exists |
+| Has `Media/` (reports, PDFs, raw exports) | **no** (git-ignored, never in the clone) | **yes** |
+| Figma MCP / headless Chrome | Figma MCP may be connected; Chromium via Playwright | Figma MCP, Chrome via puppeteer-core |
+| Git | may push **only** to its `claude/*` branch (now `claude/stoic-ride-lj7woi`; a new cloud session may get another `claude/*` name: check `git branch -r`) | pushes to `main` |
+| Deploy | its work is **not live** until merged into `main` | `main` = what Cloudflare deploys |
+| Good for | code, layout, CSS, copy, MDX writing from facts already in the repo or pasted in chat | anything that needs `Media/`: reading reports, extracting facts, composing covers/boards, cut-outs, Figma exports; merging cloud work into `main` |
+
+The owner's routine: he works in the cloud; when something needs `Media/`, he opens a local chat, says what he needs
+and "read HANDOFF.md". Then he may come back to the cloud. So **both sides must leave this file up to date at the end of
+every change**, as if the next message came from the other side.
+
+### Start of every session (and of every new task in a long session)
+- **LOCAL:**
+  ```
+  git fetch origin
+  git checkout main && git pull
+  git branch -r --no-merged main        # any origin/claude/* listed = cloud work not yet in main
+  git merge origin/claude/<branch>      # for each one listed; resolve conflicts (see below)
+  npm install                           # if package.json changed
+  build (PowerShell, §2) → if OK: git push
+  ```
+  Then re-read HANDOFF.md (the merge may have changed it) and the **Session log** (§01). Tell the owner that the cloud
+  work is now live (pushed to `main`).
+- **CLOUD:**
+  ```
+  git fetch origin main && git merge origin/main     # bring in local work (Media assets, notes, fixes)
+  ```
+  Then re-read HANDOFF.md and §01. Never push to `main` (not allowed); push the `claude/*` branch.
+
+### End of every change (both sides)
+1. Build, verify, commit, push (LOCAL → `main`; CLOUD → its `claude/*` branch).
+2. Add an entry at the **top** of the Session log (§01): date, CLOUD/LOCAL, what changed, what is pending, and any
+   **request for the other side**. Also update the sections it touches (§3 file map, §4–§5, §7, §8, §9) and `CLAUDE.md`.
+3. Commit and push the HANDOFF update too. Uncommitted = lost (the cloud container is thrown away).
+4. CLOUD only: tell the owner when his change is **not live yet** and needs a local session (or a merged PR) to deploy.
+
+### Handing work across
+- **Cloud needs something from `Media/`:** write a `REQUEST → LOCAL` entry in §01 saying exactly what to produce and
+  where to put it (e.g. "Rehab cover 3840×2400 → `src/assets/projects/rehab/cover.png`"; "facts from the Rehab report →
+  `notes/02-rehab.md`"). Tell the owner in Italian what to ask the local chat.
+- **Facts from `Media/` go into the repo as text**, so the cloud can use them: `notes/NN-name.md` (one file per project:
+  numbers with their source and page, team, role, timeline, tools, open questions for the owner). `notes/` is not
+  published by Astro. Processed images go to `src/assets/projects/<name>/`, video/PDF to `public/`, as usual. Raw
+  `Media/` stays git-ignored.
+- **Local finished a request:** mark it `DONE` in §01, push `main`. The cloud merges `origin/main` at its next task.
+- **Conflicts:** usually only in HANDOFF.md §01. Keep both entries, newest first. For code, prefer the newer intent and
+  check the log. Never force-push `main`; never rebase someone else's history.
+
+---
+
+## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
+
+- **2026-10-04 · CLOUD** · Added §00 (cloud/local protocol) and this log; one line in `CLAUDE.md` points to it. No site
+  changes. Cloud branch `claude/stoic-ride-lj7woi` = `main` + this HANDOFF/CLAUDE.md update → LOCAL: merge it at your
+  next start. No open requests.
+
 ---
 
 ## 0. How to work with the owner (read first)
@@ -11,7 +78,7 @@ rules that load automatically. Where the two disagree, this file is newer (last 
   (officially "Interfacce e Tecnologie della Comunicazione") at the University of Trento.
   Git identity: `rosponiv-star` / rosponiv@gmail.com.
 - **Language:** always talk to him in **Italian**. All site copy is in **English**.
-- **He never edits code.** Every change goes through Claude, so after each change build, commit and push.
+- **He never edits code.** Every change goes through Claude, so after each change build, commit and push (and log it in §01).
 - **Iteration style:** he gives short visual feedback ("non mi piace", "torna alla versione precedente", "nessuna").
   - Revert immediately when asked.
   - When he asks for options, show **live interactive concepts** with the `mcp__visualize__show_widget` tool (load
@@ -50,12 +117,13 @@ and Rovereto (TN).
 
 - **Framework:** Astro 7 (static) + `@astrojs/mdx` + `@astrojs/sitemap`. Hand-written CSS, no framework. Font: **Geist
   only** (`@fontsource-variable/geist`). Geist Mono was uninstalled.
-- **Repo:** `https://github.com/rosponiv-star/uxportfolio-main`, branch `main`. Push works with cached Git
+- **Repo:** `https://github.com/rosponiv-star/uxportfolio-main`, branch `main` (cloud sessions push to a `claude/*`
+  branch instead, see §00). Locally, push works with cached Git
   Credential Manager credentials. `gh` CLI is NOT installed.
 - **Deploy:** the owner connects the repo to **Cloudflare** (Pages/Workers: build `npm run build`, output `dist`).
   Domain configured in code: `https://www.valeriorosponi.com` (`astro.config.mjs` `site`, `public/robots.txt`). The
   owner has his own domain on Cloudflare; confirm the exact domain with him if it matters.
-- **Machine:** Windows 11, Node 24. **Run `astro` commands through PowerShell**, because in Git Bash Rolldown's native
+- **Machine (LOCAL session):** Windows 11, Node 24. **Run `astro` commands through PowerShell**, because in Git Bash Rolldown's native
   binding fails ("Cannot find native binding"). The pattern used everywhere:
   ```
   powershell -NoProfile -Command "npx astro build 2>&1 | Select-String -Pattern 'ERROR|page\(s\) built'"
