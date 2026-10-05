@@ -1,88 +1,747 @@
 # HANDOFF — Valerio Rosponi portfolio
 
-This file hands the project over between Claude sessions. Read it fully, then read `CLAUDE.md`, the persistent
-rules that load automatically. Where the two disagree, this file is newer (last update: 2026-10-04).
+This file hands the project over between Claude sessions — LOCAL (Windows PC, has `Media/`) and CLOUD
+(claude.ai/code, no `Media/`) — so a new session reaches the same operational awareness as the one that just ended.
+Read this file **in full**, then read `CLAUDE.md` (persistent rules, auto-loaded every session). Where the two
+disagree, this file is newer and wins.
 
-**First: sync git (§00), THEN read this file again.** Another session may have pushed a newer HANDOFF.
+**Before anything else: sync git as §10 describes, then re-read this file** — another session may have pushed a
+newer version while you were away.
+
+Structure of this document (10 fixed sections + two appendices):
+1. Overview & Global Architecture — what the site is and what already works
+2. Art Direction, UI/UX & Style Rules — the design system, verbatim
+3. Development Rules & Working Style — how the owner works, how to write code here
+4. Discarded Approaches & Anti-patterns — do not re-propose these
+5. Git Status & Recent History — snapshot at last update
+6. Detailed File Map — exact paths, what each one owns
+7. Technical Context, Bugs & Tech Debt — open issues, accepted shortcuts
+8. Run & Test Commands — exact commands, copy-paste ready
+9. Immediate Task & Roadmap — the unambiguous next step
+10. Hybrid Flow (Local ↔ Cloud) — the sync protocol, read this one every session
+- Appendix A — Session log (newest first)
+- Appendix B — JustCook verified facts + how to write the next case studies
 
 ---
 
-## 00. Two kinds of session: CLOUD and LOCAL (read first, every time)
+## 1. Overview & Global Architecture
 
-The owner works with Claude in two places, and alternates between them. This file is the only memory they share.
+**What the site is.** A personal portfolio for Valerio Rosponi (junior UX / digital product / visual designer, 3rd
+year BSc "Interfaces & Communication" at the University of Trento). It exists to show **case studies, process and
+mindset** to recruiters and hiring managers — not a self-promotion or "hire me" site, so contact stays discreet (no
+sticky CTA, no "available for work" banner). Target companies the owner cited: Belka, Bending Spoons, Apple, Google,
+Deda, DXC, GPI, Meta, Microsoft. Preferred sectors: health, fintech, fashion, wellbeing. Open to remote, not to
+relocating right now. Lives between Malè and Rovereto (TN).
+
+**Exact stack.**
+- **Astro 7** (static output, no SSR/SSG islands framework — plain Astro components + vanilla `<script>` for
+  interactivity), `@astrojs/mdx` (case studies are `.mdx`), `@astrojs/sitemap`.
+- **Hand-written CSS only** — no Tailwind, no Bootstrap, no CSS-in-JS. One global stylesheet
+  (`src/styles/global.css`) holds every design token; components use Astro's native scoped `<style>` blocks.
+- **Font:** Geist only, self-hosted via `@fontsource-variable/geist` (variable font, so weights are picked with
+  `font-weight`, not separate files). Geist Mono was installed early on and later **uninstalled** — do not
+  reintroduce monospace type.
+- **TypeScript** for the few vanilla scripts (`src/scripts/site.ts`, inline `<script>` blocks in components —
+  Astro transpiles these).
+- **No component framework** (no React/Vue/Svelte islands) — everything is `.astro` templates + plain DOM scripts.
+- **Node 24** on the local machine.
+
+**Deploy.** GitHub `rosponiv-star/uxportfolio-main`, branch `main` → **Cloudflare** (Pages/Workers; build
+`npm run build`, output `dist`). Domain in code: `https://www.valeriorosponi.com` (`astro.config.mjs` → `site`,
+`public/robots.txt`). `main` is what Cloudflare actually deploys — pushing there is publishing to the live site.
+
+**Pages implemented and working today:**
+- **Home `/`** (`src/pages/index.astro`) — also the Work listing. Hero statement over an animated depth-texture
+  background (no solid band), a two-column project grid with a rich hover state, "How I work" principles, footer.
+  Fully built, see §2 for the exact spec.
+- **Case study template `/work/[slug]`** (`src/pages/work/[slug].astro`) — intro, Overview, Result (showcase or
+  placeholder), a process index with a sticky reading bar, then MDX chapters, then a "next case study" band. A
+  library of ~14 purpose-built components renders the chapters (see §6). **JustCook (`01-justcook.mdx`) is fully
+  written with real data and a real cover/Result/Design gallery** — treat it as the reference implementation for
+  tone, structure and component usage when writing the next four case studies.
+- **About `/about`**, **Playground `/playground`**, **404** — built, stable, not a current focus.
+
+**Content status (projects):**
+
+| Project | Status |
+|---|---|
+| 01 JustCook | **Done.** Real research data, real cover, real Result showcase, real Design chapter with product photography. Reference implementation. |
+| 02 Rehab | Placeholder — invented frontmatter facts, MDX skeleton only. |
+| 03 Smart Home Ecosystem | Placeholder — invented frontmatter facts, MDX skeleton only. |
+| 04 Realiti | Placeholder — invented frontmatter facts, dark tone, MDX skeleton only. |
+| 05 AuraWake | Placeholder text, **real cover** (2 app screens on a flat ground). |
+
+**What "working" means concretely** (so a new session doesn't re-build what exists): the full case-study component
+library below is implemented, styled, responsive and verified with headless-Chrome screenshots at 1440×900 and
+390×844 — don't rebuild these, extend or reuse them:
+`Chapter`, `Key`, `Note`, `Figure`, `Metrics` (+ `Stat` count-up), `Insights`, `Reframes` (stepped funnel), `Archetypes`
+(side-by-side comparison), `Chips` (item row / card variants, hover note or image preview), `BigStat`, `Features`
+(alternating device rows), `Gallery` (mosaic with 2×2 hero tiles), `BoxStrip` (colour-block product panels),
+`Closing`, `ProcessIndex` (inline + sticky reading bar), `Showcase` (Result device presentation). All live in
+`src/components/case/`.
+
+---
+
+## 2. Art Direction, UI/UX & Style Rules
+
+**Philosophy:** Swiss editorial base + tech precision (hairline rules, precise alignment, uppercase micro-labels)
+with a touch of brutalism (oversized display type) and exactly **one** experimental gesture — the hero's depth
+texture (parallax grain, see below). Everything else stays restrained. The owner consistently rejects decorative
+noise, "clever" interaction for its own sake, dark overlays and showy motion. He likes clean grids, generous but not
+scattered space, fluid and subtle motion. **When in doubt, propose the more restrained option first.**
+
+### Colour (`global.css :root`) — exact values, do not approximate
+| Token | Value | Use |
+|---|---|---|
+| `--paper` | `#fdfdfc` | page background (near-white, slightly cool) |
+| `--paper-2` | `#f2f2ef` | placeholder surfaces, hover fills |
+| `--paper-3` | `#e8e8e4` | tertiary surface |
+| `--paper-alt` | `#f3f3f0` | tinted bands (How I work, case-study Result + Insights, About "What I bring") |
+| `--ink` | `#111111` | primary text |
+| `--ink-2` | `#33332f` | secondary text |
+| `--ink-3` | `#6b6b65` | tertiary text / muted |
+| `--ink-4` | `#8a8a84` | quaternary text / faintest |
+| `--rule` | `rgb(17 17 17 / .08)` | row hairlines |
+| `--rule-strong` | `rgb(17 17 17 / .22)` | section rules, card borders |
+| `--signal` | `#3d5a73` (slate blue) | the **single** accent colour — sequence numbers, active states, progress fills. Used sparingly, never as a background fill for large areas. |
+
+Colour history (do not re-propose): background went `#f5f5f0` → `#fafaf8` → `#fcfcfb` → `#fdfdfc`. Accent went
+orange `#c93a14` → green `#2b9e4d` (rejected) → slate `#3d5a73` (kept, derived from cover tones). **No gradients, no
+fluorescent colours, no dark background sections except the inverted "Next case study" band and the final box of a
+Reframes funnel.**
+
+### Typography (Geist only) — exact size tokens, never hard-code a font-size
+| Token | Size | Use |
+|---|---|---|
+| `--fs-mega` | clamp → ~168px | case-study title, footer wordmark, "Next" band title |
+| `--fs-display` | 30→60px, **Regular 400**, lh 1.1 | page-opening statements only (home hero, About, Playground, 404) |
+| `--fs-h2` | 32→48px, Medium | section titles ("Selected work", "How I work", chapter titles) |
+| `--fs-h3` | 22→28px | item titles (principles, insights, index rows) |
+| `--fs-lead` | ~19→23px | lead paragraphs; card titles (Medium) |
+| `--fs-body` | 17px | running text in non-case-study contexts; text inside case-study blocks (archetype quotes/traits, insight evidence, reframe values) |
+| `--fs-read` | 17→19px, lh 1.55 | case-study **chapter paragraphs only** (the longer reading measure) |
+| `--fs-stat` | 56→104px, Medium, tight tracking | key numbers only (`Metrics`, insight `stat`); affixes (%, min, signs) sit at 0.42–0.55em, proportional figures (clean "1", no tabular foot) |
+| `--fs-small` | 16px | nav, filters, meta, notes, captions |
+| `--fs-label` | 12px | `.label` class: Geist **Medium 500**, uppercase, 8% letter-spacing, tabular figures |
+
+**Label roles — never give two different kinds of information the same visual treatment** (owner correction,
+2026-10-04, after "Cycle 01" and "Problem" looked identical):
+- `.label` (signal colour) = a **number or step in a sequence** — "01", "Cycle 02", chapter numbers.
+- `.label.label--group` (ink colour) = the **heading of a group** — "Targets for a pilot", "Must-haves", "Channels".
+- `.field` (small, grey `--ink-3`, sentence case, **not** uppercase) = the **name of a field inside an item** —
+  "Problem", "Idea", "Friction", a number's caption.
+
+Type history: tried Regular-weight labels at 6% tracking with a no-wrap card eyebrow, **reverted** — labels stay
+Medium 500. Selected filter/view underline is exactly **1.5px**.
+
+### Layout system (strict — verify numerically, never by eye)
+- **12-column grid.** `--margin` = clamp(16–48px), `--gutter` = clamp(16–24px).
+- **The section pattern** (`components/Section.astro`, used everywhere): a full-width top rule, title in the head
+  lane (columns 1–3, `position: sticky`), content in the body lane (columns 4–12). `tone="alt"` swaps the rule for a
+  full-bleed `--paper-alt` band (no rule before or after a band). `stacked` puts the title on its own row (used by
+  `Collection`).
+- **The body lane splits into three equal tracks** via `.trio`: A = cols 4–6, B = 7–9, C = 10–12. Every element
+  must start and end exactly on a track edge — `span-2` spans B–C, full-width spans A–C. Running text uses the A–B
+  measure (not A–C — text that wide is hard to read). Boxes, figures, metrics and data rows span A–C.
+- **Spacing is token-only**, never a raw px/rem value in a component: `--space-1…6` (8/16/24/32/48/64px),
+  `--space-block` (vertical rhythm between blocks inside a section), `--space-item` (between cards),
+  `--space-section` (between sections).
+- **Alignment verification:** always measure element edges against the column lines with a small JS audit in the
+  browser (`getBoundingClientRect()` compared to grid math) — the owner explicitly rejected "looks aligned" as a
+  verification method.
+
+### Motion
+- Medium overall level. **Always** respect `prefers-reduced-motion` — every animated component has a static
+  fallback branch.
+- Current calibration (owner, 2026-10-04, after an "evident/premium" request was walked back): **motion must be
+  barely noticeable** — his words: *"se uno non ci vuole fare caso non ci fa caso"* (if you don't want to notice it,
+  you won't). Concretely: no entrance/reveal choreography on the Result showcase, only a ~24px-max inertial
+  parallax and a 4px hover lift. **Always start from the smallest plausible motion amplitude, never the largest** —
+  he will ask to reduce it, rarely to increase it (the one exception was the home hero texture intensity, see §3
+  Appendix/log).
+- Page view-transitions are on (Astro's native `<ClientRouter>`-less transition API via CSS).
+- Hero words use a blur-fade focus-in per word (a masked slide-up was tried and rejected — it cut letters).
+- The cursor label ("Read case study" etc.) follows the pointer over linked cards/bands; it inverts to light-on-dark
+  over dark surfaces (`data-cursor-theme="light"`).
+- The **depth texture** (`components/DepthTexture.astro`) is the one permitted "experimental gesture": three
+  canvas-drawn grain layers that drift in parallax with the pointer and "breathe" (brighten) near the cursor. Props:
+  `intensity` (dot opacity multiplier, home uses **1.25** — raised twice from an initial 0.5 after "rendili più
+  visibili") and `parallax` (travel-distance multiplier per layer, home uses **1.6**). Static on touch / reduced
+  motion. Do not add new experimental gestures elsewhere — this is the only one.
+
+### Responsive rules
+- Two breakpoints used throughout case-study components: **960px** (tablet — grid collapses or simplifies) and
+  **640px** (phone — single column, horizontal swipe rows for anything that was a multi-column grid, i.e.
+  `Showcase`, `Gallery`, `Chips`).
+- The Work/Playground grid is two columns of 4:3 cards, one column on phones.
+- Card entrance never changes its footprint (no layout shift): the cover fades in at full size while the inner
+  image settles from `scale(1.06)`.
+
+### Component construction conventions (how `.astro` files here should be built)
+- **Props:** a TypeScript `interface Props` at the top of the frontmatter fence, destructured with sane defaults
+  (`const { items, variant = 'plain' } = Astro.props;`).
+- **Styling:** Astro's native scoped `<style>` block per component. Reach for `:global(...)` only when styling
+  markup injected via `<slot />` or an imported sub-component's output. Class names follow a loose BEM pattern —
+  `.component`, `.component__part`, `.component--variant` (e.g. `.chips--cards`, `.step--final`).
+  No CSS modules, no utility classes beyond the shared `.label`, `.field`, `.muted`, `.trio`, `.span-2` primitives
+  in `global.css`.
+- **Grid placement:** components that live inside a case-study chapter body use `.trio` + explicit `grid-column`
+  inline styles when a component needs custom spans (e.g. `Reframes`' stepped funnel, `Archetypes`' comparison
+  columns) — see those two files for the pattern of computing `grid-column` from an index.
+- **Entrance reveals:** add `data-reveal` (optionally `data-reveal="group"` or similar for a custom observer) to
+  opt an element into the site-wide `IntersectionObserver` fade-up in `site.ts`; stagger with `style="--d: {i}"`
+  which the global CSS reads as a transition-delay multiplier. Components with their own bespoke motion (the
+  `Showcase` parallax, `Stat`'s count-up) manage their own `IntersectionObserver` instead.
+- **Images:** always `astro:assets` `<Image>` (never a raw `<img src>`), always pass `widths` + `sizes` for
+  responsive output, always a real `alt`.
+- **Numbers:** any number shown at a large size goes through `<Stat value="…" />`, never raw text — it handles the
+  count-up, the proportional-figure "1" fix, and prefix/suffix sizing consistently.
+
+### Information architecture of a case study (fixed order — owner's brief, 2026-10-03)
+*"More concise, more impactful, no filler; a recruiter sees interface and result at first glance, and can dig into
+the whole process and way of thinking if they want."*
+1. Back button (outlined pill, static chevron — no animated arrow).
+2. Title (`--fs-mega`) + one-sentence tagline (`--fs-lead`).
+3. Cover (16:10).
+4. **Overview** — no band, ink top rule (other sections get a grey one); Problem/Approach/Outcome, one sentence
+   each; then the facts grid; separated by whitespace only (hairlines between them were tried and rejected as "too
+   many lines").
+5. **Result** — alt band. If `result.showcase` exists (JustCook), it's a full-width device presentation via
+   `Showcase.astro`; otherwise a simpler placeholder layout. This is the "30-second read" — interface + outcome
+   before any process explanation.
+6. **Process** — `ProcessIndex.astro`: steps hanging off an ink line, each numbered with a 2–4-word summary pulled
+   from the MDX `<Chapter summary="…">` attribute. Once scrolled past, a slim fixed bar under the header takes over
+   as a reading progress indicator (replacing a plain progress bar).
+7. **Chapters** (from MDX): Challenge → Research → Insights (alt band) → Define → Ideate → Design → [Validate, only
+   if usability testing happened] → Reflection → `Closing`. Each chapter opens with a `<Key>` sentence (lead size,
+   ink) then short paragraphs (2–3 lines, `--fs-read`). No filler — cut anything that doesn't carry a fact, a
+   decision or a reason.
+8. "Next case study" full-bleed band (inverted colours, cover image of the next project).
+
+---
+
+## 3. Development Rules & Working Style
+
+**The owner never edits code.** Every change goes through Claude — always build, verify, commit and push before
+reporting back; never leave work uncommitted at the end of a turn.
+
+**Language:** talk to the owner **in Italian**, always. All site copy is in **English**, always. This HANDOFF file
+and `CLAUDE.md` are written in English (matching the codebase's own comments/docs convention) — keep it that way for
+continuity even though the owner himself is addressed in Italian.
+
+**Iteration style:** the owner gives short, blunt visual feedback — *"non mi piace"*, *"torna alla versione
+precedente"*, *"nessuna"*. **Revert immediately** when told, no argument. When he asks for options on something
+visual/taste-based, **do not just describe them in text** — show **live interactive concepts** with the
+`mcp__visualize__show_widget` tool (load `read_me` with the `interactive` module first), then implement only the
+option he picks. When he explicitly asks to "ask questions" (or a decision is genuinely his to make, not inferable
+from the repo), use `AskUserQuestion` with 2–4 concise options, one marked "(Recommended)".
+
+**Autonomy level:** high on implementation and technical decisions; low on taste/content calls. Make the obvious
+engineering choice yourself and proceed; stop and ask (via widget or `AskUserQuestion`) only for things that are
+genuinely subjective or where getting it wrong means redoing real work (new colours, new layout concepts, content
+claims about the owner's life/work). Default to the more restrained option when proposing something new (§2
+philosophy).
+
+**Verification discipline:** headless Chrome via **puppeteer-core**
+(`C:/Program Files/Google/Chrome/Application/chrome.exe`) is the reliable way to check visual work — the in-app
+Browser pane is too narrow/scaled for pixel-accurate review. Standard checks: screenshot at 1440×900 and 390×844
+(mobile viewport with `isMobile`/`hasTouch`), measure alignment/gaps/visibility numerically in page-evaluated JS,
+never eyeball it. See §8 for the exact gotchas (lazy images, `data-reveal` classes, stale dev-server cache).
+
+**End every reply with a short Italian summary**: what changed, what was verified (and, honestly, what was *not*
+verified), and any open choices. Use tables when they make it scannable.
+
+**Commit discipline:**
+- Build **before** every commit (PowerShell command, §8) — never commit a broken build.
+- One logical change per commit where practical; commit messages in English, imperative, with a short body when the
+  change needs explaining.
+- **Attribution line is MANDATORY on every commit and PR** and changes depending on which model is active this
+  session — check the system reminder at the top of the conversation for the current line. As of this update it is:
+  ```
+  Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+  ```
+  (Earlier commits in this repo used `Claude Opus 5.5` — that's fine, don't rewrite history, just use whatever the
+  *current* session's system prompt specifies going forward.)
+- Use `git commit -q -F -` with a heredoc (commit messages often contain quotes/apostrophes that break `-m`).
+  PowerShell `-m @'...'@` has broken before — avoid it.
+- **HANDOFF.md and CLAUDE.md updates are their own commit discipline**: after any change that touches design
+  system, file map, or decisions, update the relevant sections here (not just the session log) *in the same session*
+  and commit that too. An out-of-date HANDOFF is worse than none.
+
+**Content conventions (MDX / frontmatter):** see `CLAUDE.md` "Writing a case study" section for the exact schema
+(`src/content.config.ts`) and the full list of components usable in MDX without imports — it is kept perfectly in
+sync with the component library and is the single source of truth for prop shapes; this file does not duplicate it.
+
+---
+
+## 4. Discarded Approaches & Anti-patterns
+
+**Do not re-propose any of these unless the owner explicitly asks.** Grouped by area.
+
+**Home hero:**
+Full-screen statement only; compact hero; registration-mark field background (replaced by the depth texture);
+masked word slide-up animation (cut letters); 6 full hero layouts (monumental name, dark band, project thumbnails
+inside the sentence, split with a role column, merged straight into Selected work); 4 hero→work transition devices
+(curtain sheet, statement shrinking into the title, typographic "05 case studies" bridge, horizon filter bar) — he
+said *"nessuna"* to all of them. New divider-effect concepts between hero and work (dot horizon, rippling line,
+halftone dissolve) were shown and declined — "just show more of the existing texture" was the accepted answer.
+
+**Work grid / cards:**
+13 scroll concepts for the project list (clip reveal + inner parallax, focus/blur, stacking deck, horizontal pinned
+track, inertia+skew, sticky index with preview, expanding window, focus carousel, 4 accordion-strip variants,
+editorial collage) — all rejected, plain two-column grid stays. Grid rhythm experiments (12-col, 6+6) before
+settling on all-half cards. A sticky side index next to the cards; facts blocks right-aligned under a cover; facts
+unfolding inside the index view; a "N of N projects, years" count line; corner marks on covers; a "Read case study"
+CTA chip under cards; card text sitting above the cover.
+
+**Card hover** (final answer: zoom-out + paper "chip" captions, see §2/§6): a dark scrim over the cover (hard no,
+repeated request); a paper caption bar sliding up and *covering* the cover; the cover shrinking to make room for a
+bar; title/meta living inside the cursor label itself ("E2") and its tech-editorial variants (tabbed card
+"E3", crosshair "E4", typographic "E5"); a translucent corner tag (variant "B3" was the runner-up); a technical spec
+sheet ("B4"); a traced/drawn frame ("B5"); a full-width "ruler strip" ("B6"); free-floating text with no container;
+a slim single-line bar. The winning design — square paper chips rising bottom-left on hover, cover zooming to 0.95
+— beat all of the above.
+
+**Typography / colour:**
+Geist Mono entirely (removed from the project); Regular-weight labels at 6% tracking with a no-wrap eyebrow
+(reverted to Medium 500); accent colours orange (`#c93a14`) and green (`#2b9e4d`).
+
+**Chrome / navigation:**
+An animated back arrow; a "Back to top" footer link; an in-page "Next" section styled with an arrow; a
+registration-field pattern as the "Next" band background (the real cover image was restored instead).
+
+**Case study structure:**
+`PhoneScroll` — a sticky scroll-driven device scene with screen-dissolve transitions — was fully built, then
+**removed entirely** by the owner (2026-10-03, *"togli il cellulare interattivo"*). Do not reintroduce it; the
+"realistic hand photo" idea that was pending for it is now moot. Overview laid out with gutter hairlines between
+the three tracks ("too many lines"); Overview as a dark band; Overview as stacked full-width sentences; Overview as
+a text+data two-column split. Process index as a plain row table-of-contents with key sentences; as a dotted
+book-style TOC; as a sticky side index (same objection as the card-grid version).
+
+**Result showcase (device presentation):**
+A dark ink background band — tried, then reverted *"era meglio prima"* (it was better before). Entrance
+choreography of any real size — first 80px rises + scale, then even a reduced 24px fade-up, both rejected down to
+**no entrance animation at all**, only a quiet ~24px parallax. Letting device groups break out of the 12-column grid
+("dentro la griglia" — inside the grid — was his explicit preference).
+
+**Case-study media / covers:**
+Any simulated photographic "depth" on covers — radial studio light/vignette, cast shadows under phones, a diffuse
+halo — all tried and rejected; **flat, evenly-lit ground only**. Media boards embedded inside the JustCook body text
+(removed for now, *"ci penseremo dopo"* — the Result showcase and Design-chapter galleries replaced the need).
+
+**Reframing / archetypes:**
+A plain unstyled list of the six reframing cycles (replaced by the stepped-funnel treatment); a timeline layout and
+a simple "before → after" two-box layout for the funnel were both considered and passed over in favour of the
+stepped funnel with a big "N → 1" header. For archetypes: a light+dark paired box pair, and a horizontal "spectrum"
+layout with the two archetypes at opposite poles, were both considered and passed over in favour of two light boxes
+compared side by side with a shared row grid.
+
+---
+
+## 5. Git Status & Recent History
+
+*(Snapshot taken at the time of this update — re-run `git status`/`git log` at the start of your session, don't
+trust this as current.)*
+
+- **Branch:** `main` (this is a LOCAL session; LOCAL always works on and pushes to `main` directly — see §10).
+- **Working tree:** clean. No staged or unstaged changes at last check.
+- **HEAD commit:** `447dbe152dd578381847c8fc06884cff1c3a8f03` —
+  *"JustCook Design: colour-block box strip, bigger alternating screens, campaign mosaic"*
+  (author `rosponiv-star`, committed 2026-10-05 00:14:04 +0200; co-authored by Claude Opus 5.5, the model active in
+  that session).
+- **No unmerged `claude/*` branches** at last check (`git branch -r --no-merged main` returned nothing) — if a new
+  one exists when you start, that's cloud work waiting to be merged, see §10.
+
+**Last 15 commits (oldest-relevant→newest), for orientation:**
+```
+447dbe1 JustCook Design: colour-block box strip, bigger alternating screens, campaign mosaic
+0dc5d93 JustCook: drawn arrow, proportional figures, perspective box renders
+abd1d01 JustCook closing line: "Design the easy path, and people will take it."
+997be11 JustCook: close the case study with a statement and the lesson to remember
+fbb83f8 JustCook: featured stat, richer Design with screens and brand gallery, launch plan
+4f81927 Case study: label roles, bolder numbers, archetype contrast, scannable text
+41f6a17 Case study: data with character, archetypes compared, reframing as a funnel
+15b9fe2 Home texture: fade only near the bottom so more of it shows
+cb119ec Home texture: dots clearly visible (intensity 1.25)
+fbd2b50 Home texture: a little more visible, stronger pointer parallax
+3dcbafb HANDOFF: log the first local merge of cloud work
+1f108f8 Home hero: drop the grey band, stronger texture fading out above Selected work
+8145aea HANDOFF: owner's rule for cloud-to-local handovers
+84a235a HANDOFF: log the first local merge of cloud work
+226c3c5 HANDOFF: cloud/local session protocol and session log
+```
+
+This commit train tells the story of the current focus: the home hero was reworked (band removed, texture tuned up
+twice), then JustCook's case-study chapters got three successive passes of visual-impact work (data/numbers →
+archetypes/reframing → Design chapter product photography), each one driven by direct owner feedback on the
+previous pass. **Expect the owner to keep iterating on JustCook's visual polish** before the project moves to case
+studies 02–05.
+
+---
+
+## 6. Detailed File Map
+
+```
+astro.config.mjs            site URL, mdx + sitemap integrations, prefetch config, devToolbar off
+src/styles/global.css       ALL design tokens (colour, type scale, spacing), grid primitives (.trio, .span-2),
+                             prose styles, the .label/.field/.muted primitives, reveal-animation CSS, view transitions
+src/layouts/Base.astro      <head>, Header, Footer (showContact prop), global <script> include
+src/scripts/site.ts         reveals (IntersectionObserver, rootMargin -1%), header hide-on-scroll, cursor label
+                             (data-cursor / data-cursor-theme / data-cursor-style / data-cursor-image), scroll-spy,
+                             video autoplay. NOTE: the old plain progress bar is superseded on case-study pages by
+                             ProcessIndex's own sticky reading bar.
+src/data/site.ts             name, email (rosponiv@gmail.com), LinkedIn (STILL A PLACEHOLDER URL — open item),
+                             CV path, nav entries
+
+src/components/
+  Header.astro                name left; nav "01 Work / 02 Playground / 03 About" with signal-coloured active state
+  Footer.astro                contact row (email, LinkedIn, Résumé PDF), giant "Valerio Rosponi" wordmark, ©
+  Section.astro                THE section pattern — see §2. Props: title, id, class, bodyClass, stacked, tone
+  Collection.astro             shared Work/Playground block: title, filters, Grid/Index switch, grid slot, index
+                                table + its own script (localStorage view preference)
+  Card.astro                   generic card: media slot; hover = cover zooms to .95 + paper "chip" captions rising
+                                bottom-left (title/type/year), staggered 60ms. Touch/unlinked cards: text below.
+  ProjectCard.astro            Card + Cover wired to a project's frontmatter
+  Cover.astro                  project cover: real image/video, or a placeholder (tone colour + faint grid + title)
+  DepthTexture.astro           the hero's grain/parallax canvas — props intensity, parallax (see §2 Motion)
+  RegistrationField.astro      the old cursor-reactive "+" field — now lives on only as the Playground experiment
+
+  case/                        — the case-study component library, all in src/components/case/
+    Chapter.astro               a numbered chapter wrapper; title + summary feed the Process index
+    Key.astro                   the chapter's opening key sentence (lead size, ink)
+    Note.astro                  an annotated aside (A–B content, C-track note, e.g. "Decision", "Discarded", "Plan")
+    Figure.astro                a captioned image/video figure
+    Metrics.astro                large bare numbers on an ink hairline; optional title (group heading) and
+                                 variant="boxed" (tinted boxes, for a second class of number in the same chapter)
+    Stat.astro                   the shared "big number" renderer: splits prefix/digits/suffix, drives the
+                                 one-time count-up (~1.2s, IntersectionObserver-triggered), proportional figures
+    Insights.astro               numbered findings; an item may carry stat/statLabel to lead with a number
+    Reframes.astro               the stepped-funnel reframing-cycles display; cycles prop opens with a big "N → 1"
+                                 (drawn hairline + chevron arrow, NOT a text arrow — see §4); each item can carry a
+                                 real cycle number n shown large and faint behind the box; discarded ideas struck
+                                 through; the last item is the dark "final framing" box
+    Archetypes.astro             two archetypes compared side by side: row labels in track A (right-aligned, with a
+                                 hairline leader into the boxes), a tinted header band, optional large goal row
+                                 ("Less effort" vs "Less waste"), quote, then shared trait rows
+    Chips.astro                  a short list pulled out of prose as an item row: label + intro in track A, chips in
+                                 B–C. variant="chips" (hover shows a sentence-case note or an image preview in the
+                                 cursor label) or variant="cards" (the note is always visible, used for channels)
+    BigStat.astro                the one number a chapter hinges on — mega size across A–B, caption+source in C
+    Features.astro               product features paired with their screen; alternate prop flips device side
+                                 row-by-row for rhythm; crop prop controls how much of the device height shows
+    Gallery.astro                brand/campaign material in a tinted full-width panel; groups of items, kind
+                                 cutout|tile; an item can take span:2 for a 2×2 hero tile in a dense mosaic
+    BoxStrip.astro                a product line as solid colour panels (one per product, its own brand colour),
+                                 the product cut-out large inside; hover cross-fades to a second image (e.g.
+                                 perspective view ↔ front view)
+    Closing.astro                 the case study's last word: a display-size statement, then a hairline and the one
+                                 lesson to remember in h2 size
+    ProcessIndex.astro            inline process list + the fixed sticky reading bar that replaces it on scroll
+    Showcase.astro                 the Result section's device presentation (grouped screenshots, crop/stagger
+                                    options, quiet parallax)
+    Todo.astro                     a visible "still to write" placeholder block — remove as real content arrives
+
+src/lib/
+  projects.ts                  getProjects, slugOf/hrefOf/numOf, chapterId/chaptersOf (reads <Chapter> tags from
+                                MDX for the Process index), CATEGORIES (re-exports categoryId)
+  collection.ts                categoryId, gridSizes (currently always 'half'), yearSpan (unused)
+
+src/content.config.ts          the project frontmatter schema — SINGLE SOURCE OF TRUTH for every prop shape used
+                                by MDX components; keep CLAUDE.md's "Writing a case study" section in sync with it
+src/content/projects/
+  01-justcook.mdx               REAL — reference implementation, read it before writing 02–05
+  02-rehab.mdx, 03-smart-home-ecosystem.mdx, 04-realiti.mdx, 05-aurawake.mdx    PLACEHOLDER frontmatter + MDX
+
+src/pages/
+  index.astro                   home: hero (DepthTexture) + Collection(work) + "How I work" + footer
+  work/[slug].astro             case-study template — wires frontmatter + MDX body into the section order in §2
+  about.astro, playground.astro, 404.astro
+
+src/assets/
+  valerio-rosponi.png            About portrait
+  projects/justcook/
+    cover-app.png                 the case-study cover (3 redesigned app screens composed together)
+    screens/*.png                 14 cut-out device PNGs used by the Result Showcase
+    boxes/
+      box-a.png … box-d.png        front-view cut-outs, 800px
+      box-a-3q.png … box-d-3q.png  perspective-view cut-outs, 900px (used by BoxStrip + Gallery)
+    brand/
+      post-box-a.jpg … post-tris.jpg, post-4box.jpg, post-app-verde.jpg, post-app-arancione.jpg
+      volantino-pubblicita-*.jpg, questionare-flyer.jpg
+      (all resized JPGs exported from the old session scratchpad's render/out folder)
+    cover.jpg, fieldwork.jpg, box-family.jpg, flyers.jpg, social.jpg     UNUSED leftovers from an earlier pass
+  projects/aurawake/
+    cover.png                      2 app screens on a flat #f4f4f2 ground
+
+public/cv/Valerio-Rosponi-CV.pdf   contains his phone number — owner was told, may want a redacted version (open item)
+
+Media/                          RAW owner material, git-ignored, LOCAL-ONLY (never exists in a cloud clone)
+  01-JustCook/                   reports (PDF/DOCX/XLSX), OfficialMedia/{Packaging,Flyers,SocialPosts,Interfaces}
+                                  — Interfaces holds 17 Figma device exports (3x scale, 1342×2741), e.g.
+                                  HomeFirstScreen.png, FocusMode.png, LiveActivityExpanded.png, BuyReviewOrder.png
+  05-AuraWake/OfficialMedia/Interfaces/   Home.png, AlarmSet1.png (3x)
+
+.claude/launch.json              dev-server config — see §8
+CLAUDE.md                        persistent rules, auto-loaded every session — the schema/component reference
+HANDOFF.md                       this file
+```
+
+**How layout/logic is actually split**, for a session about to touch something:
+- **Tokens and primitives** (colour, type, spacing, `.trio`/`.span-2`, `.label`/`.field`) live **only** in
+  `global.css` — never redefine a size or colour locally in a component.
+- **Page-level structure** (which sections exist, in what order, with what frontmatter wiring) lives in
+  `src/pages/*.astro` — these files are thin: they import `case/*` components and lay out the fixed section order.
+- **Chapter *content*** lives in the MDX files (`src/content/projects/*.mdx`) as a sequence of component
+  invocations — a session writing/editing case-study text works almost entirely in MDX, rarely touching `.astro`.
+- **Reusable visual logic** (how a stat counts up, how a funnel narrows, how a gallery mosaic packs) lives in
+  `case/*.astro` components — a session asked to change *how something looks or behaves* (not *what it says*)
+  touches these instead.
+
+---
+
+## 7. Technical Context, Bugs & Tech Debt
+
+**Environment quirks (not bugs, but will burn time if unknown):**
+- **Run all `astro` CLI commands through PowerShell**, not Git Bash — Rolldown's native binding fails to load there
+  ("Cannot find native binding"). See §8 for the exact command.
+- **Dev server serves stale CSS/data after edits** (Vite cache). If a screenshot doesn't reflect a just-made change:
+  `preview_stop` then `preview_start` again. After a *schema* change, also delete
+  `.astro`, `node_modules/.astro`, `node_modules/.vite` first.
+- **In dev, an image keeps the same URL when its source file changes** (no content hash), so the browser serves the
+  old cached bytes — hard-refresh or clear the dirs above. **Production URLs are hashed**, so this is dev-only.
+- `.claude/launch.json` runs `npm run dev -- --ignore-lock` with `autoPort` so a local session's dev server can run
+  alongside another chat's server without a port clash; `astro.config.mjs` reads `PORT` from the environment to
+  match.
+- **Before any full-page screenshot:** add the `is-in` class to every `[data-reveal]` element (otherwise entrance
+  CSS hides them) and, since images are lazy-loaded, either scroll through the page first or set `loading='eager'`
+  on the `<img>`s — otherwise captured screenshots come out blank below the fold.
+- The old puppeteer verification scripts live in a **previous session's scratchpad**
+  (`C:\Users\rospo\AppData\Local\Temp\claude\...\734cf2a2-...\scratchpad\render\`) — they may no longer exist by the
+  time you read this; recreate them if so (the pattern is simple: launch `puppeteer-core` pointed at the system
+  Chrome binary, navigate, set viewport, screenshot).
+- `pdf-lib`, `pdfjs-dist` + headless Chrome, and `sharp` are the toolchain used to extract/compose imagery from the
+  owner's raw `Media/` PDFs — poppler and python are **not** installed. The Read tool fails on PDFs over 20MB, so
+  split or render first. All of this tooling lives in the scratchpad, never in the repo.
+- **Media (images) read with the Read tool get stripped from context later** ("media removed") — when extracting
+  facts from an image-only PDF, write notes to a file immediately after reading each part, don't rely on
+  remembering it later in the same session.
+- Higgsfield image generation is connected but the owner's plan is free-tier and can't generate — don't attempt it
+  without asking first (it would also cost credits even if it could).
+
+**Open questions / pending decisions** (ask the owner, don't guess):
+1. **LinkedIn URL** in `src/data/site.ts` is still the literal placeholder `https://www.linkedin.com/in/`.
+2. **CV may contain his phone number** (`public/cv/Valerio-Rosponi-CV.pdf`) — he was told, may want a redacted copy.
+3. **UX/UI filter** is present on every single project, so it doesn't actually discriminate anything in the
+   Work-page filter bar — flagged to the owner, still unresolved whether to drop it.
+4. **JustCook tools list** currently reads "Figma, Miro" — owner was asked whether to add others, no answer yet.
+5. **Hero cover-glimpse at 1280×720** measures only 38px (target ~80px, which it hits at every other tested
+   viewport: 80px @1440, 95px @1920, 84px on mobile). Low priority, but a `--peek` tweak would fix it if raised.
+
+**Accepted tech debt / deliberate shortcuts:**
+- `Reframes` shows only 3 of JustCook's real 6 reframing cycles (opening, one discard, final framing) — a
+  deliberate edit for length, not a bug; the `cycles` prop still correctly renders "6 → 1" as the header.
+- `Archetypes` trims each archetype to a quote + 2 traits (Friction/Opportunity) even though the source research
+  had more dimensions — same reasoning, kept for scannability.
+- Case studies 02–05 still carry **entirely invented** frontmatter facts (year, type, platform, role, timeline,
+  team, tools) — these must be replaced through the interview process (Appendix B) before `placeholder: false`.
+- `PhoneScroll` removal left no dangling references, confirmed — but the "realistic hand photo" asset idea that was
+  attached to it is now simply moot, don't revisit it.
+- Box-profile colour hex values used in `BoxStrip`/`Chips` (A `#ffa91e`, B `#488863`, C `#ff7257`, D `#29bcff`) were
+  **sampled from the rendered packaging images**, not pulled from an official brand palette file — close enough
+  visually, flagged here in case an authoritative source ever turns up.
+
+---
+
+## 8. Run & Test Commands
+
+**Start the dev server** (always via the Claude Code preview tool, never raw `npm run dev` in a bash tool call):
+```
+mcp__Claude_Browser__preview_start {name: "portfolio"}
+```
+This reads `.claude/launch.json` → `npm run dev -- --ignore-lock` with `autoPort`.
+
+**Build (verification before every commit) — PowerShell only:**
+```powershell
+powershell -NoProfile -Command "npx astro build 2>&1 | Select-String -Pattern 'ERROR|page\(s\) built'"
+```
+A successful build prints `N page(s) built` with no `ERROR` lines.
+
+**Commit pattern** (heredoc avoids quote-escaping issues; attribution line per §3 — check current model before
+copying this verbatim):
+```bash
+git add -A && git commit -q -F - <<'EOF'
+<Imperative summary line>
+
+<Optional body explaining the why>
+
+Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+EOF
+git push
+```
+
+**Visual verification (puppeteer-core, headless Chrome):**
+```js
+import puppeteer from 'puppeteer-core';
+const b = await puppeteer.launch({ executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
+const p = await b.newPage();
+await p.setViewport({ width: 1440, height: 900 }); // also check 390×844 with isMobile:true, hasTouch:true
+await p.goto('http://localhost:<port>/work/justcook', { waitUntil: 'networkidle0' });
+await p.evaluate(() => {
+  document.querySelectorAll('[data-reveal]').forEach((e) => e.classList.add('is-in'));
+  document.querySelectorAll('img').forEach((i) => (i.loading = 'eager'));
+});
+await new Promise((r) => setTimeout(r, 1500)); // let images settle
+await p.screenshot({ path: 'out.png', fullPage: true });
+await b.close();
+```
+Use `page.evaluate(() => ({...}))` to pull `getBoundingClientRect()` numbers for alignment/gap verification instead
+of judging screenshots by eye.
+
+**Git session-start sync** — see §10 for the full protocol; the short version for LOCAL:
+```bash
+git fetch origin
+git checkout main && git pull
+git branch -r --no-merged main        # anything origin/claude/* listed here is unmerged cloud work
+git merge origin/claude/<branch>      # for each one found
+npm install                           # only if package.json changed
+# build (command above) → if OK:
+git push
+```
+
+---
+
+## 9. Immediate Task & Roadmap
+
+**First step, unambiguous:** run the LOCAL session-start sync from §10 right now — `git fetch origin`, check
+`git branch -r --no-merged main` for any cloud work waiting, merge it in, build, push. Only after that is the
+working tree guaranteed current. Then re-read this file once more (the merge may have changed it) and check
+Appendix A for the latest session-log entry — it states explicitly whether there is an open request from the other
+side.
+
+**Next 2–3 steps, in likely priority order:**
+1. **Continue polishing JustCook's visual impact if the owner keeps iterating** — the last several sessions were a
+   tight feedback loop on exactly this (data/numbers → archetypes/reframing → Design-chapter photography). Expect
+   more small, specific visual-direction requests before he considers it finished. Show widget concepts for
+   anything genuinely subjective (§3).
+2. **Once JustCook is settled, start case study 02 (Rehab)** using the process in Appendix B: read everything in
+   `Media/02-Rehab/`, write facts to a notes file as you go, interview the owner about gaps/contradictions, draft
+   the MDX with the real chapter skeleton and the `result` frontmatter, replace every invented fact, set
+   `placeholder: false`, build/verify/push.
+3. **Resolve the small open items in §7** opportunistically — LinkedIn URL, CV redaction, UX/UI filter, JustCook
+   tools list — none are blocking, but ask next time the owner is in a decision-making mood rather than letting
+   them go stale indefinitely.
+
+---
+
+## 10. Hybrid Flow (Local ↔ Cloud)
+
+**This file is the only memory the two environments share — read this section every session, before touching
+anything else.**
 
 | | **CLOUD session** | **LOCAL session** |
 |---|---|---|
-| Where | claude.ai/code, Linux container, fresh clone | the owner's Windows 11 PC (Claude Code desktop/CLI) |
-| How to tell | working dir `/home/user/...`, no `Media/` folder | path `C:\Users\rospo\...`, `Media/` folder exists |
-| Has `Media/` (reports, PDFs, raw exports) | **no** (git-ignored, never in the clone) | **yes** |
-| Figma MCP / headless Chrome | Figma MCP may be connected; Chromium via Playwright | Figma MCP, Chrome via puppeteer-core |
-| Git | may push **only** to its `claude/*` branch (now `claude/stoic-ride-lj7woi`; a new cloud session may get another `claude/*` name: check `git branch -r`) | pushes to `main` |
-| Deploy | its work is **not live** until merged into `main` | `main` = what Cloudflare deploys |
-| Good for | code, layout, CSS, copy, MDX writing from facts already in the repo or pasted in chat | anything that needs `Media/`: reading reports, extracting facts, composing covers/boards, cut-outs, Figma exports; merging cloud work into `main` |
+| Where | claude.ai/code, Linux container, fresh clone each time | the owner's Windows 11 PC (Claude Code desktop/CLI) |
+| How to tell which you are | working dir `/home/user/...`, no `Media/` folder | path `C:\Users\rospo\...`, `Media/` folder exists |
+| Has `Media/` (raw reports, PDFs, exports) | **No** — git-ignored, never present in the clone | **Yes** |
+| Figma MCP / browser automation | Figma MCP may be connected; Chromium via Playwright | Figma MCP; Chrome via puppeteer-core |
+| Git permissions | may push **only** to its own `claude/*` branch — check `git branch -r` for the current name, a fresh cloud session may get a different one | pushes directly to `main` |
+| Deploy | its work is **NOT live** until merged into `main` | `main` = what Cloudflare actually deploys |
+| Best suited for | code, layout, CSS, copy, MDX writing from facts already in the repo or pasted into chat | anything needing `Media/`: reading raw reports, extracting facts, composing covers/boards, Figma exports, image cut-outs; **merging cloud work into `main`** |
 
-The owner's routine: he works in the cloud; when something needs `Media/`, he opens a local chat, says what he needs
-and "read HANDOFF.md". Then he may come back to the cloud. So **both sides must leave this file up to date at the end of
-every change**, as if the next message came from the other side.
+The owner's actual routine: he usually works in the cloud; when a task needs `Media/` (or local tooling), he opens a
+local session, states what's needed, and says "read HANDOFF.md". He may then return to the cloud. **Both sides must
+leave this file fully up to date at the end of every change, written as if the very next message will come from the
+other environment.**
 
-### Start of every session (and of every new task in a long session)
-- **LOCAL:**
-  ```
-  git fetch origin
-  git checkout main && git pull
-  git branch -r --no-merged main        # any origin/claude/* listed = cloud work not yet in main
-  git merge origin/claude/<branch>      # for each one listed; resolve conflicts (see below)
-  npm install                           # if package.json changed
-  build (PowerShell, §2) → if OK: git push
-  ```
-  Then re-read HANDOFF.md (the merge may have changed it) and the **Session log** (§01). Tell the owner that the cloud
-  work is now live (pushed to `main`).
-- **CLOUD:**
-  ```
-  git fetch origin main && git merge origin/main     # bring in local work (Media assets, notes, fixes)
-  ```
-  Then re-read HANDOFF.md and §01. Never push to `main` (not allowed); push the `claude/*` branch.
+### At the start of every session (and every new task inside a long session)
 
-### End of every change (both sides)
-1. Build, verify, commit, push (LOCAL → `main`; CLOUD → its `claude/*` branch).
-2. Add an entry at the **top** of the Session log (§01): date, CLOUD/LOCAL, what changed, what is pending, and any
-   **request for the other side**. Also update the sections it touches (§3 file map, §4–§5, §7, §8, §9) and `CLAUDE.md`.
-3. Commit and push the HANDOFF update too. Uncommitted = lost (the cloud container is thrown away).
-4. CLOUD only: tell the owner when his change is **not live yet** and needs a local session (or a merged PR) to deploy.
+**LOCAL:**
+```bash
+git fetch origin
+git checkout main && git pull
+git branch -r --no-merged main        # any origin/claude/* listed = cloud work not yet in main
+git merge origin/claude/<branch>      # for each one listed — resolve conflicts per the rule below
+npm install                           # only if package.json changed
+# build (§8) → if it passes:
+git push
+```
+Then re-read this entire file (the merge may have changed it) and Appendix A. **Tell the owner explicitly that the
+cloud work is now live** (pushed to `main`, which Cloudflare deploys).
 
-### Handing work across
-- **Owner's rule (2026-10-04):** when a request needs the local session, the CLOUD session must **say so explicitly**
-  in its reply (in Italian: what is missing and why it needs `Media/` or the local machine), do **everything it can**
-  first (code, layout, MDX with `<Todo>` placeholders, asset paths wired up), leave a precise `REQUEST → LOCAL` entry
-  in §01, push, and give the owner a ready-to-paste message for the local chat. The local chat finishes the job.
-- **Cloud needs something from `Media/`:** write a `REQUEST → LOCAL` entry in §01 saying exactly what to produce and
-  where to put it (e.g. "Rehab cover 3840×2400 → `src/assets/projects/rehab/cover.png`"; "facts from the Rehab report →
-  `notes/02-rehab.md`"). Tell the owner in Italian what to ask the local chat.
-- **Facts from `Media/` go into the repo as text**, so the cloud can use them: `notes/NN-name.md` (one file per project:
-  numbers with their source and page, team, role, timeline, tools, open questions for the owner). `notes/` is not
-  published by Astro. Processed images go to `src/assets/projects/<name>/`, video/PDF to `public/`, as usual. Raw
-  `Media/` stays git-ignored.
-- **Local finished a request:** mark it `DONE` in §01, push `main`. The cloud merges `origin/main` at its next task.
-- **Conflicts:** usually only in HANDOFF.md §01. Keep both entries, newest first. For code, prefer the newer intent and
-  check the log. Never force-push `main`; never rebase someone else's history.
+**Your primary job when resuming a LOCAL session after cloud work exists is exactly this:** read what the cloud
+session produced (from the merge diff and from its Appendix A entries), physically reconcile/update the local
+files if the merge needs any manual follow-up (e.g. a cloud session left a `REQUEST → LOCAL` for an asset it
+couldn't produce without `Media/`), and commit/push whatever is needed to bring the repository to a single
+consistent, deployed state. Don't just merge mechanically — verify the result builds and looks right.
+
+**CLOUD:**
+```bash
+git fetch origin main && git merge origin/main     # bring in local-only work (new assets, notes, fixes)
+```
+Then re-read this file and Appendix A. **Never push to `main`** (not permitted) — push your `claude/*` branch.
+
+### At the end of every change (both sides)
+1. Build, verify, commit, push — LOCAL → `main`; CLOUD → its own `claude/*` branch.
+2. Add a new entry at the **top** of Appendix A: date, CLOUD or LOCAL, what changed, what's still pending, and any
+   explicit **request for the other side**. Also update whichever of §1–§9 the change actually touches — not just
+   the log entry. A session log without updated reference sections is only half a handoff.
+3. Commit and push the HANDOFF update **too**, as its own or combined commit. Uncommitted = lost — a cloud
+   container is thrown away at the end of its session.
+4. **CLOUD only:** always tell the owner explicitly when a change is **not live yet** and needs a LOCAL session (or
+   a merged PR) before it reaches the real site.
+
+### Owner's explicit rule for cloud→local handovers (2026-10-04)
+When a CLOUD session hits something that needs the local environment, it must:
+1. **Say so explicitly** in its reply to the owner, in Italian — what's missing and why it needs `Media/` or local
+   tooling.
+2. **Do everything else it can first** — code, layout, MDX with `<Todo>` placeholders, asset paths already wired up
+   to where the file *will* live — so the local session only has to fill in the gap, not build around it.
+3. Leave a precise `REQUEST → LOCAL` entry in Appendix A stating exactly what to produce and where it goes (e.g.
+   *"Rehab cover 3840×2400 → `src/assets/projects/rehab/cover.png`"*, *"facts from the Rehab report →
+   `notes/02-rehab.md`"*).
+4. Push, then give the owner a ready-to-paste message for opening the local chat.
+
+### Passing facts across the boundary
+- **Facts extracted from `Media/` go into the repo as plain text**, so the cloud side can use them without ever
+  touching the raw files: `notes/NN-name.md`, one file per project — numbers with their source and page, team,
+  role, timeline, tools, open questions for the owner. `notes/` is **not** published by Astro (not under `src/`).
+- Processed images go to `src/assets/projects/<name>/` as usual (optimised by Astro), video/PDF to `public/`. Raw
+  `Media/` itself always stays git-ignored, local-only.
+
+### Finishing a request, and conflicts
+- **LOCAL finished a cloud request:** mark it `DONE` in Appendix A, push `main`. The cloud session picks it up by
+  merging `origin/main` at its next task start.
+- **Conflicts** will almost always be confined to Appendix A (the session log). Resolution: **keep both entries**,
+  newest-first, never drop one. For actual code conflicts: prefer whichever side has the more recent stated intent,
+  cross-checked against the log — and when genuinely unsure, ask the owner rather than guessing.
+- **Never force-push `main`. Never rebase someone else's history.** This is a two-sided shared repo with no PR
+  review step in between — a bad rewrite breaks the other side silently.
 
 ---
 
-## 01. Session log (newest first, keep ~15 entries; move older facts into the sections below)
+## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
 - **2026-10-05 · LOCAL** · Design chapter made visually impactful (owner meant Design, not Ideate; typographic
-  concepts were declined: "intendo impattante visivamente"). The box opens with a BoxStrip: four solid panels in the box
-  colours, perspective box inside, hover turns it to the front view (replaces the profile chips; no drop shadow).
-  Features: alternate sides, crop .72, devices one full track wide. Gallery: "Campaign" mosaic (the 4-box post as a 2×2
-  tile + 4 box posts + So good + Tris + 2 app posts), then the 4 maze flyers; packaging group dropped (the strip shows
-  the boxes). Ideate unchanged apart from the arrow. Pushed `main`.
-- **2026-10-05 · LOCAL** · "6 → 1" arrow is now a drawn hairline + chevron (the text arrow was rejected). All Stat numbers
-  use proportional figures (clean "1", no tabular foot). Perspective box renders (`boxes/box-*-3q.png`, old
+  concepts were declined: "intendo impattante visivamente"). The box opens with a BoxStrip: four solid panels in the
+  box colours, perspective box inside, hover turns it to the front view (replaces the profile chips; no drop
+  shadow). Features: alternate sides, crop .72, devices one full track wide. Gallery: "Campaign" mosaic (the 4-box
+  post as a 2×2 tile + 4 box posts + So good + Tris + 2 app posts), then the 4 maze flyers; packaging group dropped
+  (the strip shows the boxes). Ideate unchanged apart from the arrow. Pushed `main`.
+- **2026-10-05 · LOCAL** · "6 → 1" arrow is now a drawn hairline + chevron (the text arrow was rejected). All Stat
+  numbers use proportional figures (clean "1", no tabular foot). Perspective box renders (`boxes/box-*-3q.png`, old
   render/box-*-R.png) added: gallery shows front + perspective rows, box chips preview the perspective view.
-  Ideate redesign concepts shown (A sieve of 6 rows, B manifesto of 6 numerals, C before → after): waiting for the
-  owner. Pushed `main`.
+  Ideate redesign concepts shown (A sieve of 6 rows, B manifesto of 6 numerals, C before → after): the owner then
+  clarified he meant the **Design** chapter, not Ideate — see the entry above. Pushed `main`.
+- **2026-10-05 · (this update)** · HANDOFF.md fully restructured at the owner's request into the 10 fixed sections
+  above (overview/architecture, art direction, dev rules, anti-patterns, git status, file map, tech debt, commands,
+  roadmap, hybrid flow) plus this session log as Appendix A and the JustCook facts as Appendix B. No content was
+  dropped — everything from the previous numbered-section version was folded in somewhere. Session was switched to
+  model `claude-sonnet-5` (`/model claude-sonnet-5`) partway through — commit attribution going forward reads
+  "Claude Sonnet 5" per the active system reminder; §3 and §8 note to re-check this each session rather than
+  hard-trusting the line shown there. No site changes. No open requests.
 - **2026-10-04 · LOCAL** · JustCook ends with a `Closing`: "JustCook is still a concept… The next version would be a
-  tested one." in display size, then "What I take with me — Design the easy path, and people will take it." (owner picked it over "Make the right thing the easy thing.") Pushed `main`.
+  tested one." in display size, then "What I take with me — Design the easy path, and people will take it." (owner
+  picked it over "Make the right thing the easy thing.") Pushed `main`.
 - **2026-10-04 · LOCAL** · Third pass on JustCook: BigStat, Research groups, archetype leaders, Chips with hover
   notes/images, Ideate "6 → 1" + giant cycle numbers, Features with screens, channel cards, brand Gallery, launch
   plan (as a plan), human Reflection; cursor label gains note/image variants. Pushed `main`.
@@ -94,8 +753,8 @@ every change**, as if the next message came from the other side.
   funnel with an ink final box. JustCook: Challenge desk-research numbers pulled into Metrics, insight stats added.
   Pushed `main`.
 - **2026-10-04 · LOCAL** · Owner: show more of the existing texture (no new divider effect: concepts "dot horizon",
-  "rippling line", "halftone dissolve" were shown and declined). Hero texture mask now opaque to 78% (was 50%), so the
-  fade happens only near the bottom, in the gap above Selected work. Pushed `main`.
+  "rippling line", "halftone dissolve" were shown and declined). Hero texture mask now opaque to 78% (was 50%), so
+  the fade happens only near the bottom, in the gap above Selected work. Pushed `main`.
 - **2026-10-04 · LOCAL** · Owner: "rendili più visibili" → home texture intensity 0.85 → 1.25. Pushed `main`.
 - **2026-10-04 · LOCAL** · Home texture a bit more visible (intensity 0.7 → 0.85) and stronger pointer parallax:
   new `parallax` prop on DepthTexture (layer travel × P), home uses 1.6 (near layer 34 → ~54px). Pushed `main`.
@@ -106,431 +765,62 @@ every change**, as if the next message came from the other side.
   texture now runs into the gap above Selected work and fades out (mask, opaque to 50%) before it. Verified at
   1440×900 (headless Chromium): hero background transparent, fade ends at the Selected work top, cover glimpse still
   ~81px. → LOCAL: merge `origin/claude/stoic-ride-lj7woi` into `main` to put it live. No other requests.
-- **2026-10-04 · CLOUD** · Merged `origin/main` (fast-forward). Added the owner's rule to §00 "Handing work across":
+- **2026-10-04 · CLOUD** · Merged `origin/main` (fast-forward). Added the owner's rule to §10 "Handing work across":
   cloud says explicitly when the local chat is needed, does all it can first, then hands over. No site changes.
   → LOCAL: merge `origin/claude/stoic-ride-lj7woi` at your next start. No open requests.
-- **2026-10-04 · LOCAL** · First run of the §00 protocol: `git fetch`, fast-forward merge of
+- **2026-10-04 · LOCAL** · First run of the §10 protocol: `git fetch`, fast-forward merge of
   `origin/claude/stoic-ride-lj7woi` into `main` (only HANDOFF/CLAUDE.md), build OK, pushed. No other unmerged
   `claude/*` branches. No site changes. No open requests.
-- **2026-10-04 · CLOUD** · Added §00 (cloud/local protocol) and this log; one line in `CLAUDE.md` points to it. No site
-  changes. Cloud branch `claude/stoic-ride-lj7woi` = `main` + this HANDOFF/CLAUDE.md update → LOCAL: merge it at your
-  next start. No open requests.
+- **2026-10-04 · CLOUD** · Added the cloud/local protocol and this log; one line in `CLAUDE.md` points to it. No
+  site changes. Cloud branch `claude/stoic-ride-lj7woi` = `main` + this HANDOFF/CLAUDE.md update → LOCAL: merge it
+  at your next start. No open requests.
 
 ---
 
-## 0. How to work with the owner (read first)
+## Appendix B — JustCook verified facts & the process for the next case studies
 
-- **Owner:** Valerio Rosponi. Junior UX / digital product / visual designer, 3rd-year BSc "Interfaces & Communication"
-  (officially "Interfacce e Tecnologie della Comunicazione") at the University of Trento.
-  Git identity: `rosponiv-star` / rosponiv@gmail.com.
-- **Language:** always talk to him in **Italian**. All site copy is in **English**.
-- **He never edits code.** Every change goes through Claude, so after each change build, commit and push (and log it in §01).
-- **Iteration style:** he gives short visual feedback ("non mi piace", "torna alla versione precedente", "nessuna").
-  - Revert immediately when asked.
-  - When he asks for options, show **live interactive concepts** with the `mcp__visualize__show_widget` tool (load
-    `read_me` with the interactive module first), then implement only the one he picks.
-  - When he asks you to "ask questions", use `AskUserQuestion` with 2–4 concise options and a "(Recommended)" one.
-- **Taste:** restraint and the Swiss editorial look win. He rejects noise, filler labels, dark overlays and showy
-  motion that serves no purpose. He likes clean grids, precise alignment, generous but not scattered space, and fluid,
-  subtle motion.
-- **End each reply** with a short Italian summary: what changed, what you verified, and open choices or caveats. Keep
-  it scannable, with tables when useful. Say honestly what you did not verify.
-
----
-
-## 1. Purpose of the site
-
-The portfolio shows **case studies, process and mindset** to recruiters and hiring managers for UX, digital product
-and visual design roles (art direction is secondary). It is **not** a "hire me" or self-promotion site, so contact
-stays discreet.
-
-Target companies he cited: Belka, Bending Spoons, Apple, Google, Deda, DXC, GPI, Meta and Microsoft. Preferred sectors:
-health, fintech, fashion and wellbeing. He is open to remote work but not to relocating for now. He lives between Malè
-and Rovereto (TN).
-
-**Hard content rules:**
-- No personal or educational backstory: no school history, internships or certifications. The CV covers those.
-- No skill percentages, skill bars or proficiency ratings.
-- No filler: every element must carry information. The exception he asked for is the small 01/02/03 numbers in the
-  nav and in the index.
-- Case studies use real numbers only. Projected metrics are presented as **targets**. Show a confident result and the
-  process; keep limits for the Reflection chapter. Don't narrate setbacks. Conad: the owner decided on 2026-10-04 to
-  NAME Conad as the JustCook pickup store (it appears in the UI and in the Design chapter); still never say it didn't join.
-
----
-
-## 2. Stack, repo, deploy, environment
-
-- **Framework:** Astro 7 (static) + `@astrojs/mdx` + `@astrojs/sitemap`. Hand-written CSS, no framework. Font: **Geist
-  only** (`@fontsource-variable/geist`). Geist Mono was uninstalled.
-- **Repo:** `https://github.com/rosponiv-star/uxportfolio-main`, branch `main` (cloud sessions push to a `claude/*`
-  branch instead, see §00). Locally, push works with cached Git
-  Credential Manager credentials. `gh` CLI is NOT installed.
-- **Deploy:** the owner connects the repo to **Cloudflare** (Pages/Workers: build `npm run build`, output `dist`).
-  Domain configured in code: `https://www.valeriorosponi.com` (`astro.config.mjs` `site`, `public/robots.txt`). The
-  owner has his own domain on Cloudflare; confirm the exact domain with him if it matters.
-- **Machine (LOCAL session):** Windows 11, Node 24. **Run `astro` commands through PowerShell**, because in Git Bash Rolldown's native
-  binding fails ("Cannot find native binding"). The pattern used everywhere:
-  ```
-  powershell -NoProfile -Command "npx astro build 2>&1 | Select-String -Pattern 'ERROR|page\(s\) built'"
-  git add -A && git commit -q -F - <<'EOF' ... Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com> EOF
-  git push
-  ```
-  Commit messages contain quotes, so use `git commit -F -` with a heredoc. PowerShell `-m @'...'@` broke once.
-- **Dev server:** `.claude/launch.json` defines `portfolio` (`npm run dev -- --ignore-lock`, `autoPort`; `astro.config.mjs` reads `PORT`), so it can run next to another chat's server. Start it with
-  `mcp__Claude_Browser__preview_start {name:"portfolio"}`.
-  - **Known issue:** the dev server often serves **stale CSS/data** after edits (Vite cache). If a screenshot doesn't
-    reflect a change, `preview_stop` then `preview_start`.
-  - After schema changes, also `rm -rf .astro node_modules/.astro node_modules/.vite`.
-- **Verification method that works best:** headless Chrome via **puppeteer-core** (`C:/Program Files/Google/Chrome/
-  Application/chrome.exe`). Scripts live in the old session scratchpad
-  (`C:\Users\rospo\AppData\Local\Temp\claude\...\734cf2a2-...\scratchpad\render\`). They may be gone; recreate them if
-  so.
-  - The in-app Browser pane is narrow and its screenshots are tiny or scaled, so it is not reliable for visual checks.
-  - Use puppeteer to take clipped screenshots at 1440×900, 1920×1080, 1280×720 and 390×844 (mobile with
-    `isMobile/hasTouch`), and to **measure** things in JS: alignment to columns, gaps, how much of the first cover is
-    visible at scroll 0.
-  - Before screenshots, add class `is-in` to `[data-reveal]` elements, otherwise entrance animations hide content.
-  - Images are lazy-loaded: before a full-page screenshot, scroll through the page (or set `loading='eager'` on the
-    imgs) and wait, otherwise they come out blank.
-  - In dev, an image keeps the same URL when its file changes, so the browser shows the old one: hard refresh, or
-    `rm -rf .astro node_modules/.astro node_modules/.vite` and restart the server. Production URLs are hashed.
-- **Figma** (official MCP, tools `mcp__242ab3dc-…__*`): `get_metadata` to find nodes, `download_assets` with
-  `defaultFormat: png, defaultScale: 3` to export, then `curl` the URL (short-lived). JustCook file
-  `9kVAJhXfvlz569AYMRGGCn`, canvas "JustCook — Redesign v3" (node 2056:180): use the "… · device" frames (with bezel).
-  Exports carry the frame fill #f5f5f5: cut it out with `render/cutout.cjs` (old scratchpad) for use on other grounds.
-- **PDF tooling** (for the owner's media), all in the scratchpad and never in the repo:
-  - poppler and python are absent;
-  - `pdf-lib` splits PDFs and dumps embedded images;
-  - `pdfjs-dist` + headless Chrome renders pages (`chrome-render.mjs`);
-  - `sharp` composes boards, contact sheets and cutouts;
-  - the Read tool fails on PDFs over 20MB, so split or render them first.
-- **Media not kept in context:** images read with the Read tool get stripped from context later ("media removed").
-  When extracting facts from image-only PDFs, **write notes to a file right after reading each part**.
-- **Higgsfield image generation** is connected but the owner's plan is **free** ("Requires basic plan or higher").
-  Nothing can be generated without his upgrade, and it costs credits, so ask first.
-
----
-
-## 3. File map (what matters)
-
-```
-astro.config.mjs            site URL, mdx, sitemap, prefetch, devToolbar off
-src/styles/global.css       ALL tokens (colour, type scale, spacing), grid primitives, prose, reveals, view transitions
-src/layouts/Base.astro      <head>, Header, Footer(showContact), global script
-src/scripts/site.ts         reveals (IntersectionObserver rootMargin -1%), header hide-on-scroll, cursor label
-                            (data-cursor / data-cursor-theme), scroll-spy, progress bar (no longer used on case pages:
-                            ProcessIndex's bar replaces it), video autoplay
-src/data/site.ts            name, email rosponiv@gmail.com, LinkedIn (STILL A PLACEHOLDER URL), CV path, nav
-src/components/
-  Header.astro              name left; nav 01 Work / 02 Playground / 03 About (micro numbers, active = signal colour)
-  Footer.astro              Contact row (email, LinkedIn, Résumé PDF), giant "Valerio Rosponi" wordmark, ©
-  Section.astro             THE section pattern (rule, title cols 1–3 sticky, body cols 4–12; `stacked`, `tone="alt"`)
-  Collection.astro          shared Work/Playground block: title, filters, Grid/Index switch, grid slot, index table + script
-  Card.astro                generic card: media slot; hover = cover zooms out to .95 + paper chips (title/type/year)
-  ProjectCard.astro         Card + Cover for a project
-  Cover.astro               project cover: real image/video or placeholder (tone colour + faint grid + title)
-  DepthTexture.astro        hero background: 3-layer grain, parallax + "breath" near cursor (home: intensity 1.25, parallax 1.6×)
-  RegistrationField.astro   old cursor-reactive "+" field; now only the Playground experiment
-  case/*.astro              Chapter (title + summary), Key, Note, Figure, Metrics, Insights, Reframes, Archetypes, Todo,
-                            ProcessIndex (process line + fixed reading bar), Showcase (Result interface presentation),
-                            Stat (big number with a one-time count-up, used by Metrics and Insights), Chips (row or
-                            cards, hover note/image), BigStat, Features (feature + cropped screen, alternate), Gallery
-                            (span-2 mosaic tiles), Closing, BoxStrip (colour-block product panels)
-src/lib/projects.ts         getProjects, slugOf/hrefOf/numOf, chapterId/chaptersOf, CATEGORIES (re-exports categoryId)
-src/lib/collection.ts       categoryId, gridSizes (all 'half'), yearSpan (unused now)
-src/content.config.ts       projects schema (categories enum, glance, result {text, media|showcase, metrics})
-src/content/projects/       01-justcook.mdx (REAL), 02-rehab, 03-smart-home-ecosystem, 04-realiti, 05-aurawake (PLACEHOLDERS)
-src/pages/index.astro       home: hero band + Collection(work) + How I work
-src/pages/work/[slug].astro case study template
-src/pages/about.astro, playground.astro, 404.astro
-src/assets/valerio-rosponi.png   portrait (About)
-src/assets/projects/justcook/    cover-app.png (cover: 3 redesigned screens), screens/*.png (14 cut-out devices for the
-                                 Result showcase); cover.jpg, fieldwork.jpg, box-family.jpg, flyers.jpg, social.jpg UNUSED
-src/assets/projects/justcook/boxes/   box-a…d.png (front cut-outs, 800px) + box-a…d-3q.png (perspective, 900px)
-src/assets/projects/justcook/brand/   posts (post-box-a…d, post-so-good, post-tris, post-4box, post-app-verde) and
-                                 flyers (volantino-pubblicita-*, questionare-flyer), resized JPGs from the old render/out
-src/assets/projects/aurawake/    cover.png (2 screens on #f4f4f2)
-public/cv/Valerio-Rosponi-CV.pdf  CV (contains his phone number — owner was told; may want a version without it)
-Media/                      raw owner material, git-ignored. 01-JustCook: reports, OfficialMedia/{Packaging,Flyers,
-                            SocialPosts,Interfaces}; Interfaces holds 17 Figma device exports (3x, 1342×2741), named
-                            like HomeFirstScreen.png, FocusMode.png, LiveActivityExpanded.png, BuyReviewOrder.png.
-                            05-AuraWake/OfficialMedia/Interfaces: Home.png, AlarmSet1.png (3x).
-CLAUDE.md                   persistent rules (auto-loaded)
-```
-
----
-
-## 4. Design system (current state)
-
-### Colour (`global.css :root`)
-| Token | Value | Use |
-|---|---|---|
-| `--paper` | `#fdfdfc` | page background (near-white, slightly cool) |
-| `--paper-2` | `#f2f2ef` | placeholder surfaces, hover fills |
-| `--paper-3` | `#e8e8e4` | |
-| `--paper-alt` | `#f3f3f0` | tinted bands (How I work, case Result + Insights, About "What I bring") |
-| `--ink` | `#111111` | text |
-| `--ink-2/3/4` | `#33332f / #6b6b65 / #8a8a84` | secondary text greys |
-| `--rule` | `rgb(17 17 17 / .08)` | row hairlines |
-| `--rule-strong` | `rgb(17 17 17 / .22)` | section rules |
-| `--signal` | `#3d5a73` slate | single accent, sparingly (active numbers, progress bars) |
-
-History: the background went `#f5f5f0` → `#fafaf8` → `#fcfcfb` → `#fdfdfc` (2026-10-03, "ancora leggermente più bianco"). The accent went orange `#c93a14` → green `#2b9e4d`
-(he didn't like it) → slate `#3d5a73`, chosen from colours derived from the cover tones. No gradients, no
-fluorescent colours.
-
-### Type (Geist only)
-| Token | Size | Use |
-|---|---|---|
-| `--fs-mega` | clamp → ~168px | case-study title, footer wordmark, Next band title |
-| `--fs-display` | 30→60px, **Regular 400**, lh 1.1 | page-opening statements (home hero, About, Playground, 404) |
-| `--fs-h2` | 32→48px, Medium | section titles ("Selected work", "How I work", chapters) |
-| `--fs-h3` | 22→28px | item titles (principles, insights, rows, index titles) |
-| `--fs-lead` | ~19→23px | leads; **card titles** use lead/Medium |
-| `--fs-body` | 17px | running text |
-| `--fs-read` | 17→19px, lh 1.55 | case-study chapter paragraphs only |
-| `--fs-stat` | 56→104px, Medium, tight | key numbers (Metrics, insight stats); sign/unit at .42–.55em |
-| `--fs-small` | **16px** | nav, filters, meta, notes, captions |
-| `--fs-label` | 12px | `.label`: Geist **Medium 500**, uppercase, 8% tracking, tabular figures |
-
-He tried Regular-weight labels with 6% tracking and a no-wrap card eyebrow, then **reverted**: keep labels at 500.
-The selected filter or view underline is **1.5px** (he asked for something between 1px and 2px).
-
-### Layout
-- 12 columns, `--margin` clamp(16–48px), `--gutter` clamp(16–24px).
-- Spacing tokens: `--space-1…6` (8/16/24/32/48/64), `--space-block`, `--space-item`, `--space-section`.
-- Case-study sections: title in cols 1–3, body in 4–12 split into 3 tracks (`.trio`). Verify alignment with a JS
-  audit, not by eye.
-
-### Motion
-- Medium level. Always respect `prefers-reduced-motion`.
-- Hero words: blur-fade focus-in per word. The earlier masked slide-up cut the letters and was rejected.
-- Page view transitions are on.
-- Cursor label "Read case study" follows the pointer over links; it inverts on dark next-bands.
-- The owner's latest motion calibration (2026-10-04): motion must be barely noticeable — "se uno non ci vuole fare caso
-  non ci fa caso". Big rises, scale-ins and reveal choreography were rejected on the case-study showcase.
-
----
-
-## 5. Pages (current state)
-
-### Home `/`
-1. **Hero**: NO background since 2026-10-04 (the grey `--paper-alt` band was removed); `DepthTexture` (intensity
-   1.25, parallax 1.6×; was 0.5 / 1×) extends ~56–96px below the hero and fades out with a mask before Selected work. Statement in `.display` spanning
-   **cols 1–11**:
-   > I'm Valerio Rosponi, a UX and digital product designer studying Interfaces & Communication at the University of
-   > Trento, based in Trentino, Italy.
-
-   Height is `min-height: max(360px, 100svh − --peek)`, where `--peek` = gap + `--work-head` (122px; 180px under
-   960px) + space-item + ~56–96px. The goal: at scroll 0 the hero dominates and the Selected work header plus the top
-   **~80px of the first row of covers** peek in. Measured last: 80px on laptop, 84px on mobile, 95px at 1920, 41px at
-   1280×720.
-   - Location reads "based in Trentino" (owner's choice, to avoid repeating "Trento").
-   - Re-measured after cols 1–11 (2026-10-03): 80px at 1440, 95px at 1920, 84px mobile, only 38px at 1280×720.
-2. **Selected work** (`Collection`): no top rule on home: the texture fade separates it.
-   - Row 1: title.
-   - Row 2: filters on the left (cols 1–9) and the Grid/Index switch on the right (cols 10–12), on one baseline.
-   - Filters: `All 5 · UX/UI 5 · Service design 1 · Product 3 · XR 1 · Research 1` (counts come from each project's
-     `categories`). UX/UI is on every project, so the owner was told it doesn't discriminate; it is unresolved.
-   - **Grid:** two equal columns of 4:3 covers with an **8px gap in both directions**.
-   - **Card hover (chips, 2026-10-03):** inspired by a reference the owner sent. The cover zooms out to 0.95 over
-     the project tone and three square paper chips (1px --rule inset) rise in bottom-left, staggered 60ms: title, type +
-     platform, year. Cursor label stays plain "Read case study". Focus-visible = hover. Unlinked cards: text below.
-     Rejected on the way: paper bar covering the cover; cover shrinking to fit the bar; E2 rich cursor label ("too
-     particular vs simple"); corner tag, free text, slim line; tech-editorial variants E3/E4/E5/B4/B5/B6.
-   - **Touch:** text sits below the cover and rows get a 48px gap.
-   - **Card entrance:** full-size fade with the inner image settling from scale 1.06; the 2nd card of a row is delayed
-     120ms. The old clip-path "curtain" made cards look narrow before animating and was rejected.
-   - **Index view:** table (No., Title, Type, Role, Year); the cover preview follows the cursor; the view is remembered
-     in localStorage (`view:work`).
-3. **How I work** (band `tone="alt"`): five principles, each with an "In practice" line.
-4. **Footer**: contact row, wordmark, ©. "Back to top" was removed.
-
-### Case study `/work/[slug]` (in order; restructured 2026-10-03)
-Owner's brief: "more concise, more impactful, no filler; a recruiter sees interface and result at first glance, and
-can dig into the whole process and way of thinking if they want".
-1. **Back button**: outlined pill with a static chevron (animated arrow rejected).
-2. **Title** (mega) + **tagline** (lead, one sentence).
-3. **Cover** (16:10).
-4. **Overview** (no band): ink top rule (other sections have a grey one), Problem / Approach / Outcome (one sentence
-   each), then the facts grid, separated by space only. Gutter hairlines were tried and judged "too many lines".
-5. **Result** (alt band): `result` frontmatter. When `result.showcase` exists (JustCook), the section is stacked
-   and full width: one-line text (body lane) → `case/Showcase.astro` → targets. Showcase (owner, 2026-10-04: grey band (a dark ink band was tried and REJECTED, "era meglio prima"),
-   small numbered labels, inside the grid, light parallax): 01 Tonight (Home, Focus mode, Streak; trio on tracks
-   A/B/C, staggered), 02 Live Activity (pair, full 12 cols, devices cropped to the top 40% on a hairline), 03 Widgets
-   (trio cropped to 50%), 04 Buy boxes (quad, 12 cols), 05 The week (Home scrolled, Plan, Boxes, Ingredients; quad, staggered). Shots are
-   the Figma "… · device" frames exported 3x into `Media/01-JustCook/OfficialMedia/Interfaces/*.png`, cut out from the
-   #f5f5f5 frame fill (flood fill + rim un-blend, old scratchpad `render/cutout.cjs`) and resized to 960px wide into
-   `src/assets/projects/justcook/screens/`. Phones: one swipe row per group.
-   Motion: NO entrance/reveal animation (owner, 2026-10-04: "leggere animazioni fluide brevemente visibili, se uno
-   non ci vuole fare caso non ci fa caso"). Only a quiet inertial parallax on uncropped groups (max 24px, speeds
-   .01/.035/.02/.045, desktop) and a 4px hover lift. Rejected: 80px rises + scale, 24px fade-up reveals, crop emerge.
-   Without a showcase (placeholder projects): three phone-ratio screens + one wide board (placeholders until real
-   images: the owner chose placeholders for now, NOT the prepared JustCook boards), 1–2 sentences, key numbers
-   (JustCook: "Targets for a pilot"). On phones the screens become a horizontal swipe row.
-6. **Process** (`case/ProcessIndex.astro`, owner picked option C "process line", in house style): steps hang from an
-   ink line on 10px ticks, each with number, title (lead) and a 2–4 word `summary` from the MDX Chapter tag (the
-   bare version looked "scarna"). When the inline index has scrolled away, a slim fixed bar under the header shows the same
-   steps; each segment fills in --signal as its chapter is read (replaces the 2px progress bar), current step in ink.
-   Sticky chapter titles and scroll-padding move down while the bar is on (`html.has-pbar`, `--pbar-h`). Phones:
-   vertical list; bar = segments + "04 / 07 DEFINE". Rejected alternatives shown: row TOC with key sentence, dotted
-   book TOC, sticky side index; Overview as dark band, stacked sentences, text + data column.
-7. **Chapters**: Challenge, Research, Insights (alt), Define, Ideate, Design, [Validate], Reflection. Each opens with
-   `<Key>` (lead, ink), then short paragraphs at --fs-read (19px). Archetypes trimmed to quote + 2 traits; Reframes to
-   3 of 6 cycles. Owner chose short paragraphs over bullets or collapsible details.
-   Data with character (owner, 2026-10-04: numbers must catch the eye, archetypes/reframing more impactful, with boxes):
-   Metrics = big bare numbers on a hairline with a ~1.2s one-time count-up (picked over boxed numbers and number +
-   bar); numbers buried in paragraphs were pulled out (Challenge: >60% / 44% / 92% desk research; Insights: >60%, 95%,
-   ≤3 via `stat`). Archetypes = two LIGHT boxes compared side by side (picked over light+dark boxes and a spectrum).
-   Reframes = stepped funnel A–C → B–C → C, discarded ideas struck through, final framing in an ink box (picked over
-   a timeline and before→after).
-   Second pass (owner: "Cycle 01 and Problem look the same", more impact, less plain text, keep all content):
-   label roles fixed site-wide (see CLAUDE.md); numbers bigger (56→104) on ink hairlines, with captions + context
-   lines; archetypes get a tinted header and a "Wants" row (Less effort / Less waste, h2); plain text turned into
-   scannable blocks: Research methods into the metrics + 8 themes / 36 codes, VPC priorities and launch channels as
-   Chips, box specs as Metrics (4–5 / 10 / ~20 min) + profile Chips with box colours (approximate: A #e2843a,
-   B #3f8f5b, C #d8503d, D #3b7fc4), app features as numbered rows, the Just Eat line as a pull quote, Reflection
-   as a numbered list.
-   Third pass (2026-10-04): 92% as a BigStat (Lupi et al. 2015, 258 students); Research split into "Methods" and
-   "What came out of it" (boxed); archetype row labels right-aligned with hairline leaders to the boxes; Chips as
-   item rows with context and hover notes; Ideate opens with "6 → 1", real cycle numbers 01/05/06 large and faint;
-   Design: app features with their screens (Plan, widget, Focus mode, Streak), box chips show the box photo on
-   hover (real colours sampled: A #ffa91e, B #488863, C #ff7257, D #29bcff), channel cards (Instagram, WhatsApp,
-   QR flyers, short videos) with post/flyer on hover, a Gallery (packaging, maze flyers, 6 posts), a "Launch plan:
-   one city first" block (Rovereto/DiPSCo, pickup at Conad Rovereto, word of mouth, signals) written as a PLAN in the
-   conditional: the Conad collaboration was proposed but never confirmed, and the owner chose to present it as the
-   launch plan; Reflection rewritten in a warmer first person (surprise, own bias, what I'd do, honest close).
-8. **Next case study band** (unchanged).
-
-PhoneScroll (sticky device scene) was **removed** by the owner on 2026-10-03.
-
-### About `/about`
-`.display` statement, Approach (portrait in grayscale that turns colour on hover, plus 3 paragraphs), What I bring
-(alt band, 6 strengths), Toolkit (Figma; Stitch & AI tools; Unity; IDEs), Now (studying, based in, looking for),
-Contact. The footer contact row is hidden on this page.
-
-### Playground `/playground`
-`.display` "Things made for the joy of it." plus a lead. A `Collection` "Experiments" with its own vocabulary
-(Interaction, Generative, Motion, Typography, Code). One experiment, the live **Registration field** canvas, as a Card
-without link.
-
----
-
-## 6. PhoneScroll
-
-Removed on 2026-10-03 ("togli il cellulare interattivo"). The hand-photo idea is moot. Do not reintroduce.
-
----
-
-## 7. Content status
-
-| Project | Status | Notes |
-|---|---|---|
-| 01 JustCook | **Written, real data; real cover** | Cover (2026-10-04) = 3 device screens from Figma page "JustCook — Redesign v3" (frames "Home · first screen · device", "Home · scrolled · device", "Boxes · device", exported PNG 3x = 1342×2741, saved as `Media/01-JustCook/OfficialMedia/Interfaces/HomeFirstScreen.png`, `HomeScrolled.png`, `Boxes.png`). The exports carry the Figma frame fill #f5f5f5, so the cover ground and tone are #f5f5f5 (no cut-out needed). `src/assets/projects/justcook/cover-app.png`, 3840×2400, phones 1800px tall, 96px gaps. Older prepared boards stay unused in the same folder. Result = interface showcase (see §5); "Home · change box" was removed from it by the owner. "Home · scrolled" was updated in Figma on 2026-10-04 and re-exported (cover + showcase). |
-| 02 Rehab | placeholder | invented facts (Digital health service, 2026, Product Designer, team lead…) |
-| 03 Smart Home Ecosystem | placeholder | invented facts |
-| 04 Realiti | placeholder | invented facts, dark tone |
-| 05 AuraWake | placeholder text, **real cover** | cover = Home + AlarmSet1 side by side, 3840×2400, from the 3x PNGs in `Media/05-AuraWake/OfficialMedia/Interfaces`. Flat #f4f4f2 ground (= tone), phones only. Depth experiments were REJECTED (2026-10-03): radial studio light/vignette, cast shadows under the phones, diffuse halo. Do not re-propose. Note: in dev the image URL has no hash, so after replacing an image the browser may need a hard refresh. |
-
-### JustCook facts (verified with the owner)
+### JustCook facts (verified with the owner — the ground truth for `01-justcook.mdx`)
 - University project, Sept 2024 – May 2025, across three courses: semiotics of visual representation, sociology of
   communication, psychology of communication.
-- Team of 4: Ippoliti Noemi, Pajola Giorgia, Rosponi Valerio, Scognamiglio Marco (Sociology without Noemi). Valerio did
-  a bit of everything: "End-to-end UX designer".
-- Research (official report numbers): **41 survey responses, 4 in-kitchen interviews, 3 field observations**; thematic
-  grid of 8 themes and 36 codes.
+- Team of 4: Ippoliti Noemi, Pajola Giorgia, Rosponi Valerio, Scognamiglio Marco (sociology coursework was without
+  Noemi). Valerio did a bit of everything — his own description: "End-to-end UX designer".
+- Research (official report numbers): **41 survey responses, 4 in-kitchen interviews, 3 field observations**;
+  thematic grid of 8 themes and 36 codes.
 - Key stats: >60% shop once a week; ~50% waste food; of those trying to avoid waste, 95% cite packs too big for one
   person. Desk research: >60% take-away weekly; 44% eat ≥1 fruit portion a day; 92% change habits after moving
-  (Lupi et al. 2015).
-- Process: CPS with 6 reframing cycles (the "healthy ready-made food" idea was discarded), then the VPD canvas.
-  Archetypes ("Efficiency seeker", "Conscious aspirer") were synthesised **afterwards** for the portfolio from real
-  data.
-- Solution: service = 4 pre-dosed single-portion boxes (A orange "proteica", B green "energica", C red "leggera", D blue
-  "comfort"; 4–5 ingredients, up to 10 recipes, ready in ~20 min, code inside) plus an app (adaptive weekly planning,
-  reminder timed backwards from the recipe duration, focus-mode vertical video, streaks with friends). Brand: the name
-  plays on "Just Eat"; maze flyers; Instagram posts.
-- **No usability testing** was done. Only a Figma prototype exists. Targets (not results): −40% waste in the first
-  month, <20 min box to plate, >60% active at day 30.
-- Owner's reflection: next time, better data analysis, more interviews, usability tests, realistic predictions.
-- Tools listed: Figma, Miro. The owner was asked whether there were others; no answer yet.
+  (Lupi et al., 2015).
+- Process: CPS with 6 reframing cycles (the "healthy ready-made food" idea was discarded along the way), then a VPD
+  (value proposition design) canvas. The two archetypes ("Efficiency seeker", "Conscious aspirer") were synthesised
+  **afterwards**, for the portfolio, from the real underlying data — not collected as personas during research.
+- Solution: a service built from 4 pre-dosed single-portion boxes (A orange "proteica", B green "energica", C red
+  "leggera", D blue "comfort"; 4–5 ingredients, up to 10 recipes, ready in ~20 min, a code inside) plus an app
+  (adaptive weekly planning, a reminder timed backwards from the recipe duration, a vertical focus-mode video feed,
+  streaks with friends). Brand: the name plays on "Just Eat"; maze-themed flyers; Instagram posts.
+- **No usability testing was done** — only a Figma prototype exists. The numbers in the Result section are
+  **targets**, never results: −40% food waste in the first month, <20 min box-to-plate, >60% still active at day 30.
+- Owner's own reflection on the project: next time, better data analysis, more interviews, actual usability tests,
+  more realistic (less ambitious) predictions.
+- Tools listed: Figma, Miro — owner was asked whether there were others, no answer received yet (§7 open item).
+- Launch plan (written as a **plan**, conditional tense, not a past result — Conad Rovereto was *approached* for a
+  pickup-point partnership but it was never confirmed, so never claim it happened): one city first — Rovereto,
+  starting with DiPSCo students; one pickup point at Conad Rovereto; word-of-mouth channels (student group chats,
+  study-room flyers, shareable posts); signals to watch (boxes collected, codes registered, streaks kept).
 
-### Process for the next case studies (what worked for JustCook)
-1. Read everything in `Media/0N-*`, writing facts to a notes file as you go.
-2. **Interview the owner** about contradictions and gaps: team, role, numbers, testing, results, materials.
-3. Write the MDX with the chapter skeleton: Challenge, Research, Insights (alt), Define, Ideate, Design, [Validate],
-   Reflection, plus the `result` frontmatter. Keep it concise: Key sentence + short paragraphs.
-4. Replace the invented frontmatter facts, set `placeholder: false` and update `categories`.
-5. Build, verify with puppeteer, push.
+### Process for writing the next case studies (what worked for JustCook — repeat this)
+1. Read everything in `Media/0N-*/`, writing extracted facts to a notes file (`notes/0N-name.md`) as you go — don't
+   rely on holding it all in context, and remember images get stripped from context later (§7).
+2. **Interview the owner** about contradictions and gaps found in the raw material: team composition, individual
+   roles, exact numbers, whether testing happened, actual results vs targets, what media assets exist.
+3. Write the MDX with the real chapter skeleton: Challenge → Research → Insights (alt band) → Define → Ideate →
+   Design → [Validate, only if testing happened] → Reflection → `Closing`, plus the full `result` frontmatter. Keep
+   it concise — a `<Key>` sentence per chapter, then short paragraphs; pull every number out into a `Metrics`/`Stat`
+   instead of burying it in prose (§2 information architecture + the "data with character" pass documented in
+   Appendix A).
+4. Replace every invented frontmatter fact, set `placeholder: false`, update `categories` to match the real
+   project.
+5. Build, verify visually with puppeteer at both viewports, push.
 
----
-
-## 8. Things tried and REJECTED (do not re-propose unless asked)
-
-- Hero: full-screen statement only (he later wanted the work visible, then a middle ground); compact hero;
-  registration-mark field background (replaced by the depth texture); masked word animation; 6 hero layouts
-  (monumental name, dark band, project thumbnails inside the sentence, split with role column, merged with Selected
-  work); 4 hero→work transitions (curtain sheet, statement shrinking into title, typographic "05 case studies" bridge,
-  horizon filter bar). He said "nessuna" to all of these. The current near-full-screen band with a glimpse of covers is
-  the accepted compromise.
-- Work scroll concepts (13 in total): clip reveal + inner parallax, focus/blur, stacking deck, horizontal pinned track,
-  inertia + skew, sticky index with preview, expanding window, focus carousel, accordion strips (and variants with
-  labels, tabs and rows), editorial collage. All rejected; the plain grid stays.
-- Grid layouts: 12 / 6+6 rhythm, then all-half (kept); a sticky side index next to the cards; facts blocks under the
-  cover (right-aligned); facts unfolding in the index; the "N of N projects, years" count line; corner marks on
-  covers; a "Read case study" CTA under cards; card text above the cover (moved back below, then into the hover
-  bar).
-- A **dark scrim on card hover**.
-- Mono labels (Geist Mono removed); Regular labels with 6% tracking.
-- Accent colours orange and green.
-- Animated back arrow; "Back to top" link.
-- Next-project band: the in-page "Next" section with an arrow; a registration-field background in the band
-  (the cover image background was restored).
-- Media boards inside JustCook (removed for now: "ci penseremo dopo"). The Result showcase uses app screens instead.
-- Card hover: paper caption bar covering the cover; cover shrinking to fit the bar; title/meta inside the cursor
-  label (E2) and its tech-editorial variants (E3 tabbed card, E4 crosshair, E5 typographic); corner tag (B, B3
-  translucent was runner-up), B4 spec sheet, B5 traced frame, B6 ruler strip; free text; slim line. Chips won.
-- Case study: PhoneScroll device scene; Overview with gutter hairlines ("too many lines"), as a dark band, as stacked
-  sentences, as text + data column; process index as row TOC, dotted book TOC, sticky side index.
-- Covers: any "depth" (radial studio light / vignette, cast shadows under phones, diffuse halo). Flat ground only.
-- Result showcase: dark ink band ("era meglio prima"); entrance animations of any size (80px + scale, then 24px
-  fade-ups, crop emerge); breaking out of the grid (he chose "dentro la griglia").
-
----
-
-## 9. Open items / next steps
-
-1. **Hero glimpse at 1280×720** is 38px (target ~80). Offer a tweak to --peek if the owner cares.
-2. **LinkedIn URL** in `src/data/site.ts` is still a placeholder (`https://www.linkedin.com/in/`). Ask for it.
-3. ~~Hand photo for PhoneScroll~~: moot, PhoneScroll removed.
-4. **JustCook interfaces redesigned in Figma** (2026-10-03): file `9kVAJhXfvlz569AYMRGGCn`
-   (https://www.figma.com/design/9kVAJhXfvlz569AYMRGGCn), page **"JustCook — Redesign"**. The owner asked to turn his
-   junior screens into senior-level ones; original screens stay untouched on "Page 1". Choices: English copy, refined
-   brand green (not a new direction), full flow + mini design system, Conad kept as pickup store.
-   - Variables "JustCook / Color" (brand green 900/700/500/100/50, neutrals, text, box A–D strong/tint/ink, warning,
-     dark); SF Pro text styles on the iOS scale ("JustCook/…"); components: Status Bar, Home Indicator, Button (Label,
-     Icon swap, Show icon), Tab Bar (Active=Today/Plan/Boxes/Profile), Box Badge (A–D), 25 Icon/* components.
-   - Screens (402×874): 01 Today, 02 Plan, 03 Boxes, 04 Focus mode, 05 Buy · method (sheet), 06 Buy · choose boxes,
-     07 Review order, 08 Reminder notification. Boards: 00 Foundations, Components.
-   - One consistent story across screens: Thu 14, Box D tonight at 20:00, Friday + next Monday without a box, pantry
-     A1 B1 C1 D3, cart A2 C2 D1, pickup tomorrow at Conad, Via Rosmini 56.
-   - Gotcha: when binding a colour variable in the plugin API, also set the paint's colour to the resolved value, or
-     Figma may render the black fallback.
-   - DONE (2026-10-04): the screens of canvas "JustCook — Redesign v3" were exported and used for the cover and the
-     Result showcase. Further edits in Figma → re-export the changed frame and replace it everywhere it appears.
-5. **Covers:** JustCook and AuraWake have real covers; Rehab, Smart Home, Realiti still placeholders.
-6. **Case studies 02–05**: the full interview-then-write process.
-7. **Filters:** decide whether to drop UX/UI (it is on every project). Confirm the categories per project.
-8. **CV** may contain his phone number; he may want a version without it.
-9. **Tools** list for JustCook: ask whether to add others besides Figma and Miro.
-10. Keep `CLAUDE.md` AND this file in sync after every change, including the file map (§3), the design tables (§4)
-    and the rejected list (§8), not only the section being worked on. (The old stale CLAUDE.md lines were fixed.)
-11. JustCook: chapter figures are still text-only; the Design chapter could use a few of the exported screens if the
-    owner wants (none is placed in the chapters yet).
-
----
-
-## 10. Memory
-
-Persistent memory dir: `C:\Users\rospo\.claude\projects\C--Users-rospo-Documents-ClaudeCode-Websites-uxportfolio\memory\`
-(`portfolio-project-goal.md`, `design-taste-feedback.md`). Update it when the owner reveals new durable preferences.
+### Persistent memory pointer
+`C:\Users\rospo\.claude\projects\C--Users-rospo-Documents-ClaudeCode-Websites-uxportfolio\memory\` —
+`portfolio-project-goal.md`, `design-taste-feedback.md`. Update these when the owner reveals a new **durable**
+preference (not a one-off request) — e.g. the motion-calibration and flat-cover rules now recorded there.
