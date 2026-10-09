@@ -1,16 +1,17 @@
 ---
-// Annotated block: the wrapped content sits in tracks A–B, the designer's note
-// in track C, top-aligned with it. On small screens the note follows the content.
+// A designer's note, read in sequence: the content it annotates first, then the note right below it as a
+// tinted callout on the same A–B measure (no side column to look for). Without content, just the callout.
 //   <Note label="Decision" text="Why I did it this way.">Paragraph…</Note>
 interface Props {
   label?: string;
   text: string;
 }
 const { label = 'Decision', text } = Astro.props;
+const hasContent = Astro.slots.has('default');
 ---
 
-<div class="note-row trio">
-  <div class="note-row__main span-2"><slot /></div>
+<div class="note-row">
+  {hasContent && <div class="note-row__main"><slot /></div>}
   <aside class="note" data-reveal style="--d: 1">
     <p class="note__label label"><span class="reg"></span>{label}</p>
     <p class="note__text">{text}</p>
@@ -19,7 +20,10 @@ const { label = 'Decision', text } = Astro.props;
 
 <style>
   .note-row {
-    row-gap: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: calc((200% - var(--gutter)) / 3);
   }
 
   .note-row__main > :global(* + *) {
@@ -31,24 +35,30 @@ const { label = 'Decision', text } = Astro.props;
   }
 
   .note {
-    font-size: var(--fs-small);
-    line-height: 1.5;
-    color: var(--ink-2);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    background: var(--paper-2);
   }
 
   .note__label {
     display: flex;
     align-items: center;
     gap: var(--space-1);
-    margin-bottom: var(--space-1);
     color: var(--signal);
     text-box: trim-start cap alphabetic;
   }
 
+  .note__text {
+    font-size: var(--fs-body);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
   @media (max-width: 640px) {
-    .note {
-      padding-left: var(--space-2);
-      border-left: 1px solid var(--signal);
+    .note-row {
+      max-width: none;
     }
   }
 </style>

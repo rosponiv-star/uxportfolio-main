@@ -47,40 +47,48 @@ steps hanging from an ink line, each with number, title (lead) and the chapter `
 segment in --signal as its chapter is read and replaces the progress bar) → chapters. Recruiters must see interface and result first; the full process stays one scroll away.
 
 Chapters: Challenge, Research, Insights (tone="alt"), Define, Ideate, Design, [Validate, only if tested], Reflection.
-Each chapter opens with a `<Key>` sentence (lead size, ink), then SHORT paragraphs (2–3 lines). Running text in
-chapters is `--fs-read` (17→19px, line-height 1.55). Text levels: Key (lead, ink) → paragraphs (read, ink-2) →
-text inside blocks: archetype quotes/traits, insight evidence, reframe values (body 17) → notes, captions (small). No filler: cut anything that doesn't carry a fact, a decision or a reason.
+Each chapter opens with a `<Key>` sentence (h3 size, Regular, ink), then SHORT paragraphs (2–3 lines). Running text in
+chapters is `--fs-read` (17→19px, line-height 1.55). Text levels: Key (h3 Regular, ink) → group headings → paragraphs
+(read, ink-2) → text inside blocks: archetype quotes/traits, insight evidence, reframe values (body 17) → notes, captions (small). No filler: cut anything that doesn't carry a fact, a decision or a reason.
+
+**One reading column (owner, 2026-10-09):** chapter text reads strictly top to bottom from the left edge of track A;
+nothing is parked in track C for the eye to hunt for (notes, captions, kickers sit right under what they refer to).
+A chapter is split into groups with `### Title`, rendered as a signal number (01.1, 01.2…, CSS counter) + the title in
+lead Medium. Proximity carries the structure: `--space-item` before a group, `--space-3` from its heading to its
+content, `--space-block` inside it. Wide media (strips, galleries, metric rows, funnels) may still span A–C.
 
 Components available in MDX without imports:
 - `<Chapter title="…" summary="2–4 words">…</Chapter>`: a numbered chapter. Title and summary feed the Process index.
 - `<Key>…</Key>`: the chapter's key sentence, first thing in a chapter.
-- `<Note label="Decision" text="Why…">paragraph(s)</Note>`: wraps the content it annotates. The content
-  goes in tracks A–B and the note in track C, top-aligned.
+- `<Note label="Decision" text="Why…">paragraph(s)</Note>`: the content it annotates, then the note
+  right below it as a tinted callout on the A–B measure. Self-closing `<Note … />` renders the callout alone.
 - `<Figure src={img} alt="" caption="" ratio="16/9" size="wide|text" />`: `wide` (the default) spans the
   whole body lane. Import the image at the top of the MDX file. A `video="/media/x.mp4"` prop is also
   supported.
 - `<Metrics items={[{ value, label, text? }]} />`: large bare numbers (`--fs-stat`) on an ink hairline, sign/unit
   small (unit raised, leading sign centred), caption below, optional context line; digits count up once (~1.2s,
   `case/Stat.astro`; ranges like "4–5" do not count). Use it wherever there are numbers, never bury them in prose.
-- `<Chips label="…" intro="…" items={[{ label, note?, color?, image? }]} variant="chips|cards" />`: a short list as an
-  item row (label + one line of context in track A, chips in B–C). Hover shows `note` in the cursor label, or `image`
+- `<Chips label="…" intro="…" items={[{ label, note?, color?, image? }]} variant="chips|cards" />`: a short list:
+  label (optional) + one line of context, then the chips right below (cards: two per row on tracks A and B). Hover shows `note` in the cursor label, or `image`
   (e.g. the box) with the note as caption. `cards` = boxes with the note visible (channels).
 - `<Closing kicker? line?>statement</Closing>`: the case study's last word, at the end of Reflection: statement in
-  display size (plain = grey, **bold** = ink), then a hairline and the one lesson to remember in h2.
+  display size (plain = grey, **bold** = ink), then a hairline, the kicker and, below it, the one lesson to remember in h2.
 - `<BoxStrip items={[{ name, role, color, image, hover?, alt }]} />`: a product line as solid colour panels (one per
   product, its own colour), the product cut-out large inside; hover cross-fades to a second view (front ↔ perspective).
 - `<Features … alternate crop={0.72} />`: bigger devices that switch side row by row.
 - Gallery items may take `span: 2` (a 2×2 hero tile; the grid packs densely around it).
-- `<BigStat value label source? />`: the one number a chapter hinges on, mega size in A–B, caption + source in C.
+- `<BigStat value label source? />`: the one number a chapter hinges on, mega size on an ink rule, caption + source
+  right below it.
 - `<Features items={[{ title, text, image, alt }]} />`: product features, each with its screen cropped to the top in
   track A, number/title/text in B–C.
 - `<Gallery groups={[{ label, kind: cutout|tile, cols?, items: [{ image, alt, caption? }] }]} />`: brand material
   (packaging cut-outs on a hairline, flyers, posts) in a tinted panel across A–C.
-- Metrics also take `title` (group heading) and `variant="boxed"` (tinted boxes, for a second kind of number).
+- Metrics also take `title` (prefer a `###` group instead) and `variant="boxed"` (tinted boxes, for a second kind of number).
   Reframes take `cycles` (opens with a big "6 → 1") and a real cycle number `n` per item (shown large, faint).
 - Cursor label variants (scripts/site.ts): `data-cursor` text; `data-cursor-style="note"` = sentence-case note;
   `data-cursor-image="url"` = image preview with `data-cursor` as caption. Clamped inside the viewport.
-- `<Insights items={[{ title, text, stat?, statLabel? }]} />`: an insight with a number shows it first, large.
+- `<Insights items={[{ title, text, stat?, statLabel? }]} />`: stacked in one column (number, title, the
+  stat large, the evidence). `variant="compact"`: a lighter list (number + lead title on one line, text below) for plans.
 - `<Reframes items={[{ client, problem, idea? }]} />`: stepped funnel of boxes (A–C → B–C → C); earlier ideas are
   struck through as discarded; the last item is the final framing in an ink box. Show ~3 key cycles.
 - `<Archetypes items={[{ name, alias?, quote, traits: [{ label, text }] }]} />`: two light boxes compared side by side

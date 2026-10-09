@@ -1,7 +1,7 @@
 ---
-// A short list pulled out of a sentence, laid out as an item row: the group label and one line of context
-// in track A, the chips in tracks B–C. Hovering a chip shows its `note` in the cursor label (sentence case),
-// or its `image` (e.g. the box itself) with the note as caption.
+// A short list pulled out of a sentence, read top to bottom: the group label and one line of context, then
+// the chips right below (cards: two per row, on tracks A and B). Hovering a chip shows its `note` in the
+// cursor label (sentence case), or its `image` (e.g. the box itself) with the note as caption.
 // variant 'cards': each item becomes a box with its note visible (channels, roles).
 //   <Chips label="Must-haves" intro="What the service could not do without."
 //     items={[{ label: 'Balanced diet', note: '…', color?: '#ffa91e', image?: imported }]} />
@@ -9,7 +9,7 @@ import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
-  label: string;
+  label?: string;
   intro?: string;
   variant?: 'chips' | 'cards';
   items: { label: string; note?: string; color?: string; image?: ImageMetadata }[];
@@ -23,12 +23,16 @@ const rows = await Promise.all(
 );
 ---
 
-<div class:list={['chips', 'trio', `chips--${variant}`]} data-reveal>
-  <div class="chips__head">
-    <p class="label label--group">{label}</p>
-    {intro && <p class="chips__intro">{intro}</p>}
-  </div>
-  <ul class="chips__list span-2">
+<div class:list={['chips', `chips--${variant}`]} data-reveal>
+  {
+    (label || intro) && (
+      <div class="chips__head">
+        {label && <p class="label label--group">{label}</p>}
+        {intro && <p class="chips__intro">{intro}</p>}
+      </div>
+    )
+  }
+  <ul class="chips__list">
     {
       rows.map((c, i) => (
         <li
@@ -51,8 +55,9 @@ const rows = await Promise.all(
 
 <style>
   .chips {
-    row-gap: var(--space-3);
-    align-items: start;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
   }
 
   .chips__head {
@@ -65,7 +70,6 @@ const rows = await Promise.all(
     font-size: var(--fs-small);
     line-height: 1.45;
     color: var(--ink-3);
-    max-width: 30ch;
   }
 
   .chips__list {
@@ -112,7 +116,9 @@ const rows = await Promise.all(
   .chips--cards .chips__list {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-1);
+    column-gap: var(--gutter);
+    row-gap: var(--gutter);
+    max-width: calc((200% - var(--gutter)) / 3);
   }
 
   .chips--cards .chip {
@@ -139,6 +145,7 @@ const rows = await Promise.all(
   @media (max-width: 640px) {
     .chips--cards .chips__list {
       grid-template-columns: minmax(0, 1fr);
+      max-width: none;
     }
   }
 </style>

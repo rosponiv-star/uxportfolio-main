@@ -450,8 +450,9 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
 /* ==========================================================================
    Long-form text (case-study chapter bodies)
    ========================================================================== */
-/* Text levels in a chapter: <Key> (lead, ink) → paragraphs (read, ink-2) → text inside
-   blocks such as archetypes, insights and reframes (body) → notes and captions (small). */
+/* Text levels in a chapter, read top to bottom in one column: <Key> (h3, Regular, ink) →
+   group headings (### → number + lead Medium) → paragraphs (read, ink-2) → text inside blocks
+   such as archetypes, insights and reframes (body) → notes and captions (small). */
 .prose {
   color: var(--ink-2);
   font-size: var(--fs-read);
@@ -460,6 +461,10 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
 
 .prose > .key + * {
   margin-top: var(--space-4);
+}
+
+.prose > .key + h3 {
+  margin-top: var(--space-6);
 }
 
 .prose > p,
@@ -478,17 +483,38 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
   margin-top: 1em;
 }
 
+/* Groups inside a chapter: `### Title` opens one. Proximity carries the structure: a wide gap
+   before each group, a short one between its heading and its content, the block rhythm inside.
+   The heading is numbered per chapter (01.1, 01.2…) in signal, the title in lead Medium. */
+.chapter {
+  counter-reset: group;
+}
+
 .prose > h3 {
-  margin-top: var(--space-5);
-  font-size: var(--fs-h3);
+  counter-increment: group;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-top: var(--space-item);
+  font-size: var(--fs-lead);
   font-weight: 500;
-  letter-spacing: -0.022em;
-  line-height: 1.15;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
   color: var(--ink);
 }
 
+.prose > h3::before {
+  content: counter(chapter, decimal-leading-zero) '.' counter(group);
+  flex: none;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  font-variant-numeric: tabular-nums;
+  color: var(--signal);
+}
+
 .prose > h3 + * {
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
 }
 
 .prose strong {

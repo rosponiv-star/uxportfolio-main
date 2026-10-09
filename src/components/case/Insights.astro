@@ -1,45 +1,55 @@
 ---
-// Numbered key insights: number + finding in track A, evidence in tracks B–C.
-// An insight backed by a number shows it first, large (`stat`, with an optional short `statLabel`).
+// Numbered key insights, read top to bottom on the A–B measure: number and finding, then the number that
+// backs it (large, `stat` with an optional short `statLabel`), then the evidence.
+// variant 'compact': a lighter list (title in lead size) for plans and short points.
 // items: [{ title: '...', text: '...', stat?: '95%', statLabel?: '…' }, ...]
 import Stat from './Stat.astro';
 
 interface Props {
   items: { title: string; text: string; stat?: string; statLabel?: string }[];
+  variant?: 'default' | 'compact';
 }
-const { items } = Astro.props;
+const { items, variant = 'default' } = Astro.props;
 ---
 
-<ol class="insights">
+<ol class:list={['insights', `insights--${variant}`]}>
   {
     items.map((it, i) => (
-      <li class="insight trio" data-reveal style={`--d: ${i}`}>
-        <div class="insight__head">
+      <li class="insight" data-reveal style={`--d: ${i}`}>
+        <p class="insight__head">
           <span class="insight__n label">{String(i + 1).padStart(2, '0')}</span>
-          <p class="insight__title">{it.title}</p>
-        </div>
-        <div class="insight__body span-2">
-          {it.stat && (
-            <p class="insight__stat">
-              <Stat value={it.stat} />
-              {it.statLabel && <span class="field">{it.statLabel}</span>}
-            </p>
-          )}
-          <p class="insight__text">{it.text}</p>
-        </div>
+          <span class="insight__title">{it.title}</span>
+        </p>
+        {it.stat && (
+          <p class="insight__stat">
+            <Stat value={it.stat} />
+            {it.statLabel && <span class="field">{it.statLabel}</span>}
+          </p>
+        )}
+        <p class="insight__text">{it.text}</p>
       </li>
     ))
   }
 </ol>
 
 <style>
+  .insights {
+    max-width: calc((200% - var(--gutter)) / 3);
+  }
+
   .insight {
-    row-gap: var(--space-2);
-    padding-block: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-block: var(--space-5);
   }
 
   .insight:first-child {
     padding-top: 0;
+  }
+
+  .insight:last-child {
+    padding-bottom: 0;
   }
 
   .insight + .insight {
@@ -64,12 +74,6 @@ const { items } = Astro.props;
     color: var(--ink);
   }
 
-  .insight__body {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-  }
-
   .insight__stat {
     display: flex;
     align-items: baseline;
@@ -80,8 +84,41 @@ const { items } = Astro.props;
 
   .insight__text {
     font-size: var(--fs-body);
-    line-height: 1.5;
+    line-height: 1.55;
     color: var(--ink-2);
     max-width: 58ch;
+  }
+
+  /* Compact: number and title on one baseline, the text right under it. */
+  .insights--compact .insight {
+    display: grid;
+    grid-template-columns: var(--space-5) minmax(0, 1fr);
+    align-items: baseline;
+    row-gap: var(--space-1);
+    padding-block: var(--space-3);
+  }
+
+  .insights--compact .insight:first-child {
+    padding-top: 0;
+  }
+
+  .insights--compact .insight__head {
+    display: contents;
+  }
+
+  .insights--compact .insight__title {
+    font-size: var(--fs-lead);
+    letter-spacing: -0.015em;
+    line-height: 1.3;
+  }
+
+  .insights--compact .insight__text {
+    grid-column: 2;
+  }
+
+  @media (max-width: 640px) {
+    .insights {
+      max-width: none;
+    }
   }
 </style>

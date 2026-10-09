@@ -18,16 +18,13 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
 
 {
   cycles && (
-    <div class="funnel__head trio" data-reveal>
-      <p class="funnel__ratio span-2">
+    <div class="funnel__head" data-reveal>
+      <p class="funnel__ratio">
         <Stat value={String(cycles)} />
         <span class="funnel__arrow" aria-hidden="true" />
         <Stat value="1" />
       </p>
-      <p class="funnel__cap">
-        <span class="label label--group">Reframing</span>
-        {cycles} Client–Problem–Solution cycles, one final framing.
-      </p>
+      <p class="funnel__cap field">{cycles} Client–Problem–Solution cycles, one final framing.</p>
     </div>
   )
 }
@@ -69,8 +66,11 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
     row-gap: var(--space-2);
   }
 
+  /* The ratio and its caption, read in one column above the funnel. */
   .funnel__head {
-    align-items: end;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
     margin-bottom: var(--space-5);
   }
 
@@ -109,12 +109,7 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
   }
 
   .funnel__cap {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    font-size: var(--fs-small);
     line-height: 1.45;
-    color: var(--ink-3);
   }
 
   .step {

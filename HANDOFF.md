@@ -116,8 +116,8 @@ Reframes funnel.**
 | `--fs-mega` | clamp → ~168px | case-study title, footer wordmark, "Next" band title |
 | `--fs-display` | 30→60px, **Regular 400**, lh 1.1 | page-opening statements only (home hero, About, Playground, 404) |
 | `--fs-h2` | 32→48px, Medium | section titles ("Selected work", "How I work", chapter titles) |
-| `--fs-h3` | 22→28px | item titles (principles, insights, index rows) |
-| `--fs-lead` | ~19→23px | lead paragraphs; card titles (Medium) |
+| `--fs-h3` | 22→28px | item titles (principles, insights, index rows); case-study `<Key>` sentence (Regular 400) |
+| `--fs-lead` | ~19→23px | lead paragraphs; card titles (Medium); chapter group headings `###` (Medium, with a signal "01.1" number) |
 | `--fs-body` | 17px | running text in non-case-study contexts; text inside case-study blocks (archetype quotes/traits, insight evidence, reframe values) |
 | `--fs-read` | 17→19px, lh 1.55 | case-study **chapter paragraphs only** (the longer reading measure) |
 | `--fs-stat` | 56→104px, Medium, tight tracking | key numbers only (`Metrics`, insight `stat`); affixes (%, min, signs) sit at 0.42–0.55em, proportional figures (clean "1", no tabular foot) |
@@ -213,9 +213,15 @@ the whole process and way of thinking if they want."*
    from the MDX `<Chapter summary="…">` attribute. Once scrolled past, a slim fixed bar under the header takes over
    as a reading progress indicator (replacing a plain progress bar).
 7. **Chapters** (from MDX): Challenge → Research → Insights (alt band) → Define → Ideate → Design → [Validate, only
-   if usability testing happened] → Reflection → `Closing`. Each chapter opens with a `<Key>` sentence (lead size,
-   ink) then short paragraphs (2–3 lines, `--fs-read`). No filler — cut anything that doesn't carry a fact, a
+   if usability testing happened] → Reflection → `Closing`. Each chapter opens with a `<Key>` sentence (h3 size,
+   Regular, ink) then short paragraphs (2–3 lines, `--fs-read`). No filler — cut anything that doesn't carry a fact, a
    decision or a reason.
+   **One reading column** (owner, 2026-10-09, after "il testo è caotico, l'occhio cerca il prossimo testo"): text
+   reads top to bottom from the left edge of track A, nothing parked in track C. Chapters are split into groups with
+   MDX `### Title` → signal number "01.1" (CSS counter `group` inside the page's `chapter` counter) + title in lead
+   Medium. Proximity: `--space-item` before a group, `--space-3` heading → content, `--space-block` inside. Notes are
+   tinted callouts under the content; BigStat/Reframes/Closing captions sit under their numbers; Chips and Insights
+   stack (Insights `variant="compact"` for the launch plan). Wide media still spans A–C.
 8. "Next case study" full-bleed band (inverted colours, cover image of the next project).
 
 ---
@@ -258,7 +264,7 @@ verified), and any open choices. Use tables when they make it scannable.
 - **Attribution line is MANDATORY on every commit and PR** and changes depending on which model is active this
   session — check the system reminder at the top of the conversation for the current line. As of this update it is:
   ```
-  Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+  Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
   ```
   (Earlier commits in this repo used `Claude Opus 5.5` — that's fine, don't rewrite history, just use whatever the
   *current* session's system prompt specifies going forward.)
@@ -318,6 +324,11 @@ the three tracks ("too many lines"); Overview as a dark band; Overview as stacke
 a text+data two-column split. Process index as a plain row table-of-contents with key sentences; as a dotted
 book-style TOC; as a sticky side index (same objection as the card-grid version).
 
+**Case-study text layout (2026-10-09):** notes and captions in a side column (track C) beside the text they annotate
+— the eye had to hunt for them. Concepts shown and not picked: "A · Righe indice" (block titles in track A, content in
+B–C) and "C · Sintesi prima" (3 big takeaways per chapter, details small below). The owner chose "B · Una colonna",
+with more breathing room.
+
 **Result showcase (device presentation):**
 A dark ink background band — tried, then reverted *"era meglio prima"* (it was better before). Entrance
 choreography of any real size — first 80px rises + scale, then even a reduced 24px fade-up, both rejected down to
@@ -344,7 +355,7 @@ compared side by side with a shared row grid.
 trust this as current.)*
 
 - **Branch:** `main` (this is a LOCAL session; LOCAL always works on and pushes to `main` directly — see §10).
-- **Working tree:** clean. No staged or unstaged changes at last check.
+- **Working tree:** clean after the 2026-10-09 push.
 - **HEAD commit:** `447dbe152dd578381847c8fc06884cff1c3a8f03` —
   *"JustCook Design: colour-block box strip, bigger alternating screens, campaign mosaic"*
   (author `rosponiv-star`, committed 2026-10-05 00:14:04 +0200; co-authored by Claude Opus 5.5, the model active in
@@ -574,7 +585,7 @@ git add -A && git commit -q -F - <<'EOF'
 
 <Optional body explaining the why>
 
-Co-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 EOF
 git push
 ```
@@ -720,6 +731,14 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-09 · LOCAL** · Owner: JustCook chapter text "caotico, l'occhio cerca il prossimo testo". Three concepts
+  shown (A index rows, B one column, C summary first); owner picked **B, with more breathing room**. Implemented as a
+  system, not just for JustCook: `###` groups numbered 01.1… (global.css), Key at h3 Regular, Note = callout under its
+  content (self-closing allowed), BigStat/Reframes/Closing captions stacked, Chips stacked, Insights stacked + new
+  `compact` variant. JustCook MDX regrouped (no content cut; one new Key in Insights: "Four findings, each one a
+  constraint the solution had to respect."; Reflection lead-ins became group titles). Verified with puppeteer at
+  1440 and 390. Features still alternate sides (media layout, left as is). Pushed `main`. No open requests.
 
 - **2026-10-05 · LOCAL** · Design chapter made visually impactful (owner meant Design, not Ideate; typographic
   concepts were declined: "intendo impattante visivamente"). The box opens with a BoxStrip: four solid panels in the
