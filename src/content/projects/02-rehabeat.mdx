@@ -1,0 +1,286 @@
+---
+title: 'Rehabeat'
+order: 2
+tagline: 'A phone, a TV and wearable sensors that guide amateur athletes through rehabilitation at home, with music setting the pace.'
+year: '2024'
+type: 'Connected health system'
+categories: ['Mobile', 'Multi-screen']
+platform: 'iOS app + TV + sensors'
+role: 'End-to-end UX designer'
+timeline: 'Oct 2024 – Jan 2025'
+team: '4 design students'
+tools: ['Figma', 'FigJam']
+tone: '#b9c3b0'
+toneDark: false
+glance:
+  problem: 'Recovering at home, injured athletes can’t tell whether they move correctly, and repeating exercises in silence wears motivation down.'
+  approach: 'Clinical literature, physiotherapy protocols and a heuristic review of fitness apps, then a system built across three devices.'
+  outcome: 'A phone app, a TV coach and wearable sensors: a plan from the medical report, live form correction, music matched to every exercise.'
+result:
+  text: 'The phone turns the medical report into a weekly plan; the TV becomes the coach, mirroring every movement and correcting it live; the music sets the pace of each exercise.'
+  media:
+    - label: 'App: plan from the medical report'
+    - label: 'App: music matched to the exercise'
+    - label: 'App: weekly progress'
+    - label: 'TV: live correction on the avatar'
+      kind: wide
+  metricsLabel: 'The system'
+  metrics:
+    - value: '3'
+      label: 'Synced devices: phone, TV and sensors'
+    - value: '4'
+      label: 'Check-in questions after every workout'
+    - value: '1'
+      label: 'Plan recalibration every week, from sensors and ratings'
+placeholder: true
+---
+
+<Chapter title="Challenge" summary="Recovery without a coach">
+
+<Key>Recovering from a sports injury at home means exercising alone, with nobody to say whether a movement is right.</Key>
+
+The brief, for a human–computer interaction course at the University of Trento: help amateur athletes return to their sport after an injury, safely and without making it worse.
+
+A team of four over one semester. I worked on every phase, from research to the app and TV interfaces.
+
+### The evidence
+
+<BigStat value="65%" label="of athletes return to their pre-injury level of sport after ACL reconstruction." source="Ardern et al., 2014 (69 studies, 7,556 participants)" />
+
+The same review found that a positive psychological response favours the return: recovery happens in the head as much as in the knee.
+
+<Metrics
+  items={[
+    { value: '30–50%', label: 'Don’t keep up their home exercise programme', text: 'Musculoskeletal patients (Argent et al., 2018).' },
+    { value: '139', label: 'Studies link music to better mood and lower perceived exertion', text: 'Meta-analysis, 3,599 participants (Terry et al., 2020).' },
+  ]}
+/>
+
+### The question
+
+<Note label="Reframe" text="From “how do we send exercises home?” to “how do we replace the guesswork with evidence, and the silence with rhythm?”">
+
+> How might we give injured amateur athletes the eye of a physiotherapist at home, and a reason to keep going?
+
+</Note>
+
+</Chapter>
+
+<Chapter title="Research" summary="Literature, protocols, apps">
+
+<Key>We started from how rehabilitation is meant to work, then looked at where unsupervised tools fail.</Key>
+
+### Methods
+
+<Chips
+  variant="cards"
+  items={[
+    { label: 'Clinical literature', note: 'Recovery after sports injuries, fear of re-injury and why people stop exercising at home.' },
+    { label: 'Physiotherapy protocols', note: 'How exercises are prescribed, dosed and progressed after an injury.' },
+    { label: 'Heuristic review', note: 'Existing fitness and rehab apps, checked for safety gaps when nobody supervises.' },
+    { label: 'Euleria Health', note: 'A clinical rehab platform used as a reference: sensors and game mechanics, run by professionals.' },
+  ]}
+/>
+
+### From the athlete’s side
+
+From there we mapped needs and problems as the athlete lives them: what a safe recovery at home requires, and what gets in the way.
+
+<Chips
+  label="Needs"
+  intro="What a safe recovery at home requires."
+  items={[
+    { label: 'Exercises for the injured area', note: 'Targeted work that keeps the area active without making it worse.' },
+    { label: 'Correct execution', note: 'Precise feedback on every movement, with errors corrected as they happen.' },
+    { label: 'Visible progress', note: 'Clear reports that show the plan is working.' },
+    { label: 'Autonomy', note: 'A structured plan without a doctor checking every session.' },
+  ]}
+/>
+
+<Chips
+  label="Problems"
+  intro="What gets in the way."
+  items={[
+    { label: 'Little rehab knowledge', note: 'Which exercises, how hard, for how long: nobody knows by default.' },
+    { label: 'Low motivation', note: 'Without something to make it engaging, rehab feels monotonous.' },
+    { label: 'Generic plans', note: 'Programmes not built for the specific injury slow recovery down.' },
+    { label: 'Unclear progress', note: 'Not knowing where you stand breeds frustration.' },
+  ]}
+/>
+
+</Chapter>
+
+<Chapter title="Insights" summary="Doubt, boredom, distance" tone="alt">
+
+<Key>The exercises were never the problem. Doing them alone, unsure and in silence was.</Key>
+
+<Insights
+  items={[
+    {
+      title: 'Nobody checks the movement',
+      text: 'Without a therapist in the room, athletes can’t tell a right movement from a wrong one. The doubt feeds a fear of re-injury, and fear makes movements hesitant.',
+    },
+    {
+      title: 'Home exercises feel like a sentence',
+      text: 'Prescribed exercises read as a reminder of the injury, not as training. Without progress or reward, repetition turns into a chore, and people stop.',
+    },
+    {
+      title: 'Generic plans miss the injury',
+      text: 'Paper sheets and video tutorials are the same for everyone. A plan that ignores the specific injury slows recovery and raises the risk of a relapse.',
+    },
+    {
+      title: 'Progress is invisible',
+      text: 'Without clear, regular feedback, athletes don’t know where they stand in their recovery, and the uncertainty leaves them frustrated and lost.',
+    },
+  ]}
+/>
+
+</Chapter>
+
+<Chapter title="Define" summary="One target, two archetypes">
+
+<Key>Two archetypes drop out for opposite reasons: one is afraid of moving wrong, the other is bored of moving at all.</Key>
+
+### The target
+
+Amateur athletes aged 18 to 50, recovering at home from a sports injury. Motivated to get back to their sport, busy with everything else, and keen on fewer visits and trips to a clinic.
+
+<Note label="Decision" text="Adults up to 50. Younger athletes need a guardian and closer clinical follow-up; past 50, other conditions and the risk of falls call for a specialist’s eye. Inside that range, the plan still starts from a doctor’s report." />
+
+### The archetypes
+
+Both are synthesised from the research above: two ends of the same problem, not two invented users.
+
+<Archetypes
+  items={[
+    {
+      name: 'The anxious perfectionist',
+      alias: 'Kinesiophobia',
+      goal: 'Certainty',
+      quote: 'I want to recover, but I am terrified of making a wrong move and hurting myself again.',
+      traits: [
+        { label: 'Friction', text: 'Insecure in every movement, with a constant need for reassurance.' },
+        { label: 'Needs', text: 'To know, while moving, that the movement is right.' },
+        { label: 'Opportunity', text: 'Real-time visual feedback and posture correction from the sensors.' },
+      ],
+    },
+    {
+      name: 'The bored achiever',
+      alias: 'Boredom',
+      goal: 'Challenge',
+      quote: 'I know what I have to do, but repeating the same exercises in silence is demotivating.',
+      traits: [
+        { label: 'Friction', text: 'No stimulus left: therapy has become a tedious chore.' },
+        { label: 'Needs', text: 'The joy of movement and a sense of athletic challenge.' },
+        { label: 'Opportunity', text: 'Music and game mechanics, with the rhythm driving the flow.' },
+      ],
+    },
+  ]}
+/>
+
+### Design principles
+
+<Insights
+  variant="compact"
+  items={[
+    { title: 'Clinical precision, home comfort', text: 'The rigour of a supervised session, with the ease of a consumer product.' },
+    { title: 'Rhythm as a driver', text: 'Music is not background: its tempo sets the speed of each movement, so instructions become instinct.' },
+    { title: 'A mirror that corrects', text: 'Athletes have to see themselves to correct themselves, with instructions laid over their own movement.' },
+  ]}
+/>
+
+</Chapter>
+
+<Chapter title="Ideate" summary="From reference to system">
+
+<Key>Euleria showed what sensors and game mechanics can do for rehabilitation. Its limit was who it is for: professionals, not patients.</Key>
+
+### What we kept and what we changed
+
+<Insights
+  variant="compact"
+  items={[
+    { title: 'Kept: sensors', text: 'Precise movement data is what makes feedback worth trusting.' },
+    { title: 'Kept: game mechanics', text: 'Points and visible progress keep people going through repetition.' },
+    { title: 'Changed: who sets the plan', text: 'Euleria needs a professional to define it. Rehabeat starts from the doctor’s report and builds the plan itself.' },
+    { title: 'Changed: who reads the data', text: 'Clinical dashboards are hard to read without training. Progress has to make sense to the athlete.' },
+  ]}
+/>
+
+</Chapter>
+
+<Chapter title="Design" summary="Phone, TV, sensors, music">
+
+<Key>Three devices, one session: the phone plans, the TV coaches, the sensors watch, and the music keeps time.</Key>
+
+### The system
+
+<Chips
+  variant="cards"
+  items={[
+    { label: 'The phone: the hub', note: 'Reads the medical report, builds and adapts the plan, tracks progress over the weeks.' },
+    { label: 'The TV: the coach', note: 'The training space: guide, live avatar and corrections, readable from across the room.' },
+    { label: 'The sensors: the eye', note: 'Wearable motion bands and a floor mat, working with the phone camera to map every movement.' },
+    { label: 'The music: the pace', note: 'One track per exercise, its tempo matched to the movement.' },
+  ]}
+/>
+
+<Note label="Decision" text="Enough sensors for accuracy, few enough to wear: a few motion bands for the limbs, a floor mat for balance and weight shift, and the phone camera filling the gaps. Comfort, cost and setup time set the limit." />
+
+### The session, step by step
+
+<Note label="Decision" text="The TV carries the workout, the phone stays in the background: during an exercise nobody should have to look down at a small screen.">
+
+Five moments, from the doctor’s report to the end of the week.
+
+</Note>
+
+<Features
+  alternate
+  crop={0.72}
+  items={[
+    { title: 'From report to plan', text: 'Body data sets the safe limits; the athlete uploads the medical report, and the AI turns injury, area and recommendations into a weekly plan.', placeholder: 'App: upload report and plan', alt: '' },
+    { title: 'Set up once', text: 'TV paired with a QR code, sensors over Bluetooth, connections remembered. The phone goes under the TV and both screens confirm the framing.', placeholder: 'TV: framing check', device: 'tv', alt: '' },
+    { title: 'Music sets the pace', text: 'Each exercise gets a track whose beat matches the movement. A best fit is ready; the athlete can swap it for another song in the same tempo range.', placeholder: 'App: track for the exercise', alt: '' },
+    { title: 'A coach on the TV', text: 'A live avatar mirrors every movement next to a guide figure. When form drifts, the correction appears on the avatar as it happens.', placeholder: 'TV: avatar and live correction', device: 'tv', alt: '' },
+    { title: 'The week, measured', text: 'After each workout, four quick ratings: pain, fatigue, difficulty, mood. With the sensor data they feed a weekly report, and the plan adapts.', placeholder: 'App: weekly report', alt: '' },
+  ]}
+/>
+
+### What it is designed to change
+
+<Insights
+  variant="compact"
+  items={[
+    { title: 'Safer autonomy', text: 'Form errors caught in real time, so a session at home keeps the safety of a supervised one.' },
+    { title: 'Training, not treatment', text: 'Rhythm and game mechanics turn a medical obligation into a workout people want to finish.' },
+    { title: 'Measurable recovery', text: 'Range of motion and stability scores, set against how the athlete feels, replace guesswork with evidence.' },
+    { title: 'Lighter clinics', text: 'With execution checked remotely, physiotherapists could focus on the cases that need them in person.' },
+  ]}
+/>
+
+</Chapter>
+
+<Chapter title="Reflection" summary="What I’d validate next">
+
+<Key>The brief looked technical. The real problem was emotional: fear on one side, boredom on the other.</Key>
+
+### What I learned
+
+Sensors and AI were the easy part to imagine. What decided the design was confidence: a system that shows the athlete a movement is right, instead of just asking for it.
+
+The music idea taught me to treat an emotional need as a functional one. Rhythm is not decoration here: it is the instruction.
+
+### If I started again
+
+1. Put the prototype in front of injured athletes before refining the screens.
+2. Bring in a physiotherapist from the first week, to check the exercises, the safety limits and what the AI may change.
+3. Test the music idea on its own, with a quick experiment on whether matching the beat really improves form and adherence.
+
+<Closing kicker="What I take with me" line="People keep going when they can see they’re doing it right.">
+
+Rehabeat is still a concept, designed in Figma. **Its next step is a session with a real athlete and a real physiotherapist.**
+
+</Closing>
+
+</Chapter>

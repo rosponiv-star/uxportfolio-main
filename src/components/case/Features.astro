@@ -3,24 +3,42 @@
 // standing on a hairline, in track A; number, title and text in tracks B–C. Rows are separated by hairlines.
 // items: [{ title, text, image, alt }]; crop = share of the device height shown (default 0.55).
 // alternate: the device switches side row by row (track A, then track C), for rhythm.
+// Without `image` the row shows a placeholder frame (`placeholder` says what belongs there; `device`
+// sets its shape: a phone, cropped like the real shots, or a 16:9 TV) until the real screen arrives.
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import Figure from './Figure.astro';
 
 interface Props {
-  items: { title: string; text: string; image: ImageMetadata; alt: string }[];
+  items: {
+    title: string;
+    text: string;
+    image?: ImageMetadata;
+    alt: string;
+    placeholder?: string;
+    device?: 'phone' | 'tv';
+  }[];
   crop?: number;
   alternate?: boolean;
 }
 const { items, crop = 0.55, alternate = false } = Astro.props;
+// Placeholder shapes: an iPhone screen (9:19.5) cut at the same crop as the real shots, or a TV.
+const phRatio = (device?: 'phone' | 'tv') => (device === 'tv' ? '16/9' : `9/${Math.round(19.5 * crop)}`);
 ---
 
 <ol class:list={['features', { 'features--alt': alternate }]}>
   {
     items.map((it, i) => (
       <li class="feature trio" data-reveal style={`--d: ${i}`}>
-        <div class="feature__shot" style={`aspect-ratio: ${it.image.width} / ${Math.round(it.image.height * crop)}`}>
-          <Image src={it.image} alt={it.alt} widths={[320, 480, 640]} sizes="(min-width: 960px) 22vw, 60vw" />
-        </div>
+        {it.image ? (
+          <div class="feature__shot" style={`aspect-ratio: ${it.image.width} / ${Math.round(it.image.height * crop)}`}>
+            <Image src={it.image} alt={it.alt} widths={[320, 480, 640]} sizes="(min-width: 960px) 22vw, 60vw" />
+          </div>
+        ) : (
+          <div class="feature__shot feature__shot--ph">
+            <Figure ratio={phRatio(it.device)} placeholder={it.placeholder ?? 'Screen'} size="wide" />
+          </div>
+        )}
         <div class="feature__body span-2">
           <span class="feature__n label">{String(i + 1).padStart(2, '0')}</span>
           <p class="feature__title">{it.title}</p>
@@ -56,6 +74,11 @@ const { items, crop = 0.55, alternate = false } = Astro.props;
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  /* Placeholder frames have their own ratio; let them size the cell. */
+  .feature__shot--ph {
+    overflow: visible;
   }
 
   .feature__body {

@@ -66,7 +66,7 @@ relocating right now. Lives between Malè and Rovereto (TN).
 | Project | Status |
 |---|---|
 | 01 JustCook | **Done.** Real research data, real cover, real Result showcase, real Design chapter with product photography. Reference implementation. |
-| 02 Rehab | Placeholder — invented frontmatter facts, MDX skeleton only. |
+| 02 Rehabeat (ex Rehab) | **Text done** (real facts, `notes/02-rehab.md`; literature numbers in Challenge). Interfaces are placeholders until the owner sends the final screens → still `placeholder: true` / Coming soon. |
 | 03 Smart Home Ecosystem | Placeholder — invented frontmatter facts, MDX skeleton only. |
 | 04 Realiti | Placeholder — invented frontmatter facts, dark tone, MDX skeleton only. |
 | 05 AuraWake | Placeholder text, **real cover** (2 app screens on a flat ground). |
@@ -732,6 +732,17 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-09 · LOCAL (3)** · Case study 02 written as **Rehabeat** (renamed; `02-rehabeat.mdx`, `/work/rehabeat`).
+  Sources: `Media/02-Rehab/hci.pdf` (HCI report, 58 pp., Italian, image-only → rendered with pdf.js in Chrome) and
+  `old-portfolio-rehab.pdf`; all facts + owner answers in `notes/02-rehab.md`. Owner decisions: research = desk +
+  clinical literature + physio protocols + heuristic review (apps not named; Euleria = reference, not competitor);
+  literature numbers allowed (Ardern 2014 65%, Argent 2018 30–50%, Terry 2020 139 studies, all verified); role
+  End-to-end UX designer; Figma + FigJam; year 2024 (Oct 2024 – Jan 2025); type "Connected health system";
+  archetypes kept, flagged as synthesised; Result numbers = system facts; target 18–50 and sensors (bands + floor mat
+  + phone camera) written as Decisions with my rationale (owner asked me to judge). No Validate chapter (no testing).
+  Interfaces: placeholders only (Features now accepts items without `image`). Stays Coming soon. Pushed `main`.
+  → Next: owner sends the final Rehabeat screens (phone + TV) → Result showcase + Features images, cover, then
+  `placeholder: false`.
 - **2026-10-09 · LOCAL (2)** · (1) Group numbers "01.1" removed ("troppi numeri"); titles stay. (2) JustCook copy
   pass: tighter Challenge intro, "at least one portion of fruit", Analysis wording, the missing "about half throw food
   away" fact added to insight 3, archetypes flagged as synthesised from the data (honest, see Appendix B), "Next" →
