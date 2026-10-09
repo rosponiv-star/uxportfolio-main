@@ -13,6 +13,22 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
         {
           nav.map((item, i) => {
             const active = item.match(path);
+            // Not ready yet: visible, greyed, not a link; "Soon" takes the micro-number's place.
+            if (item.soon) {
+              return (
+                <li>
+                  <span
+                    class="header__link header__link--soon"
+                    aria-disabled="true"
+                    data-cursor="Coming soon"
+                    data-cursor-style="soon"
+                  >
+                    <span class="header__idx header__idx--soon label">Soon</span>
+                    <span>{item.label}</span>
+                  </span>
+                </li>
+              );
+            }
             return (
               <li>
                 <a
@@ -102,13 +118,40 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
     color: var(--ink);
   }
 
+  .header__link--soon,
+  .header__link--soon:hover {
+    color: var(--ink-4);
+    cursor: default;
+  }
+
+  .header__idx--soon {
+    color: var(--soon);
+  }
+
   @media (max-width: 520px) {
-    .header__nav {
-      gap: var(--space-3);
+    .header__name {
+      white-space: nowrap;
     }
 
-    .header__idx {
+    .header__nav {
+      gap: var(--space-2);
+    }
+
+    .header__idx:not(.header__idx--soon) {
       display: none;
+    }
+
+    /* No room beside the word: "Soon" sits just above it, taking no width. */
+    .header__link--soon {
+      position: relative;
+    }
+
+    .header__idx--soon {
+      position: absolute;
+      left: 0;
+      bottom: 100%;
+      transform: none;
+      line-height: 1;
     }
   }
 </style>

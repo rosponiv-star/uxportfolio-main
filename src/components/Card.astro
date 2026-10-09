@@ -4,6 +4,8 @@
 // tone and the facts rise in as square paper chips at the bottom-left (title, type, year).
 // Touch devices and cards without a link keep the text below the media.
 // The media ratio comes from the grid slot (--card-ratio). With `href` the whole card is a link.
+// `soon`: unfinished work. Same hover facts, but no link and no zoom; the cursor label turns red
+// ("Coming soon"), and on touch a red "Coming soon" line sits under the title.
 interface Props {
   title: string;
   year?: string;
@@ -12,18 +14,26 @@ interface Props {
   cursor?: string;
   id?: string;
   tone?: string;
+  soon?: boolean;
 }
-const { title, year, meta, href, cursor, id, tone } = Astro.props;
-const Tag = href ? 'a' : 'div';
+const { title, year, meta, href, cursor, id, tone, soon = false } = Astro.props;
+const link = soon ? undefined : href;
+const Tag = link ? 'a' : 'div';
 ---
 
 <article
-  class:list={['card', { 'card--linked': href }]}
+  class:list={['card', { 'card--linked': link || soon, 'card--soon': soon }]}
   id={id}
   data-reveal="card"
   style={tone ? `--card-bg: ${tone}` : undefined}
 >
-  <Tag class="card__link" href={href} data-cursor={href ? cursor : undefined}>
+  <Tag
+    class="card__link"
+    href={link}
+    data-cursor={soon ? 'Coming soon' : link ? cursor : undefined}
+    data-cursor-style={soon ? 'soon' : undefined}
+    aria-disabled={soon ? 'true' : undefined}
+  >
     <div class="card__media">
       <slot />
     </div>
@@ -31,6 +41,7 @@ const Tag = href ? 'a' : 'div';
       <h3 class="card__title">{title}</h3>
       {meta && <span class="card__type">{meta}</span>}
       {year && <span class="card__year">{year}</span>}
+      {soon && <span class="card__soon">Coming soon</span>}
     </div>
   </Tag>
 </article>
@@ -87,6 +98,18 @@ const Tag = href ? 'a' : 'div';
   .card__year {
     color: var(--ink-4);
     font-variant-numeric: tabular-nums;
+  }
+
+  /* Touch: the unfinished-work note under the facts (on hover devices the cursor label says it). */
+  .card__soon {
+    flex-basis: 100%;
+    font-size: var(--fs-small);
+    font-weight: 500;
+    color: var(--soon);
+  }
+
+  .card--soon .card__link {
+    cursor: default;
   }
 
   /* Entrance (footprint never changes): the cover fades in at full size while the image
@@ -176,6 +199,16 @@ const Tag = href ? 'a' : 'div';
     :global(.js) .card:global(.is-in) .card__link:is(:hover, :focus-visible) .card__media > :global(*),
     .card--linked .card__link:is(:hover, :focus-visible) .card__media > :global(*) {
       transform: scale(0.95);
+    }
+
+    /* Unfinished work: the facts still rise in, but the cover stays put (nothing to open). */
+    .card--soon .card__soon {
+      display: none;
+    }
+
+    :global(.js) .card--soon:global(.is-in) .card__link:is(:hover, :focus-visible) .card__media > :global(*),
+    .card--soon .card__link:is(:hover, :focus-visible) .card__media > :global(*) {
+      transform: none;
     }
 
     /* The cover's own hover zoom would fight the zoom-out. */

@@ -25,22 +25,28 @@ import { chaptersOf, getProjects, hrefOf, slugOf, type Project } from '../../lib
 
 export async function getStaticPaths() {
   const projects = await getProjects();
+  // The next band only points to finished case studies: placeholders are built but never linked.
+  const nextOf = (i: number) =>
+    projects
+      .slice(i + 1)
+      .concat(projects.slice(0, i))
+      .find((p) => !p.data.placeholder);
   return projects.map((project, i) => ({
     params: { slug: slugOf(project) },
-    props: { project, next: projects[(i + 1) % projects.length] },
+    props: { project, next: nextOf(i) },
   }));
 }
 
 interface Props {
   project: Project;
-  next: Project;
+  next?: Project;
 }
 
 const { project, next } = Astro.props;
 const { title, tagline, role, timeline, team, type, platform, tools, glance, result } = project.data;
 const { Content } = await render(project);
 const chapters = chaptersOf(project);
-const nextCover = next.data.cover;
+const nextCover = next?.data.cover;
 const nextHasMedia = Boolean(nextCover?.image || nextCover?.video);
 
 const glanceItems = [
@@ -59,7 +65,7 @@ const facts = [
 ];
 ---
 
-<Base title={title} description={`${title} — ${tagline}`}>
+<Base title={title} description={`${title} — ${tagline}`} noindex={project.data.placeholder}>
   <article>
     <!-- Intro ------------------------------------------------------------ -->
     <header class="wrap intro">
@@ -164,7 +170,8 @@ const facts = [
 
   <ProcessIndex chapters={chapters} bar />
 
-  <!-- Next case study: full-bleed band in the next project's tone ---------- -->
+  <!-- Next case study: full-bleed band in the next finished project's tone -- -->
+  {next && (
   <a
     href={hrefOf(next)}
     class:list={['next', { 'next--dark': next.data.toneDark || nextHasMedia, 'next--media': nextHasMedia }]}
@@ -191,6 +198,7 @@ const facts = [
       <p class="next__tagline">{next.data.tagline}</p>
     </div>
   </a>
+  )}
 </Base>
 
 <style>

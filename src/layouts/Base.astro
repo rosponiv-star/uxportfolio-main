@@ -9,9 +9,11 @@ interface Props {
   description?: string;
   bodyClass?: string;
   showFooterContact?: boolean;
+  // Built but not meant to be found yet (unfinished case studies, Playground).
+  noindex?: boolean;
 }
 
-const { title, description = site.description, bodyClass, showFooterContact = true } = Astro.props;
+const { title, description = site.description, bodyClass, showFooterContact = true, noindex = false } = Astro.props;
 const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — UX & Digital Product Designer`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -24,6 +26,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
+    {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#fdfdfc" />

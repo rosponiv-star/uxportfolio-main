@@ -104,6 +104,7 @@ scattered space, fluid and subtle motion. **When in doubt, propose the more rest
 | `--rule` | `rgb(17 17 17 / .08)` | row hairlines |
 | `--rule-strong` | `rgb(17 17 17 / .22)` | section rules, card borders |
 | `--signal` | `#3d5a73` (slate blue) | the **single** accent colour — sequence numbers, active states, progress fills. Used sparingly, never as a background fill for large areas. |
+| `--soon` | `#a6463c` (muted brick red) | **only** for "Coming soon" (cursor label background, touch note, nav "Soon"). White on it = 5.9:1. |
 
 Colour history (do not re-propose): background went `#f5f5f0` → `#fafaf8` → `#fcfcfb` → `#fdfdfc`. Accent went
 orange `#c93a14` → green `#2b9e4d` (rejected) → slate `#3d5a73` (kept, derived from cover tones). **No gradients, no
@@ -117,7 +118,7 @@ Reframes funnel.**
 | `--fs-display` | 30→60px, **Regular 400**, lh 1.1 | page-opening statements only (home hero, About, Playground, 404) |
 | `--fs-h2` | 32→48px, Medium | section titles ("Selected work", "How I work", chapter titles) |
 | `--fs-h3` | 22→28px | item titles (principles, insights, index rows); case-study `<Key>` sentence (Regular 400) |
-| `--fs-lead` | ~19→23px | lead paragraphs; card titles (Medium); chapter group headings `###` (Medium, with a signal "01.1" number) |
+| `--fs-lead` | ~19→23px | lead paragraphs; card titles (Medium); chapter group headings `###` (Medium, no number) |
 | `--fs-body` | 17px | running text in non-case-study contexts; text inside case-study blocks (archetype quotes/traits, insight evidence, reframe values) |
 | `--fs-read` | 17→19px, lh 1.55 | case-study **chapter paragraphs only** (the longer reading measure) |
 | `--fs-stat` | 56→104px, Medium, tight tracking | key numbers only (`Metrics`, insight `stat`); affixes (%, min, signs) sit at 0.42–0.55em, proportional figures (clean "1", no tabular foot) |
@@ -218,8 +219,8 @@ the whole process and way of thinking if they want."*
    decision or a reason.
    **One reading column** (owner, 2026-10-09, after "il testo è caotico, l'occhio cerca il prossimo testo"): text
    reads top to bottom from the left edge of track A, nothing parked in track C. Chapters are split into groups with
-   MDX `### Title` → signal number "01.1" (CSS counter `group` inside the page's `chapter` counter) + title in lead
-   Medium. Proximity: `--space-item` before a group, `--space-3` heading → content, `--space-block` inside. Notes are
+   MDX `### Title` → title alone in lead Medium (a signal "01.1" number was tried the same day and removed: "troppi
+   numeri"). Proximity: `--space-item` before a group, `--space-3` heading → content, `--space-block` inside. Notes are
    tinted callouts under the content; BigStat/Reframes/Closing captions sit under their numbers; Chips and Insights
    stack (Insights `variant="compact"` for the launch plan). Wide media still spans A–C.
 8. "Next case study" full-bleed band (inverted colours, cover image of the next project).
@@ -542,8 +543,7 @@ HANDOFF.md                       this file
 **Open questions / pending decisions** (ask the owner, don't guess):
 1. **LinkedIn URL** in `src/data/site.ts` is still the literal placeholder `https://www.linkedin.com/in/`.
 2. **CV may contain his phone number** (`public/cv/Valerio-Rosponi-CV.pdf`) — he was told, may want a redacted copy.
-3. **UX/UI filter** is present on every single project, so it doesn't actually discriminate anything in the
-   Work-page filter bar — flagged to the owner, still unresolved whether to drop it.
+3. ~~UX/UI filter~~ — resolved 2026-10-09: the vocabulary is now All / Mobile / XR / Product / Multi-screen.
 4. **JustCook tools list** currently reads "Figma, Miro" — owner was asked whether to add others, no answer yet.
 5. **Hero cover-glimpse at 1280×720** measures only 38px (target ~80px, which it hits at every other tested
    viewport: 80px @1440, 95px @1920, 84px on mobile). Low priority, but a `--peek` tweak would fix it if raised.
@@ -732,6 +732,14 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-09 · LOCAL (2)** · (1) Group numbers "01.1" removed ("troppi numeri"); titles stay. (2) JustCook copy
+  pass: tighter Challenge intro, "at least one portion of fruit", Analysis wording, the missing "about half throw food
+  away" fact added to insight 3, archetypes flagged as synthesised from the data (honest, see Appendix B), "Next" →
+  "Nice-to-haves", simpler Ideate Key + heading, Conad pickup framed as "in the prototype" (never confirmed),
+  Reflection without repeating the Challenge Key. (3) Unfinished work: placeholder projects + Playground visible but
+  not openable, red "Coming soon" cursor label (`--soon`), touch note, pages built but noindex + out of sitemap, Next
+  band only to finished projects (JustCook now has none). (4) Filters: All, Mobile, XR, Product, Multi-screen (Rehab =
+  phone + TV together; its platform now "Mobile + TV"). Verified with puppeteer (1440, 390, 360). Pushed `main`.
 - **2026-10-09 · LOCAL** · Owner: JustCook chapter text "caotico, l'occhio cerca il prossimo testo". Three concepts
   shown (A index rows, B one column, C summary first); owner picked **B, with more breathing room**. Implemented as a
   system, not just for JustCook: `###` groups numbered 01.1… (global.css), Key at h3 Regular, Note = callout under its

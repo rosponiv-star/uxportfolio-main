@@ -53,8 +53,8 @@ chapters is `--fs-read` (17→19px, line-height 1.55). Text levels: Key (h3 Regu
 
 **One reading column (owner, 2026-10-09):** chapter text reads strictly top to bottom from the left edge of track A;
 nothing is parked in track C for the eye to hunt for (notes, captions, kickers sit right under what they refer to).
-A chapter is split into groups with `### Title`, rendered as a signal number (01.1, 01.2…, CSS counter) + the title in
-lead Medium. Proximity carries the structure: `--space-item` before a group, `--space-3` from its heading to its
+A chapter is split into groups with `### Title`, rendered as the title alone in lead Medium (group numbers like 01.1
+were tried and rejected, 2026-10-09: "troppi numeri"). Proximity carries the structure: `--space-item` before a group, `--space-3` from its heading to its
 content, `--space-block` inside it. Wide media (strips, galleries, metric rows, funnels) may still span A–C.
 
 Components available in MDX without imports:
@@ -145,7 +145,9 @@ title, the footer wordmark and the nav micro-numbers.
 - Small text (filters, counts, meta, nav, notes) is 16px through `--fs-small`. The selected option has a 1.5px underline.
 
 - Filters come from `categories` in each MDX file. The vocabulary is fixed in `lib/projects.ts → CATEGORIES` and in
-  the enum in `content.config.ts`. Only categories in use are shown, with their counts.
+  the enum in `content.config.ts`. Only categories in use are shown, with their counts. Vocabulary (owner, 2026-10-09):
+  All, Mobile (JustCook, Rehab, Smart Home, AuraWake), XR (Realiti), Product (Smart Home, JustCook), Multi-screen
+  (Rehab: phone and TV used together).
 - The selected filter or view turns ink and is underlined (name and count separately). The others stay grey.
 - Grid: two columns, every card half width (4:3). One column on phones.
 - Collection header: row 1 = title; row 2 = filters (left, cols 1–9) and Grid/Index switch (right, cols 10–12) on one baseline.
@@ -167,6 +169,12 @@ title, the footer wordmark and the nav micro-numbers.
 
 Status:
 - JustCook (01) is written with real data.
+- Unfinished work is visible but not openable (owner, 2026-10-09): a project with `placeholder: true` gets a card and
+  an index row with no link, no zoom and no preview; the cursor label turns `--soon` red with "Coming soon" (on touch,
+  a red "Coming soon" line under the facts). Its page is still built but never linked: `noindex`, out of the sitemap
+  (astro.config.mjs reads the flag), and the "Next case study" band skips it (no band if nothing is finished).
+  Playground: same treatment in the nav (`soon: true` in data/site.ts: grey, "Soon" in place of the micro-number).
+  Setting `placeholder: false` re-enables everything for a project.
 - The other four MDX files still carry INVENTED placeholder facts (year, type, platform, role, timeline, team,
   tools). Replace them with the real ones when each case study is written.
 
@@ -185,7 +193,7 @@ Status:
 - Swiss editorial base + tech precision (mono labels, registration marks, hairline rules), with a
   touch of brutalism (oversized type) and one experimental gesture (the hero depth texture: three layers of near-invisible grain that drift in parallax with the cursor and surface slightly around it, components/DepthTexture.astro; the old registration field lives on in Playground).
 - Background `#fdfdfc` (near-white, slightly cool). One accent `--signal` (#3d5a73), used sparingly. No gradients and no
-  fluorescent colours.
+  fluorescent colours. The only other colour is `--soon` (#a6463c, muted brick red), reserved for "Coming soon".
 - Type: Geist Medium for headings (H2 ≈ 48px), labels in Geist Medium at 12px, uppercase, 8% tracking,
   tabular figures. Use contrast between
   ink and grey to build hierarchy.

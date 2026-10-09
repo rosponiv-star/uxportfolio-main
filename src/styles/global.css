@@ -18,6 +18,7 @@
   --rule: rgb(17 17 17 / 0.08); /* hairlines between rows */
   --rule-strong: rgb(17 17 17 / 0.22); /* section dividers */
   --signal: #3d5a73; /* single accent, used sparingly */
+  --soon: #a6463c; /* muted brick red: only for "Coming soon" (unfinished work), white text on it reads at 5.9:1 */
 
   /* Type */
   --font-sans: 'Geist Variable', 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -483,34 +484,16 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
   margin-top: 1em;
 }
 
-/* Groups inside a chapter: `### Title` opens one. Proximity carries the structure: a wide gap
-   before each group, a short one between its heading and its content, the block rhythm inside.
-   The heading is numbered per chapter (01.1, 01.2…) in signal, the title in lead Medium. */
-.chapter {
-  counter-reset: group;
-}
-
+/* Groups inside a chapter: `### Title` opens one (title in lead Medium, no number: the chapter
+   number is the only one). Proximity carries the structure: a wide gap before each group, a short
+   one between its heading and its content, the block rhythm inside. */
 .prose > h3 {
-  counter-increment: group;
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
   margin-top: var(--space-item);
   font-size: var(--fs-lead);
   font-weight: 500;
   letter-spacing: -0.015em;
   line-height: 1.25;
   color: var(--ink);
-}
-
-.prose > h3::before {
-  content: counter(chapter, decimal-leading-zero) '.' counter(group);
-  flex: none;
-  font-size: var(--fs-label);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  font-variant-numeric: tabular-nums;
-  color: var(--signal);
 }
 
 .prose > h3 + * {
@@ -830,6 +813,12 @@ a:focus-visible .arrow--back {
 .cursor-label.is-light {
   background: var(--paper);
   color: var(--ink);
+}
+
+/* Unfinished work (data-cursor-style="soon"): the only red on the site. */
+.cursor-label.is-soon {
+  background: var(--soon);
+  color: #fff;
 }
 
 /* A short explanation (chips): sentence case, wraps. */

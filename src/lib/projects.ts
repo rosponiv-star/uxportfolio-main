@@ -3,7 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 export type Project = CollectionEntry<'projects'>;
 
 /** Filter vocabulary, in display order. Must match the enum in content.config.ts. */
-export const CATEGORIES = ['UX/UI', 'Service design', 'Product', 'XR', 'Research'] as const;
+export const CATEGORIES = ['Mobile', 'XR', 'Product', 'Multi-screen'] as const;
 
 export { categoryId } from './collection';
 

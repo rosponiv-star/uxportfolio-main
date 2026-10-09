@@ -22,6 +22,7 @@ const items = projects.map((p) => ({
   role: p.data.role,
   cats: p.data.categories as string[],
   href: hrefOf(p),
+  soon: p.data.placeholder,
   project: p,
 }));
 

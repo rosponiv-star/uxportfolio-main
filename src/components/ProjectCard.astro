@@ -20,6 +20,7 @@ const { title, year, type, platform } = project.data;
   meta={`${type}, ${platform}`}
   href={hrefOf(project)}
   cursor="Read case study"
+  soon={project.data.placeholder}
   tone={project.data.tone}
 >
   <Cover project={project} eager={eager} sizes="(min-width: 960px) 90vw, 100vw" />

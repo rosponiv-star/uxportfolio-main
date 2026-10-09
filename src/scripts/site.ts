@@ -114,6 +114,8 @@ function initCursorLabel() {
         label.textContent = cursor || 'View';
       }
       label.classList.toggle('is-note', cursorStyle === 'note' && !cursorImage);
+      // Unfinished work (case studies still in progress, Playground): "Coming soon" on red.
+      label.classList.toggle('is-soon', cursorStyle === 'soon');
       label.classList.toggle('is-image', Boolean(cursorImage));
       // Light label over dark surfaces (e.g. a dark next-project band)
       label.classList.toggle('is-light', el.dataset.cursorTheme === 'light');

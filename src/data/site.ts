@@ -13,8 +13,9 @@ export const site = {
     'Valerio Rosponi — UX, digital product and visual designer. Case studies, process and the thinking behind the work.',
 };
 
-export const nav = [
+// `soon`: shown in the nav but not linked yet (grey, red "Coming soon" cursor label).
+export const nav: { href: string; label: string; soon?: boolean; match: (p: string) => boolean }[] = [
   { href: '/', label: 'Work', match: (p: string) => p === '/' || p.startsWith('/work') },
-  { href: '/playground', label: 'Playground', match: (p: string) => p.startsWith('/playground') },
+  { href: '/playground', label: 'Playground', soon: true, match: (p: string) => p.startsWith('/playground') },
   { href: '/about', label: 'About', match: (p: string) => p.startsWith('/about') },
 ];
