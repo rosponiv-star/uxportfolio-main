@@ -732,6 +732,12 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-10 · LOCAL (2)** · Rehabeat cover REDONE with the owner's TV mockup (a 2000×1500 webp of a slim
+  3/4-perspective TV on a flat #e8e8e8 ground): **TV on the left, the two phones large on the right**, one ground line,
+  group centred, side margins ~480px (4:3 card safe). The mockup body was upscaled ×2 and cut out (neutral greys ≥172
+  removed by flood fill, which also drops its faint contact shadow: covers stay flat); the 4K TV screen from Figma was
+  re-projected onto the glass with a homography (glass corners measured on the mockup: 526,218 · 1308,392 ·
+  1344,1052 · 571,1197), so the UI is sharp. The drawn minimal TV from the entry below is superseded. Pushed `main`.
 - **2026-10-10 · LOCAL** · Rehabeat cover (`src/assets/projects/rehabeat/cover.png`, 3840×2400, tone #f5f5f5). Source:
   Figma file `xmb1334lJ54M35DwB9PFnl` (page "Redesign"), nodes 4106:1552 "Mockup · Home · iPhone 16 Pro (official
   bezel)", 4115:2142 "Mockup · Week 2 data …", 4349:1524 "TV / Get ready · thumbs up recognized (TV-10)" (exported
