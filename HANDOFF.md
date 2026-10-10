@@ -66,7 +66,7 @@ relocating right now. Lives between Malè and Rovereto (TN).
 | Project | Status |
 |---|---|
 | 01 JustCook | **Done.** Real research data, real cover, real Result showcase, real Design chapter with product photography. Reference implementation. |
-| 02 Rehabeat (ex Rehab) | **Text done** (real facts, `notes/02-rehab.md`; literature numbers in Challenge). Interfaces are placeholders until the owner sends the final screens → still `placeholder: true` / Coming soon. |
+| 02 Rehabeat (ex Rehab) | **Text + cover done** (cover from the final Figma screens) (real facts, `notes/02-rehab.md`; literature numbers in Challenge). Interfaces are placeholders until the owner sends the final screens → still `placeholder: true` / Coming soon. |
 | 03 Smart Home Ecosystem | Placeholder — invented frontmatter facts, MDX skeleton only. |
 | 04 Realiti | Placeholder — invented frontmatter facts, dark tone, MDX skeleton only. |
 | 05 AuraWake | Placeholder text, **real cover** (2 app screens on a flat ground). |
@@ -732,6 +732,15 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-10 · LOCAL** · Rehabeat cover (`src/assets/projects/rehabeat/cover.png`, 3840×2400, tone #f5f5f5). Source:
+  Figma file `xmb1334lJ54M35DwB9PFnl` (page "Redesign"), nodes 4106:1552 "Mockup · Home · iPhone 16 Pro (official
+  bezel)", 4115:2142 "Mockup · Week 2 data …", 4349:1524 "TV / Get ready · thumbs up recognized (TV-10)" (exported
+  via the Figma MCP, ×4 phones, ×3 TV). Phones cut out of their #f5f5f5 frame (flood fill); TV screen set in a drawn
+  minimal TV (near-black bezel 1.2%, thin neck + rounded base, no shadows). Layout picked by the owner from 3
+  concepts (triptych / TV in front / lineup): **"B · TV in primo piano"** with the stand: TV centred, phones in front of
+  its lower corners, all standing on one ground line, group vertically centred. Side margins ~505px so the 4:3 home
+  card crop (−320px per side) never cuts a phone. These Figma screens are the FINAL interfaces (the old UI in
+  `Media/02-Rehab` is not). Still Coming soon until the Result/Features screens are placed. Pushed `main`.
 - **2026-10-09 · LOCAL (3)** · Case study 02 written as **Rehabeat** (renamed; `02-rehabeat.mdx`, `/work/rehabeat`).
   Sources: `Media/02-Rehab/hci.pdf` (HCI report, 58 pp., Italian, image-only → rendered with pdf.js in Chrome) and
   `old-portfolio-rehab.pdf`; all facts + owner answers in `notes/02-rehab.md`. Owner decisions: research = desk +
