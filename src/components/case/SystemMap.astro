@@ -1,0 +1,230 @@
+---
+// Rehabeat's system as a wiring diagram: four nodes (user, sensors, phone, TV) linked by arrows with what
+// flows along them. Styled like the tool tiles (hairline boxes, line icons, sequence numbers). Hover or focus
+// a node: its links light up in signal and carry a moving dash, everything else steps back.
+// On phones the diagram keeps its size and scrolls sideways.
+const nodes = [
+  { id: 'user', n: '01', name: 'Athlete', note: 'Moves, rates each session', x: 400, y: 30, icon: 'user' },
+  { id: 'sensors', n: '02', name: 'Sensors', note: 'Motion bands, floor mat', x: 400, y: 250, icon: 'band' },
+  { id: 'phone', n: '03', name: 'Phone app', note: 'Plan, camera, progress', x: 760, y: 250, icon: 'phone' },
+  { id: 'tv', n: '04', name: 'TV app', note: 'Coach, avatar, music', x: 400, y: 470, icon: 'tv' },
+];
+const W = 260, H = 96;
+const edges = [
+  { ends: 'user sensors', d: 'M530 126 V246', label: 'Wears', lx: 544, ly: 192, anchor: 'start' },
+  { ends: 'sensors phone', d: 'M660 298 H756', label: 'Wi-Fi', lx: 708, ly: 324, anchor: 'middle' },
+  { ends: 'phone tv', d: 'M890 346 V518 H664', label: 'Wi-Fi', lx: 776, ly: 544, anchor: 'middle', both: true },
+  { ends: 'tv user', d: 'M400 518 H240 V78 H396', label: 'Video, audio', lx: 228, ly: 292, anchor: 'end', sub: 'feedback' },
+  { ends: 'phone user', d: 'M850 250 V112 H664', label: 'Progress', lx: 862, ly: 186, anchor: 'start' },
+  { ends: 'user phone', d: 'M660 52 H1080 V298 H1024', label: 'Interaction', lx: 1092, ly: 182, anchor: 'start' },
+];
+const icons: Record<string, string> = {
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>',
+  band: '<rect x="2.5" y="8" width="19" height="8" rx="4"/><circle cx="12" cy="12" r="1.8"/><path d="M6 12h1.5M16.5 12H18"/>',
+  phone: '<rect x="6.5" y="2" width="11" height="20" rx="2.2"/><path d="M10.5 18.5h3"/>',
+  tv: '<rect x="2" y="4" width="20" height="13" rx="1.5"/><path d="M8 21h8M12 17v4"/>',
+};
+---
+
+<figure class="sysmap" data-sysmap>
+  <div class="sysmap__scroll">
+    <svg viewBox="0 0 1200 600" role="img" aria-labelledby="sysmap-title">
+      <title id="sysmap-title">
+        The Rehabeat system: the athlete wears the sensors; sensors and phone talk over Wi-Fi; phone and TV
+        sync over Wi-Fi; the TV gives video and audio feedback; the phone shows progress; the athlete interacts
+        with the phone.
+      </title>
+      <defs>
+        <marker id="sys-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+          <path d="M1 1 L9 5 L1 9" fill="none" stroke="context-stroke" stroke-width="1.4" stroke-linejoin="round" />
+        </marker>
+      </defs>
+
+      {
+        edges.map((e) => (
+          <g class="edge" data-ends={e.ends}>
+            <path class="edge__line" d={e.d} marker-end="url(#sys-arrow)" marker-start={e.both ? 'url(#sys-arrow)' : undefined} />
+            <text class="edge__label" x={e.lx} y={e.ly} text-anchor={e.anchor}>
+              {e.label}
+              {e.sub && <tspan x={e.lx} dy="18">{e.sub}</tspan>}
+            </text>
+          </g>
+        ))
+      }
+
+      {
+        nodes.map((n) => (
+          <g class="node" data-node={n.id} tabindex="0" transform={`translate(${n.x} ${n.y})`}>
+            <rect class="node__box" width={W} height={H} />
+            <text class="node__n" x="18" y="26">{n.n}</text>
+            <g class="node__icon" transform="translate(206 20) scale(1.5)" set:html={icons[n.icon]} />
+            <text class="node__name" x="18" y="58">{n.name}</text>
+            <text class="node__note" x="18" y="80">{n.note}</text>
+          </g>
+        ))
+      }
+    </svg>
+  </div>
+  <figcaption class="sysmap__cap field">Hover a part to follow its links.</figcaption>
+</figure>
+
+<style>
+  .sysmap__scroll {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    min-width: 760px;
+    height: auto;
+    overflow: visible;
+    font-family: inherit;
+  }
+
+  .node__box {
+    fill: var(--paper);
+    stroke: var(--rule-strong);
+    stroke-width: 1;
+    transition:
+      stroke 0.4s var(--ease-out),
+      fill 0.4s var(--ease-out);
+  }
+
+  .node__n {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    fill: var(--signal);
+  }
+
+  .node__icon {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke 0.4s var(--ease-out);
+  }
+
+  .node__name {
+    font-size: 22px;
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    fill: var(--ink);
+  }
+
+  .node__note {
+    font-size: 15px;
+    fill: var(--ink-3);
+  }
+
+  .node {
+    cursor: default;
+    outline: none;
+    transition: opacity 0.4s var(--ease-out);
+  }
+
+  .edge__line {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.4;
+    stroke-linejoin: round;
+    transition:
+      stroke 0.4s var(--ease-out),
+      opacity 0.4s var(--ease-out);
+  }
+
+  .edge__label {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    fill: var(--ink-3);
+    transition: fill 0.4s var(--ease-out), opacity 0.4s var(--ease-out);
+  }
+
+  /* Focus mode: the hovered node, its links and their other ends stay; the rest steps back. */
+  [data-focus] .edge:not(.is-on) .edge__line,
+  [data-focus] .edge:not(.is-on) .edge__label,
+  [data-focus] .node:not(.is-on) {
+    opacity: 0.18;
+  }
+
+  .node.is-hub .node__box {
+    stroke: var(--signal);
+    fill: var(--paper-2);
+  }
+
+  .node.is-hub .node__icon {
+    stroke: var(--signal);
+  }
+
+  .edge.is-on .edge__line {
+    stroke: var(--signal);
+    stroke-dasharray: 6 5;
+    animation: flow 0.9s linear infinite;
+  }
+
+  .edge.is-on .edge__label {
+    fill: var(--signal);
+  }
+
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -11;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .edge.is-on .edge__line {
+      animation: none;
+    }
+  }
+
+  .sysmap__cap {
+    margin-top: var(--space-2);
+  }
+
+  @media (hover: none) {
+    .sysmap__cap {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-sysmap]').forEach((fig) => {
+    const svg = fig.querySelector('svg')!;
+    const nodes = Array.from(svg.querySelectorAll<SVGGElement>('.node'));
+    const edges = Array.from(svg.querySelectorAll<SVGGElement>('.edge'));
+    const focus = (id: string | null) => {
+      if (!id) {
+        svg.removeAttribute('data-focus');
+        nodes.forEach((n) => n.classList.remove('is-on', 'is-hub'));
+        edges.forEach((e) => e.classList.remove('is-on'));
+        return;
+      }
+      svg.setAttribute('data-focus', id);
+      const linked = new Set([id]);
+      edges.forEach((e) => {
+        const ends = (e.dataset.ends || '').split(' ');
+        const on = ends.includes(id);
+        e.classList.toggle('is-on', on);
+        if (on) ends.forEach((x) => linked.add(x));
+      });
+      nodes.forEach((n) => {
+        n.classList.toggle('is-on', linked.has(n.dataset.node!));
+        n.classList.toggle('is-hub', n.dataset.node === id);
+      });
+    };
+    nodes.forEach((n) => {
+      n.addEventListener('pointerenter', () => focus(n.dataset.node!));
+      n.addEventListener('focus', () => focus(n.dataset.node!));
+      n.addEventListener('blur', () => focus(null));
+      n.addEventListener('click', () => focus(svg.getAttribute('data-focus') === n.dataset.node ? null : n.dataset.node!));
+    });
+    svg.addEventListener('pointerleave', () => focus(null));
+  });
+</script>

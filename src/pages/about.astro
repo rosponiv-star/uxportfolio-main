@@ -11,6 +11,8 @@ import ollama from '../assets/logos/ollama.svg?raw';
 import unity from '../assets/logos/unity.svg?raw';
 import meta from '../assets/logos/meta.svg?raw';
 import git from '../assets/logos/git.svg?raw';
+import affinity from '../assets/logos/affinity.svg?raw';
+import illustrator from '../assets/logos/adobeillustrator.svg?raw';
 
 // Strip the <title> so screen readers read the tool name once, from the text.
 const mark = (svg: string) => svg.replace(/<title>.*?<\/title>/, '').replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
@@ -66,6 +68,7 @@ const tools = [
   { name: 'Figma', marks: [figma], use: 'Interfaces, prototypes, variables and design systems.' },
   { name: 'Claude & Codex', marks: [claude, openai], use: 'Coding agents to build and test what I design.' },
   { name: 'Local AI tools', marks: [ollama], use: 'Models on my own machine, like Ollama, for private experiments.' },
+  { name: 'Affinity & Illustrator', marks: [affinity, illustrator], use: 'Vector graphics, brand material and print.' },
   { name: 'Unity', marks: [unity], use: 'Interactive, spatial and XR prototypes.' },
   { name: 'Meta Developer Hub', marks: [meta], use: 'Building and testing on Meta Quest headsets.' },
   { name: 'Git', marks: [git], use: 'Versioning code and prototypes.' },
@@ -74,7 +77,7 @@ const tools = [
 const sections = [
   { id: 'approach', title: 'How I approach design', summary: 'Evidence, structure, then detail' },
   { id: 'skills', title: 'What I bring to a team', summary: '14 skills in three areas' },
-  { id: 'tools', title: 'Tools I work with', summary: 'Figma, AI agents, Unity, Git' },
+  { id: 'tools', title: 'Tools I work with', summary: 'Figma, AI agents, Affinity, Unity, Git' },
   { id: 'now', title: 'Where I am now', summary: 'Studying in Trento, open to remote' },
   { id: 'contact', title: 'How to reach me', summary: 'Email, LinkedIn, résumé' },
 ];
@@ -108,15 +111,6 @@ const pad = (i: number) => String(i + 1).padStart(2, '0');
             sizes="(min-width: 960px) 30vw, 70vw"
             class="portrait__img portrait__img--mono"
             loading="eager"
-          />
-          <Image
-            src={portrait}
-            alt=""
-            widths={[480, 800, 1200]}
-            sizes="(min-width: 960px) 30vw, 70vw"
-            class="portrait__img portrait__img--colour"
-            loading="eager"
-            aria-hidden="true"
           />
         </div>
         <figcaption class="portrait__cap">
@@ -335,7 +329,7 @@ const pad = (i: number) => String(i + 1).padStart(2, '0');
     }
   }
 
-  /* Portrait: black and white; under the pointer a soft lens brings the colour back. */
+  /* Portrait */
   .portrait {
     grid-column: 10 / span 3;
     grid-row: 1 / span 2;
@@ -360,17 +354,21 @@ const pad = (i: number) => String(i + 1).padStart(2, '0');
     object-position: 50% 35%;
   }
 
+  /* Black and white; on hover the colour fades back in and the photo eases a touch closer. */
   .portrait__frame :global(.portrait__img--mono) {
     filter: grayscale(1) contrast(1.06);
+    transition:
+      filter 0.9s var(--ease-out),
+      transform 1.2s var(--ease-out);
   }
 
-  .portrait__frame :global(.portrait__img--colour) {
-    --lx: 50%;
-    --ly: 40%;
-    --lr: 0px;
-    -webkit-mask-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), #000 60%, transparent 100%);
-    mask-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), #000 60%, transparent 100%);
+  @media (hover: hover) and (pointer: fine) {
+    .portrait__frame:hover :global(.portrait__img--mono) {
+      filter: grayscale(0) contrast(1);
+      transform: scale(1.03);
+    }
   }
+
 
   .portrait__cap {
     display: flex;
@@ -802,37 +800,4 @@ const pad = (i: number) => String(i + 1).padStart(2, '0');
     if (target) set(target, true);
   });
 
-  // Portrait lens: a soft circle of colour follows the pointer and fades away when it leaves.
-  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  document.querySelectorAll<HTMLElement>('[data-portrait]').forEach((fig) => {
-    const frame = fig.querySelector<HTMLElement>('.portrait__frame')!;
-    const colour = fig.querySelector<HTMLElement>('.portrait__img--colour')!;
-    if (!fine || reduced) return;
-    let x = 50, y = 40, tx = 50, ty = 40, r = 0, tr = 0, raf = 0;
-    const loop = () => {
-      x += (tx - x) * 0.14;
-      y += (ty - y) * 0.14;
-      r += (tr - r) * 0.1;
-      colour.style.setProperty('--lx', `${x}%`);
-      colour.style.setProperty('--ly', `${y}%`);
-      colour.style.setProperty('--lr', `${r}px`);
-      const moving = Math.abs(tx - x) > 0.05 || Math.abs(ty - y) > 0.05 || Math.abs(tr - r) > 0.5;
-      raf = moving ? requestAnimationFrame(loop) : 0;
-    };
-    const kick = () => {
-      if (!raf) raf = requestAnimationFrame(loop);
-    };
-    frame.addEventListener('pointermove', (e) => {
-      const b = frame.getBoundingClientRect();
-      tx = ((e.clientX - b.left) / b.width) * 100;
-      ty = ((e.clientY - b.top) / b.height) * 100;
-      tr = b.width * 0.32;
-      kick();
-    });
-    frame.addEventListener('pointerleave', () => {
-      tr = 0;
-      kick();
-    });
-  });
 </script>

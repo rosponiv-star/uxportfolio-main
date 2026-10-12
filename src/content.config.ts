@@ -68,7 +68,7 @@ const projects = defineCollection({
                 crop: z.number().min(0.1).max(1).optional(),
                 anchor: z.enum(['top', 'bottom']).default('top'),
                 stagger: z.boolean().default(false),
-                items: z.array(z.object({ image: image(), alt: z.string(), caption: z.string().optional() })),
+                items: z.array(z.object({ image: image(), alt: z.string(), caption: z.string().optional(), focus: z.string().optional() })),
               }),
             )
             .optional(),

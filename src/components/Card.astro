@@ -218,10 +218,16 @@ const Tag = link ? 'a' : 'div';
       transform: scale(0.95);
     }
 
-    /* Full-bleed photos: zooming out would expose the tone around the photo, so zoom in a touch instead. */
+    /* Full-bleed photos rest slightly zoomed in and zoom out to their full frame: the same gesture as
+       the other cards, with no tone border around the photo. */
+    :global(.js) .card--bleed:global(.is-in) .card__media > :global(*),
+    .card--bleed .card__media > :global(*) {
+      transform: scale(1.07);
+    }
+
     :global(.js) .card--bleed:global(.is-in) .card__link:is(:hover, :focus-visible) .card__media > :global(*),
     .card--bleed .card__link:is(:hover, :focus-visible) .card__media > :global(*) {
-      transform: scale(1.04);
+      transform: scale(1);
     }
 
     /* Unfinished work: the facts still rise in, but the cover stays put (nothing to open). */

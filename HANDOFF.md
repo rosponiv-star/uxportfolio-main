@@ -732,6 +732,15 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-13 · LOCAL (2)** · Recruiter pass: OG/Twitter large images on every page; at-a-glance Role/Team/Timeline
+  under each case-study tagline; editorial back link. All card hovers zoom out (bleed covers from 1.07). Labels: JustCook
+  "Product & communication design, iOS app + physical box", Realiti "VR experimental experience, Meta Quest", AuraWake
+  "Gradual alarm, Mobile app". Home statement word by word (rise + fade). About: simpler portrait hover; tools + Affinity
+  & Illustrator. Rehabeat: living-room scene full-bleed 100svh with scroll zoom; TV-2 rebuilt 4370×2160 with the corner
+  UI moved outwards (clean plate + alpha, scratchpad `rbtv/widen3.mjs`); Euleria moved to Ideate as a `Reference`
+  tile with its logo; "The system" is now `SystemMap`. Owner to-do in memory: a working-prototype section for
+  Rehabeat. Lighthouse not run (only a manual check). Pushed `main`.
+
 - **2026-10-13 · LOCAL** · About rebuilt (see CLAUDE.md Structure): column-line hero + statement "Useful to as many
   people as possible. / Beautiful enough to make them stay." + portrait colour lens; 5 accordion sections, all closed,
   one open at a time; tools with logos (Figma, Claude & Codex, local AI/Ollama, Unity, Meta Developer Hub, Git);

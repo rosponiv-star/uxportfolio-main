@@ -1,0 +1,96 @@
+---
+// A product used as a reference, shown like the tool tiles on About: its mark in monochrome (the logo's
+// alpha used as a mask, so it takes the text colour), the name, and what it taught the project.
+//   <Reference logo={img} name="Euleria Health" role="Reference" text="What it showed, and its limit." />
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  logo: ImageMetadata;
+  name: string;
+  role?: string;
+  text: string;
+}
+const { logo, name, role = 'Reference', text } = Astro.props;
+const mark = await getImage({ src: logo, width: 480, format: 'png' });
+const ratio = logo.width / logo.height;
+---
+
+<aside class="ref" data-reveal>
+  <span class="ref__mark" style={`--src: url(${mark.src}); aspect-ratio: ${ratio}`} role="img" aria-label={`${name} logo`}></span>
+  <div class="ref__body">
+    <p class="label ref__role">{role}</p>
+    <p class="ref__name">{name}</p>
+    <p class="ref__text">{text}</p>
+  </div>
+</aside>
+
+<style>
+  .ref {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--space-4);
+    align-items: center;
+    max-width: calc((200% - var(--gutter)) / 3);
+    padding: var(--space-4);
+    border: 1px solid var(--rule-strong);
+    transition:
+      border-color 0.4s var(--ease-out),
+      background 0.4s var(--ease-out);
+  }
+
+  .ref__mark {
+    display: block;
+    width: 100%;
+    max-width: 160px;
+    background: var(--ink);
+    -webkit-mask: var(--src) center / contain no-repeat;
+    mask: var(--src) center / contain no-repeat;
+    transition: background 0.4s var(--ease-out);
+  }
+
+  .ref__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .ref__role {
+    color: var(--signal);
+  }
+
+  .ref__name {
+    font-size: var(--fs-lead);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+  }
+
+  .ref__text {
+    font-size: var(--fs-body);
+    line-height: 1.5;
+    color: var(--ink-2);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .ref:hover {
+      border-color: var(--ink);
+      background: var(--paper-2);
+    }
+
+    .ref:hover .ref__mark {
+      background: var(--signal);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ref {
+      grid-template-columns: minmax(0, 1fr);
+      max-width: none;
+    }
+
+    .ref__mark {
+      max-width: 120px;
+    }
+  }
+</style>

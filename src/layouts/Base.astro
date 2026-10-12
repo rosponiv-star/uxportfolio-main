@@ -3,6 +3,9 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import defaultShare from '../assets/projects/justcook/cover-app.png';
 
 interface Props {
   title?: string;
@@ -11,9 +14,13 @@ interface Props {
   showFooterContact?: boolean;
   // Built but not meant to be found yet (unfinished case studies, Playground).
   noindex?: boolean;
+  // Social preview (Open Graph / LinkedIn / chat apps); a 1200px JPEG is generated from it.
+  image?: ImageMetadata;
 }
 
-const { title, description = site.description, bodyClass, showFooterContact = true, noindex = false } = Astro.props;
+const { title, description = site.description, bodyClass, showFooterContact = true, noindex = false, image } = Astro.props;
+const share = await getImage({ src: image ?? defaultShare, width: 1200, format: 'jpeg', quality: 82 });
+const shareUrl = new URL(share.src, Astro.site);
 const fullTitle = title ? `${title} — ${site.name}` : `${site.name} — UX & Digital Product Designer`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -36,7 +43,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content={shareUrl} />
+    <meta property="og:image:width" content={String(share.attributes.width ?? 1200)} />
+    <meta property="og:image:height" content={String(share.attributes.height ?? 750)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={shareUrl} />
 
     <script is:inline>
       document.documentElement.classList.add('js');

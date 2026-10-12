@@ -27,6 +27,7 @@ result:
       layout: scene
       items:
         - image: '../../assets/projects/rehabeat/screens/tv-living-room.jpg'
+          focus: '52.7% 43%'
           alt: 'A TV in a dim living room during a leg flexion workout: rep 4 of 10, the athlete’s avatar mirrored next to the coach, the knee at 83° and the track playing at 104 BPM.'
     - label: 'The app'
       layout: trio
@@ -59,6 +60,8 @@ result:
       label: 'Plan recalibration every week, from sensors and ratings'
 placeholder: false
 ---
+
+import euleria from '../../assets/logos/euleria.png';
 
 <Chapter title="Challenge" summary="Recovery without a coach">
 
@@ -103,7 +106,6 @@ The same review found that a positive psychological response favours the return:
     { label: 'Clinical literature', note: 'Recovery after sports injuries, fear of re-injury and why people stop exercising at home.' },
     { label: 'Physiotherapy protocols', note: 'How exercises are prescribed, dosed and progressed after an injury.' },
     { label: 'Heuristic review', note: 'Existing fitness and rehab apps, checked for safety gaps when nobody supervises.' },
-    { label: 'Euleria Health', note: 'A clinical rehab platform used as a reference: sensors and game mechanics, run by professionals.' },
   ]}
 />
 
@@ -220,6 +222,8 @@ Both are synthesised from the research above: two ends of the same problem, not 
 
 <Key>Euleria showed what sensors and game mechanics can do for rehabilitation. Its limit was who it is for: professionals, not patients.</Key>
 
+<Reference logo={euleria} name="Euleria Health" role="Reference" text="A clinical rehab platform with motion sensors and game mechanics, run by physiotherapists for their patients." />
+
 ### What we kept and what we changed
 
 <Insights
@@ -240,15 +244,9 @@ Both are synthesised from the research above: two ends of the same problem, not 
 
 ### The system
 
-<Chips
-  variant="cards"
-  items={[
-    { label: 'The phone: the hub', note: 'Reads the medical report, builds and adapts the plan, tracks progress over the weeks.' },
-    { label: 'The TV: the coach', note: 'The training space: guide, live avatar and corrections, readable from across the room.' },
-    { label: 'The sensors: the eye', note: 'Wearable motion bands and a floor mat, working with the phone camera to map every movement.' },
-    { label: 'The music: the pace', note: 'One track per exercise, its tempo matched to the movement.' },
-  ]}
-/>
+Four parts and what flows between them. The phone is the hub; the music travels with the session, from the plan on the phone to the TV.
+
+<SystemMap />
 
 <Note label="Decision" text="Enough sensors for accuracy, few enough to wear: a few motion bands for the limbs, a floor mat for balance and weight shift, and the phone camera filling the gaps. Comfort, cost and setup time set the limit." />
 

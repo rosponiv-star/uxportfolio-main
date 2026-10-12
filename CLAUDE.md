@@ -22,12 +22,12 @@ all site copy is in **English**.
 
 ## Structure
 
-- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement "Valerio Rosponi, UX and digital product designer studying…" (owner, 2026-10-12), entering with one soft mask wipe left→right (2026-10-13), centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters,
+- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement "Valerio Rosponi, UX and digital product designer studying…" (owner, 2026-10-12), entering word by word: each word rises and fades in, 60ms stagger (2026-10-13), centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters,
   Grid/Index switch, two-column grid of cards), "How I work" principles.
 - `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
 - `src/pages/work/[slug].astro`: case study template. The PhoneScroll device scene was removed by the owner (2026-10-03).
 - `src/pages/about.astro` (owner, 2026-10-13): hero = the 12 columns drawn as hairlines + a two-sentence statement
-  (graphic size exception, 36→76px) + B/W portrait with a colour lens under the pointer; then five accordion sections,
+  (graphic size exception, 36→76px) + B/W portrait that turns to colour and eases to 1.03 on hover; then five accordion sections,
   all closed, one open at a time (grid-rows 0fr→1fr; closed panels inert): approach (3 steps), skills (3 groups, 14
   skills), tools (logo tiles, Simple Icons CC0 in `src/assets/logos/`, monochrome → signal on hover), now, contact.
 - `src/pages/playground.astro`, `src/pages/404.astro`.
@@ -103,6 +103,11 @@ Components available in MDX without imports:
   Trio = tracks A/B/C beside the label; pair/quad = all 12 columns; scene = one wide photo (a device in its setting)
   across 12 columns; crop shows the top share of the device on a hairline, `anchor: bottom` the bottom share with the
   cut at the top (sticky bars, before/after); caption = a short field under a shot. Use cut-out device PNGs (960px).
+- `<Reference logo={img} name role? text />`: a product used as a reference, as an editorial tile with its logo in
+  monochrome (alpha as mask). `<SystemMap />`: Rehabeat's wiring diagram (nodes + arrows, hover lights the links).
+- Showcase `scene` = edge to edge, 100svh tall, zooming in (×1.3) on its `focus` point as it scrolls (view timeline).
+- Case-study intro: back link = hairline arrow + label; under the tagline an at-a-glance line (Role, Team, Timeline).
+  Every page has an Open Graph image (Base `image` prop; case studies pass their cover, default JustCook's).
 - `<Todo>…</Todo>`: visible placeholder. Remove these as the real content arrives.
 
 Cover media: put the image in `src/assets/projects/<name>/` and reference it in the frontmatter
@@ -163,8 +168,8 @@ title, the footer wordmark and the nav micro-numbers.
 - Card: the cover fills the card. On hover/focus the cover zooms out to 0.95 over the project tone (Card `tone`) and
   square paper chips rise in at the bottom-left, staggered: title (Medium, ink), one chip per label (frontmatter
   `labels`, default [type, platform]), year (greys).
-  Photographic full-bleed covers (`cover.bleed: true`, e.g. Rehabeat) zoom IN to 1.04 instead, so no tone border shows
-  around the photo (owner, 2026-10-12). The cursor label still says "Read case study". Touch devices and unlinked cards (Playground) keep the text below the
+  Photographic full-bleed covers (`cover.bleed: true`, e.g. Rehabeat) rest at scale 1.07 and zoom out to 1 on hover:
+  same gesture, no tone border (owner, 2026-10-13: all hovers zoom out). The cursor label still says "Read case study". Touch devices and unlinked cards (Playground) keep the text below the
   cover. The image is never darkened. Rejected: caption bar covering the cover; cover shrinking to fit the bar; info
   inside the cursor label (E2).
 - Home hero has no background (owner, 2026-10-04: the --paper-alt band was removed). Only the depth texture

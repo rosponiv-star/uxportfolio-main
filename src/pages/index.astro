@@ -59,7 +59,15 @@ const principles = [
   <section class="hero">
     <DepthTexture intensity={1.25} parallax={1.6} />
     <div class="wrap grid hero__inner">
-      <h1 class="hero__title display">{statement}</h1>
+      <h1 class="hero__title display" aria-label={statement}>
+        {
+          statement.split(' ').map((w, i) => (
+            <>
+              <span class="w" style={`--i:${i}`} aria-hidden="true">{w}</span>{' '}
+            </>
+          ))
+        }
+      </h1>
     </div>
   </section>
 
@@ -152,26 +160,19 @@ const principles = [
     padding-bottom: var(--space-5);
   }
 
-  /* Statement entrance: one soft-edged wipe of light sweeps across the whole block, left to
-     right, while it settles from a slight lift. One element, one gesture: no per-word choreography,
-     no reflow, and the mask ends fully open, so nothing is ever cut. */
-  .hero__title {
-    -webkit-mask-image: linear-gradient(100deg, #000 40%, transparent 60%);
-    mask-image: linear-gradient(100deg, #000 40%, transparent 60%);
-    -webkit-mask-size: 300% 100%;
-    mask-size: 300% 100%;
-    -webkit-mask-repeat: no-repeat;
-    mask-repeat: no-repeat;
-    animation: statement-in 2.2s cubic-bezier(0.45, 0, 0.2, 1) 0.25s backwards;
-    -webkit-mask-position: 0% 0;
-    mask-position: 0% 0;
+  /* Statement entrance, word by word: each word rises from just below its line and fades in, on a
+     quick stagger, so the sentence assembles like it is being typeset. No blur, no masks. */
+  .w {
+    display: inline-block;
+    animation: word-rise 1.1s var(--ease-out) backwards;
+    animation-delay: calc(0.15s + var(--i) * 0.06s);
   }
 
-  @keyframes statement-in {
+  @keyframes word-rise {
     from {
-      -webkit-mask-position: 100% 0;
-      mask-position: 100% 0;
-      transform: translateY(0.12em);
+      opacity: 0;
+      transform: translateY(0.55em) rotate(2deg);
+      transform-origin: left bottom;
     }
   }
 
@@ -183,7 +184,7 @@ const principles = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero__title {
+    .w {
       animation: none;
     }
   }

@@ -21,6 +21,8 @@ import Metrics from '../../components/case/Metrics.astro';
 import Insights from '../../components/case/Insights.astro';
 import Reframes from '../../components/case/Reframes.astro';
 import Archetypes from '../../components/case/Archetypes.astro';
+import Reference from '../../components/case/Reference.astro';
+import SystemMap from '../../components/case/SystemMap.astro';
 import { chaptersOf, getProjects, hrefOf, slugOf, type Project } from '../../lib/projects';
 
 export async function getStaticPaths() {
@@ -65,20 +67,24 @@ const facts = [
 ];
 ---
 
-<Base title={title} description={`${title} — ${tagline}`} noindex={project.data.placeholder}>
+<Base title={title} description={`${title} — ${tagline}`} noindex={project.data.placeholder} image={project.data.cover?.image}>
   <article>
     <!-- Intro ------------------------------------------------------------ -->
     <header class="wrap intro">
       <a href="/#work" class="intro__back">
-        <svg class="intro__chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
-          <path d="M10 3.5 5.5 8l4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <span>All work</span>
+        <span class="intro__arrow" aria-hidden="true"></span>
+        <span class="label">All work</span>
       </a>
       <h1 class="intro__title trim">{title}</h1>
       <div class="grid">
         <p class="intro__tagline lead col-text" data-reveal>{tagline}</p>
       </div>
+      <!-- At a glance, for a 10-second read: the three facts a recruiter looks for first. -->
+      <dl class="intro__glance" data-reveal style="--d:1">
+        <div><dt class="field">Role</dt><dd>{role}</dd></div>
+        <div><dt class="field">Team</dt><dd>{team}</dd></div>
+        <div><dt class="field">Timeline</dt><dd>{timeline}</dd></div>
+      </dl>
     </header>
 
     <div class="wrap intro__cover" data-reveal="clip">
@@ -162,7 +168,7 @@ const facts = [
 
       <!-- Chapters (from MDX) ---------------------------------------------- -->
       <div class="chapters">
-        <Content components={{ Chapter, Key, Chips, BigStat, Features, Gallery, Closing, BoxStrip, Todo, Figure, Note, Metrics, Insights, Reframes, Archetypes }} />
+        <Content components={{ Chapter, Key, Chips, BigStat, Features, Gallery, Closing, BoxStrip, Todo, Figure, Note, Metrics, Insights, Reframes, Archetypes, Reference, SystemMap }} />
       </div>
 
     </div>
@@ -207,35 +213,61 @@ const facts = [
     padding-top: calc(var(--header-h) + var(--space-6));
   }
 
-  /* Quiet outlined button: clearly clickable, never louder than the title */
+  /* Back link, editorial: a drawn hairline arrow and a label; the line stretches on hover. */
   .intro__back {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-1);
-    height: 40px;
-    padding: 0 18px 0 12px;
-    border: 1px solid var(--rule);
-    border-radius: 999px;
-    font-size: var(--fs-small);
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    gap: var(--space-2);
+    padding-block: var(--space-1);
     color: var(--ink-2);
-    background: transparent;
-    transition:
-      color 0.25s,
-      border-color 0.25s,
-      background-color 0.25s;
+    transition: color 0.3s;
   }
 
-  .intro__chev {
-    flex: none;
+  .intro__arrow {
+    position: relative;
+    width: 28px;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.6s var(--ease-out);
+  }
+
+  .intro__arrow::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-left: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: translate(0, -50%) rotate(45deg);
   }
 
   .intro__back:hover,
   .intro__back:focus-visible {
     color: var(--ink);
-    border-color: var(--ink);
-    background: var(--paper-2);
+  }
+
+  .intro__back:hover .intro__arrow,
+  .intro__back:focus-visible .intro__arrow {
+    width: 48px;
+  }
+
+  .intro__glance {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin-top: var(--space-4);
+    font-size: var(--fs-small);
+  }
+
+  .intro__glance div {
+    display: flex;
+    gap: var(--space-1);
+  }
+
+  .intro__glance dd {
+    color: var(--ink);
   }
 
   .intro__title {

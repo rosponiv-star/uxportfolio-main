@@ -18,7 +18,7 @@ interface Props {
     crop?: number;
     anchor?: 'top' | 'bottom';
     stagger?: boolean;
-    items: { image: ImageMetadata; alt: string; caption?: string }[];
+    items: { image: ImageMetadata; alt: string; caption?: string; focus?: string }[];
   }[];
 }
 const { groups } = Astro.props;
@@ -47,7 +47,7 @@ const widths = { trio: [480, 720, 960], pair: [480, 720, 960], quad: [480, 720, 
         </p>
         <div class="group__shots">
           {g.items.map((it, i) => (
-            <figure class="shot" style={`--i: ${i}`}>
+            <figure class="shot" style={`--i: ${i};${it.focus ? ` --fx: ${it.focus.split(' ')[0]}; --fy: ${it.focus.split(' ')[1]};` : ''}`}>
               <div class="shot__drift" data-drift={speeds[i % speeds.length]}>
                 <div
                   class="shot__frame"
@@ -113,6 +113,45 @@ const widths = { trio: [480, 720, 960], pair: [480, 720, 960], quad: [480, 720, 
 
   .group--scene .group__shots {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Scene: edge to edge and one screen tall. While it crosses the viewport the photo slowly closes
+     in on the screen (focus point --fx/--fy), so the reader is drawn into the room. */
+  .group--scene .shot {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+
+  .group--scene .shot__frame {
+    height: 100svh;
+  }
+
+  .group--scene .shot__frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--fx, 50%) var(--fy, 50%);
+    transform-origin: var(--fx, 50%) var(--fy, 50%);
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .group--scene .shot__frame :global(img) {
+        animation: scene-in linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+      }
+    }
+  }
+
+  @keyframes scene-in {
+    from {
+      transform: scale(1);
+    }
+
+    to {
+      transform: scale(1.3);
+    }
   }
 
   /* Each shot steps down by one spacing unit: a quiet diagonal across the tracks. */
@@ -203,7 +242,11 @@ const widths = { trio: [480, 720, 960], pair: [480, 720, 960], quad: [480, 720, 
       grid-auto-columns: 80%;
     }
 
-    /* A scene stays one full-width image, no swipe row. */
+    /* A scene stays one full-width image, no swipe row; on phones it keeps a landscape crop. */
+    .group--scene .shot__frame {
+      height: 70svh;
+    }
+
     .group--scene .group__shots {
       grid-auto-columns: 100%;
       overflow: visible;
