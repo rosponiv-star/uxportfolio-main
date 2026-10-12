@@ -732,6 +732,12 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-12 · LOCAL (2)** · Owner changed idea: Rehabeat cover is now the **living-room mockup** (owner's webp,
+  2000×1337: wall-mounted TV, wooden console, two tall speakers, sofa) with the same TV-2 "Leg flexion" screen. The
+  photo is upscaled to 3840 wide and cropped to 16:10 (80px off the top); the 4K screen is projected onto the glass
+  (inner edge measured on the 2000×1337 photo, expanded ~1.5px to cover the original Apple TV UI: 654.4,258.8 ·
+  1347.4,258.2 · 1343.1,649.8 · 658.2,650.1), 3×3 supersampled. Card tone #d9d4d2. Script: scratchpad
+  `rbtv/room.mjs`. Supersedes the studio TV versions below. Pushed `main`.
 - **2026-10-12 · LOCAL** · Rehabeat cover REDONE a third time, at the owner's request: **only a TV**, the photographic
   studio mockup ("image 1", node 4535:1499, raw 2312×1732, page "Redesign") showing **TV-2 "Workout · Leg flexion · rep 4
   of 10"** (node 4404:1524, exported ×3 = 3840×2160). The screen is re-projected onto the glass with a homography (glass
