@@ -738,6 +738,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   (inner edge measured on the 2000×1337 photo, expanded ~1.5px to cover the original Apple TV UI: 654.4,258.8 ·
   1347.4,258.2 · 1343.1,649.8 · 658.2,650.1), 3×3 supersampled. Card tone #d9d4d2. Script: scratchpad
   `rbtv/room.mjs`. Supersedes the studio TV versions below. Pushed `main`.
+  Follow-up (owner: zoom so the TV is centred, add light realistic reflections): crop 1500×938 of the photo from
+  x 251, y 0 (TV centre at 48.5% height, ×2.56); on the glass, screen-blended: the room mirrored left–right and blurred
+  (σ 60) at 10%, plus a soft diagonal window-light sheen and a faint top-edge glow at 15% (scratchpad `rbtv/room2.mjs`).
 - **2026-10-12 · LOCAL** · Rehabeat cover REDONE a third time, at the owner's request: **only a TV**, the photographic
   studio mockup ("image 1", node 4535:1499, raw 2312×1732, page "Redesign") showing **TV-2 "Workout · Leg flexion · rep 4
   of 10"** (node 4404:1524, exported ×3 = 3840×2160). The screen is re-projected onto the glass with a homography (glass
