@@ -740,6 +740,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   cinematografica e luminosa"). The 4:3 photo becomes 16:10 by filling each side row by row with a band 60–140px inside
   the photo, feathered over 160px (the outer columns had resampling artefacts). This is the one exception to the flat
   #f5f5f5 covers: a lit studio photo, card tone #e8ebef. Scripts: session scratchpad `rbtv/make.mjs`. Pushed `main`.
+  Follow-up (owner: "tieni solo la TV, togli il tavolino"): the media console was removed (`rbtv/clean.mjs`): TV + its
+  L-shaped stand kept (stand traced as polygons, metal pixels only), the area below the TV rebuilt as the studio
+  gradient with a faint contact shadow; the photo is scaled ×0.94 and the TV+stand group centred vertically.
   NOTE: Cloudflare had stopped deploying after `280321c` (live site still showed "Rehab", `/work/rehabeat` 404) even
   though a clean clone builds fine; cause not found yet (the owner said "ora va" for localhost, Cloudflare log still
   to read). Also: never delete `.astro`/`node_modules/.astro` while the dev server is running, it empties the content
