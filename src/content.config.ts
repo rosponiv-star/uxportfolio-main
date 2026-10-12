@@ -59,10 +59,11 @@ const projects = defineCollection({
             .array(
               z.object({
                 label: z.string(),
-                layout: z.enum(['trio', 'pair', 'quad']),
-                crop: z.number().min(0.2).max(1).optional(),
+                layout: z.enum(['trio', 'pair', 'quad', 'scene']),
+                crop: z.number().min(0.1).max(1).optional(),
+                anchor: z.enum(['top', 'bottom']).default('top'),
                 stagger: z.boolean().default(false),
-                items: z.array(z.object({ image: image(), alt: z.string() })),
+                items: z.array(z.object({ image: image(), alt: z.string(), caption: z.string().optional() })),
               }),
             )
             .optional(),

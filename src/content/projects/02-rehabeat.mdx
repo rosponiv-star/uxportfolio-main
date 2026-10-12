@@ -21,12 +21,33 @@ glance:
   outcome: 'A phone app, a TV coach and wearable sensors: a plan from the medical report, live form correction, music matched to every exercise.'
 result:
   text: 'The phone turns the medical report into a weekly plan; the TV becomes the coach, mirroring every movement and correcting it live; the music sets the pace of each exercise.'
-  media:
-    - label: 'App: plan from the medical report'
-    - label: 'App: music matched to the exercise'
-    - label: 'App: weekly progress'
-    - label: 'TV: live correction on the avatar'
-      kind: wide
+  showcase:
+    - label: 'The coach on the TV'
+      layout: scene
+      items:
+        - image: '../../assets/projects/rehabeat/screens/tv-living-room.jpg'
+          alt: 'A TV in a dim living room during a leg flexion workout: rep 4 of 10, the athlete’s avatar mirrored next to the coach, the knee at 83° and the track playing at 104 BPM.'
+    - label: 'The app'
+      layout: trio
+      stagger: true
+      items:
+        - image: '../../assets/projects/rehabeat/screens/home.png'
+          alt: 'Home: the recovery timeline from injury to check-up, this week’s plan, overall recovery at 42% and today’s session, Knee mobility.'
+        - image: '../../assets/projects/rehabeat/screens/week-2-report.png'
+          alt: 'Week 2 report: week 2 done, ahead of plan, with recovery at 44% against a 40% plan, four sessions out of five and an average rhythm of 80 BPM.'
+        - image: '../../assets/projects/rehabeat/screens/week-2-data.png'
+          alt: 'Week 2 data: recovery, sessions, minutes and form, then pain down to 3 out of 10 and strength up to 58%, each compared with last week.'
+    - label: 'Before and after a session'
+      layout: pair
+      crop: 0.2
+      anchor: bottom
+      items:
+        - image: '../../assets/projects/rehabeat/screens/home.png'
+          alt: 'Before: the sticky bar invites today’s session, Knee mobility, 60 minutes, with a Start button.'
+          caption: 'Before the session'
+        - image: '../../assets/projects/rehabeat/screens/home-session-done.png'
+          alt: 'After: the same bar turns into Session complete, 58 minutes, with the next session tomorrow.'
+          caption: 'After the session'
   metricsLabel: 'The system'
   metrics:
     - value: '3'

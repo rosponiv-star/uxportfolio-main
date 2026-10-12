@@ -2,7 +2,9 @@
 // Interface presentation for the Result section: labelled groups of device shots on the 12-column grid.
 // - trio: label in the head lane (cols 1–3), three shots on tracks A/B/C; `stagger` steps them down.
 // - pair / quad: the full 12 columns, label above.
+// - scene: one wide image (a device in its setting, e.g. a TV in a room) across all 12 columns, label above.
 // - crop: only the top share of the device is shown (Dynamic Island, widgets); the cut sits on a hairline.
+//   anchor 'bottom': the bottom share instead (a sticky bar, a tab bar); the cut and its hairline are at the top.
 // Motion, deliberately quiet: no entrance animation (everything is simply there). While scrolling,
 // uncropped shots drift a few pixels at different speeds with a little inertia. Off with reduced motion.
 // On phones every group becomes a horizontal swipe row.
@@ -12,24 +14,31 @@ import type { ImageMetadata } from 'astro';
 interface Props {
   groups: {
     label: string;
-    layout: 'trio' | 'pair' | 'quad';
+    layout: 'trio' | 'pair' | 'quad' | 'scene';
     crop?: number;
+    anchor?: 'top' | 'bottom';
     stagger?: boolean;
-    items: { image: ImageMetadata; alt: string }[];
+    items: { image: ImageMetadata; alt: string; caption?: string }[];
   }[];
 }
 const { groups } = Astro.props;
 const n = (i: number) => String(i + 1).padStart(2, '0');
 // Parallax speeds per position: neighbours never move together.
 const speeds = [0.01, 0.035, 0.02, 0.045];
-const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px) 48vw, 62vw', quad: '(min-width: 960px) 24vw, 62vw' };
+const sizes = {
+  trio: '(min-width: 960px) 24vw, 62vw',
+  pair: '(min-width: 960px) 48vw, 62vw',
+  quad: '(min-width: 960px) 24vw, 62vw',
+  scene: '100vw',
+};
+const widths = { trio: [480, 720, 960], pair: [480, 720, 960], quad: [480, 720, 960], scene: [960, 1600, 2400, 2880] };
 ---
 
 <div class="showcase">
   {
     groups.map((g, gi) => (
       <section
-        class:list={['group', `group--${g.layout}`, { 'group--crop': g.crop, 'group--stagger': g.stagger }]}
+        class:list={['group', `group--${g.layout}`, { 'group--crop': g.crop, 'group--bottom': g.crop && g.anchor === 'bottom', 'group--stagger': g.stagger }]}
         aria-label={g.label}
       >
         <p class="group__label label">
@@ -44,9 +53,10 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
                   class="shot__frame"
                   style={g.crop ? `aspect-ratio: ${it.image.width} / ${Math.round(it.image.height * g.crop)}` : undefined}
                 >
-                  <Image src={it.image} alt={it.alt} widths={[480, 720, 960]} sizes={sizes[g.layout]} />
+                  <Image src={it.image} alt={it.alt} widths={widths[g.layout]} sizes={sizes[g.layout]} />
                 </div>
               </div>
+              {it.caption && <figcaption class="shot__cap field">{it.caption}</figcaption>}
             </figure>
           ))}
         </div>
@@ -101,6 +111,10 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
+  .group--scene .group__shots {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   /* Each shot steps down by one spacing unit: a quiet diagonal across the tracks. */
   .group--stagger .shot {
     margin-top: calc(var(--i) * var(--space-6));
@@ -117,6 +131,11 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
     .group:not(.group--crop) .shot:hover .shot__frame {
       transform: translateY(-4px);
     }
+  }
+
+  /* A short caption under a shot (e.g. Before / After), as a field: small, grey. */
+  .shot__cap {
+    margin-top: var(--space-2);
   }
 
   .shot__frame :global(img) {
@@ -139,6 +158,18 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
     bottom: 0;
     height: 1px;
     background: var(--rule-strong);
+  }
+
+  /* Bottom crops: the device rises from below, so the cut (and its hairline) is at the top. */
+  .group--bottom .group__shots::after {
+    top: 0;
+    bottom: auto;
+  }
+
+  .group--bottom .shot__frame :global(img) {
+    position: absolute;
+    left: 0;
+    bottom: 0;
   }
 
   @media (max-width: 960px) {
@@ -172,6 +203,14 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
       grid-auto-columns: 80%;
     }
 
+    /* A scene stays one full-width image, no swipe row. */
+    .group--scene .group__shots {
+      grid-auto-columns: 100%;
+      overflow: visible;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
     .shot {
       scroll-snap-align: start;
     }
@@ -191,7 +230,7 @@ const sizes = { trio: '(min-width: 960px) 24vw, 62vw', pair: '(min-width: 960px)
   // Parallax with inertia: every frame each shot eases towards a target offset proportional to its
   // distance from the viewport centre, so it trails the scroll slightly instead of being locked to it.
   const drifts = Array.from(document.querySelectorAll<HTMLElement>('[data-drift]'))
-    .filter((el) => Number(el.dataset.drift) > 0 && !el.closest('.group--crop'))
+    .filter((el) => Number(el.dataset.drift) > 0 && !el.closest('.group--crop, .group--scene'))
     .map((el) => ({ el, speed: Number(el.dataset.drift), y: 0 }));
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const desktop = window.matchMedia('(min-width: 641px)');

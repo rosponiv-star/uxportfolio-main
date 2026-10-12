@@ -428,6 +428,11 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
     grid-row: auto;
   }
 
+  /* Stacked heads keep cols 1–3 on desktop; on narrow screens the title needs the full row. */
+  .sec--stacked .sec__head {
+    grid-column: 1 / -1;
+  }
+
   .sec__sticky {
     position: static;
   }

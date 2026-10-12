@@ -95,8 +95,10 @@ Components available in MDX without imports:
   (row labels in track A, archetypes in B and C; tinted header band; optional `goal` row in h2 size, e.g. "Less
   effort" vs "Less waste"; quote in lead size). Same trait labels, same order, for both.
 - `result.showcase` (frontmatter, not MDX): labelled groups of device shots rendered by `case/Showcase.astro`:
-  `{ label, layout: trio|pair|quad, crop?, stagger?, items: [{ image, alt }] }`. Trio = tracks A/B/C beside the label;
-  pair/quad = all 12 columns; crop shows the top share of the device on a hairline. Use cut-out device PNGs (960px).
+  `{ label, layout: trio|pair|quad|scene, crop?, anchor?: top|bottom, stagger?, items: [{ image, alt, caption? }] }`.
+  Trio = tracks A/B/C beside the label; pair/quad = all 12 columns; scene = one wide photo (a device in its setting)
+  across 12 columns; crop shows the top share of the device on a hairline, `anchor: bottom` the bottom share with the
+  cut at the top (sticky bars, before/after); caption = a short field under a shot. Use cut-out device PNGs (960px).
 - `<Todo>…</Todo>`: visible placeholder. Remove these as the real content arrives.
 
 Cover media: put the image in `src/assets/projects/<name>/` and reference it in the frontmatter

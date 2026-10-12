@@ -732,6 +732,16 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-12 · LOCAL (3)** · Rehabeat Result filled with the final Figma screens (`result.showcase`, assets in
+  `src/assets/projects/rehabeat/screens/`): 01 "The coach on the TV" = TV-2 in the owner's dark living-room mockup
+  (1569×911 webp, upscaled to 2880; glass 563.5,261 · 1092.5,522.5, ~2.02:1, so the 16:9 screen is widened with its
+  own blurred dark edges instead of stretched; light reflections from the upper right; scratchpad `rbtv/dark.mjs`),
+  new layout `scene`; 02 "The app" = Home, Week 2 report, Week 2 data (trio, stagger); 03 "Before and after a
+  session" = the Home and Session-done (node 4107:1735) phones cropped to their bottom 20% (new `anchor: bottom`),
+  side by side with captions (new `caption`). Order picked by the owner (TV first). Also fixed an old mobile bug:
+  stacked section heads kept cols 1–3 below 960px, so "Result" broke as "Resu/lt" (JustCook too). Still Coming soon:
+  Design-chapter Features placeholders remain. Pushed `main`.
+
 - **2026-10-12 · LOCAL (2)** · Owner changed idea: Rehabeat cover is now the **living-room mockup** (owner's webp,
   2000×1337: wall-mounted TV, wooden console, two tall speakers, sofa) with the same TV-2 "Leg flexion" screen. The
   photo is upscaled to 3840 wide and cropped to 16:10 (80px off the top); the 4K screen is projected onto the glass
