@@ -732,6 +732,18 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-12 · LOCAL** · Rehabeat cover REDONE a third time, at the owner's request: **only a TV**, the photographic
+  studio mockup ("image 1", node 4535:1499, raw 2312×1732, page "Redesign") showing **TV-2 "Workout · Leg flexion · rep 4
+  of 10"** (node 4404:1524, exported ×3 = 3840×2160). The screen is re-projected onto the glass with a homography (glass
+  = inner edge of the front bezel, measured on the 2312×1732 photo: 401,171 · 1939,40 · 1940,1198 · 401,1118), then the
+  photo's own glare and rainbow light are screen-blended back over the UI at 45% (owner: "mantieni l'aura
+  cinematografica e luminosa"). The 4:3 photo becomes 16:10 by filling each side row by row with a band 60–140px inside
+  the photo, feathered over 160px (the outer columns had resampling artefacts). This is the one exception to the flat
+  #f5f5f5 covers: a lit studio photo, card tone #e8ebef. Scripts: session scratchpad `rbtv/make.mjs`. Pushed `main`.
+  NOTE: Cloudflare had stopped deploying after `280321c` (live site still showed "Rehab", `/work/rehabeat` 404) even
+  though a clean clone builds fine; cause not found yet (the owner said "ora va" for localhost, Cloudflare log still
+  to read). Also: never delete `.astro`/`node_modules/.astro` while the dev server is running, it empties the content
+  store (home shows no projects) until restart.
 - **2026-10-10 · LOCAL (2)** · Rehabeat cover REDONE with the owner's TV mockup (a 2000×1500 webp of a slim
   3/4-perspective TV on a flat #e8e8e8 ground): **TV on the left, the two phones large on the right**, one ground line,
   group centred, side margins ~480px (4:3 card safe). The mockup body was upscaled ×2 and cut out (neutral greys ≥172
