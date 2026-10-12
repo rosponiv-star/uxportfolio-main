@@ -732,6 +732,13 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-13 · LOCAL (3)** · Rehabeat TV screen now comes from a **wide Figma frame**: node 4564:3022 "TV-2 · wide
+  2.02:1" (1457×720, duplicate of 4404:1524 under it; backgrounds stretched, centre scene +89, right column +177 so
+  side margins stay 64), exported ×3 into the dark living room (`tv-living-room.jpg`). Scene back inside the grid
+  (no full-bleed / scroll zoom). Home statement back to the blur word reveal. Affinity logo → Affinity Designer mark.
+  Back arrow 1.5px. Design step 04 shows the TV-2 screen (`tv-workout.jpg`; Features: `device: 'tv'` images are not
+  cropped). Pushed `main`.
+
 - **2026-10-13 · LOCAL (2)** · Recruiter pass: OG/Twitter large images on every page; at-a-glance Role/Team/Timeline
   under each case-study tagline; editorial back link. All card hovers zoom out (bleed covers from 1.07). Labels: JustCook
   "Product & communication design, iOS app + physical box", Realiti "VR experimental experience, Meta Quest", AuraWake

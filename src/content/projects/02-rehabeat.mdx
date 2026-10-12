@@ -27,7 +27,6 @@ result:
       layout: scene
       items:
         - image: '../../assets/projects/rehabeat/screens/tv-living-room.jpg'
-          focus: '52.7% 43%'
           alt: 'A TV in a dim living room during a leg flexion workout: rep 4 of 10, the athlete’s avatar mirrored next to the coach, the knee at 83° and the track playing at 104 BPM.'
     - label: 'The app'
       layout: trio
@@ -62,6 +61,7 @@ placeholder: false
 ---
 
 import euleria from '../../assets/logos/euleria.png';
+import tvWorkout from '../../assets/projects/rehabeat/screens/tv-workout.jpg';
 
 <Chapter title="Challenge" summary="Recovery without a coach">
 
@@ -265,7 +265,7 @@ Five moments, from the doctor’s report to the end of the week.
     { title: 'From report to plan', text: 'Body data sets the safe limits; the athlete uploads the medical report, and the AI turns injury, area and recommendations into a weekly plan.', placeholder: 'App: upload report and plan', alt: '' },
     { title: 'Set up once', text: 'TV paired with a QR code, sensors over Bluetooth, connections remembered. The phone goes under the TV and both screens confirm the framing.', placeholder: 'TV: framing check', device: 'tv', alt: '' },
     { title: 'Music sets the pace', text: 'Each exercise gets a track whose beat matches the movement. A best fit is ready; the athlete can swap it for another song in the same tempo range.', placeholder: 'App: track for the exercise', alt: '' },
-    { title: 'A coach on the TV', text: 'A live avatar mirrors every movement next to a guide figure. When form drifts, the correction appears on the avatar as it happens.', placeholder: 'TV: avatar and live correction', device: 'tv', alt: '' },
+    { title: 'A coach on the TV', text: 'A live avatar mirrors every movement next to a guide figure. When form drifts, the correction appears on the avatar as it happens.', image: tvWorkout, device: 'tv', alt: 'TV workout: the athlete’s avatar mirrored next to the coach, the knee angle at 83°, rep 4 of 10 and the track at 104 BPM.' },
     { title: 'The week, measured', text: 'After each workout, four quick ratings: pain, fatigue, difficulty, mood. With the sensor data they feed a weekly report, and the plan adapts.', placeholder: 'App: weekly report', alt: '' },
   ]}
 />

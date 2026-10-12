@@ -31,7 +31,7 @@ const phRatio = (device?: 'phone' | 'tv') => (device === 'tv' ? '16/9' : `9/${Ma
     items.map((it, i) => (
       <li class="feature trio" data-reveal style={`--d: ${i}`}>
         {it.image ? (
-          <div class="feature__shot" style={`aspect-ratio: ${it.image.width} / ${Math.round(it.image.height * crop)}`}>
+          <div class="feature__shot" style={`aspect-ratio: ${it.image.width} / ${Math.round(it.image.height * (it.device === 'tv' ? 1 : crop))}`}>
             <Image src={it.image} alt={it.alt} widths={[320, 480, 640]} sizes="(min-width: 960px) 22vw, 60vw" />
           </div>
         ) : (

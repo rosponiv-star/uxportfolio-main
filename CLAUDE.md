@@ -22,7 +22,7 @@ all site copy is in **English**.
 
 ## Structure
 
-- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement "Valerio Rosponi, UX and digital product designer studying…" (owner, 2026-10-12), entering word by word: each word rises and fades in, 60ms stagger (2026-10-13), centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters,
+- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement "Valerio Rosponi, UX and digital product designer studying…" (owner, 2026-10-12), entering word by word with the original blur-to-focus reveal (restored by the owner, 2026-10-13), centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters,
   Grid/Index switch, two-column grid of cards), "How I work" principles.
 - `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
 - `src/pages/work/[slug].astro`: case study template. The PhoneScroll device scene was removed by the owner (2026-10-03).
@@ -105,7 +105,7 @@ Components available in MDX without imports:
   cut at the top (sticky bars, before/after); caption = a short field under a shot. Use cut-out device PNGs (960px).
 - `<Reference logo={img} name role? text />`: a product used as a reference, as an editorial tile with its logo in
   monochrome (alpha as mask). `<SystemMap />`: Rehabeat's wiring diagram (nodes + arrows, hover lights the links).
-- Showcase `scene` = edge to edge, 100svh tall, zooming in (×1.3) on its `focus` point as it scrolls (view timeline).
+- Showcase `scene` stays inside the 12-col grid (full-bleed 100svh + scroll zoom was tried and reverted, 2026-10-13).
 - Case-study intro: back link = hairline arrow + label; under the tagline an at-a-glance line (Role, Team, Timeline).
   Every page has an Open Graph image (Base `image` prop; case studies pass their cover, default JustCook's).
 - `<Todo>…</Todo>`: visible placeholder. Remove these as the real content arrives.
