@@ -22,11 +22,15 @@ all site copy is in **English**.
 
 ## Structure
 
-- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement "Valerio Rosponi, UX and digital product designer studying…" (owner, 2026-10-12), centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters,
+- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement "Valerio Rosponi, UX and digital product designer studying…" (owner, 2026-10-12), entering with one soft mask wipe left→right (2026-10-13), centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters,
   Grid/Index switch, two-column grid of cards), "How I work" principles.
 - `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
 - `src/pages/work/[slug].astro`: case study template. The PhoneScroll device scene was removed by the owner (2026-10-03).
-- `src/pages/about.astro`, `src/pages/playground.astro`, `src/pages/404.astro`.
+- `src/pages/about.astro` (owner, 2026-10-13): hero = the 12 columns drawn as hairlines + a two-sentence statement
+  (graphic size exception, 36→76px) + B/W portrait with a colour lens under the pointer; then five accordion sections,
+  all closed, one open at a time (grid-rows 0fr→1fr; closed panels inert): approach (3 steps), skills (3 groups, 14
+  skills), tools (logo tiles, Simple Icons CC0 in `src/assets/logos/`, monochrome → signal on hover), now, contact.
+- `src/pages/playground.astro`, `src/pages/404.astro`.
 - `src/content/projects/NN-name.mdx`: one file per case study. The `NN-` prefix is stripped from the URL.
 - `src/data/site.ts`: personal info (email, LinkedIn, CV path).
 - `src/styles/global.css`: tokens, type scale, motion primitives.
@@ -148,7 +152,7 @@ title, the footer wordmark and the nav micro-numbers.
 
 - Filters come from `categories` in each MDX file. The vocabulary is fixed in `lib/projects.ts → CATEGORIES` and in
   the enum in `content.config.ts`. Only categories in use are shown, with their counts. Vocabulary (owner, 2026-10-09):
-  All, Mobile (JustCook, Rehab, Smart Home, AuraWake), XR (Realiti), Product (Smart Home, JustCook), Multi-screen
+  All, Mobile (JustCook, Rehab, Smart Home Hub, AuraWake), XR (Realiti), Product (Smart Home, JustCook), Multi-screen
   (Rehab: phone and TV used together).
 - The selected filter or view turns ink and is underlined (name and count separately). The others stay grey.
 - Grid: two columns, every card half width (4:3). One column on phones.
@@ -157,7 +161,8 @@ title, the footer wordmark and the nav micro-numbers.
   entrance never changes the footprint: cover fades in at full size while its image settles from scale 1.06; the
   second card of a row is delayed 120ms.
 - Card: the cover fills the card. On hover/focus the cover zooms out to 0.95 over the project tone (Card `tone`) and
-  three square paper chips rise in at the bottom-left, staggered: title (Medium, ink), "type, platform", year (greys).
+  square paper chips rise in at the bottom-left, staggered: title (Medium, ink), one chip per label (frontmatter
+  `labels`, default [type, platform]), year (greys).
   Photographic full-bleed covers (`cover.bleed: true`, e.g. Rehabeat) zoom IN to 1.04 instead, so no tone border shows
   around the photo (owner, 2026-10-12). The cursor label still says "Read case study". Touch devices and unlinked cards (Playground) keep the text below the
   cover. The image is never darkened. Rejected: caption bar covering the cover; cover shrinking to fit the bar; info

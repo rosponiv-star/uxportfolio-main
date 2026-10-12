@@ -3,8 +3,7 @@ export const site = {
   name: 'Valerio Rosponi',
   url: 'https://www.valeriorosponi.com',
   email: 'rosponiv@gmail.com',
-  // TODO: replace with the full LinkedIn profile URL.
-  linkedin: 'https://www.linkedin.com/in/',
+  linkedin: 'https://www.linkedin.com/in/valerio-rosponi',
   cv: '/cv/Valerio-Rosponi-CV.pdf',
   roles: ['UX Designer', 'Digital Product Designer', 'Visual Designer'],
   location: 'Trentino, Italy',

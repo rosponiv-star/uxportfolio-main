@@ -541,7 +541,7 @@ HANDOFF.md                       this file
   without asking first (it would also cost credits even if it could).
 
 **Open questions / pending decisions** (ask the owner, don't guess):
-1. **LinkedIn URL** in `src/data/site.ts` is still the literal placeholder `https://www.linkedin.com/in/`.
+1. ~~LinkedIn URL~~ — set 2026-10-13.
 2. **CV may contain his phone number** (`public/cv/Valerio-Rosponi-CV.pdf`) — he was told, may want a redacted copy.
 3. ~~UX/UI filter~~ — resolved 2026-10-09: the vocabulary is now All / Mobile / XR / Product / Multi-screen.
 4. **JustCook tools list** currently reads "Figma, Miro" — owner was asked whether to add others, no answer yet.
@@ -731,6 +731,15 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-13 · LOCAL** · About rebuilt (see CLAUDE.md Structure): column-line hero + statement "Useful to as many
+  people as possible. / Beautiful enough to make them stay." + portrait colour lens; 5 accordion sections, all closed,
+  one open at a time; tools with logos (Figma, Claude & Codex, local AI/Ollama, Unity, Meta Developer Hub, Git);
+  "Looking for" removed; "What I bring" → 14 skills in Research & strategy / Structure & interaction / Interface &
+  delivery. LinkedIn set (linkedin.com/in/valerio-rosponi). Home: statement enters with a single mask wipe (per-word
+  blur removed); depth texture drifts by itself on touch. Card labels: new `labels` frontmatter, one chip each;
+  Smart Home Ecosystem → **Smart Home Hub** (file 03-smart-home-hub.mdx). Owner wrote "Reality": kept the project
+  name **Realiti**. Verified with puppeteer 1440/390. Pushed `main`.
 
 - **2026-10-12 · LOCAL (5)** · (1) Card hover: the 0.95 zoom-out left ugly tone borders around Rehabeat's photographic
   cover. New `cover.bleed` flag (content.config.ts → ProjectCard → Card `bleed`): bleed covers zoom in to 1.04 on

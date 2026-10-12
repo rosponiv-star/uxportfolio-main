@@ -9,7 +9,7 @@
 interface Props {
   title: string;
   year?: string;
-  meta?: string;
+  meta?: string | string[]; // one chip per entry on hover; joined with commas below the media
   href?: string;
   cursor?: string;
   id?: string;
@@ -19,6 +19,7 @@ interface Props {
   bleed?: boolean;
 }
 const { title, year, meta, href, cursor, id, tone, soon = false, bleed = false } = Astro.props;
+const labels = meta ? (Array.isArray(meta) ? meta : [meta]) : [];
 const link = soon ? undefined : href;
 const Tag = link ? 'a' : 'div';
 ---
@@ -27,7 +28,7 @@ const Tag = link ? 'a' : 'div';
   class:list={['card', { 'card--linked': link || soon, 'card--soon': soon, 'card--bleed': bleed }]}
   id={id}
   data-reveal="card"
-  style={tone ? `--card-bg: ${tone}` : undefined}
+  style={`${tone ? `--card-bg: ${tone};` : ''} --n-labels: ${Math.max(0, labels.length - 1)}`}
 >
   <Tag
     class="card__link"
@@ -41,7 +42,8 @@ const Tag = link ? 'a' : 'div';
     </div>
     <div class="card__info">
       <h3 class="card__title">{title}</h3>
-      {meta && <span class="card__type">{meta}</span>}
+      {labels.length > 0 && <span class="card__type card__type--joined">{labels.join(', ')}</span>}
+      {labels.map((l, i) => <span class="card__type card__type--chip" style={`--k:${i}`} aria-hidden="true">{l}</span>)}
       {year && <span class="card__year">{year}</span>}
       {soon && <span class="card__soon">Coming soon</span>}
     </div>
@@ -95,6 +97,11 @@ const Tag = link ? 'a' : 'div';
 
   .card__type {
     min-width: 0;
+  }
+
+  /* Below the media (touch, unlinked) the labels read as one line; on hover each becomes a chip. */
+  .card__type--chip {
+    display: none;
   }
 
   .card__year {
@@ -166,6 +173,14 @@ const Tag = link ? 'a' : 'div';
         transform 0.6s var(--ease-out);
     }
 
+    .card--linked .card__type--joined {
+      display: none;
+    }
+
+    .card--linked .card__type--chip {
+      display: block;
+    }
+
     .card--linked .card__title {
       font-weight: 500;
       color: var(--ink);
@@ -191,11 +206,11 @@ const Tag = link ? 'a' : 'div';
     }
 
     .card--linked .card__link:is(:hover, :focus-visible) .card__type {
-      transition-delay: 0.12s;
+      transition-delay: calc(0.12s + var(--k, 0) * 0.05s);
     }
 
     .card--linked .card__link:is(:hover, :focus-visible) .card__year {
-      transition-delay: 0.18s;
+      transition-delay: calc(0.18s + var(--n-labels, 1) * 0.05s);
     }
 
     :global(.js) .card:global(.is-in) .card__link:is(:hover, :focus-visible) .card__media > :global(*),

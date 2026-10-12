@@ -15,6 +15,8 @@ const projects = defineCollection({
       // Work filters. Keep to the shared vocabulary in lib/projects.ts → CATEGORIES.
       categories: z.array(z.enum(['Mobile', 'XR', 'Product', 'Multi-screen'])).min(1),
       platform: z.string(),
+      // Card labels (hover chips / line under the cover), in reading order. Defaults to [type, platform].
+      labels: z.array(z.string()).optional(),
       role: z.string(),
       timeline: z.string(),
       team: z.string(),

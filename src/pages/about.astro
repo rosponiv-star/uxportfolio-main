@@ -1,245 +1,838 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import Section from '../components/Section.astro';
 import portrait from '../assets/valerio-rosponi.png';
 import { site } from '../data/site';
+// Brand marks from Simple Icons (CC0), inlined so they take the text colour.
+import figma from '../assets/logos/figma.svg?raw';
+import claude from '../assets/logos/claude.svg?raw';
+import openai from '../assets/logos/openai.svg?raw';
+import ollama from '../assets/logos/ollama.svg?raw';
+import unity from '../assets/logos/unity.svg?raw';
+import meta from '../assets/logos/meta.svg?raw';
+import git from '../assets/logos/git.svg?raw';
 
-const strengths = [
+// Strip the <title> so screen readers read the tool name once, from the text.
+const mark = (svg: string) => svg.replace(/<title>.*?<\/title>/, '').replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
+
+const approach = [
   {
-    title: 'Visual & UI design',
-    text: 'Typography, layout, colour and the small decisions that make an interface feel considered.',
+    title: 'Start from evidence',
+    text: 'Who the people are, what gets in their way, and what the data says about it. I don’t design until I can state the problem in one sentence.',
   },
   {
-    title: 'Information architecture',
-    text: 'Turning messy content and features into structures people can navigate without thinking.',
+    title: 'Structure before style',
+    text: 'Content, flows and hierarchy come first. A product that makes sense is already halfway to being a product people enjoy.',
   },
   {
-    title: 'Interaction design',
-    text: 'Flows, states and feedback that make every step feel obvious and every action reversible.',
-  },
-  {
-    title: 'Design systems',
-    text: 'Components, variables and tokens that keep a product consistent as it grows.',
-  },
-  {
-    title: 'Working with developers',
-    text: 'I understand how interfaces get built, so my specs are realistic and my handoffs are clear.',
-  },
-  {
-    title: 'Prototyping & motion',
-    text: 'High-fidelity prototypes and motion that test ideas before they become expensive.',
+    title: 'Craft the details, then dare',
+    text: 'Spacing, states, motion and microcopy decide whether people trust a product. Then I push a little further, and test whether it holds up.',
   },
 ];
 
-const toolkit = [
-  { name: 'Figma', use: 'Interface design, prototyping, variables and design systems.' },
-  { name: 'Stitch & AI tools', use: 'Rapid exploration and generating directions to react to.' },
-  { name: 'Unity', use: 'Interactive, spatial and XR prototypes.' },
-  { name: 'IDEs', use: 'Building and testing what I design, in code.' },
-];
-
-const now = [
-  { label: 'Studying', text: 'BSc in Interfaces & Communication, University of Trento.' },
-  { label: 'Based in', text: 'Trentino, Italy. Open to remote work.' },
+const skills = [
   {
-    label: 'Looking for',
-    text: 'Junior roles in UX, digital product and visual design. Especially drawn to health, fintech, fashion and wellbeing.',
+    group: 'Research & strategy',
+    items: [
+      { name: 'Domain analysis', note: 'The market, rules and constraints of a field, before designing for it.' },
+      { name: 'User research', note: 'Interviews, surveys and field observation in people’s real context.' },
+      { name: 'Synthesis', note: 'Thematic coding, insights and archetypes that a team can defend.' },
+      { name: 'Product specifications', note: 'Requirements, user stories and acceptance criteria.' },
+      { name: 'Usability testing', note: 'Tasks, observation and the changes they lead to.' },
+    ],
+  },
+  {
+    group: 'Structure & interaction',
+    items: [
+      { name: 'Information architecture', note: 'Content and features organised so people find them without thinking.' },
+      { name: 'User flows & journeys', note: 'Every step, state and edge case, across devices.' },
+      { name: 'Interaction design', note: 'Feedback and transitions that make each action obvious and reversible.' },
+      { name: 'Prototyping & motion', note: 'High-fidelity prototypes that test ideas before they get expensive.' },
+      { name: 'Accessibility', note: 'Contrast, sizes, focus and content that work for more people.' },
+    ],
+  },
+  {
+    group: 'Interface & delivery',
+    items: [
+      { name: 'UI & visual design', note: 'Typography, layout and colour that make an interface feel considered.' },
+      { name: 'Design systems', note: 'Components, variables and tokens that keep a product consistent.' },
+      { name: 'Working with developers', note: 'Realistic specs and clear handoffs, from someone who builds too.' },
+      { name: 'Documentation', note: 'Decisions written down, so the next person knows why.' },
+    ],
   },
 ];
+
+const tools = [
+  { name: 'Figma', marks: [figma], use: 'Interfaces, prototypes, variables and design systems.' },
+  { name: 'Claude & Codex', marks: [claude, openai], use: 'Coding agents to build and test what I design.' },
+  { name: 'Local AI tools', marks: [ollama], use: 'Models on my own machine, like Ollama, for private experiments.' },
+  { name: 'Unity', marks: [unity], use: 'Interactive, spatial and XR prototypes.' },
+  { name: 'Meta Developer Hub', marks: [meta], use: 'Building and testing on Meta Quest headsets.' },
+  { name: 'Git', marks: [git], use: 'Versioning code and prototypes.' },
+];
+
+const sections = [
+  { id: 'approach', title: 'How I approach design', summary: 'Evidence, structure, then detail' },
+  { id: 'skills', title: 'What I bring to a team', summary: '14 skills in three areas' },
+  { id: 'tools', title: 'Tools I work with', summary: 'Figma, AI agents, Unity, Git' },
+  { id: 'now', title: 'Where I am now', summary: 'Studying in Trento, open to remote' },
+  { id: 'contact', title: 'How to reach me', summary: 'Email, LinkedIn, résumé' },
+];
+const pad = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 <Base
   title="About"
-  description="About Valerio Rosponi — how he thinks about design, what he brings to a team and what he is looking for."
+  description="About Valerio Rosponi: how he approaches design, what he brings to a team and the tools he works with."
   showFooterContact={false}
 >
-  <header class="wrap grid intro">
-    <h1 class="display col-wide">Useful to as many people as possible, and beautiful enough to make them stay.</h1>
-  </header>
-
-  <div class="wrap">
-    <Section title="Approach" id="approach">
-      <div class="trio">
-        <figure class="portrait" data-reveal="clip">
+  <!-- Hero: the column grid drawn on the page, the statement on cols 1–8, the portrait on 9–12. -->
+  <header class="hero">
+    <div class="hero__cols" aria-hidden="true">
+      <div class="wrap grid">
+        {Array.from({ length: 12 }, (_, i) => <span style={`--i:${i}`} />)}
+      </div>
+    </div>
+    <div class="wrap grid hero__inner">
+      <p class="hero__kicker label">About</p>
+      <h1 class="hero__title display">
+        <span class="hero__line">Useful to as many people as possible.</span>
+        <span class="hero__line hero__line--2">Beautiful enough to make them stay.</span>
+      </h1>
+      <figure class="portrait" data-portrait>
+        <div class="portrait__frame">
           <Image
             src={portrait}
             alt="Portrait of Valerio Rosponi"
-            widths={[400, 640, 900, 1200]}
-            sizes="(min-width: 960px) 24vw, 100vw"
-            class="portrait__img"
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 960px) 30vw, 70vw"
+            class="portrait__img portrait__img--mono"
+            loading="eager"
           />
-        </figure>
-
-        <div class="approach span-2">
-          <p class="lead trim" data-reveal>
-            For me, design is the point where usefulness and beauty stop being separate goals. A product should solve a
-            real problem for as many people as possible, and it should be crafted well enough that people trust it at
-            first sight.
-          </p>
-          <p data-reveal>
-            I start from evidence: who the people are, what gets in their way, and what the data says about it. From
-            there I work on structure before style, because a product that makes sense is already halfway to being a
-            product people enjoy.
-          </p>
-          <p data-reveal>
-            Then I obsess over the details, and I try to push a little further than the expected. New ways of
-            interacting, new visual languages: I like to explore them, and then test whether they really work for the
-            people they are meant for.
-          </p>
+          <Image
+            src={portrait}
+            alt=""
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 960px) 30vw, 70vw"
+            class="portrait__img portrait__img--colour"
+            loading="eager"
+            aria-hidden="true"
+          />
         </div>
-      </div>
-    </Section>
+        <figcaption class="portrait__cap">
+          <span>Valerio Rosponi</span>
+          <span class="muted">UX & digital product designer</span>
+        </figcaption>
+      </figure>
+    </div>
+  </header>
 
-    <Section title="What I bring" id="strengths" tone="alt">
-      <ol>
-        {
-          strengths.map((s, i) => (
-            <li class="row trio">
-              <div class="row__head" data-reveal>
-                <span class="label row__n">{String(i + 1).padStart(2, '0')}</span>
-                <h3 class="h3 trim">{s.title}</h3>
+  <!-- Five sections, all closed at first, one open at a time. -->
+  <div class="wrap acc" data-acc>
+    {
+      sections.map((s, i) => (
+        <section class="acc__item" id={s.id}>
+          <h2 class="acc__h">
+            <button
+              class="acc__btn grid"
+              type="button"
+              id={`${s.id}-btn`}
+              aria-expanded="false"
+              aria-controls={`${s.id}-panel`}
+            >
+              <span class="acc__n label">{pad(i)}</span>
+              <span class="acc__title">{s.title}</span>
+              <span class="acc__sum">{s.summary}</span>
+              <span class="acc__icon" aria-hidden="true" />
+            </button>
+          </h2>
+          <div class="acc__panel" id={`${s.id}-panel`} role="region" aria-labelledby={`${s.id}-btn`} inert>
+            <div class="acc__clip">
+              <div class="acc__inner grid">
+                {s.id === 'approach' && (
+                  <div class="body">
+                    <p class="lead approach__lead">
+                      For me, design is where usefulness and beauty stop being separate goals. Three habits get me
+                      there, in this order.
+                    </p>
+                    <ol class="steps trio">
+                      {approach.map((a, j) => (
+                        <li class="step">
+                          <span class="label step__n">{pad(j)}</span>
+                          <h3 class="step__title">{a.title}</h3>
+                          <p class="step__text">{a.text}</p>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
+
+                {s.id === 'skills' && (
+                  <div class="body skills trio">
+                    {skills.map((g) => (
+                      <div class="skills__group">
+                        <p class="label label--group skills__h">{g.group}</p>
+                        <ul class="skills__list">
+                          {g.items.map((it) => (
+                            <li class="skill">
+                              <span class="skill__name">{it.name}</span>
+                              <span class="skill__note">{it.note}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {s.id === 'tools' && (
+                  <ul class="body tools trio">
+                    {tools.map((t) => (
+                      <li class="tool">
+                        <span class="tool__marks">
+                          {t.marks.map((m) => (
+                            <span class="tool__mark" set:html={mark(m)} />
+                          ))}
+                        </span>
+                        <span class="tool__name">{t.name}</span>
+                        <span class="tool__use">{t.use}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {s.id === 'now' && (
+                  <dl class="body now trio">
+                    <div class="now__item">
+                      <dt class="field">Studying</dt>
+                      <dd>BSc in Interfaces & Communication at the University of Trento.</dd>
+                    </div>
+                    <div class="now__item">
+                      <dt class="field">Based in</dt>
+                      <dd>Trentino, Italy. Open to remote work.</dd>
+                    </div>
+                  </dl>
+                )}
+
+                {s.id === 'contact' && (
+                  <ul class="body contact">
+                    <li>
+                      <a class="contact__link" href={`mailto:${site.email}`}>
+                        <span class="field">Email</span>
+                        <span class="contact__value">{site.email}</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="contact__link" href={site.linkedin} target="_blank" rel="noopener">
+                        <span class="field">LinkedIn</span>
+                        <span class="contact__value">valerio-rosponi <span class="arrow" aria-hidden="true">↗</span></span>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="contact__link" href={site.cv} target="_blank" rel="noopener">
+                        <span class="field">Résumé</span>
+                        <span class="contact__value">Download PDF <span class="arrow" aria-hidden="true">↗</span></span>
+                      </a>
+                    </li>
+                  </ul>
+                )}
               </div>
-              <p class="row__text span-2 trim" data-reveal style="--d:1">
-                {s.text}
-              </p>
-            </li>
-          ))
-        }
-      </ol>
-    </Section>
-
-    <Section title="Toolkit" id="toolkit">
-      <ul>
-        {
-          toolkit.map((t) => (
-            <li class="row trio">
-              <h3 class="h3 trim" data-reveal>
-                {t.name}
-              </h3>
-              <p class="row__text span-2 trim" data-reveal style="--d:1">
-                {t.use}
-              </p>
-            </li>
-          ))
-        }
-      </ul>
-    </Section>
-
-    <Section title="Now" id="now">
-      <dl class="trio">
-        {
-          now.map((n, i) => (
-            <div class="item" data-reveal style={`--d:${i}`}>
-              <dt class="label muted">{n.label}</dt>
-              <dd>{n.text}</dd>
             </div>
-          ))
-        }
-      </dl>
-    </Section>
-
-    <Section title="Contact" id="contact">
-      <ul class="trio">
-        <li class="item" data-reveal>
-          <span class="label muted">Email</span>
-          <a class="link" href={`mailto:${site.email}`}>{site.email}</a>
-        </li>
-        <li class="item" data-reveal style="--d:1">
-          <span class="label muted">LinkedIn</span>
-          <a href={site.linkedin} target="_blank" rel="noopener">
-            Valerio Rosponi <span class="arrow arrow--ne" aria-hidden="true">↗</span>
-          </a>
-        </li>
-        <li class="item" data-reveal style="--d:2">
-          <span class="label muted">Résumé</span>
-          <a href={site.cv} target="_blank" rel="noopener">
-            Download PDF <span class="arrow arrow--ne" aria-hidden="true">↗</span>
-          </a>
-        </li>
-      </ul>
-    </Section>
+          </div>
+        </section>
+      ))
+    }
   </div>
 </Base>
 
 <style>
-  .intro {
-    padding-top: calc(var(--header-h) + var(--space-6) * 2);
+  /* Hero ----------------------------------------------------------------- */
+  .hero {
+    position: relative;
+    min-height: min(860px, 82svh);
+    display: flex;
+    overflow: hidden;
   }
 
-  /* Approach */
+  /* The 12 columns, drawn as hairlines that grow down the page one after the other. */
+  .hero__cols {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .hero__cols > .wrap {
+    height: 100%;
+  }
+
+  .hero__cols span {
+    position: relative;
+    height: 100%;
+  }
+
+  .hero__cols span::before,
+  .hero__cols span:last-child::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background: var(--rule);
+    transform-origin: top;
+    animation: col-draw 1.6s var(--ease-out) backwards;
+    animation-delay: calc(var(--i) * 45ms);
+  }
+
+  .hero__cols span:last-child::after {
+    left: auto;
+    right: 0;
+  }
+
+  @keyframes col-draw {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  .hero__inner {
+    position: relative;
+    align-content: end;
+    row-gap: var(--space-4);
+    padding-top: calc(var(--header-h) + var(--space-6));
+    padding-bottom: var(--space-6);
+  }
+
+  .hero__kicker {
+    grid-column: 1 / span 8;
+    color: var(--signal);
+  }
+
+  .hero__title {
+    grid-column: 1 / span 8;
+    align-self: end;
+    /* A graphic exception to the type scale (like the cover title): the page's only statement,
+       between display (60) and mega, so it carries the empty band on its own. */
+    font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.75rem);
+    letter-spacing: -0.035em;
+  }
+
+  .hero__line {
+    display: block;
+    animation: line-in 1.3s var(--ease-out) backwards;
+    animation-delay: 0.35s;
+  }
+
+  .hero__line--2 {
+    color: var(--ink-4);
+    animation-delay: 0.6s;
+  }
+
+  @keyframes line-in {
+    from {
+      opacity: 0;
+      transform: translateY(0.35em);
+    }
+  }
+
+  /* Portrait: black and white; under the pointer a soft lens brings the colour back. */
   .portrait {
-    align-self: start;
-    background: var(--paper);
+    grid-column: 10 / span 3;
+    grid-row: 1 / span 2;
+    align-self: end;
+    animation: line-in 1.3s var(--ease-out) backwards;
+    animation-delay: 0.8s;
   }
 
-  .portrait__img {
-    width: 100%;
+  .portrait__frame {
+    position: relative;
     aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--paper-2);
+  }
+
+  .portrait__frame :global(.portrait__img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    object-position: 50% 30%;
-    filter: grayscale(1) contrast(1.05);
-    mix-blend-mode: multiply;
-    transition: filter 0.8s var(--ease-out);
+    object-position: 50% 35%;
   }
 
-  .portrait:hover .portrait__img {
-    filter: grayscale(0) contrast(1);
+  .portrait__frame :global(.portrait__img--mono) {
+    filter: grayscale(1) contrast(1.06);
   }
 
-  .approach {
+  .portrait__frame :global(.portrait__img--colour) {
+    --lx: 50%;
+    --ly: 40%;
+    --lr: 0px;
+    -webkit-mask-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), #000 60%, transparent 100%);
+    mask-image: radial-gradient(circle var(--lr) at var(--lx) var(--ly), #000 60%, transparent 100%);
+  }
+
+  .portrait__cap {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
-    color: var(--ink-2);
-    line-height: 1.6;
+    gap: 2px;
+    margin-top: var(--space-2);
+    font-size: var(--fs-small);
   }
 
-  .approach > * {
-    max-width: 60ch;
+  @media (max-width: 960px) {
+    .hero {
+      min-height: 0;
+    }
+
+    .hero__inner {
+      align-content: start;
+    }
+
+    .hero__kicker,
+    .hero__title {
+      grid-column: 1 / -1;
+    }
+
+    .portrait {
+      grid-column: 1 / span 8;
+      grid-row: auto;
+      margin-top: var(--space-4);
+    }
   }
 
-  /* Rows (strengths, toolkit) */
-  .row {
-    row-gap: var(--space-2);
-    padding-block: var(--space-3) var(--space-5);
-    border-top: 1px solid var(--rule);
+  @media (max-width: 640px) {
+    .portrait {
+      grid-column: 1 / -1;
+    }
   }
 
-  .row:first-child {
-    border-top: 0;
-    padding-top: 0;
+  @media (prefers-reduced-motion: reduce) {
+    .hero__cols span::before,
+    .hero__cols span:last-child::after,
+    .hero__line,
+    .portrait {
+      animation: none;
+    }
   }
 
-  .row__head {
+  /* Accordion ------------------------------------------------------------ */
+  .acc {
+    padding-bottom: var(--space-section);
+  }
+
+  .acc__item {
+    border-top: 1px solid var(--rule-strong);
+  }
+
+  .acc__item:last-child {
+    border-bottom: 1px solid var(--rule-strong);
+  }
+
+  .acc__h {
+    font: inherit;
+  }
+
+  .acc__btn {
+    width: 100%;
+    align-items: baseline;
+    padding-block: var(--space-4);
+    text-align: left;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .acc__n {
+    grid-column: 1 / span 1;
+    color: var(--signal);
+  }
+
+  .acc__title {
+    grid-column: 2 / span 7;
+    font-size: var(--fs-h2);
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .acc__sum {
+    grid-column: 9 / span 3;
+    font-size: var(--fs-small);
+    color: var(--ink-3);
+    transition: opacity 0.4s var(--ease-out);
+  }
+
+  /* A plus that turns into a minus. */
+  .acc__icon {
+    grid-column: 12;
+    justify-self: end;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    align-self: center;
+  }
+
+  .acc__icon::before,
+  .acc__icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    background: currentColor;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  .acc__icon::after {
+    transform: rotate(90deg);
+  }
+
+  .acc__item.is-open .acc__icon::after {
+    transform: rotate(0deg);
+  }
+
+  .acc__item.is-open .acc__sum {
+    opacity: 0;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .acc__btn:hover .acc__title {
+      transform: translateX(8px);
+    }
+  }
+
+  .acc__btn:focus-visible {
+    outline: 2px solid var(--signal);
+    outline-offset: 4px;
+  }
+
+  /* Height animates through the grid-rows trick (0fr → 1fr), so content never jumps. */
+  .acc__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.75s var(--ease-out);
+  }
+
+  .acc__item.is-open .acc__panel {
+    grid-template-rows: 1fr;
+  }
+
+  .acc__clip {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .acc__inner {
+    padding-bottom: var(--space-6);
+  }
+
+  /* The content settles in just after the panel starts opening, and leaves first. */
+  .acc__inner > .body {
+    grid-column: 2 / -1;
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.35s var(--ease-out),
+      transform 0.5s var(--ease-out);
+  }
+
+  .acc__item.is-open .acc__inner > .body {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.18s;
+    transition-duration: 0.7s, 0.9s;
+  }
+
+  @media (max-width: 960px) {
+    .acc__n {
+      grid-column: 1 / -1;
+    }
+
+    .acc__title {
+      grid-column: 1 / span 11;
+    }
+
+    .acc__sum {
+      grid-column: 1 / span 11;
+      grid-row: 3;
+      margin-top: var(--space-1);
+    }
+
+    .acc__icon {
+      grid-row: 2;
+    }
+
+    .acc__inner > .body {
+      grid-column: 1 / -1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .acc__panel,
+    .acc__inner > .body,
+    .acc__title {
+      transition: none;
+    }
+  }
+
+  /* 01 Approach: three numbered steps on the tracks. */
+  .approach__lead {
+    max-width: 40ch;
+    margin-bottom: var(--space-5);
+  }
+
+  .step {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--ink);
   }
 
-  .row__n {
+  .step__n {
     color: var(--signal);
-    text-box: trim-both cap alphabetic;
   }
 
-  .row__text {
-    max-width: 58ch;
+  .step__title {
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+  }
+
+  .step__text {
     color: var(--ink-2);
+    line-height: 1.55;
   }
 
-  /* Now + contact items */
-  .item {
+  /* 02 Skills: three groups, each a list of name + one line. */
+  .skills {
+    align-items: start;
+  }
+
+  .skills__h {
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .skill {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    gap: 4px;
+    padding-block: var(--space-2);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .skill__name {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .skill__note {
+    font-size: var(--fs-small);
+    line-height: 1.45;
+    color: var(--ink-3);
+  }
+
+  /* 03 Tools: tiles with the brand mark, monochrome until hovered. */
+  .tools {
+    row-gap: var(--gutter);
+  }
+
+  .tool {
+    display: flex;
+    flex-direction: column;
     gap: var(--space-1);
+    padding: var(--space-3);
+    border: 1px solid var(--rule-strong);
+    transition:
+      border-color 0.4s var(--ease-out),
+      background 0.4s var(--ease-out);
   }
 
-  .item > :first-child {
-    text-box: trim-start cap alphabetic;
+  .tool__marks {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+    color: var(--ink);
+    transition: color 0.4s var(--ease-out);
   }
 
-  .item dd {
-    max-width: 32ch;
+  .tool__mark :global(svg) {
+    display: block;
+    width: 32px;
+    height: 32px;
+    fill: currentColor;
+  }
+
+  .tool__name {
+    font-size: var(--fs-lead);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+  }
+
+  .tool__use {
+    font-size: var(--fs-small);
+    line-height: 1.45;
+    color: var(--ink-3);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .tool:hover {
+      border-color: var(--ink);
+      background: var(--paper-2);
+    }
+
+    .tool:hover .tool__marks {
+      color: var(--signal);
+    }
+  }
+
+  /* 04 Now: two facts, large. */
+  .now__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--ink);
+  }
+
+  .now__item dd {
+    font-size: var(--fs-lead);
+    line-height: 1.35;
+    letter-spacing: -0.012em;
+  }
+
+  /* 05 Contact: three big rows, the whole row is the link. */
+  .contact li + li {
+    border-top: 1px solid var(--rule);
+  }
+
+  .contact__link {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+    align-items: baseline;
+    gap: var(--gutter);
+    padding-block: var(--space-3);
+  }
+
+  .contact__value {
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    letter-spacing: -0.022em;
+    transition: transform 0.6s var(--ease-out);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .contact__link:hover .contact__value {
+      transform: translateX(8px);
+    }
+  }
+
+  /* Phones: tools stay two per row, smaller tiles. */
+  @media (max-width: 640px) {
+    .tools {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--gutter);
+    }
+
+    .tool {
+      padding: var(--space-2);
+    }
+
+    .tool__marks {
+      margin-bottom: var(--space-2);
+    }
+
+    .tool__mark :global(svg) {
+      width: 26px;
+      height: 26px;
+    }
+
+    .tool__name {
+      font-size: var(--fs-body);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .contact__link {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--space-1);
+    }
+
+    .contact__value {
+      font-size: var(--fs-lead);
+      overflow-wrap: anywhere;
+    }
   }
 </style>
+
+<script>
+  // Accordion: one section open at a time. Closed panels are inert, so their links are not focusable.
+  document.querySelectorAll<HTMLElement>('[data-acc]').forEach((acc) => {
+    const items = Array.from(acc.querySelectorAll<HTMLElement>('.acc__item'));
+    const set = (item: HTMLElement, open: boolean) => {
+      item.classList.toggle('is-open', open);
+      item.querySelector('.acc__btn')!.setAttribute('aria-expanded', String(open));
+      const panel = item.querySelector<HTMLElement>('.acc__panel')!;
+      if (open) panel.removeAttribute('inert');
+      else panel.setAttribute('inert', '');
+    };
+    items.forEach((item) => {
+      item.querySelector('.acc__btn')!.addEventListener('click', () => {
+        const open = !item.classList.contains('is-open');
+        items.forEach((other) => other !== item && set(other, false));
+        set(item, open);
+        if (!open) return;
+        // When a section above closes, this header moves up: keep it in view once the motion settles.
+        window.setTimeout(() => {
+          const top = item.getBoundingClientRect().top;
+          const header = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
+          if (top < header || top > window.innerHeight * 0.6) {
+            window.scrollTo({ top: window.scrollY + top - header - 16, behavior: 'smooth' });
+          }
+        }, 780);
+      });
+    });
+    // Deep links (#tools) open their section.
+    const hash = location.hash.slice(1);
+    const target = items.find((i) => i.id === hash);
+    if (target) set(target, true);
+  });
+
+  // Portrait lens: a soft circle of colour follows the pointer and fades away when it leaves.
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLElement>('[data-portrait]').forEach((fig) => {
+    const frame = fig.querySelector<HTMLElement>('.portrait__frame')!;
+    const colour = fig.querySelector<HTMLElement>('.portrait__img--colour')!;
+    if (!fine || reduced) return;
+    let x = 50, y = 40, tx = 50, ty = 40, r = 0, tr = 0, raf = 0;
+    const loop = () => {
+      x += (tx - x) * 0.14;
+      y += (ty - y) * 0.14;
+      r += (tr - r) * 0.1;
+      colour.style.setProperty('--lx', `${x}%`);
+      colour.style.setProperty('--ly', `${y}%`);
+      colour.style.setProperty('--lr', `${r}px`);
+      const moving = Math.abs(tx - x) > 0.05 || Math.abs(ty - y) > 0.05 || Math.abs(tr - r) > 0.5;
+      raf = moving ? requestAnimationFrame(loop) : 0;
+    };
+    const kick = () => {
+      if (!raf) raf = requestAnimationFrame(loop);
+    };
+    frame.addEventListener('pointermove', (e) => {
+      const b = frame.getBoundingClientRect();
+      tx = ((e.clientX - b.left) / b.width) * 100;
+      ty = ((e.clientY - b.top) / b.height) * 100;
+      tr = b.width * 0.32;
+      kick();
+    });
+    frame.addEventListener('pointerleave', () => {
+      tr = 0;
+      kick();
+    });
+  });
+</script>

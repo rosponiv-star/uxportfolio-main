@@ -11,7 +11,6 @@ const projects = await getProjects();
 
 const statement =
   'Valerio Rosponi, UX and digital product designer studying Interfaces & Communication at the University of Trento, based in Trentino, Italy.';
-const words = statement.split(' ');
 
 const sizes = gridSizes(projects.length);
 const items = projects.map((p) => ({
@@ -60,17 +59,7 @@ const principles = [
   <section class="hero">
     <DepthTexture intensity={1.25} parallax={1.6} />
     <div class="wrap grid hero__inner">
-      <h1 class="hero__title display">
-        {
-          words.map((w, i) => (
-            <>
-              <span class="w" style={`--i:${i}`}>
-                {w}
-              </span>{' '}
-            </>
-          ))
-        }
-      </h1>
+      <h1 class="hero__title display">{statement}</h1>
     </div>
   </section>
 
@@ -163,26 +152,26 @@ const principles = [
     padding-bottom: var(--space-5);
   }
 
-  /* Statement entrance: each word comes into focus in sequence — fade, de-blur and a
-     small rise. No masks, so letters are never cut. fill-mode backwards: hidden during
-     the delay, then back to the natural (filter-free) style once done. */
-  .w {
-    display: inline-block;
-    animation: word-in 1.4s var(--ease-out) backwards;
-    animation-delay: calc(150ms + var(--i) * 55ms);
+  /* Statement entrance: one soft-edged wipe of light sweeps across the whole block, left to
+     right, while it settles from a slight lift. One element, one gesture: no per-word choreography,
+     no reflow, and the mask ends fully open, so nothing is ever cut. */
+  .hero__title {
+    -webkit-mask-image: linear-gradient(100deg, #000 40%, transparent 60%);
+    mask-image: linear-gradient(100deg, #000 40%, transparent 60%);
+    -webkit-mask-size: 300% 100%;
+    mask-size: 300% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    animation: statement-in 2.2s cubic-bezier(0.45, 0, 0.2, 1) 0.25s backwards;
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
   }
 
-  @keyframes word-in {
+  @keyframes statement-in {
     from {
-      opacity: 0;
-      filter: blur(10px);
-      transform: translateY(0.18em);
-    }
-
-    to {
-      opacity: 1;
-      filter: none;
-      transform: none;
+      -webkit-mask-position: 100% 0;
+      mask-position: 100% 0;
+      transform: translateY(0.12em);
     }
   }
 
@@ -194,7 +183,7 @@ const principles = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .w {
+    .hero__title {
       animation: none;
     }
   }
