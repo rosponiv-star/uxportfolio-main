@@ -66,7 +66,7 @@ relocating right now. Lives between Malè and Rovereto (TN).
 | Project | Status |
 |---|---|
 | 01 JustCook | **Done.** Real research data, real cover, real Result showcase, real Design chapter with product photography. Reference implementation. |
-| 02 Rehabeat (ex Rehab) | **Text + cover done** (cover from the final Figma screens) (real facts, `notes/02-rehab.md`; literature numbers in Challenge). Interfaces are placeholders until the owner sends the final screens → still `placeholder: true` / Coming soon. |
+| 02 Rehabeat (ex Rehab) | **Live** (2026-10-12): text, cover, Result showcase done; Design-chapter Features still placeholders (real facts, `notes/02-rehab.md`; literature numbers in Challenge). Interfaces are placeholders until the owner sends the final screens → still `placeholder: true` / Coming soon. |
 | 03 Smart Home Ecosystem | Placeholder — invented frontmatter facts, MDX skeleton only. |
 | 04 Realiti | Placeholder — invented frontmatter facts, dark tone, MDX skeleton only. |
 | 05 AuraWake | Placeholder text, **real cover** (2 app screens on a flat ground). |
@@ -731,6 +731,10 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-12 · LOCAL (4)** · Owner: "rendi il progetto disponibile" → Rehabeat `placeholder: false`: card and index
+  row linked, in the sitemap, no noindex, JustCook's Next band now points to it. Known gap, published anyway at the
+  owner's request: the 5 Design-chapter Features rows still show placeholder frames (no final screens yet). Pushed `main`.
 
 - **2026-10-12 · LOCAL (3)** · Rehabeat Result filled with the final Figma screens (`result.showcase`, assets in
   `src/assets/projects/rehabeat/screens/`): 01 "The coach on the TV" = TV-2 in the owner's dark living-room mockup

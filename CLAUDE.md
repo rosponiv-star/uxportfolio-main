@@ -173,7 +173,8 @@ Status:
 - JustCook (01) is written with real data.
 - Rehabeat (02, ex "Rehab", file `02-rehabeat.mdx`) is written with real facts (notes/02-rehab.md) and verified literature
   numbers in Challenge, but its interfaces are placeholders (Result media labels, Features without `image`) until the
-  owner sends the final screens: it stays `placeholder: true` ("Coming soon") until then. Do NOT use the UI in
+  owner sends the final screens. Published (`placeholder: false`) on 2026-10-12 at the owner's request; the Result showcase
+  uses the final Figma screens, only the Design-chapter Features rows are still placeholders. Do NOT use the UI in
   Media/02-Rehab (old versions). `<Features>` items accept no `image` + `placeholder` label + `device: phone|tv`.
 - Unfinished work is visible but not openable (owner, 2026-10-09): a project with `placeholder: true` gets a card and
   an index row with no link, no zoom and no preview; the cursor label turns `--soon` red with "Coming soon" (on touch,
