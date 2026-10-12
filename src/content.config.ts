@@ -27,6 +27,9 @@ const projects = defineCollection({
           image: image().optional(),
           video: z.string().optional(),
           alt: z.string().default(''),
+          // A photographic cover that fills the frame edge to edge (no flat ground to zoom out over):
+          // on hover the card zooms in slightly instead of out, so no tone border appears.
+          bleed: z.boolean().default(false),
         })
         .optional(),
       // 30-second read for recruiters.

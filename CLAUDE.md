@@ -22,7 +22,7 @@ all site copy is in **English**.
 
 ## Structure
 
-- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters,
+- `src/pages/index.astro`: Work page, which is also the home: near full-screen hero band (statement "Valerio Rosponi, UX and digital product designer studying…" (owner, 2026-10-12), centred + depth texture; at scroll 0 the Selected work header and the top ~80px of the first row of covers peek in at the bottom; --peek / --work-head in index.astro), Selected work (filters,
   Grid/Index switch, two-column grid of cards), "How I work" principles.
 - `src/components/Section.astro`: the single section pattern used on every page (see "Layout system").
 - `src/pages/work/[slug].astro`: case study template. The PhoneScroll device scene was removed by the owner (2026-10-03).
@@ -158,7 +158,8 @@ title, the footer wordmark and the nav micro-numbers.
   second card of a row is delayed 120ms.
 - Card: the cover fills the card. On hover/focus the cover zooms out to 0.95 over the project tone (Card `tone`) and
   three square paper chips rise in at the bottom-left, staggered: title (Medium, ink), "type, platform", year (greys).
-  The cursor label still says "Read case study". Touch devices and unlinked cards (Playground) keep the text below the
+  Photographic full-bleed covers (`cover.bleed: true`, e.g. Rehabeat) zoom IN to 1.04 instead, so no tone border shows
+  around the photo (owner, 2026-10-12). The cursor label still says "Read case study". Touch devices and unlinked cards (Playground) keep the text below the
   cover. The image is never darkened. Rejected: caption bar covering the cover; cover shrinking to fit the bar; info
   inside the cursor label (E2).
 - Home hero has no background (owner, 2026-10-04: the --paper-alt band was removed). Only the depth texture

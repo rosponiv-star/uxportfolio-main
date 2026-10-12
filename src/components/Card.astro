@@ -15,14 +15,16 @@ interface Props {
   id?: string;
   tone?: string;
   soon?: boolean;
+  // Full-bleed photographic media: hover zooms in a touch instead of out (no border around a photo).
+  bleed?: boolean;
 }
-const { title, year, meta, href, cursor, id, tone, soon = false } = Astro.props;
+const { title, year, meta, href, cursor, id, tone, soon = false, bleed = false } = Astro.props;
 const link = soon ? undefined : href;
 const Tag = link ? 'a' : 'div';
 ---
 
 <article
-  class:list={['card', { 'card--linked': link || soon, 'card--soon': soon }]}
+  class:list={['card', { 'card--linked': link || soon, 'card--soon': soon, 'card--bleed': bleed }]}
   id={id}
   data-reveal="card"
   style={tone ? `--card-bg: ${tone}` : undefined}
@@ -199,6 +201,12 @@ const Tag = link ? 'a' : 'div';
     :global(.js) .card:global(.is-in) .card__link:is(:hover, :focus-visible) .card__media > :global(*),
     .card--linked .card__link:is(:hover, :focus-visible) .card__media > :global(*) {
       transform: scale(0.95);
+    }
+
+    /* Full-bleed photos: zooming out would expose the tone around the photo, so zoom in a touch instead. */
+    :global(.js) .card--bleed:global(.is-in) .card__link:is(:hover, :focus-visible) .card__media > :global(*),
+    .card--bleed .card__link:is(:hover, :focus-visible) .card__media > :global(*) {
+      transform: scale(1.04);
     }
 
     /* Unfinished work: the facts still rise in, but the cover stays put (nothing to open). */

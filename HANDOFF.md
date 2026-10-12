@@ -732,6 +732,12 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-12 · LOCAL (5)** · (1) Card hover: the 0.95 zoom-out left ugly tone borders around Rehabeat's photographic
+  cover. New `cover.bleed` flag (content.config.ts → ProjectCard → Card `bleed`): bleed covers zoom in to 1.04 on
+  hover instead; JustCook (flat ground) keeps the zoom-out. (2) Home hero statement now reads "Valerio Rosponi, UX and
+  digital product designer studying Interfaces & Communication at the University of Trento, based in Trentino,
+  Italy." (was "I'm Valerio Rosponi, a UX and…"). Verified with puppeteer at 1440. Pushed `main`.
+
 - **2026-10-12 · LOCAL (4)** · Owner: "rendi il progetto disponibile" → Rehabeat `placeholder: false`: card and index
   row linked, in the sitemap, no noindex, JustCook's Next band now points to it. Known gap, published anyway at the
   owner's request: the 5 Design-chapter Features rows still show placeholder frames (no final screens yet). Pushed `main`.
