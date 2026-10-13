@@ -16,7 +16,8 @@ const hidden = [
 
 export default defineConfig({
   site: 'https://www.valeriorosponi.com',
-  trailingSlash: 'ignore',
+  // Every page is a folder (/about/): links end with a slash, so Google never meets a redirect.
+  trailingSlash: 'always',
   integrations: [
     mdx(),
     sitemap({ filter: (page) => !hidden.some((path) => new URL(page).pathname.replace(/\/$/, '') === path) }),

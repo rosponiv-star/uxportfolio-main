@@ -10,7 +10,7 @@ export { categoryId } from './collection';
 /** URL slug: file id without its numeric ordering prefix ("01-justcook" → "justcook"). */
 export const slugOf = (p: Project) => p.id.replace(/^\d+-/, '');
 
-export const hrefOf = (p: Project) => `/work/${slugOf(p)}`;
+export const hrefOf = (p: Project) => `/work/${slugOf(p)}/`;
 
 export const numOf = (p: Project) => String(p.data.order).padStart(2, '0');
 
