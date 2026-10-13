@@ -732,6 +732,10 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-13 · LOCAL (4)** · Wide TV frame 4564:3022: the knee-angle bar column (4564:3078) was double-shifted by a
+  constraint resize; now centred on the frame (728.5), re-exported. Affinity mark = the new "a" logo the owner sent,
+  built as a masked SVG (`src/assets/logos/affinity.svg`, takes currentColor). Pushed `main`.
+
 - **2026-10-13 · LOCAL (3)** · Rehabeat TV screen now comes from a **wide Figma frame**: node 4564:3022 "TV-2 · wide
   2.02:1" (1457×720, duplicate of 4404:1524 under it; backgrounds stretched, centre scene +89, right column +177 so
   side margins stay 64), exported ×3 into the dark living room (`tv-living-room.jpg`). Scene back inside the grid
