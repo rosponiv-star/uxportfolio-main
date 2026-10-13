@@ -36,6 +36,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     {noindex && <meta name="robots" content="noindex" />}
     <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-light.png" type="image/png" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/favicon-dark.png" type="image/png" media="(prefers-color-scheme: dark)" />
+    <link rel="apple-touch-icon" href="/favicon-light.png" />
     <meta name="theme-color" content="#fdfdfc" />
 
     <meta property="og:type" content="website" />
