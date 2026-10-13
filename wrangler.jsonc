@@ -1,0 +1,14 @@
+{
+  // Cloudflare Worker that serves the Astro build (dist/) as static assets.
+  "name": "uxportfolio-main",
+  "compatibility_date": "2025-09-01",
+  "main": "worker/index.js",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash",
+    // The worker runs first so it can redirect the bare domain and http:// to https://www.
+    "run_worker_first": true
+  }
+}

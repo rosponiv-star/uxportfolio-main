@@ -732,11 +732,15 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-13 · LOCAL (6)** · The site is the Cloudflare **Worker** `uxportfolio-main` (Workers Builds from git, static assets).
+  Added `wrangler.jsonc` + `worker/index.js`: worker runs first and 301-redirects http:// and valeriorosponi.com to
+  https://www.valeriorosponi.com (same path/query); everything else goes to the ASSETS binding (dist/, 404 page).
+  Pushed `main`.
+
 - **2026-10-13 · LOCAL (5)** · Google Search Console: 1 "duplicate without user-selected canonical" + 2 "page with redirect".
   Causes: internal links without trailing slash (/about → 307 → /about/) and the apex domain valeriorosponi.com
   serving the site with 200 instead of redirecting to www. Fixed in code: `trailingSlash: always`, nav and `hrefOf` end
-  with "/" (no internal link redirects any more). **Owner must add in Cloudflare** a 301 redirect rule apex → www
-  (can't be done from the repo). Pushed `main`.
+  with "/" (no internal link redirects any more). Apex → www now handled by the Worker itself (see next entry). Pushed `main`.
 
 - **2026-10-13 · LOCAL (4)** · Wide TV frame 4564:3022: the knee-angle bar column (4564:3078) was double-shifted by a
   constraint resize; now centred on the frame (728.5), re-exported. Affinity mark = the new "a" logo the owner sent,
