@@ -810,7 +810,7 @@ When a CLOUD session hits something that needs the local environment, it must:
 - **2026-10-16 · LOCAL (3)** · AuraWake (05) written from the two AuraWake PDFs: short page (no research existed, so no
   Research/Insights chapters), Reflection says research would come first now. Same pattern as Smart Home Hub: text
   complete, interfaces as placeholders, Coming soon. `render.mjs` now loads the PDF once (88 MB PDFs crashed it).
-  Timeline "One semester, 2024" is inferred from the June 2024 mockups (owner gave no period). Pushed `main`.
+  Timeline: spring 2024 (owner). Rehabeat and AuraWake both name the course "Human–Computer Interaction 1". Pushed `main`.
 
 - **2026-10-16 · LOCAL (2)** · Smart Home Hub (03) written from the PIG final report: Challenge (brief + stakeholders),
   Research (8 situations, 6 proto-personas, 16 pain points), Insights, Define (Marco vs Franco archetypes, 5 problems

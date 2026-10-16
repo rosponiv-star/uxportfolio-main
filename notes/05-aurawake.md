@@ -48,7 +48,7 @@ fuller report). Italian. "Progetto di Rosponi Valerio e Lisci Nicolò" (team of 
 - No research, interviews, personas or testing. No course name. No date other than the mockups (June 2024).
 
 ## Owner answers (2026-10-16)
-- Course: Human–Computer Interaction 1 (taught in English), University of Trento. Period not given: mockups say June 2024 → year 2024, timeline "One semester, 2024".
+- Course: Human–Computer Interaction 1 (taught in English), University of Trento. Same course as Rehabeat, earlier edition: spring 2024 (owner).
 - Role: Valerio did almost everything (concept + interfaces); Nicolò Lisci is the second team member.
 - No research: shorter page (Challenge, Define, Design, Reflection), no invented Research/Insights.
 - Keep the existing cover (cover.png, two app screens). Tools: Figma only. Stays placeholder (Coming soon) until the interfaces arrive.
