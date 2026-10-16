@@ -5,7 +5,7 @@ This file hands the project over between Claude sessions — LOCAL (Windows PC, 
 Read this file **in full**, then read `CLAUDE.md` (persistent rules, auto-loaded every session). Where the two
 disagree, this file is newer and wins.
 
-**Before anything else: sync git as §10 describes, then re-read this file** — another session may have pushed a
+**New chat: read §0 first (current state), then sync git as §10 describes, then re-read this file** — another session may have pushed a
 newer version while you were away.
 
 Structure of this document (10 fixed sections + two appendices):
@@ -21,6 +21,66 @@ Structure of this document (10 fixed sections + two appendices):
 10. Hybrid Flow (Local ↔ Cloud) — the sync protocol, read this one every session
 - Appendix A — Session log (newest first)
 - Appendix B — JustCook verified facts + how to write the next case studies
+
+---
+
+## 0. Current state — 2026-10-16 (read this first; it overrides older details in §1–§9)
+
+**Live:** https://www.valeriorosponi.com — Cloudflare **Worker** `uxportfolio-main` (Workers Builds from GitHub `main`,
+~2–4 min per deploy). `wrangler.jsonc` + `worker/index.js`: the worker runs first and 301-redirects `http://` and the bare
+domain `valeriorosponi.com` to `https://www.valeriorosponi.com` (same path/query); everything else is served from `dist/`
+(ASSETS binding, `404-page`, `auto-trailing-slash`). `astro.config.mjs` has `trailingSlash: 'always'`; every internal link
+ends with "/" (nav in `data/site.ts`, `hrefOf()` in `lib/projects.ts`). This fixed Google Search Console's "page with
+redirect" + "duplicate without canonical" (2026-10-13). The owner was told to "Richiedi indicizzazione" for /, /about/,
+/work/justcook/, /work/rehabeat/ and "Convalida correzione" in Search Console (not reachable from Claude).
+A Cloudflare MCP is connected (workers/KV/R2/D1/docs only — no DNS or redirect rules). Figma MCP is connected too.
+
+**Projects (`src/content/projects/`):**
+| File | Status |
+|---|---|
+| `01-justcook.mdx` | Live, complete (real data). labels: Product & communication design · iOS app + physical box |
+| `02-rehabeat.mdx` (ex "Rehab") | **Live** since 2026-10-12. Text real (`notes/02-rehab.md` = all facts, owner answers, verified literature). Cover = owner's light living-room mockup with the TV-2 screen (`assets/projects/rehabeat/cover.png`, `cover.bleed: true`). Result showcase: 01 TV-2 in the dark living room (`screens/tv-living-room.jpg`, rendered from the **wide Figma frame 4564:3022**), 02 app trio (home, week-2-report, week-2-data), 03 before/after sticky bar (`anchor: bottom`, captions). Ideate has a `<Reference>` tile (Euleria logo), Design has `<SystemMap />`. **Still placeholders:** Design Features rows 01, 02, 03, 05 (only 04 has `tv-workout.jpg`). **To-do (memory):** add a working-prototype section. |
+| `03-smart-home-hub.mdx` (renamed from Smart Home Ecosystem) | placeholder: true (Coming soon), invented facts; labels Product & UX design · Material Design app |
+| `04-realiti.mdx` | placeholder; labels VR experimental experience · Meta Quest (owner once wrote "Reality": the name stays **Realiti**) |
+| `05-aurawake.mdx` | placeholder; labels Gradual alarm · Mobile app |
+
+**Home:** statement "Valerio Rosponi, UX and digital product designer studying Interfaces & Communication at the University
+of Trento, based in Trentino, Italy." with the ORIGINAL per-word blur-to-focus reveal (`.w`, `word-in`). Depth texture drifts
+by itself on touch devices. Hero structure: the owner wants it "more characterful" but rejected every proposal on 2026-10-16
+(see §4) and said "lasciamola così per ora" — do not redo it unless asked. Cards: one chip per frontmatter `labels` entry;
+all hovers zoom out (bleed covers rest at 1.07 → 1). LinkedIn: https://www.linkedin.com/in/valerio-rosponi.
+
+**About** (`pages/about.astro`): hero = 12 column hairlines drawing down + statement "Useful to as many people as possible. /
+Beautiful enough to make them stay." (size exception) + B/W portrait → colour + scale 1.03 on hover. Five accordion sections,
+all closed, one open at a time: How I approach design (3 steps) · What I bring to a team (14 skills, 3 groups) · Tools I work
+with (logo tiles: Figma, Claude & Codex, Local AI tools/Ollama, Affinity & Illustrator, Unity, Meta Developer Hub, Git; SVGs in
+`src/assets/logos/`, Simple Icons CC0 except `affinity.svg` = the owner's new "a" logo as a masked SVG) · Where I am now ·
+How to reach me. No "Looking for".
+
+**Case-study template** (`pages/work/[slug].astro`): back link = 1.5px hairline arrow + "ALL WORK" label (stretches on hover);
+title, tagline, cover (no role/team line under the tagline: those live only in the Overview, owner 2026-10-16). Every page
+has OG/Twitter large images (Base `image` prop; default JustCook cover). Favicon: "VR" in Geist, `public/favicon.svg`
+(light/dark media query inside) + `favicon-light.png` / `favicon-dark.png` linked with `media`.
+
+**Components added since 2026-10-09:** `case/Reference.astro`, `case/SystemMap.astro`, Showcase layout `scene`,
+`anchor: bottom`, item `caption` (and an unused `focus`), Features items without `image` (placeholder, `device: phone|tv`;
+tv images are not cropped), Card `bleed` + `labels` chips, Base `noindex` + `image`, colour `--soon` (#a6463c) for
+"Coming soon" only.
+
+**Working with the owner (current):** he is low on Claude credits: be terse, batch edits with small node scripts, avoid
+re-reading big files, take only the screenshots you need. Italian to him, English on the site. Short visual feedback, often
+"rimetti com'era" (revert at once). For taste questions show quick `show_widget` previews, then implement only his pick.
+Commit trailer: `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` (check the system reminder for the model).
+
+**Tooling on this PC:** build with PowerShell `npx astro build`. Never delete `.astro` / `node_modules/.astro` / `.vite`
+while the dev server runs (home loses all projects until restart): stop it, then `preview_start` again (port may change,
+autoPort). Puppeteer-core + sharp live in a session scratchpad (copy `node_modules` from an older scratchpad under
+`%TEMP%/claude/C--Users-rospo-Documents-ClaudeCode-Websites-uxportfolio/<session>/scratchpad`); Chrome at
+`C:/Program Files/Google/Chrome/Application/chrome.exe`. Set `document.documentElement.style.scrollBehavior='auto'` before
+scripted scrolls (the site scrolls smoothly). Image recipes used (screen into a photo via homography + glare blend, phone
+cut-outs by flood fill, masked SVG logos) are described in the Appendix A entries. Figma file for Rehabeat:
+`xmb1334lJ54M35DwB9PFnl` (page "Redesign"); `use_figma` needs the figma-use skill first; `resize()` applies constraints
+to children (use `resizeWithoutConstraints`).
 
 ---
 
@@ -330,6 +390,14 @@ book-style TOC; as a sticky side index (same objection as the card-grid version)
 B–C) and "C · Sintesi prima" (3 big takeaways per chapter, details small below). The owner chose "B · Una colonna",
 with more breathing room.
 
+**Rejected 2026-10-12 → 16 (do not re-propose):** home statement entrances other than the blur word reveal (single
+mask wipe, word rise); "living" hero concepts (wireframe → text, spec annotations, X-ray lens, variable-weight cursor,
+rotating role); hero structures (typographic index, bento grid, statement + interface strip, floating covers depth field);
+simple hero variants (bottom poster with grey tail, section-style label + statement, name and description side by side,
+statement + footer line). About portrait colour lens following the cursor (now a simple colour fade). Rehabeat Result
+scene full-bleed 100svh with scroll zoom (back in the grid). Role/Team/Timeline line under the case-study tagline
+(removed). Zoom-in hover on photo covers (all zoom out now).
+
 **Result showcase (device presentation):**
 A dark ink background band — tried, then reverted *"era meglio prima"* (it was better before). Entrance
 choreography of any real size — first 80px rises + scale, then even a reduced 24px fade-up, both rejected down to
@@ -351,6 +419,8 @@ compared side by side with a shared row grid.
 ---
 
 ## 5. Git Status & Recent History
+
+> 2026-10-16: `main` is clean and pushed; everything in §0 is live. The snapshot below is older history.
 
 *(Snapshot taken at the time of this update — re-run `git status`/`git log` at the start of your session, don't
 trust this as current.)*
@@ -622,6 +692,11 @@ git push
 ---
 
 ## 9. Immediate Task & Roadmap
+
+> **2026-10-16 next steps:** (1) wait for the owner's next request, nothing is pending on Claude's side; (2) Rehabeat:
+> fill Design Features 01/02/03/05 with final screens from the Figma file and add the working-prototype section (ask the
+> owner for the material); (3) write case studies 03–05 with the Appendix B process (Media/ has their sources); (4) open
+> items: the CV contains the phone number; no Lighthouse/accessibility pass yet; home hero left as is.
 
 **First step, unambiguous:** run the LOCAL session-start sync from §10 right now — `git fetch origin`, check
 `git branch -r --no-merged main` for any cloud work waiting, merge it in, build, push. Only after that is the
