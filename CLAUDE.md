@@ -194,7 +194,7 @@ Status:
   Playground: same treatment in the nav (`soon: true` in data/site.ts: grey, "Soon" in place of the micro-number).
   Setting `placeholder: false` re-enables everything for a project.
 - Smart Home Hub (03) text is written from the PIG report (notes/03-smart-home-hub.md) but stays Coming soon until
-  the owner sends its interfaces. The other two MDX files (04, 05) still carry INVENTED placeholder facts (year, type, platform, role, timeline, team,
+  the owner sends its interfaces. AuraWake (05) likewise (notes/05-aurawake.md). Realiti (04) still carries INVENTED placeholder facts (year, type, platform, role, timeline, team,
   tools). Replace them with the real ones when each case study is written.
 
 ## Case-study content rules (agreed with the owner)

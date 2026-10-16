@@ -1,124 +1,149 @@
 ---
 title: 'AuraWake'
 order: 5
-tagline: 'One sentence on what AuraWake is, who it is for and the change it makes for them.'
-year: '2025'
+tagline: 'An alarm with no buttons that wakes you gradually, with light, sound, scent and daylight, at the lightest moment of your sleep.'
+year: '2024'
 type: 'Gradual alarm'
 categories: ['Mobile']
-platform: 'Mobile app'
+platform: 'Mobile app + alarm + wearable'
 labels: ['Gradual alarm', 'Mobile app']
-role: 'Product Designer'
-timeline: '6 weeks'
-team: 'Solo project'
-tools: ['Figma', 'Google AI Studio']
+role: 'Concept and interface designer'
+timeline: 'One semester, 2024'
+team: '2 design students'
+tools: ['Figma']
 tone: '#f4f4f2'
 cover:
   image: '../../assets/projects/aurawake/cover.png'
   alt: 'Two AuraWake screens side by side: the routines overview and the alarm set-up dial.'
 toneDark: false
 glance:
-  problem: 'The problem in one sentence: who struggles, with what, and why it matters.'
-  approach: 'How I tackled it: the key methods and the turning-point decision.'
-  outcome: 'What changed: results, validation or feedback, in one sentence.'
+  problem: 'People with demanding hours, from professionals to students, wake up tired: an alarm breaks their sleep at a fixed time, whatever phase they are in.'
+  approach: 'A connected system instead of a better ringtone: a wearable reads the sleep phases, and the room itself does the waking.'
+  outcome: 'A concept for an alarm with no buttons, a wearable, room devices and a phone app that sets routines and reports on sleep.'
 result:
-  text: 'What was made and what it does for people, in one or two sentences.'
+  text: 'The phone sets the routine; the wearable picks the lightest moment to wake you; light, sound, scent and the shutters do it gradually, and the alarm switches itself off once you are up.'
   media:
-    - label: 'Key screen 1'
-    - label: 'Key screen 2'
-    - label: 'Key screen 3'
-  metricsLabel: 'Results'
+    - label: 'App: your routines'
+    - label: 'App: set the alarm'
+    - label: 'App: your sleep'
+  metricsLabel: 'The system'
   metrics:
-    - value: '—'
-      label: 'Key result'
-    - value: '—'
-      label: 'Key result'
-    - value: '—'
-      label: 'Key result'
+    - value: '0'
+      label: 'Buttons on the alarm: everything is set from the phone'
+    - value: '4'
+      label: 'Gradual elements: light, sound, scent, daylight'
+    - value: '8'
+      label: 'Sleep signals read by the wearable'
 placeholder: true
 ---
 
-<Chapter title="Challenge">
+<Chapter title="Challenge" summary="Woken at the wrong moment">
 
-<Key>Todo: the problem in one sentence, as I reframed it.</Key>
+<Key>An alarm does one thing: it breaks your sleep at a fixed time, whatever state you are in.</Key>
 
-<Todo>
-  Context in two or three lines (brief, course or client, team, my role), then the reframe and one "How might we".
-</Todo>
+Designed for Human–Computer Interaction 1, a course at the University of Trento: one of my first design projects.
+
+A team of two. I led the concept and designed the app.
+
+### Who it is for
+
+People who can’t wake up rested, above all those with demanding hours: busy professionals and students.
+
+<Note label="Reframe" text="From “a more pleasant ringtone” to “a room that wakes you gradually, at the moment your sleep is lightest.”" />
 
 </Chapter>
 
-<Chapter title="Research">
+<Chapter title="Define" summary="An alarm with no buttons">
 
-<Key>Todo: what I needed to learn and where I went to learn it.</Key>
+<Key>The alarm has no buttons and no screen. Everything is set from the phone, and the wearable decides when to act.</Key>
 
-<Metrics
+### The system
+
+<Chips
+  variant="cards"
   items={[
-    { value: '—', label: 'Interviews' },
-    { value: '—', label: 'Survey responses' },
-    { value: '—', label: 'Products benchmarked' },
+    { label: 'The alarm', note: 'Speaker and microphone inside; it charges the bracelet when you lay it on top.' },
+    { label: 'The wearable', note: 'A bracelet that comes with the alarm, or the smartwatch you already own.' },
+    { label: 'The room', note: 'A smart bulb on the existing ceiling light, a scent diffuser by the bed, smart shutters.' },
+    { label: 'The app', note: 'Every setting, every routine and every sleep report lives on the phone.' },
   ]}
 />
 
-<Todo>Methods and why those, in two short paragraphs. Keep the numbers honest.</Todo>
+<Note label="Decision" text="No buttons, so nothing to fumble with half asleep: the alarm switches itself off when the wearable senses you got up.">
+
+The wearable does three jobs: it finds a light sleep phase to wake you in, it knows when you are awake, and it records how you slept.
+
+</Note>
+
+<Note label="Reference" text="Philips SmartSleep wakes you with a single lamp. AuraWake takes the same idea to the whole room, and times it to your sleep." />
 
 </Chapter>
 
-<Chapter title="Insights" tone="alt">
+<Chapter title="Design" summary="Night, morning, app">
+
+<Key>The night has two halves, and the system works on both: helping you fall asleep, then waking you slowly.</Key>
+
+### The night, step by step
 
 <Insights
+  variant="compact"
   items={[
-    { title: 'Insight one, as a finding', text: 'The evidence and what it implied, in one sentence.' },
-    { title: 'Insight two, as a finding', text: 'The evidence and what it implied, in one sentence.' },
-    { title: 'Insight three, as a finding', text: 'The evidence and what it implied, in one sentence.' },
+    { title: 'Time for bed', text: 'A notification on the phone, at the bedtime the routine has set.' },
+    { title: 'Falling asleep', text: 'Soft light, natural scents and relaxing sounds, chosen in advance.' },
+    { title: 'Waking up', text: 'In a light sleep phase, light, sound and scent rise slowly, and the shutters let the daylight in.' },
+    { title: 'Once you are up', text: 'The alarm switches itself off; the app asks a few quick questions about the night.' },
   ]}
 />
 
-</Chapter>
+### The app, section by section
 
-<Chapter title="Define">
+<Features
+  alternate
+  crop={0.72}
+  items={[
+    { title: 'Routines, not alarms', text: 'A routine sets when to sleep as well as when to wake, for chosen days. The dial shows the hours in between and says whether they are enough.', placeholder: 'App: your routines', alt: '' },
+    { title: 'A gradual wake-up, your way', text: 'Light colour, sound (from rain to birdsong), scent and shutters, set separately for falling asleep and for waking up.', placeholder: 'App: set the alarm', alt: '' },
+    { title: 'Your sleep, explained', text: 'Every morning, a report of the night: phases, awakenings, heart rate and more. Over time, the data and short questionnaires suggest changes to the routine.', placeholder: 'App: your sleep', alt: '' },
+  ]}
+/>
 
-<Key>Todo: the direction the insights pointed to.</Key>
+### The alarm speaks in light
 
-<Todo>Archetypes or personas, flows or architecture: the structure before the screens.</Todo>
+<Chips
+  intro="With no screen, a small light on the alarm tells you its state."
+  items={[
+    { label: 'Routine active', note: 'A routine is set for tonight.' },
+    { label: 'No routine', note: 'Nothing will wake you tomorrow.' },
+    { label: 'Ringing', note: 'The wake-up has started.' },
+    { label: 'Changes applied', note: 'A setting changed in the app has reached the alarm.' },
+    { label: 'The time', note: 'Shown in transparent LEDs only when you are awake, off while you sleep.' },
+  ]}
+/>
 
-</Chapter>
+### Built to last
 
-<Chapter title="Ideate">
-
-<Key>Todo: how I explored, and what I threw away.</Key>
-
-<Note label="Discarded" text="An alternative direction and why it was dropped.">
-
-<Todo>The explorations in two or three lines.</Todo>
-
-</Note>
-
-</Chapter>
-
-<Chapter title="Design">
-
-<Key>Todo: the idea that holds the design together.</Key>
-
-<Note label="Trade-off" text="A decision where I gave something up to gain something more important.">
-
-<Todo>Two or three decisions, each with its rationale, as short bold-led paragraphs.</Todo>
-
-</Note>
+No screen, a recycled aluminium body and a wooden shell. Gradual light also uses less energy than a lamp switched on at full power.
 
 </Chapter>
 
-<Chapter title="Validate">
+<Chapter title="Reflection" summary="What I’d research first">
 
-<Key>Todo: what testing proved or broke. Remove this chapter if no testing was done.</Key>
+<Key>AuraWake was strong on the system and thin on evidence: I designed the answer before checking the question.</Key>
 
-<Todo>Participants, tasks, what broke and what changed.</Todo>
+### What I learned
 
-</Chapter>
+Thinking in systems came naturally: the phone, the wearable and the room each have a clear job. What was missing was anyone who actually struggles to wake up.
 
-<Chapter title="Reflection">
+### If I started again
 
-<Key>Todo: the one lesson to take into the next project.</Key>
+1. Start from research: sleep diaries and interviews with students and people working shifts.
+2. Test the core idea on its own: does a gradual, well-timed wake-up feel better than an ordinary alarm?
+3. Weigh the cost: four devices are a lot to buy and set up for a better morning.
 
-<Todo>What I would do differently with more time or data, in two or three lines.</Todo>
+<Closing kicker="What I take with me" line="Research first, then the system.">
+
+AuraWake is an early concept, designed in Figma. **It taught me to ask who it is for before deciding what it does.**
+
+</Closing>
 
 </Chapter>
