@@ -810,8 +810,8 @@ When a CLOUD session hits something that needs the local environment, it must:
 - **2026-10-16 · LOCAL (2)** · Smart Home Hub (03) written from the PIG final report: Challenge (brief + stakeholders),
   Research (8 situations, 6 proto-personas, 16 pain points), Insights, Define (Marco vs Franco archetypes, 5 problems
   taken on, "universal remote" dropped), Ideate (solo sketches → design space), Design (4 placeholder Features rows +
-  slider / Cancel-emphasis decisions), Reflection + Closing. Speculative ideas (e-commerce shipping code, smoke defence,
-  automatic emergency call) left out on purpose. Still Coming soon. Report rendered with `render.mjs` (puppeteer +
+  slider / Cancel-emphasis decisions), Reflection + Closing. System ideas (e-commerce shipping code, automatic emergency call,
+  smoke defence) shown in Design under "Beyond the screens", as ideas, not interfaces. Still Coming soon. Report rendered with `render.mjs` (puppeteer +
   pdf.js, session scratchpad). Archetype `goal` words must be short ("Less to remember" broke mid-word). Pushed `main`.
 
 - **2026-10-13 · LOCAL (6)** · The site is the Cloudflare **Worker** `uxportfolio-main` (Workers Builds from git, static assets).

@@ -106,4 +106,4 @@ Others solved indirectly per flow (e.g. 01, 12, 13, 14, 16, 10).
 - Sep–Dec 2025, Android, Material Design 3, Figma + FigJam.
 - Define compares Marco vs Franco. Design rows: floor plan, intercom, access codes, security (+automations).
 - Stays placeholder (Coming soon) until the owner sends the interfaces. No Validate chapter.
-- Speculative ideas left out of the page: shipping code via e-commerce API, smoke defence, automatic emergency call.
+- Shipping code via e-commerce, automatic emergency call and smoke defence: shown in Design as "Beyond the screens" (system ideas, not interfaces), owner 2026-10-16.
