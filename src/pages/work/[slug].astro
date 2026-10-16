@@ -79,12 +79,6 @@ const facts = [
       <div class="grid">
         <p class="intro__tagline lead col-text" data-reveal>{tagline}</p>
       </div>
-      <!-- At a glance, for a 10-second read: the three facts a recruiter looks for first. -->
-      <dl class="intro__glance" data-reveal style="--d:1">
-        <div><dt class="field">Role</dt><dd>{role}</dd></div>
-        <div><dt class="field">Team</dt><dd>{team}</dd></div>
-        <div><dt class="field">Timeline</dt><dd>{timeline}</dd></div>
-      </dl>
     </header>
 
     <div class="wrap intro__cover" data-reveal="clip">
@@ -253,22 +247,6 @@ const facts = [
     width: 48px;
   }
 
-  .intro__glance {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2) var(--space-5);
-    margin-top: var(--space-4);
-    font-size: var(--fs-small);
-  }
-
-  .intro__glance div {
-    display: flex;
-    gap: var(--space-1);
-  }
-
-  .intro__glance dd {
-    color: var(--ink);
-  }
 
   .intro__title {
     margin-top: var(--space-5);

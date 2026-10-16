@@ -106,7 +106,7 @@ Components available in MDX without imports:
 - `<Reference logo={img} name role? text />`: a product used as a reference, as an editorial tile with its logo in
   monochrome (alpha as mask). `<SystemMap />`: Rehabeat's wiring diagram (nodes + arrows, hover lights the links).
 - Showcase `scene` stays inside the 12-col grid (full-bleed 100svh + scroll zoom was tried and reverted, 2026-10-13).
-- Case-study intro: back link = hairline arrow + label; under the tagline an at-a-glance line (Role, Team, Timeline).
+- Case-study intro: back link = hairline arrow + label (role/team/timeline live only in the Overview, owner 2026-10-16).
   Every page has an Open Graph image (Base `image` prop; case studies pass their cover, default JustCook's).
 - `<Todo>…</Todo>`: visible placeholder. Remove these as the real content arrives.
 
