@@ -40,7 +40,7 @@ A Cloudflare MCP is connected (workers/KV/R2/D1/docs only — no DNS or redirect
 |---|---|
 | `01-justcook.mdx` | Live, complete (real data). labels: Product & communication design · iOS app + physical box |
 | `02-rehabeat.mdx` (ex "Rehab") | **Live** since 2026-10-12. Text real (`notes/02-rehab.md` = all facts, owner answers, verified literature). Cover = owner's light living-room mockup with the TV-2 screen (`assets/projects/rehabeat/cover.png`, `cover.bleed: true`). Result showcase: 01 TV-2 in the dark living room (`screens/tv-living-room.jpg`, rendered from the **wide Figma frame 4564:3022**), 02 app trio (home, week-2-report, week-2-data), 03 before/after sticky bar (`anchor: bottom`, captions). Ideate has a `<Reference>` tile (Euleria logo), Design has `<SystemMap />`. **Still placeholders:** Design Features rows 01, 02, 03, 05 (only 04 has `tv-workout.jpg`). **To-do (memory):** add a working-prototype section. |
-| `03-smart-home-hub.mdx` (renamed from Smart Home Ecosystem) | placeholder: true (Coming soon), invented facts; labels Product & UX design · Material Design app |
+| `03-smart-home-hub.mdx` | **Text written** 2026-10-16 from `Media/03-Smart Home Ecosystem/REPORT FINALE PIG.pdf` (facts + owner answers in `notes/03-smart-home-hub.md`). Still `placeholder: true` (Coming soon) until the owner sends the interfaces: then fill `cover`, `result` (showcase) and the 4 Design `Features` rows (floor plan, intercom, access codes, security), and set `placeholder: false`. PIG course, Sep–Dec 2025, 3 students (all phases shared), Android MD3, proto-personas (no interviews), no Validate chapter. |
 | `04-realiti.mdx` | placeholder; labels VR experimental experience · Meta Quest (owner once wrote "Reality": the name stays **Realiti**) |
 | `05-aurawake.mdx` | placeholder; labels Gradual alarm · Mobile app |
 
@@ -695,7 +695,7 @@ git push
 
 > **2026-10-16 next steps:** (1) wait for the owner's next request, nothing is pending on Claude's side; (2) Rehabeat:
 > fill Design Features 01/02/03/05 with final screens from the Figma file and add the working-prototype section (ask the
-> owner for the material); (3) write case studies 03–05 with the Appendix B process (Media/ has their sources); (4) open
+> owner for the material); (3) 03 text done, waiting for its interfaces; write case studies 04–05 with the Appendix B process (Media/ has their sources); (4) open
 > items: the CV contains the phone number; no Lighthouse/accessibility pass yet; home hero left as is.
 
 **First step, unambiguous:** run the LOCAL session-start sync from §10 right now — `git fetch origin`, check
@@ -806,6 +806,13 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-16 · LOCAL (2)** · Smart Home Hub (03) written from the PIG final report: Challenge (brief + stakeholders),
+  Research (8 situations, 6 proto-personas, 16 pain points), Insights, Define (Marco vs Franco archetypes, 5 problems
+  taken on, "universal remote" dropped), Ideate (solo sketches → design space), Design (4 placeholder Features rows +
+  slider / Cancel-emphasis decisions), Reflection + Closing. Speculative ideas (e-commerce shipping code, smoke defence,
+  automatic emergency call) left out on purpose. Still Coming soon. Report rendered with `render.mjs` (puppeteer +
+  pdf.js, session scratchpad). Archetype `goal` words must be short ("Less to remember" broke mid-word). Pushed `main`.
 
 - **2026-10-13 · LOCAL (6)** · The site is the Cloudflare **Worker** `uxportfolio-main` (Workers Builds from git, static assets).
   Added `wrangler.jsonc` + `worker/index.js`: worker runs first and 301-redirects http:// and valeriorosponi.com to

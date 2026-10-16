@@ -1,121 +1,257 @@
 ---
 title: 'Smart Home Hub'
 order: 3
-tagline: 'One sentence on what Smart Home Hub is, who it is for and the change it makes for them.'
+tagline: 'An Android app that brings every device of a smart home into one place, designed to settle doubts rather than add controls.'
 year: '2025'
 type: 'Product & UX design'
 categories: ['Mobile', 'Product']
-platform: 'Material Design app'
+platform: 'Android app · Material Design 3'
 labels: ['Product & UX design', 'Material Design app']
-role: 'Interaction Designer'
-timeline: '8 weeks'
-team: '3 designers'
+role: 'End-to-end UX designer'
+timeline: 'Sep – Dec 2025'
+team: '3 design students'
 tools: ['Figma', 'FigJam']
 tone: '#afb7bf'
 toneDark: false
 glance:
-  problem: 'The problem in one sentence: who struggles, with what, and why it matters.'
-  approach: 'How I tackled it: the key methods and the turning-point decision.'
-  outcome: 'What changed: results, validation or feedback, in one sentence.'
+  problem: 'A smart home promises comfort but often adds worry: what is still on, who is at the door, whom to trust with a key.'
+  approach: 'Domain models, six proto-personas and 16 pain points, then sketches made alone and merged around the five problems that mattered most.'
+  outcome: 'An Android app in Material Design 3: the house on a floor plan, the intercom in your pocket, personal access codes and an alarm that prevents mistakes.'
 result:
-  text: 'What was made and what it does for people, in one or two sentences.'
+  text: 'One app shows the state of the whole house at a glance, answers the door from anywhere and hands out access one person at a time, with every risky action made hard to trigger by accident.'
   media:
-    - label: 'Key screen 1'
-    - label: 'Key screen 2'
-    - label: 'Key screen 3'
-  metricsLabel: 'Results'
+    - label: 'App: floor plan and devices'
+    - label: 'App: intercom panel'
+    - label: 'App: access codes'
+  metricsLabel: 'The project'
   metrics:
-    - value: '—'
-      label: 'Key result'
-    - value: '—'
-      label: 'Key result'
-    - value: '—'
-      label: 'Key result'
+    - value: '16'
+      label: 'Pain points mapped across six personas'
+    - value: '5'
+      label: 'Pain points taken into the app'
+    - value: '5'
+      label: 'App sections: home, security, access, automations, history'
 placeholder: true
 ---
 
-<Chapter title="Challenge">
+<Chapter title="Challenge" summary="Comfort that brings worry">
 
-<Key>Todo: the problem in one sentence, as I reframed it.</Key>
+<Key>A smart home is meant to bring peace of mind. Often it brings new doubts: is the oven off, who rang, who still has a key.</Key>
 
-<Todo>
-  Context in two or three lines (brief, course or client, team, my role), then the reframe and one "How might we".
-</Todo>
+The brief, for a graphical interface design course at the University of Trento: design the software for a company that builds and installs home automation hardware.
+
+A team of three over one semester. We shared every phase equally, from domain modelling to the Figma prototype.
+
+### The brief
+
+<Note label="Constraint" text="The app manages devices already installed. Selling, installing and servicing hardware stay with the partner company.">
+
+The partner’s goal: one app for every device in the house, so its customers feel in control and come back for more devices.
+
+</Note>
+
+### Who it touches
+
+<Chips
+  intro="A home is shared, so the app affects more people than the one holding the phone."
+  items={[
+    { label: 'Household', note: 'Parents and adult children: they use the app every day.' },
+    { label: 'Delegates', note: 'Babysitters, carers, cleaners: they need limited, controlled access.' },
+    { label: 'Young children', note: 'They don’t use the app, but live with every rule it sets.' },
+    { label: 'Couriers and guests', note: 'Their experience at the door depends on how the owners use the app.' },
+    { label: 'Technicians', note: 'Their maintenance decides whether the system feels reliable.' },
+    { label: 'Partner company', note: 'A good app raises the value of its hardware; a bad one damages it.' },
+  ]}
+/>
 
 </Chapter>
 
-<Chapter title="Research">
+<Chapter title="Research" summary="Models, personas, pain points">
 
-<Key>Todo: what I needed to learn and where I went to learn it.</Key>
+<Key>Before any screen, we modelled the home: what happens in it, where people touch the system, and where it lets them down.</Key>
 
 <Metrics
   items={[
-    { value: '—', label: 'Interviews' },
-    { value: '—', label: 'Survey responses' },
-    { value: '—', label: 'Products benchmarked' },
+    { value: '8', label: 'Everyday situations modelled', text: 'From leaving the house to a break-in or a fire.' },
+    { value: '6', label: 'Proto-personas', text: 'Four household members, two people outside it.' },
+    { value: '16', label: 'Pain points', text: 'Each one mapped against the personas it affects.' },
   ]}
 />
 
-<Todo>Methods and why those, in two short paragraphs. Keep the numbers honest.</Todo>
+### Methods
+
+<Chips
+  variant="cards"
+  items={[
+    { label: 'Domain and artifact models', note: 'The devices, keys, codes and objects a home runs on, and who uses them.' },
+    { label: 'Sequence and flow models', note: 'Eight situations step by step, from opening the door to guests to a fire.' },
+    { label: 'Physical model', note: 'Where things happen in the house, and how far people are from them.' },
+    { label: 'Proto-personas and pain points', note: 'Six people built from the models, and a matrix of who suffers which problem.' },
+  ]}
+/>
+
+<Note label="Decision" text="We added touchpoints to the sequence models, borrowing them from service design: in a smart home, the moments where people meet the technology are the experience.">
+
+The personas are proto-personas: built by the team from the domain analysis, not from interviews.
+
+</Note>
 
 </Chapter>
 
-<Chapter title="Insights" tone="alt">
+<Chapter title="Insights" summary="Doubt, the door, fear of mistakes" tone="alt">
+
+<Key>The technology was creating anxiety, not only comfort.</Key>
 
 <Insights
   items={[
-    { title: 'Insight one, as a finding', text: 'The evidence and what it implied, in one sentence.' },
-    { title: 'Insight two, as a finding', text: 'The evidence and what it implied, in one sentence.' },
-    { title: 'Insight three, as a finding', text: 'The evidence and what it implied, in one sentence.' },
+    {
+      title: 'Nobody knows the state of the house',
+      text: 'Did I turn off the light, close the window, arm the alarm? Scattered devices raise the mental load instead of lowering it.',
+      stat: '4/6',
+      statLabel: 'Personas unsure what they left on or open',
+    },
+    {
+      title: 'The door is the weak point',
+      text: 'Missed intercom calls, keys handed to a babysitter, codes shared with anyone. Access needs to reach the owner anywhere, and to be personal and temporary.',
+      stat: '5/6',
+      statLabel: 'Personas who miss the intercom',
+    },
+    {
+      title: 'The fear of pressing the wrong button',
+      text: 'For older or less confident people, today’s controls feel hostile. The fear of a mistake leaves installed hardware unused.',
+    },
   ]}
 />
 
 </Chapter>
 
-<Chapter title="Define">
+<Chapter title="Define" summary="Two personas, five problems">
 
-<Key>Todo: the direction the insights pointed to.</Key>
+<Key>We dropped the universal remote. People needed a hub that tells them the house is fine, and lets them act when it isn’t.</Key>
 
-<Todo>Archetypes or personas, flows or architecture: the structure before the screens.</Todo>
+<Note label="Reframe" text="From “one remote for every device” to “one place that shows the house is safe, and makes acting on it safe too.”" />
+
+### Two ends of the problem
+
+<Archetypes
+  items={[
+    {
+      name: 'Marco',
+      alias: 'Always in a rush',
+      goal: 'Fewer doubts',
+      quote: 'I want a house that runs itself.',
+      traits: [
+        { label: 'Friction', text: 'Leaves in a hurry, then wonders whether the gas, the door or the alarm is on.' },
+        { label: 'Needs', text: 'To check everything at a glance, and to be told when something was left behind.' },
+        { label: 'Opportunity', text: 'One overview of the house, and a notification when he leaves with something on.' },
+      ],
+    },
+    {
+      name: 'Franco',
+      alias: 'Independent, living alone',
+      goal: 'Less fear',
+      quote: 'I want to stay independent, without handing my keys to anyone.',
+      traits: [
+        { label: 'Friction', text: 'Slow to reach the door or the intercom, and wary of leaving keys or codes to his carer.' },
+        { label: 'Needs', text: 'To let people in from where he sits, and to know who comes in and when.' },
+        { label: 'Opportunity', text: 'Answer the door from the phone; give each person a code of their own.' },
+      ],
+    },
+  ]}
+/>
+
+### The five problems we took on
+
+<Insights
+  variant="compact"
+  items={[
+    { title: 'Did I leave something on?', text: 'Lights, heaters, ovens, windows: the most common doubt, shared by four personas.' },
+    { title: 'Did I arm the alarm?', text: 'Forgotten in a hurry on the way out, or still armed on the way back in.' },
+    { title: 'Someone is at the door', text: 'Out of the house, or home but out of earshot: two problems with the same answer, so we merged them.' },
+    { title: 'I don’t trust handing over a key', text: 'Babysitters, cleaners, carers: shared keys and codes can’t be traced or taken back.' },
+    { title: 'I feel unsafe home alone', text: 'A noise at night, and no quick way to see what is happening.' },
+  ]}
+/>
+
+<Note label="Decision" text="Of the 16 pain points, we chose by impact and by how many personas share them. Several others ended up solved along the way, like forgotten keys and forgotten codes." />
 
 </Chapter>
 
-<Chapter title="Ideate">
+<Chapter title="Ideate" summary="Sketch alone, merge together">
 
-<Key>Todo: how I explored, and what I threw away.</Key>
+<Key>Each of us sketched alone first, so the ideas could diverge before we merged them.</Key>
 
-<Note label="Discarded" text="An alternative direction and why it was dropped.">
+Concepts were drawn by hand, on paper, one pain point and one persona at a time.
 
-<Todo>The explorations in two or three lines.</Todo>
+We then laid them out in a shared design space, grouped by pain point, and checked that no idea worked against another persona.
+
+<Note label="Method" text="For each pain point we kept the smallest set of elements that solves it; everything else became secondary. Features were ranked, not piled up." />
+
+### Checked against the models
+
+Once the flows existed in Figma, we ran them against the original sequence models: wherever the app replaced a touchpoint, the experience had to get shorter.
+
+At the door, for example, answering the call opens a control panel on the phone, instead of a walk to the intercom.
+
+</Chapter>
+
+<Chapter title="Design" summary="Plan, door, codes, alarm">
+
+<Key>One rule across the app: show the state of the house first, and make every risky action hard to trigger by accident.</Key>
+
+### The structure
+
+Five sections, always one tap away in the navigation: home, security, access, automations, history. Each room keeps its own colour everywhere, on the floor plan and on the device cards.
+
+### The app, section by section
+
+<Features
+  alternate
+  crop={0.72}
+  items={[
+    { title: 'The house on a floor plan', text: 'Devices sit where they are in the house. Those that are on light up; tapping a room narrows the list to what is in it.', placeholder: 'App: floor plan and devices', alt: '' },
+    { title: 'The intercom in your pocket', text: 'At home the intercom rings as a notification, away as a phone call. The panel shows the camera, which bell was rung, and opens the gate or the door.', placeholder: 'App: intercom panel', alt: '' },
+    { title: 'A code for every person', text: 'Each code belongs to one person, with the doors, days and hours it is valid for. Temporary codes expire after one use or a set time, and every use is notified.', placeholder: 'App: access codes', alt: '' },
+    { title: 'An alarm that prevents mistakes', text: 'One button arms everything, but not with a window open: a message says which one to close. Routines can arm the house at night on their own.', placeholder: 'App: security', alt: '' },
+  ]}
+/>
+
+### Safety first
+
+<Note label="Trade-off" text="Material Design doesn’t intend the slider for confirming actions. We used it anyway: a deliberate, continuous gesture that can’t fire by accident, with no dialog covering the live video.">
+
+**Opening the gate takes a slide, not a tap.** The action lets someone into the house, so it asks for a gesture nobody makes by mistake.
+
+</Note>
+
+<Note label="Decision" text="Pressing Cancel by mistake costs nothing. Setting off, or switching off, the alarm in a hurry does.">
+
+**Arming and disarming ask for confirmation, and Cancel gets the emphasis.** The safe answer is the easy one to hit.
 
 </Note>
 
 </Chapter>
 
-<Chapter title="Design">
+<Chapter title="Reflection" summary="What I’d test next">
 
-<Key>Todo: the idea that holds the design together.</Key>
+<Key>A smart home earns trust by showing its state, not by adding more controls.</Key>
 
-<Note label="Trade-off" text="A decision where I gave something up to gain something more important.">
+### What I learned
 
-<Todo>Two or three decisions, each with its rationale, as short bold-led paragraphs.</Todo>
+The most useful feature turned out to be the least technical: a clear answer to “is everything all right at home?”
 
-</Note>
+Designing for delegates, couriers and children taught me that a home app has users who never open it.
 
-</Chapter>
+### If I started again
 
-<Chapter title="Validate">
+1. Interview real households, including an older person and a babysitter, before building the personas.
+2. Test the riskiest flows with people: opening the gate from afar, arming the alarm with a window open.
+3. Take on the problems left out, starting with calling for help in an emergency.
 
-<Key>Todo: what testing proved or broke. Remove this chapter if no testing was done.</Key>
+<Closing kicker="What I take with me" line="Calm is a feature: design the state before the controls.">
 
-<Todo>Participants, tasks, what broke and what changed.</Todo>
+Smart Home Hub is a concept, prototyped in Figma. **Its next step is a test in a real home, with the people who share it.**
 
-</Chapter>
-
-<Chapter title="Reflection">
-
-<Key>Todo: the one lesson to take into the next project.</Key>
-
-<Todo>What I would do differently with more time or data, in two or three lines.</Todo>
+</Closing>
 
 </Chapter>
