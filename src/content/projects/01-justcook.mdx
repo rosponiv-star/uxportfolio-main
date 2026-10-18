@@ -33,11 +33,11 @@ result:
           alt: 'Focus mode: step four of six, full-screen video with the timer and the next step.'
         - image: '../../assets/projects/justcook/screens/home-streak.png'
           alt: 'Streak: four days in a row and the points earned.'
-    - label: 'The nudge'
+    - label: 'In hand'
       layout: scene
       items:
-        - image: '../../assets/projects/justcook/mockup-table.jpg'
-          alt: 'A phone on a wooden table, lock screen at 19:45: Time to start cooking, dinner on the table at 20:00.'
+        - image: '../../assets/projects/justcook/mockup-hands.jpg'
+          alt: 'Two hands holding a phone with JustCook’s Today screen: start cooking at 19:45, tonight’s box and the recipe card.'
     - label: 'From box to stamp'
       layout: trio
       stagger: true
@@ -57,11 +57,13 @@ result:
         - image: '../../assets/projects/justcook/screens/live-activity-expanded.png'
           alt: 'Live Activity expanded: current step, time left, next step and a shortcut to the recipe.'
     - label: 'Widgets'
-      layout: trio
+      layout: quad
       crop: 0.5
       items:
         - image: '../../assets/projects/justcook/screens/widget-small.png'
           alt: 'Small Home Screen widget with the cooking streak.'
+        - image: '../../assets/projects/justcook/screens/widget-small-ending.png'
+          alt: 'Small widget: the streak ends in five hours, cook tonight to keep it alive.'
         - image: '../../assets/projects/justcook/screens/widget-medium.png'
           alt: 'Medium widget: tonight’s box and the time to start cooking.'
         - image: '../../assets/projects/justcook/screens/widget-large.png'
@@ -112,13 +114,13 @@ import plan from '../../assets/projects/justcook/screens/plan.png';
 import widgetMedium from '../../assets/projects/justcook/screens/widget-medium.png';
 import focusMode from '../../assets/projects/justcook/screens/focus-mode.png';
 import homeStreak from '../../assets/projects/justcook/screens/home-streak.png';
-import handsMockup from '../../assets/projects/justcook/mockup-hands.png';
+import tableMockup from '../../assets/projects/justcook/mockup-table.jpg';
 import changeBox from '../../assets/projects/justcook/screens/home-change-box.png';
 import lidCodeUsed from '../../assets/projects/justcook/screens/lid-code-used.png';
 import mealStamp from '../../assets/projects/justcook/screens/meal-stamp.png';
 import notifReady from '../../assets/projects/justcook/screens/notif-boxes-ready-crop.png';
 import notifToday from '../../assets/projects/justcook/screens/notif-use-today-crop.png';
-import widgetSmallEnding from '../../assets/projects/justcook/screens/widget-small-ending-crop.png';
+import widgetSmallEnding from '../../assets/projects/justcook/screens/widget-small-ending.png';
 import postA from '../../assets/projects/justcook/brand/post-box-a.jpg';
 import postB from '../../assets/projects/justcook/brand/post-box-b.jpg';
 import postC from '../../assets/projects/justcook/brand/post-box-c.jpg';
@@ -343,7 +345,7 @@ Each feature removes a decision, or an excuse, from the student’s evening.
 
 </Note>
 
-<Figure src={handsMockup} alt='Two hands holding a phone with JustCook’s Today screen: start cooking at 19:45, tonight’s box and the recipe card.' ratio='1600/1128' bg='transparent' size='text' />
+<Figure src={tableMockup} alt='A phone on a wooden table, lock screen at 19:45: Time to start cooking, dinner on the table at 20:00.' ratio='1896/1066' />
 
 <Features
   alternate
@@ -356,7 +358,7 @@ Each feature removes a decision, or an excuse, from the student’s evening.
     { title: 'Focus mode', text: 'Recipes play as a vertical, step-by-step video feed, a pattern students already know.', image: focusMode, alt: 'Focus mode: step four of six with a timer.' },
     { title: 'Hold to stamp', text: 'Once dinner is done, a long press on today stamps the meal and keeps the streak alive. Holding, not tapping, makes it a deliberate act.', image: mealStamp, alt: 'Hold today to stamp it: the week with today ready to be stamped.' },
     { title: 'Streaks with friends', text: 'A weekly score with flatmates rewards showing up, not what is on the plate.', image: homeStreak, alt: 'Streak: four days in a row and the points earned.' },
-    { title: 'Before the streak ends', text: 'Hours before a streak breaks, the widget says how long is left and what to do about it.', image: widgetSmallEnding, crop: 0.72, alt: 'Small widget: the streak ends in five hours, cook tonight to keep it alive.' },
+    { title: 'Before the streak ends', text: 'Hours before a streak breaks, the widget says how long is left and what to do about it.', image: widgetSmallEnding, crop: 0.36, alt: 'Small widget: the streak ends in five hours, cook tonight to keep it alive.' },
     { title: 'Ready to collect', text: 'When the boxes are ready, a notification says where and until when.', image: notifReady, crop: 0.7, anchor: 'bottom', alt: 'Lock screen notification: your boxes are ready at Conad, collect until 18:00.' },
     { title: 'Use it before it goes', text: 'The pantry knows what expires first, and points to the recipes that use it the same day.', image: notifToday, crop: 0.7, anchor: 'bottom', alt: 'Lock screen notification: spinach expires today, three recipes can use it.' },
   ]}
