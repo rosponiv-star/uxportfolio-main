@@ -23,6 +23,7 @@ import Reframes from '../../components/case/Reframes.astro';
 import Archetypes from '../../components/case/Archetypes.astro';
 import Reference from '../../components/case/Reference.astro';
 import SystemMap from '../../components/case/SystemMap.astro';
+import Spot from '../../components/case/Spot.astro';
 import { chaptersOf, getProjects, hrefOf, slugOf, type Project } from '../../lib/projects';
 
 export async function getStaticPaths() {
@@ -162,7 +163,7 @@ const facts = [
 
       <!-- Chapters (from MDX) ---------------------------------------------- -->
       <div class="chapters">
-        <Content components={{ Chapter, Key, Chips, BigStat, Features, Gallery, Closing, BoxStrip, Todo, Figure, Note, Metrics, Insights, Reframes, Archetypes, Reference, SystemMap }} />
+        <Content components={{ Chapter, Key, Chips, BigStat, Features, Gallery, Closing, BoxStrip, Todo, Figure, Note, Metrics, Insights, Reframes, Archetypes, Reference, SystemMap, Spot }} />
       </div>
 
     </div>

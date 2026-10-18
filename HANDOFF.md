@@ -807,6 +807,15 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-19 · LOCAL** · JustCook hand mockups (owner photos, `assets/projects/justcook/mockups/hand-*.jpg`): screens
+  exported 3× without bezel from Figma, warped by homography, fingers kept on top via a skin mask, Dynamic Island
+  restored or painted. Result opens with a new Showcase layout `duo` (Home + Plan in hand). Design: new `case/Spot.astro`
+  (photo on B–C, framing text on A, baseline hairline) for "One code per box" and the 19:45 notification; "The stamp"
+  group with the finger mockup as a wide Figure + a Principle note. Stamp copy rewritten after the owner: the long
+  press is emotional (doing it yourself = pride and completion, from his `1percent-design-guidelines.md` §8: participation
+  over spectatorship, retention ask inside the peak), not a safety lock. Features rows for code/stamp removed; table
+  and old hands mockups deleted. Outside the app groups relabelled by time of day. Pushed `main`.
+
 - **2026-10-18 · LOCAL (6)** · JustCook Design "Outside the app" back, as a day narrative: intro line, the table mockup,
   then a Gallery (cutout, cols 3) in four moments: Morning (08:30 use it today, 09:00 boxes ready, large widget) ·
   During the day (3 streak widgets) · Before dinner (medium widget, 19:45 notification) · While cooking (Live Activity

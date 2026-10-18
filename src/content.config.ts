@@ -64,7 +64,7 @@ const projects = defineCollection({
             .array(
               z.object({
                 label: z.string(),
-                layout: z.enum(['trio', 'pair', 'quad', 'scene']),
+                layout: z.enum(['trio', 'pair', 'quad', 'scene', 'duo']),
                 crop: z.number().min(0.1).max(1).optional(),
                 anchor: z.enum(['top', 'bottom']).default('top'),
                 stagger: z.boolean().default(false),
