@@ -33,6 +33,11 @@ result:
           alt: 'Focus mode: step four of six, full-screen video with the timer and the next step.'
         - image: '../../assets/projects/justcook/screens/home-streak.png'
           alt: 'Streak: four days in a row and the points earned.'
+    - label: 'The nudge'
+      layout: scene
+      items:
+        - image: '../../assets/projects/justcook/mockup-table.jpg'
+          alt: 'A phone on a wooden table, lock screen at 19:45: Time to start cooking, dinner on the table at 20:00.'
     - label: 'From box to stamp'
       layout: trio
       stagger: true
@@ -107,13 +112,12 @@ import plan from '../../assets/projects/justcook/screens/plan.png';
 import widgetMedium from '../../assets/projects/justcook/screens/widget-medium.png';
 import focusMode from '../../assets/projects/justcook/screens/focus-mode.png';
 import homeStreak from '../../assets/projects/justcook/screens/home-streak.png';
+import handsMockup from '../../assets/projects/justcook/mockup-hands.png';
 import changeBox from '../../assets/projects/justcook/screens/home-change-box.png';
 import lidCodeUsed from '../../assets/projects/justcook/screens/lid-code-used.png';
 import mealStamp from '../../assets/projects/justcook/screens/meal-stamp.png';
-import notifStart from '../../assets/projects/justcook/screens/notif-start-cooking-crop.png';
 import notifReady from '../../assets/projects/justcook/screens/notif-boxes-ready-crop.png';
 import notifToday from '../../assets/projects/justcook/screens/notif-use-today-crop.png';
-import widgetMediumStreak from '../../assets/projects/justcook/screens/widget-medium-streak-crop.png';
 import widgetSmallEnding from '../../assets/projects/justcook/screens/widget-small-ending-crop.png';
 import postA from '../../assets/projects/justcook/brand/post-box-a.jpg';
 import postB from '../../assets/projects/justcook/brand/post-box-b.jpg';
@@ -339,44 +343,22 @@ Each feature removes a decision, or an excuse, from the student’s evening.
 
 </Note>
 
+<Figure src={handsMockup} alt='Two hands holding a phone with JustCook’s Today screen: start cooking at 19:45, tonight’s box and the recipe card.' ratio='1600/1128' bg='transparent' size='text' />
+
 <Features
   alternate
-  crop={0.72}
+  crop={0.82}
   items={[
     { title: 'Adaptive planning', text: 'Boxes go on the days students will actually cook; the app says whether the week is covered.', image: plan, alt: 'Plan screen: the week with a box on each dinner.' },
     { title: 'Swap tonight’s box', text: 'Plans change. Any box already in the pantry can take tonight’s place, and the rest of the week rebalances around it.', image: changeBox, alt: 'Change tonight’s box: the boxes in the pantry, with Box A picked to replace Box D.' },
-    { title: 'A timely nudge', text: 'Reminders are timed backwards from the recipe’s duration and dinner time, before a delivery app wins.', image: widgetMedium, alt: 'Home Screen widget: start cooking in 45 minutes.' },
+    { title: 'A timely nudge', text: 'Reminders are timed backwards from the recipe’s duration and dinner time, before a delivery app wins.', image: widgetMedium, crop: 0.32, alt: 'Home Screen widget: start cooking in 45 minutes.' },
     { title: 'One code per box', text: 'Recipes are open to browse at any time. To cook one, students enter the unique code inside the box, so every point comes from a box really used; a code works only once.', image: lidCodeUsed, alt: 'Code already used: the lid code is refused, with the date it was used.' },
     { title: 'Focus mode', text: 'Recipes play as a vertical, step-by-step video feed, a pattern students already know.', image: focusMode, alt: 'Focus mode: step four of six with a timer.' },
     { title: 'Hold to stamp', text: 'Once dinner is done, a long press on today stamps the meal and keeps the streak alive. Holding, not tapping, makes it a deliberate act.', image: mealStamp, alt: 'Hold today to stamp it: the week with today ready to be stamped.' },
     { title: 'Streaks with friends', text: 'A weekly score with flatmates rewards showing up, not what is on the plate.', image: homeStreak, alt: 'Streak: four days in a row and the points earned.' },
-  ]}
-/>
-
-### Outside the app
-
-The app reaches students where they already look: the lock screen and the Home Screen.
-
-<Gallery
-  groups={[
-    {
-      label: 'Notifications',
-      kind: 'cutout',
-      items: [
-        { image: notifStart, alt: 'Lock screen notification: time to start cooking, dinner on the table at 20:00.', caption: 'Time to start cooking' },
-        { image: notifReady, alt: 'Lock screen notification: your boxes are ready at Conad, collect until 18:00.', caption: 'Boxes ready to collect' },
-        { image: notifToday, alt: 'Lock screen notification: spinach expires today, three recipes can use it.', caption: 'Use it today' },
-      ],
-    },
-    {
-      label: 'Streak widgets',
-      kind: 'cutout',
-      cols: 3,
-      items: [
-        { image: widgetMediumStreak, alt: 'Medium widget: a four-day streak, cook tomorrow to reach five.', caption: 'The streak' },
-        { image: widgetSmallEnding, alt: 'Small widget: the streak ends in five hours, cook tonight to keep it alive.', caption: 'Before it ends' },
-      ],
-    },
+    { title: 'Before the streak ends', text: 'Hours before a streak breaks, the widget says how long is left and what to do about it.', image: widgetSmallEnding, crop: 0.72, alt: 'Small widget: the streak ends in five hours, cook tonight to keep it alive.' },
+    { title: 'Ready to collect', text: 'When the boxes are ready, a notification says where and until when.', image: notifReady, crop: 0.7, anchor: 'bottom', alt: 'Lock screen notification: your boxes are ready at Conad, collect until 18:00.' },
+    { title: 'Use it before it goes', text: 'The pantry knows what expires first, and points to the recipes that use it the same day.', image: notifToday, crop: 0.7, anchor: 'bottom', alt: 'Lock screen notification: spinach expires today, three recipes can use it.' },
   ]}
 />
 

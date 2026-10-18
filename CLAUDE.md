@@ -79,7 +79,8 @@ Components available in MDX without imports:
   display size (plain = grey, **bold** = ink), then a hairline, the kicker and, below it, the one lesson to remember in h2.
 - `<BoxStrip items={[{ name, role, color, image, hover?, alt }]} />`: a product line as solid colour panels (one per
   product, its own colour), the product cut-out large inside; hover cross-fades to a second view (front ↔ perspective).
-- `<Features … alternate crop={0.72} />`: bigger devices that switch side row by row.
+- `<Features … alternate crop={0.82} />`: bigger devices that switch side row by row; items may override `crop` and take
+  `anchor: 'bottom'` (widgets need ~0.3, lock-screen notifications show the bottom share).
 - Gallery items may take `span: 2` (a 2×2 hero tile; the grid packs densely around it).
 - `<BigStat value label source? />`: the one number a chapter hinges on, mega size on an ink rule, caption + source
   right below it.

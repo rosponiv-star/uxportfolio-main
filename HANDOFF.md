@@ -807,6 +807,13 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-18 · LOCAL (3)** · JustCook mockups (owner-supplied photos): `mockup-table.jpg` = Result scene "The nudge"
+  (start-cooking lock screen warped into the table photo, Dynamic Island pasted back, 16:9 crop; the only mockup in
+  Result). `mockup-hands.png` = hands photo with the Today screen, background cut by flood fill, edges faded, shown as a
+  `size=text` Figure under the Design "The app" note. Features now take per-item `crop` and `anchor: bottom`: global
+  0.82, widget rows 0.32/0.72-of-half, notification rows bottom 0.7 of the 40% crops. "Outside the app" Gallery removed
+  (its items became Features rows 08–10). Figma clones removed. Pushed `main`.
+
 - **2026-10-18 · LOCAL (2)** · JustCook Result "From box to stamp" → trio: lid code (re-exported: now with the keyboard),
   hold to stamp, Thursday stamped (re-exported, owner edit). Dropped code accepted + dinner served (files deleted).
   All 23 original screens had already been replaced from Redesign v3 in the previous entry. Pushed `main`.

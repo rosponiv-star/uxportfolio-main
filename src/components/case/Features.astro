@@ -1,7 +1,9 @@
 ---
 // Product features with the screen that delivers each one. Each row: the device, cropped to its top part and
 // standing on a hairline, in track A; number, title and text in tracks B–C. Rows are separated by hairlines.
-// items: [{ title, text, image, alt }]; crop = share of the device height shown (default 0.55).
+// items: [{ title, text, image, alt, crop?, anchor? }]; crop = share of the device height shown (default 0.55);
+// an item can override it (a widget needs only the top third) and take anchor 'bottom' to show the bottom share
+// instead (a lock-screen notification), with the cut at the top.
 // alternate: the device switches side row by row (track A, then track C), for rhythm.
 // Without `image` the row shows a placeholder frame (`placeholder` says what belongs there; `device`
 // sets its shape: a phone, cropped like the real shots, or a 16:9 TV) until the real screen arrives.
@@ -17,6 +19,8 @@ interface Props {
     alt: string;
     placeholder?: string;
     device?: 'phone' | 'tv';
+    crop?: number;
+    anchor?: 'top' | 'bottom';
   }[];
   crop?: number;
   alternate?: boolean;
@@ -31,7 +35,7 @@ const phRatio = (device?: 'phone' | 'tv') => (device === 'tv' ? '16/9' : `9/${Ma
     items.map((it, i) => (
       <li class="feature trio" data-reveal style={`--d: ${i}`}>
         {it.image ? (
-          <div class="feature__shot" style={`aspect-ratio: ${it.image.width} / ${Math.round(it.image.height * (it.device === 'tv' ? 1 : crop))}`}>
+          <div class:list={['feature__shot', { 'feature__shot--bottom': it.anchor === 'bottom' }]} style={`aspect-ratio: ${it.image.width} / ${Math.round(it.image.height * (it.device === 'tv' ? 1 : (it.crop ?? crop)))}`}>
             <Image src={it.image} alt={it.alt} widths={[320, 480, 640]} sizes="(min-width: 960px) 22vw, 60vw" />
           </div>
         ) : (
@@ -74,6 +78,13 @@ const phRatio = (device?: 'phone' | 'tv') => (device === 'tv' ? '16/9' : `9/${Ma
     display: block;
     width: 100%;
     height: auto;
+  }
+
+  /* Bottom share: the image sits on the bottom edge and overflows upwards. */
+  .feature__shot--bottom {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
   }
 
   /* Placeholder frames have their own ratio; let them size the cell. */
