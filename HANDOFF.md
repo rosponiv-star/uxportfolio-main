@@ -807,6 +807,12 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-18 · LOCAL (6)** · JustCook Design "Outside the app" back, as a day narrative: intro line, the table mockup,
+  then a Gallery (cutout, cols 3) in four moments: Morning (08:30 use it today, 09:00 boxes ready, large widget) ·
+  During the day (3 streak widgets) · Before dinner (medium widget, 19:45 notification) · While cooking (Live Activity
+  compact + expanded). All pieces are `screens/out-*.png`, one uniform 0.53 crop (notifications from the bottom, the
+  rest from the top). Features rows 08–10 removed (now in the narrative). Pushed `main`.
+
 - **2026-10-18 · LOCAL (5)** · JustCook Result: the one mockup is now the hands photo (`mockup-hands.jpg`, full photo with
   its grey ground, no fades) as scene "In hand"; the table mockup moved to the end of the Design app rows (wide Figure).
   Widgets group → quad (small, small ending, medium, large). Meal stamped re-exported (owner edit). Widget small ending

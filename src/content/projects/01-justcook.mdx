@@ -114,13 +114,20 @@ import plan from '../../assets/projects/justcook/screens/plan.png';
 import widgetMedium from '../../assets/projects/justcook/screens/widget-medium.png';
 import focusMode from '../../assets/projects/justcook/screens/focus-mode.png';
 import homeStreak from '../../assets/projects/justcook/screens/home-streak.png';
+import oToday from '../../assets/projects/justcook/screens/out-notif-use-today.png';
+import oReady from '../../assets/projects/justcook/screens/out-notif-boxes-ready.png';
+import oStart from '../../assets/projects/justcook/screens/out-notif-start-cooking.png';
+import oLarge from '../../assets/projects/justcook/screens/out-widget-large.png';
+import oSmall from '../../assets/projects/justcook/screens/out-widget-small.png';
+import oMedStreak from '../../assets/projects/justcook/screens/out-widget-medium-streak.png';
+import oEnding from '../../assets/projects/justcook/screens/out-widget-small-ending.png';
+import oMedium from '../../assets/projects/justcook/screens/out-widget-medium.png';
+import oLaC from '../../assets/projects/justcook/screens/out-live-activity-compact.png';
+import oLaE from '../../assets/projects/justcook/screens/out-live-activity-expanded.png';
 import tableMockup from '../../assets/projects/justcook/mockup-table.jpg';
 import changeBox from '../../assets/projects/justcook/screens/home-change-box.png';
 import lidCodeUsed from '../../assets/projects/justcook/screens/lid-code-used.png';
 import mealStamp from '../../assets/projects/justcook/screens/meal-stamp.png';
-import notifReady from '../../assets/projects/justcook/screens/notif-boxes-ready-crop.png';
-import notifToday from '../../assets/projects/justcook/screens/notif-use-today-crop.png';
-import widgetSmallEnding from '../../assets/projects/justcook/screens/widget-small-ending.png';
 import postA from '../../assets/projects/justcook/brand/post-box-a.jpg';
 import postB from '../../assets/projects/justcook/brand/post-box-b.jpg';
 import postC from '../../assets/projects/justcook/brand/post-box-c.jpg';
@@ -345,7 +352,54 @@ Each feature removes a decision, or an excuse, from the student’s evening.
 
 </Note>
 
+### Outside the app
+
+Most of JustCook happens without opening it. Through the day, the lock screen, the Home Screen and the Dynamic Island carry the plan, so the evening needs no decision.
+
 <Figure src={tableMockup} alt='A phone on a wooden table, lock screen at 19:45: Time to start cooking, dinner on the table at 20:00.' ratio='1896/1066' />
+
+<Gallery
+  groups={[
+    {
+      label: 'Morning',
+      kind: 'cutout',
+      cols: 3,
+      items: [
+        { image: oToday, alt: 'Lock screen notification at 08:30: spinach expires today, three recipes can use it.', caption: '08:30 · Use it today' },
+        { image: oReady, alt: 'Lock screen notification at 09:00: your boxes are ready at Conad, collect until 18:00.', caption: '09:00 · Boxes ready' },
+        { image: oLarge, alt: 'Large widget: tonight’s box, the time to start cooking and the week at a glance.', caption: 'The week at a glance' },
+      ],
+    },
+    {
+      label: 'During the day',
+      kind: 'cutout',
+      cols: 3,
+      items: [
+        { image: oSmall, alt: 'Small widget: a four-day cooking streak.', caption: 'The streak' },
+        { image: oMedStreak, alt: 'Medium widget: a four-day streak, cook tomorrow to reach five.', caption: 'The streak, with the week' },
+        { image: oEnding, alt: 'Small widget: the streak ends in five hours, cook tonight to keep it alive.', caption: '5 hours left' },
+      ],
+    },
+    {
+      label: 'Before dinner',
+      kind: 'cutout',
+      cols: 3,
+      items: [
+        { image: oMedium, alt: 'Medium widget: tonight’s box, start cooking in 45 minutes.', caption: 'In 45 minutes' },
+        { image: oStart, alt: 'Lock screen notification at 19:45: time to start cooking, dinner on the table at 20:00.', caption: '19:45 · Time to start cooking' },
+      ],
+    },
+    {
+      label: 'While cooking',
+      kind: 'cutout',
+      cols: 3,
+      items: [
+        { image: oLaC, alt: 'Live Activity in the Dynamic Island, compact: the step timer while cooking.', caption: 'Step timer in the Dynamic Island' },
+        { image: oLaE, alt: 'Live Activity expanded: current step, time left, next step and a shortcut to the recipe.', caption: 'Expanded: the next step' },
+      ],
+    },
+  ]}
+/>
 
 <Features
   alternate
@@ -358,9 +412,6 @@ Each feature removes a decision, or an excuse, from the student’s evening.
     { title: 'Focus mode', text: 'Recipes play as a vertical, step-by-step video feed, a pattern students already know.', image: focusMode, alt: 'Focus mode: step four of six with a timer.' },
     { title: 'Hold to stamp', text: 'Once dinner is done, a long press on today stamps the meal and keeps the streak alive. Holding, not tapping, makes it a deliberate act.', image: mealStamp, alt: 'Hold today to stamp it: the week with today ready to be stamped.' },
     { title: 'Streaks with friends', text: 'A weekly score with flatmates rewards showing up, not what is on the plate.', image: homeStreak, alt: 'Streak: four days in a row and the points earned.' },
-    { title: 'Before the streak ends', text: 'Hours before a streak breaks, the widget says how long is left and what to do about it.', image: widgetSmallEnding, crop: 0.36, alt: 'Small widget: the streak ends in five hours, cook tonight to keep it alive.' },
-    { title: 'Ready to collect', text: 'When the boxes are ready, a notification says where and until when.', image: notifReady, crop: 0.7, anchor: 'bottom', alt: 'Lock screen notification: your boxes are ready at Conad, collect until 18:00.' },
-    { title: 'Use it before it goes', text: 'The pantry knows what expires first, and points to the recipes that use it the same day.', image: notifToday, crop: 0.7, anchor: 'bottom', alt: 'Lock screen notification: spinach expires today, three recipes can use it.' },
   ]}
 />
 
