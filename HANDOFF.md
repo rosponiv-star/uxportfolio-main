@@ -807,6 +807,10 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-18 · LOCAL (4)** · Hands mockup moved to the end of the app group (after the Features rows, before Brand and
+  campaign), full body-lane width. Features `anchor: bottom` fixed (img flex-shrink 0: the phone’s bottom edge now
+  shows, cut at the top); notification rows crop 0.85. Pushed `main`.
+
 - **2026-10-18 · LOCAL (3)** · JustCook mockups (owner-supplied photos): `mockup-table.jpg` = Result scene "The nudge"
   (start-cooking lock screen warped into the table photo, Dynamic Island pasted back, 16:9 crop; the only mockup in
   Result). `mockup-hands.png` = hands photo with the Today screen, background cut by flood fill, edges faded, shown as a

@@ -87,6 +87,10 @@ const phRatio = (device?: 'phone' | 'tv') => (device === 'tv' ? '16/9' : `9/${Ma
     justify-content: flex-end;
   }
 
+  .feature__shot--bottom :global(img) {
+    flex-shrink: 0;
+  }
+
   /* Placeholder frames have their own ratio; let them size the cell. */
   .feature__shot--ph {
     overflow: visible;
