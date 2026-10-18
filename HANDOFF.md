@@ -807,6 +807,10 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-18 · LOCAL (2)** · JustCook Result "From box to stamp" → trio: lid code (re-exported: now with the keyboard),
+  hold to stamp, Thursday stamped (re-exported, owner edit). Dropped code accepted + dinner served (files deleted).
+  All 23 original screens had already been replaced from Redesign v3 in the previous entry. Pushed `main`.
+
 - **2026-10-18 · LOCAL** · JustCook screens replaced with the owner’s **Redesign v3** (Figma file `9kVAJhXfvlz569AYMRGGCn`,
   page "JustCook — Redesign v3" 2056:180: 28 device frames in 5 flows, Home / Cook / Buy / Plan and pantry / Widgets).
   Export recipe: get_screenshot never upscales, so clone each device frame, `rescale(960/w)`, screenshot at 1963,
