@@ -543,7 +543,7 @@ src/assets/
   valerio-rosponi.png            About portrait
   projects/justcook/
     cover-app.png                 the case-study cover (3 redesigned app screens composed together)
-    screens/*.png                 14 cut-out device PNGs used by the Result Showcase
+    screens/*.png                 Redesign v3 cut-outs (960×1963) + 5 *-crop.png for the Design Gallery
     boxes/
       box-a.png … box-d.png        front-view cut-outs, 800px
       box-a-3q.png … box-d-3q.png  perspective-view cut-outs, 900px (used by BoxStrip + Gallery)
@@ -806,6 +806,16 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-18 · LOCAL** · JustCook screens replaced with the owner’s **Redesign v3** (Figma file `9kVAJhXfvlz569AYMRGGCn`,
+  page "JustCook — Redesign v3" 2056:180: 28 device frames in 5 flows, Home / Cook / Buy / Plan and pantry / Widgets).
+  Export recipe: get_screenshot never upscales, so clone each device frame, `rescale(960/w)`, screenshot at 1963,
+  delete the clones (done; nothing left in the file). `screens/*.png` = 960×1963 transparent cut-outs. Cover recomposed
+  with the same three screens (home, home scrolled, boxes; 869×1776 each, same centres). Result: new quad "From box to
+  stamp" (lid code, code accepted, served, stamped). Design: Features 4 → 7 rows (+ swap box, one code per box, hold to
+  stamp) and a new group "Outside the app" (Gallery cutout: 3 notifications cropped to the bottom 40%, 2 streak
+  widgets cropped to the top 50%, `*-crop.png`). Owner: the lid code is unique per box and validates that a box was
+  really cooked (recipes stay browsable); the stamp confirms the meal for the streak. Pushed `main`.
 
 - **2026-10-16 · LOCAL (3)** · AuraWake (05) written from the two AuraWake PDFs: short page (no research existed, so no
   Research/Insights chapters), Reflection says research would come first now. Same pattern as Smart Home Hub: text
