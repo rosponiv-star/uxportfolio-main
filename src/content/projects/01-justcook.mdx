@@ -118,7 +118,8 @@ import oEnding from '../../assets/projects/justcook/screens/out-widget-small-end
 import oMedium from '../../assets/projects/justcook/screens/out-widget-medium.png';
 import oLaC from '../../assets/projects/justcook/screens/out-live-activity-compact.png';
 import oLaE from '../../assets/projects/justcook/screens/out-live-activity-expanded.png';
-import handLid from '../../assets/projects/justcook/mockups/hand-lid.jpg';
+import lidCode from '../../assets/projects/justcook/screens/lid-code.png';
+import handStamp from '../../assets/projects/justcook/mockups/hand-stamp.jpg';
 import oStart from '../../assets/projects/justcook/screens/out-notif-start-cooking.png';
 import changeBox from '../../assets/projects/justcook/screens/home-change-box.png';
 import postA from '../../assets/projects/justcook/brand/post-box-a.jpg';
@@ -352,26 +353,21 @@ Each feature removes a decision, or an excuse, from the student’s evening.
     { title: 'Adaptive planning', text: 'Boxes go on the days students will actually cook; the app says whether the week is covered.', image: plan, alt: 'Plan screen: the week with a box on each dinner.' },
     { title: 'Swap tonight’s box', text: 'Plans change. Any box already in the pantry can take tonight’s place, and the rest of the week rebalances around it.', image: changeBox, alt: 'Change tonight’s box: the boxes in the pantry, with Box A picked to replace Box D.' },
     { title: 'A timely nudge', text: 'Reminders are timed backwards from the recipe’s duration and dinner time, before a delivery app wins.', image: widgetMedium, crop: 0.32, alt: 'Home Screen widget: start cooking in 45 minutes.' },
+    { title: 'One code per box', text: 'Recipes stay open to browse. To cook one, students type the code printed inside the box; each code works once, so every point on the leaderboard comes from a box really cooked.', image: lidCode, alt: 'Lid code screen: D7K-4 typed, the keyboard open.' },
     { title: 'Focus mode', text: 'Recipes play as a vertical, step-by-step video feed, a pattern students already know.', image: focusMode, alt: 'Focus mode: step four of six with a timer.' },
     { title: 'Streaks with friends', text: 'A weekly score with flatmates rewards showing up, not what is on the plate.', image: homeStreak, alt: 'Streak: four days in a row and the points earned.' },
   ]}
 />
 
-### One code per box
-
-<Spot zoom="52% 47%" image={handLid} alt="A hand holding a phone with the lid code screen: D7K-4 typed, the keyboard open." label="Before cooking">
-
-Recipes are open to browse at any time. To cook one, students type the code printed inside the box.
-
-Each code is unique and works once, so every point on the leaderboard comes from a box really cooked.
-
-</Spot>
-
 ### The stamp
+
+<Spot image={handStamp} alt="A hand holding a phone with the stamp screen: hold today to stamp it, the week with three days already stamped." label="After dinner">
 
 Dinner ends with a gesture, not a checkbox. Students press and hold today until the stamp lands on the week.
 
 The long press is not there for safety. It is there for the feeling: stamping the day with their own hand turns a logged meal into something they did, and the week fills up like a loyalty card they are proud of.
+
+</Spot>
 
 <Note label="Principle" text="A reward people perform themselves feels earned. The peak also carries the next step: right after the stamp, tomorrow’s meal and its reminder are one tap away, and 8 of 10 meals keeps the next stamp within reach." />
 

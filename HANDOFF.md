@@ -56,10 +56,10 @@ then this HANDOFF commit).
   07 The week, quad (home scrolled, plan, boxes, ingredients). Removed by the owner: "code accepted", "dinner is served",
   the table mockup, the single big hands scene, the hand-home/hand-plan duo.
 - **Design chapter, app part:** Note (Decision) → `Features` alternate crop 0.82: Adaptive planning, Swap tonight's box,
-  A timely nudge (widget medium, crop 0.32), Focus mode, Streaks with friends →
-  `### One code per box` = `<Spot zoom="52% 47%" image={handLid} label="Before cooking">` (scroll-linked zoom 1 → 1.4 onto the screen, owner 2026-10-20) (owner: the code inside each box is unique and
-  validates that a box was really cooked; recipes stay browsable at any time) →
-  `### The stamp` = two paragraphs + Note "Principle" (the finger mockup was removed 2026-10-20: **the owner will send a new stamp mockup**, put it back here) →
+  A timely nudge (widget medium, crop 0.32), One code per box (flat `screens/lid-code.png`; the code inside each box is
+  unique and validates that a box was really cooked; recipes stay browsable), Focus mode, Streaks with friends →
+  `### The stamp` = `<Spot image={handStamp} label="After dinner">` with the two paragraphs (owner's backlit hand photo
+  `Media/01-JustCook/mockups-source/hand-backlit.webp`, "Meal done · stamp" screen warped in, 2026-10-20) + Note "Principle" →
   `### Outside the app` = intro ("hold the thread") + Gallery cutout cols 3 in four moments (the 19:45 hand mockup was
   removed 2026-10-20; its notification is now a cut-out, `screens/out-notif-start-cooking.png`, Figma `2319:5724`): "08:30 – 09:00 · Morning" (use it today, boxes
   ready, large widget) · "All day · The streak" (small, medium streak, 5 hours left) · "19:00 – 19:45 · Before dinner" (medium
@@ -72,8 +72,13 @@ then this HANDOFF commit).
   `C:\Users\rospo\Documents\Designing\1percent\1percent-design-guidelines.md` (§8 Critical Retention Moment:
   participation over spectatorship, put the retention ask inside the peak; §9 Zeigarnik, Hick, Fitts). Use them to show
   that he reflects on behaviour, never with invented data.
-- Mockups in use: only hand-lid (Spot). Owner (2026-10-20): "molti mockup sono fatti male". Source photos are kept in `Media/01-JustCook/mockups-source/`: hand-ultra → home,
-  palm → plan, hand-holding → lid, finger-press → stamp, hand-raised → lock (table.webp and two-hands.jpg no longer used).
+- Mockups in use: only `mockups/hand-stamp.jpg` (Spot in The stamp). Owner (2026-10-20): "molti mockup sono fatti male";
+  he removed the hand-home/plan/lid/lock ones and the scroll zoom. Source photos: `Media/01-JustCook/mockups-source/`
+  (hand-backlit.webp = current stamp). Recipe for this backlit photo: screen corners by fitting lines to the
+  bezel→glass edges (thresholds dark<30, bright>60): TL 506.1,166.2 · TR 871.5,171.4 · BR 757.5,1121.1 · BL 382.7,1071.4;
+  flatten the 3× screen on a white rounded rect, paint the island into it, `warp2 … 2 out 0 0 1.5`, then
+  `Media/_tools/handmask.js` (flood-fill the dark hand from 900,900, lum<70, only bottom/right edge) and `desat.js`
+  (neutralise the old orange glow on the bezel).
 
 ### Components added or changed since 2026-10-16
 - `case/Spot.astro` (new, registered in `[slug].astro`): photo on tracks B–C, framing text on A (optional ink group
@@ -744,7 +749,7 @@ git push
 > showcase, Features images, `placeholder: false`. (2) Rehabeat: Design Features 01/02/03/05 from its Figma + the
 > working-prototype section (ask for material). (3) Write Realiti (04) with the Appendix B process (sources in
 > `Media/04-Realiti/`). (4) Open items: the CV contains the phone number; no Lighthouse/accessibility pass yet; the
-> JustCook stamp mockup (owner will send a new one).
+> JustCook mockups (owner may send more photos).
 
 **First step, unambiguous:** run the LOCAL session-start sync from §10 right now — `git fetch origin`, check
 `git branch -r --no-merged main` for any cloud work waiting, merge it in, build, push. Only after that is the
@@ -854,6 +859,10 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-20 · LOCAL (3)** · JustCook, owner: scroll zoom and lid mockup removed (Spot `zoom` prop deleted); the lid
+  code is a flat Features row "One code per box" between A timely nudge and Focus mode. New stamp mockup from the
+  owner's backlit hand photo (`mockups/hand-stamp.jpg`, 1800×2250) as a Spot "After dinner" in The stamp. Pushed `main`.
 
 - **2026-10-20 · LOCAL (2)** · JustCook, owner: removed the In hand duo from Result, the 19:45 hand Spot and the stamp
   finger Figure (files deleted). 19:45 notification exported from Figma (2319:5724) as `out-notif-start-cooking.png`
