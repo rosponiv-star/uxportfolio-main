@@ -874,7 +874,7 @@ When a CLOUD session hits something that needs the local environment, it must:
   rhythm (text centred on the screen, device on the line) + new `also`/`note` fields: Hold to stamp and Thursday
   stamped side by side in one row with the Principle note under the text; channel cards with logos (Instagram,
   WhatsApp, TikTok from Simple Icons, a drawn QR). Owner liked the mega Closing: "tutta la pagina punta ad avere
-  questa vibe" (open: how far to push it). Pushed `main`.
+  questa vibe" (a compliment: nothing else to scale up). Pushed `main`.
 
 - **2026-10-20 · LOCAL (9)** · **Case-study structure "B-mix" implemented** (owner's pick from the three prototypes in
   `notes/proposals/`): rules and text levels of B (cells), Overview as cells, Result untouched, Process = clickable
