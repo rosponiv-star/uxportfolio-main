@@ -121,8 +121,8 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     position: relative;
     justify-self: end;
     align-self: center;
-    width: 28px;
-    height: 1.5px;
+    width: 20px;
+    height: 1px;
     background: currentColor;
     transition: width 0.5s var(--ease-out);
   }
@@ -132,10 +132,10 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     position: absolute;
     right: 0;
     top: 50%;
-    width: 7px;
-    height: 7px;
-    border-top: 1.5px solid currentColor;
-    border-right: 1.5px solid currentColor;
+    width: 5px;
+    height: 5px;
+    border-top: 1px solid currentColor;
+    border-right: 1px solid currentColor;
     transform: translate(0, -50%) rotate(45deg);
   }
 
@@ -147,7 +147,7 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
 
   .pidx__row:hover .pidx__go,
   .pidx__row:focus-visible .pidx__go {
-    width: 44px;
+    width: 32px;
   }
 
   @media (max-width: 640px) {

@@ -12,7 +12,8 @@ interface Props {
   label?: string;
   intro?: string;
   variant?: 'chips' | 'cards';
-  items: { label: string; note?: string; color?: string; image?: ImageMetadata }[];
+  // logo: a raw monochrome SVG (import x from '…svg?raw'), shown top-right in a card.
+  items: { label: string; note?: string; color?: string; image?: ImageMetadata; logo?: string }[];
 }
 const { label, intro, variant = 'chips', items } = Astro.props;
 const rows = await Promise.all(
@@ -27,7 +28,7 @@ const rows = await Promise.all(
   {
     (label || intro) && (
       <div class="chips__head">
-        {label && <p class="label label--group">{label}</p>}
+        {label && <p class="chips__label">{label}</p>}
         {intro && <p class="chips__intro">{intro}</p>}
       </div>
     )
@@ -41,7 +42,12 @@ const rows = await Promise.all(
           data-cursor-style={variant !== 'cards' && c.note && !c.src ? 'note' : undefined}
           data-cursor-image={c.src}
         >
-          {variant === 'cards' && <span class="chip__n label">{String(i + 1).padStart(2, '0')}</span>}
+          {variant === 'cards' && (
+            <span class="chip__top">
+              <span class="chip__n label">{String(i + 1).padStart(2, '0')}</span>
+              {c.logo && <span class="chip__logo" aria-hidden="true" set:html={c.logo} />}
+            </span>
+          )}
           <span class="chip__title">
             {c.color && <span class="chip__swatch" style={`background: ${c.color}`} aria-hidden="true" />}
             {c.label}
@@ -73,6 +79,15 @@ const rows = await Promise.all(
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
+  }
+
+  /* A sub-heading inside a group: lead Medium, sentence case, so it never reads as the group's own label. */
+  .chips__label {
+    font-size: var(--fs-lead);
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+    color: var(--ink);
   }
 
   .chips__intro {
@@ -134,8 +149,28 @@ const rows = await Promise.all(
     border-bottom: 1px solid var(--rule-strong);
   }
 
+  .chip__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
   .chip__n {
     color: var(--signal);
+  }
+
+  .chip__logo {
+    display: block;
+    width: 28px;
+    height: 28px;
+    color: var(--ink);
+  }
+
+  .chip__logo :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
   }
 
   .chip__note {

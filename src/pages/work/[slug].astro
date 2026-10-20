@@ -216,8 +216,8 @@ const facts = [
 
   .intro__arrow {
     position: relative;
-    width: 28px;
-    height: 1.5px;
+    width: 20px;
+    height: 1px;
     background: currentColor;
     transition: width 0.6s var(--ease-out);
   }
@@ -227,10 +227,10 @@ const facts = [
     position: absolute;
     left: 0;
     top: 50%;
-    width: 7px;
-    height: 7px;
-    border-left: 1.5px solid currentColor;
-    border-bottom: 1.5px solid currentColor;
+    width: 5px;
+    height: 5px;
+    border-left: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
     transform: translate(0, -50%) rotate(45deg);
   }
 
@@ -241,7 +241,7 @@ const facts = [
 
   .intro__back:hover .intro__arrow,
   .intro__back:focus-visible .intro__arrow {
-    width: 48px;
+    width: 32px;
   }
 
 
@@ -285,10 +285,9 @@ const facts = [
     gap: var(--space-1);
   }
 
-  /* Set apart by an ink rule instead of the usual grey one; inside, only space separates
-     the three sentences from the facts. */
+  /* No rule above the Overview: its cell grid already frames it (owner, 2026-10-20). */
   :global(.overview)::before {
-    background: var(--ink);
+    display: none;
   }
 
   /* Phones: the three sentences full width, the facts two per row. */

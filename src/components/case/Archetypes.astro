@@ -63,18 +63,20 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: repeat(var(--rows), auto);
-    column-gap: var(--gutter);
+    column-gap: 0;
   }
 
-  /* Light comparison: no boxes, no tint. An ink rule opens each archetype's column; light hairlines run
-     across all three tracks between rows, so every row reads left to right. */
+  /* Light comparison: no boxes, no tint, no column rules. One continuous light hairline per row runs
+     across all three tracks (no column gap; the gutter is padding), so every row reads left to right. */
   .arch__box {
     display: none;
   }
 
-  .arch__cell {
+  .arch__cell,
+  .arch__rowlabel {
     position: relative;
     padding-block: var(--space-3);
+    padding-right: var(--gutter);
   }
 
   .arch__goal,
@@ -94,8 +96,7 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
-    padding-block: var(--space-2) var(--space-4);
-    border-top: 1px solid var(--ink);
+    padding-block: 0 var(--space-4);
   }
 
   /* What they want: the largest text in the box, the first thing to compare. */
