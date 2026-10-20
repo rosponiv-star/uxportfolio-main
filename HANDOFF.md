@@ -24,63 +24,109 @@ Structure of this document (10 fixed sections + two appendices):
 
 ---
 
-## 0. Current state — 2026-10-16 (read this first; it overrides older details in §1–§9)
+## 0. Current state — 2026-10-20 (read this first; it overrides older details in §1–§9)
 
 **Live:** https://www.valeriorosponi.com — Cloudflare **Worker** `uxportfolio-main` (Workers Builds from GitHub `main`,
-~2–4 min per deploy). `wrangler.jsonc` + `worker/index.js`: the worker runs first and 301-redirects `http://` and the bare
-domain `valeriorosponi.com` to `https://www.valeriorosponi.com` (same path/query); everything else is served from `dist/`
-(ASSETS binding, `404-page`, `auto-trailing-slash`). `astro.config.mjs` has `trailingSlash: 'always'`; every internal link
-ends with "/" (nav in `data/site.ts`, `hrefOf()` in `lib/projects.ts`). This fixed Google Search Console's "page with
-redirect" + "duplicate without canonical" (2026-10-13). The owner was told to "Richiedi indicizzazione" for /, /about/,
-/work/justcook/, /work/rehabeat/ and "Convalida correzione" in Search Console (not reachable from Claude).
-A Cloudflare MCP is connected (workers/KV/R2/D1/docs only — no DNS or redirect rules). Figma MCP is connected too.
+~2–4 min per deploy). `wrangler.jsonc` + `worker/index.js`: the worker 301-redirects `http://` and the bare domain to
+`https://www.valeriorosponi.com`; everything else is served from `dist/` (ASSETS binding, `404-page`,
+`auto-trailing-slash`). `astro.config.mjs` has `trailingSlash: 'always'`; every internal link ends with "/". Search
+Console fixes were requested by the owner (not reachable from Claude). Cloudflare MCP (workers/KV/R2/D1/docs only) and
+Figma MCP are connected. Git at the end of the last session: `main` = `origin/main`, clean (last code commit `db7252d`,
+then this HANDOFF commit).
 
-**Projects (`src/content/projects/`):**
+### Projects (`src/content/projects/`)
 | File | Status |
 |---|---|
-| `01-justcook.mdx` | Live, complete (real data). labels: Product & communication design · iOS app + physical box |
-| `02-rehabeat.mdx` (ex "Rehab") | **Live** since 2026-10-12. Text real (`notes/02-rehab.md` = all facts, owner answers, verified literature). Cover = owner's light living-room mockup with the TV-2 screen (`assets/projects/rehabeat/cover.png`, `cover.bleed: true`). Result showcase: 01 TV-2 in the dark living room (`screens/tv-living-room.jpg`, rendered from the **wide Figma frame 4564:3022**), 02 app trio (home, week-2-report, week-2-data), 03 before/after sticky bar (`anchor: bottom`, captions). Ideate has a `<Reference>` tile (Euleria logo), Design has `<SystemMap />`. **Still placeholders:** Design Features rows 01, 02, 03, 05 (only 04 has `tv-workout.jpg`). **To-do (memory):** add a working-prototype section. |
-| `03-smart-home-hub.mdx` | **Text written** 2026-10-16 from `Media/03-Smart Home Ecosystem/REPORT FINALE PIG.pdf` (facts + owner answers in `notes/03-smart-home-hub.md`). Still `placeholder: true` (Coming soon) until the owner sends the interfaces: then fill `cover`, `result` (showcase) and the 4 Design `Features` rows (floor plan, intercom, access codes, security), and set `placeholder: false`. PIG course, Sep–Dec 2025, 3 students (all phases shared), Android MD3, proto-personas (no interviews), no Validate chapter. |
-| `04-realiti.mdx` | placeholder; labels VR experimental experience · Meta Quest (owner once wrote "Reality": the name stays **Realiti**) |
-| `05-aurawake.mdx` | **Text written** 2026-10-16 from `Media/05-AuraWake/AuraWake1.pdf` + `AuraWake2.pdf` (facts + owner answers in `notes/05-aurawake.md`). Junior project, HCI 1 course (Uni Trento, 2024), team of 2 (Valerio did almost everything, with Nicolò Lisci), Figma only. No research in the sources → short page: Challenge, Define, Design (3 placeholder Features rows), Reflection. Keeps its existing cover. Still `placeholder: true` until the owner sends the interfaces. |
+| `01-justcook.mdx` | **Live, complete.** All interfaces are the owner's **Redesign v3** from Figma. Exact structure in "JustCook page" below. |
+| `02-rehabeat.mdx` | **Live** since 2026-10-12. Text real (`notes/02-rehab.md`). Result showcase from Figma `xmb1334lJ54M35DwB9PFnl`. Course written as "Human–Computer Interaction 1, a course at the University of Trento" (same wording as AuraWake, owner 2026-10-16). **Still placeholders:** Design Features rows 01, 02, 03, 05 (only 04 has `tv-workout.jpg`). To-do (memory): a working-prototype section. |
+| `03-smart-home-hub.mdx` | **Text written** 2026-10-16 from `Media/03-Smart Home Ecosystem/REPORT FINALE PIG.pdf`; facts + owner answers in `notes/03-smart-home-hub.md`. `placeholder: true` (Coming soon) until the owner sends the interfaces. PIG course, Sep–Dec 2025, 3 students, all phases shared equally (teammates Marco Scognamiglio, Giorgia Pajola: not named on the page), Android MD3, Figma + FigJam, proto-personas (no interviews, said on the page), no Validate chapter. Archetypes Marco vs Franco. Design: 4 placeholder Features rows (floor plan, intercom, access codes, security) + "Beyond the screens" (e-commerce shipping code, automatic emergency call, smoke defence = system ideas, not interfaces, owner's request). When interfaces arrive: cover, `result.showcase`, Features images, `placeholder: false`. |
+| `04-realiti.mdx` | Placeholder with INVENTED facts; the name stays **Realiti**. Not started. Sources in `Media/04-Realiti/`. |
+| `05-aurawake.mdx` | **Text written** 2026-10-16 from `Media/05-AuraWake/AuraWake1.pdf` + `AuraWake2.pdf`; `notes/05-aurawake.md`. Junior project: HCI 1, spring 2024, team of 2 (Valerio did almost everything; Nicolò Lisci not named), Figma only. Short page: Challenge, Define, Design (3 placeholder Features rows: routines, set the alarm, your sleep), Reflection. Keeps its existing cover `cover.png` (owner). Coming soon until the interfaces arrive. |
 
-**Home:** statement "Valerio Rosponi, UX and digital product designer studying Interfaces & Communication at the University
-of Trento, based in Trentino, Italy." with the ORIGINAL per-word blur-to-focus reveal (`.w`, `word-in`). Depth texture drifts
-by itself on touch devices. Hero structure: the owner wants it "more characterful" but rejected every proposal on 2026-10-16
-(see §4) and said "lasciamola così per ora" — do not redo it unless asked. Cards: one chip per frontmatter `labels` entry;
-all hovers zoom out (bleed covers rest at 1.07 → 1). LinkedIn: https://www.linkedin.com/in/valerio-rosponi.
+### JustCook page (`01-justcook.mdx`): exact current structure
+- **Figma:** file `9kVAJhXfvlz569AYMRGGCn`, page **"JustCook — Redesign v3"** (`2056:180`). 28 device frames named
+  `"<Screen> · device"` (each = a `Screen` instance + a `Bezel` instance of "iPhone 16 Pro Max" `2211:1515`), in 5 flows
+  (Home / Cook / Buy / Plan and pantry / Widgets). The Screen components sit above each device frame (e.g. "Meal done ·
+  stamped" component `2287:5416`, device `2287:5417`). Pages "Redesign" and "Redesign v2" are obsolete.
+- **Cover** `cover-app.png` 3840×2400 on #f5f5f5: three phones 869×1776, centres x 942.5 / 1919.5 / 2896.5, top 312:
+  Home first screen, Home scrolled, Boxes (owner: the same three, updated).
+- **Result showcase**, in order: 01 **In hand** = `layout: duo`, `mockups/hand-home.jpg` (Today) + `mockups/hand-plan.jpg`
+  (Plan on a palm): the only mockup allowed in Result · 02 Tonight, trio (home first screen, focus mode, streak) ·
+  03 From box to stamp, trio stagger (lid code with keyboard, "Hold today to stamp it", "Thursday, stamped") ·
+  04 Live Activity, pair crop 0.4 · 05 Widgets, quad crop 0.5 (small, small ending, medium, large) · 06 Buy boxes, quad ·
+  07 The week, quad (home scrolled, plan, boxes, ingredients). Removed by the owner: "code accepted", "dinner is served",
+  the table mockup, the single big hands scene.
+- **Design chapter, app part:** Note (Decision) → `Features` alternate crop 0.82: Adaptive planning, Swap tonight's box,
+  A timely nudge (widget medium, crop 0.32), Focus mode, Streaks with friends →
+  `### One code per box` = `<Spot image={handLid} label="Before cooking">` (owner: the code inside each box is unique and
+  validates that a box was really cooked; recipes stay browsable at any time) →
+  `### The stamp` = two paragraphs + wide Figure `mockups/hand-stamp.jpg` (a finger about to press) + Note "Principle" →
+  `### Outside the app` = intro ("hold the thread") + `<Spot image={handLock} label="19:45">` (raised hand, lock screen
+  "Time to start cooking") + Gallery cutout cols 3 in three moments: "08:30 – 09:00 · Morning" (use it today, boxes
+  ready, large widget) · "All day · The streak" (small, medium streak, 5 hours left) · "19:00 – 20:00 · Dinner" (medium
+  widget, Live Activity compact + expanded). Gallery pieces are `screens/out-*.png`, one uniform 0.53 crop
+  (notifications from the bottom, widgets and Live Activity from the top). Then Brand and campaign, the launch plan and
+  Reflection (unchanged).
+- **What the stamp means (owner, 2026-10-19; matters for any copy):** the long press is NOT a safety lock. It is an
+  emotional gesture: stamping the day yourself gives completion and pride. Concepts from the owner's guidelines
+  `C:\Users\rospo\Documents\Designing\1percent\1percent-design-guidelines.md` (§8 Critical Retention Moment:
+  participation over spectatorship, put the retention ask inside the peak; §9 Zeigarnik, Hick, Fitts). Use them to show
+  that he reflects on behaviour, never with invented data.
+- All 5 owner mockups are in use. Source photos are kept in `Media/01-JustCook/mockups-source/`: hand-ultra → home,
+  palm → plan, hand-holding → lid, finger-press → stamp, hand-raised → lock (table.webp and two-hands.jpg no longer used).
 
-**About** (`pages/about.astro`): hero = 12 column hairlines drawing down + statement "Useful to as many people as possible. /
-Beautiful enough to make them stay." (size exception) + B/W portrait → colour + scale 1.03 on hover. Five accordion sections,
-all closed, one open at a time: How I approach design (3 steps) · What I bring to a team (14 skills, 3 groups) · Tools I work
-with (logo tiles: Figma, Claude & Codex, Local AI tools/Ollama, Affinity & Illustrator, Unity, Meta Developer Hub, Git; SVGs in
-`src/assets/logos/`, Simple Icons CC0 except `affinity.svg` = the owner's new "a" logo as a masked SVG) · Where I am now ·
-How to reach me. No "Looking for".
+### Components added or changed since 2026-10-16
+- `case/Spot.astro` (new, registered in `[slug].astro`): photo on tracks B–C, framing text on A (optional ink group
+  label) on a `--rule-strong` hairline at the photo's baseline; on phones the text goes under the photo.
+- `case/Showcase.astro`: new layout **`duo`** (two photos, 6 + 6 cols, stacked on phones, no drift); enum in
+  `content.config.ts`.
+- `case/Features.astro`: items take their own `crop` and `anchor: 'bottom'` (bottom share; img `flex-shrink: 0` so the
+  phone's bottom edge shows). Component default stays 0.55; JustCook uses 0.82.
+- `case/Gallery.astro` unchanged; used for the JustCook day narrative (cutout + captions).
 
-**Case-study template** (`pages/work/[slug].astro`): back link = 1.5px hairline arrow + "ALL WORK" label (stretches on hover);
-title, tagline, cover (no role/team line under the tagline: those live only in the Overview, owner 2026-10-16). Every page
-has OG/Twitter large images (Base `image` prop; default JustCook cover). Favicon: "VR" in Geist, `public/favicon.svg`
-(light/dark media query inside) + `favicon-light.png` / `favicon-dark.png` linked with `media`.
+### Image recipes (scripts saved in `Media/_tools/`; run them from a session scratchpad that has `node_modules`)
+- **Figma export at 960 px:** `get_screenshot` never upscales beyond 1×. Load the `figma:figma-use` skill, then with
+  `use_figma` `clone()` the device frame, `rescale(960 / w)`, park it at x ≥ 8000, name it `TMP export · …`;
+  `get_screenshot` (`maxDimension 1963`, `contentsOnly: true`), curl the URL, then delete every `TMP export ·` node.
+  Device PNGs are 960×1963 with transparent corners. For mockups clone the `Screen` instance (no bezel) and
+  `rescale(3)` → 1206×2622 (corner radius 165).
+- **Screen into a photo:** `node warp2.js mock screen '{"TL":[x,y],"TR":…,"BR":…,"BL":…}' 2 out.jpg skin island grow skinVmin`.
+  Homography, 3×3 supersampling, mockup upscaled ×2. `skin=1` keeps fingers on top (skin = r>g≥b−3, r−b>18); `skinVmin`
+  limits that to the lower part of the screen (needed when the original screen shows skin-like colours); `island=1`
+  copies the original Dynamic Island back; for dark original screens paint the island into the screen PNG instead
+  (rect x415 y33 w376 h111 rx55.5 at 3×). `grow` (px) pushes the quad out to hide the old glass. Corners: `glass.js`
+  (largest blob of pink/white glass → hull → 4 longest sides) or `refine.js` (fits the glass/bezel transition); check
+  with `outline.js`; for dark screens sample luminance rows/columns by hand. `grid.js` draws a grid whose labels are
+  absolute pixels.
+- **Site screenshots:** `node sec.mjs URL prefix "selector|text" …` (puppeteer-core + Chrome at 1440×900; the fixed
+  header appears in shots, ignore it). Chrome: `C:/Program Files/Google/Chrome/Application/chrome.exe`.
+- Older recipes (PDF render with pdf.js, cut-outs by flood fill, masked SVG logos) are in Appendix A. `node_modules`
+  (puppeteer-core, sharp, pdfjs-dist) can be copied from an older session scratchpad under
+  `%TEMP%/claude/C--Users-rospo-Documents-ClaudeCode-Websites-uxportfolio/*/scratchpad` (some get cleaned up).
 
-**Components added since 2026-10-09:** `case/Reference.astro`, `case/SystemMap.astro`, Showcase layout `scene`,
-`anchor: bottom`, item `caption` (and an unused `focus`), Features items without `image` (placeholder, `device: phone|tv`;
-tv images are not cropped), Card `bleed` + `labels` chips, Base `noindex` + `image`, colour `--soon` (#a6463c) for
-"Coming soon" only.
+### Home, About, template (unchanged since 2026-10-16)
+Home statement with the per-word blur reveal; the hero is left as is ("lasciamola così per ora": every redesign was
+rejected, see §4). About: column hairlines + two-sentence statement + B/W portrait; five accordion sections. Case
+template: hairline back arrow + "ALL WORK"; role/team/timeline only in the Overview; OG images everywhere; favicon "VR".
 
-**Working with the owner (current):** he is low on Claude credits: be terse, batch edits with small node scripts, avoid
-re-reading big files, take only the screenshots you need. Italian to him, English on the site. Short visual feedback, often
-"rimetti com'era" (revert at once). For taste questions show quick `show_widget` previews, then implement only his pick.
-Commit trailer: `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` (check the system reminder for the model).
+### Working with the owner (current)
+- Italian to him, English on the site. He often asks for **"caveman mode"**: terse answers, tokens spent on the work,
+  not on prose. He is short on credits: batch edits with small node scripts, avoid re-reading big files, take only the
+  screenshots you need (crop and resize them).
+- He says **"se hai domande falle, non lasciare nulla al caso"**: ask (AskUserQuestion, few questions, with options)
+  before guessing facts, feature purposes or placements. Never invent facts or numbers (an invented "fifteen minutes"
+  claim was caught and removed on 2026-10-19).
+- Short visual feedback, often "rimetti com'era". For taste questions show quick previews and implement only his pick.
+- He edits Figma himself; when he says a screen changed, re-export it. If the export is identical, tell him and ask
+  (on 2026-10-19 nothing had actually changed).
+- Commit trailer from the system reminder (currently `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`). In LOCAL
+  sessions push `main` after every change and add an Appendix A entry each time.
 
-**Tooling on this PC:** build with PowerShell `npx astro build`. Never delete `.astro` / `node_modules/.astro` / `.vite`
-while the dev server runs (home loses all projects until restart): stop it, then `preview_start` again (port may change,
-autoPort). Puppeteer-core + sharp live in a session scratchpad (copy `node_modules` from an older scratchpad under
-`%TEMP%/claude/C--Users-rospo-Documents-ClaudeCode-Websites-uxportfolio/<session>/scratchpad`); Chrome at
-`C:/Program Files/Google/Chrome/Application/chrome.exe`. Set `document.documentElement.style.scrollBehavior='auto'` before
-scripted scrolls (the site scrolls smoothly). Image recipes used (screen into a photo via homography + glare blend, phone
-cut-outs by flood fill, masked SVG logos) are described in the Appendix A entries. Figma file for Rehabeat:
-`xmb1334lJ54M35DwB9PFnl` (page "Redesign"); `use_figma` needs the figma-use skill first; `resize()` applies constraints
-to children (use `resizeWithoutConstraints`).
+### Tooling on this PC
+Build with PowerShell `npx astro build` (Git Bash cannot load Rolldown). Dev server via `preview_start` name
+`portfolio` (`.claude/launch.json`, port 4321, autoPort). Never delete `.astro` / `node_modules/.astro` / `.vite` while
+the dev server runs. Set `document.documentElement.style.scrollBehavior='auto'` before scripted scrolls. Rehabeat Figma
+`xmb1334lJ54M35DwB9PFnl` (page "Redesign"); `resize()` applies constraints to children (use `resizeWithoutConstraints`).
 
 ---
 
@@ -693,10 +739,12 @@ git push
 
 ## 9. Immediate Task & Roadmap
 
-> **2026-10-16 next steps:** (1) wait for the owner's next request, nothing is pending on Claude's side; (2) Rehabeat:
-> fill Design Features 01/02/03/05 with final screens from the Figma file and add the working-prototype section (ask the
-> owner for the material); (3) 03 and 05 text done, waiting for their interfaces; write case study 04 (Realiti) with the Appendix B process (Media/ has their sources); (4) open
-> items: the CV contains the phone number; no Lighthouse/accessibility pass yet; home hero left as is.
+> **2026-10-20 next steps:** (1) nothing is pending on Claude's side; wait for the owner. Likely requests: more
+> JustCook polish (mockups, copy, layout); the interfaces for Smart Home Hub (03) and AuraWake (05) → cover, Result
+> showcase, Features images, `placeholder: false`. (2) Rehabeat: Design Features 01/02/03/05 from its Figma + the
+> working-prototype section (ask for material). (3) Write Realiti (04) with the Appendix B process (sources in
+> `Media/04-Realiti/`). (4) Open items: the CV contains the phone number; no Lighthouse/accessibility pass yet; the
+> JustCook mockup sections were checked only at 1440 px, not on phones.
 
 **First step, unambiguous:** run the LOCAL session-start sync from §10 right now — `git fetch origin`, check
 `git branch -r --no-merged main` for any cloud work waiting, merge it in, build, push. Only after that is the
@@ -806,6 +854,10 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-20 · LOCAL** · HANDOFF §0 and §9 rewritten for a new chat (full current state of all five projects, the
+  exact JustCook structure, new components, image recipes). Mockup source photos copied to
+  `Media/01-JustCook/mockups-source/`, image scripts to `Media/_tools/` (both git-ignored, local only). Pushed `main`.
 
 - **2026-10-19 · LOCAL** · JustCook hand mockups (owner photos, `assets/projects/justcook/mockups/hand-*.jpg`): screens
   exported 3× without bezel from Figma, warped by homography, fingers kept on top via a skin mask, Dynamic Island
