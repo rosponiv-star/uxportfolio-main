@@ -58,8 +58,10 @@ then this HANDOFF commit).
 - **Design chapter, app part:** Note (Decision) → `Features` alternate crop 0.82: Adaptive planning, Swap tonight's box,
   A timely nudge (widget medium, crop 0.32), One code per box (flat `screens/lid-code.png`; the code inside each box is
   unique and validates that a box was really cooked; recipes stay browsable), Focus mode, Streaks with friends →
-  `### The stamp` = `<Spot image={handStamp} label="After dinner">` with the two paragraphs (owner's backlit hand photo
-  `Media/01-JustCook/mockups-source/hand-backlit.webp`, "Meal done · stamp" screen warped in, 2026-10-20) + Note "Principle" →
+  `### The stamp` = two paragraphs + wide Figure `mockups/hand-stamp.jpg` (4:3, 2000×1500: owner's frontal hand photo
+  `Media/01-JustCook/mockups-source/hand-front.png` with "Hold today to stamp it" warped in, and beside it the flat
+  `screens/meal-stamped.png` device at the same scale, matched on screen width, tops aligned; owner 2026-10-20) + Note
+  "Principle" →
   `### Outside the app` = intro ("hold the thread") + Gallery cutout cols 3 in four moments (the 19:45 hand mockup was
   removed 2026-10-20; its notification is now a cut-out, `screens/out-notif-start-cooking.png`, Figma `2319:5724`): "08:30 – 09:00 · Morning" (use it today, boxes
   ready, large widget) · "All day · The streak" (small, medium streak, 5 hours left) · "19:00 – 19:45 · Before dinner" (medium
@@ -72,9 +74,10 @@ then this HANDOFF commit).
   `C:\Users\rospo\Documents\Designing\1percent\1percent-design-guidelines.md` (§8 Critical Retention Moment:
   participation over spectatorship, put the retention ask inside the peak; §9 Zeigarnik, Hick, Fitts). Use them to show
   that he reflects on behaviour, never with invented data.
-- Mockups in use: only `mockups/hand-stamp.jpg` (Spot in The stamp). Owner (2026-10-20): "molti mockup sono fatti male";
+- Mockups in use: only `mockups/hand-stamp.jpg` (Figure in The stamp; no Spot is used on the page now). Owner (2026-10-20): "molti mockup sono fatti male";
   he removed the hand-home/plan/lid/lock ones and the scroll zoom. Source photos: `Media/01-JustCook/mockups-source/`
-  (hand-backlit.webp = current stamp). Recipe for this backlit photo: screen corners by fitting lines to the
+  (hand-front.png = current stamp, 680 px source warped at k=3: screen rect TL 217.7,79.7 → BR 460.6,606.4, no hand
+  overlap; device PNG scaled 243·3/866, outer left at 1680, top 203, bg #f5f5f7). Older recipe for the backlit photo: screen corners by fitting lines to the
   bezel→glass edges (thresholds dark<30, bright>60): TL 506.1,166.2 · TR 871.5,171.4 · BR 757.5,1121.1 · BL 382.7,1071.4;
   flatten the 3× screen on a white rounded rect, paint the island into it, `warp2 … 2 out 0 0 1.5`, then
   `Media/_tools/handmask.js` (flood-fill the dark hand from 900,900, lum<70, only bottom/right edge) and `desat.js`
@@ -859,6 +862,9 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-20 · LOCAL (4)** · JustCook The stamp: backlit Spot replaced by a wide Figure (owner): his frontal hand photo
+  with "Hold today to stamp it" + the flat "Thursday, stamped" device beside it at the same scale. Pushed `main`.
 
 - **2026-10-20 · LOCAL (3)** · JustCook, owner: scroll zoom and lid mockup removed (Spot `zoom` prop deleted); the lid
   code is a flat Features row "One code per box" between A timely nudge and Focus mode. New stamp mockup from the
