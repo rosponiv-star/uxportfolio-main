@@ -867,6 +867,13 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-20 · LOCAL (8)** · Owner: case-study pages are confusing (no entry point, unclear order and hierarchy of
+  text, labels, numbers, boxes). Three full structural proposals built with real JustCook content in
+  `notes/proposals/case-structure.html` (?p=A|B|C): **A Index rows** (no sticky title lane; title cols 1–4, text 5–10,
+  media 5–12; one stat size in data rows), **B Cells** (everything in one hairline cell grid, label top / number
+  bottom), **C One column** (text cols 3–10 in lead size, numbers gathered in full-width data rows). A|B|C
+  comparisons per section in `notes/proposals/cmp/`. **Waiting for the owner to pick**; nothing on the site changed yet.
+
 - **2026-10-20 · LOCAL (7)** · JustCook: stamp hand mockup dropped (owner: "torna indietro"). The two stamp screens are
   flat Features rows 06 Hold to stamp and 07 The day, stamped (between Focus mode and Streaks); the Principle note
   follows the Features. No mockups left on the page. Pushed `main`.

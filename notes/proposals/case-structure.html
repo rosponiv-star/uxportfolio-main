@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Case structure — proposals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500&family=Geist+Mono:wght@400&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --paper:#fdfdfc;--paper-2:#f2f2ef;--paper-3:#e8e8e4;--alt:#f3f3f0;
+  --ink:#111;--ink-2:#33332f;--ink-3:#6b6b65;--ink-4:#8a8a84;
+  --rule:rgb(17 17 17/.08);--rule-s:rgb(17 17 17/.22);--signal:#3d5a73;
+  --fs-label:12px;--fs-small:16px;--fs-body:17px;--fs-read:19px;--fs-lead:23px;--fs-h3:28px;--fs-h2:48px;--fs-display:60px;--fs-stat:104px;--fs-mega:168px;
+  --m:48px;--g:24px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:Geist,system-ui,sans-serif;font-size:var(--fs-body);line-height:1.5;-webkit-font-smoothing:antialiased;font-feature-settings:"tnum"}
+p,h1,h2,h3,h4,ul,ol,figure,blockquote{margin:0;padding:0}
+ul,ol{list-style:none}
+img{display:block;max-width:100%}
+.wrap{max-width:1680px;margin:0 auto;padding:0 var(--m)}
+.g{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:var(--g)}
+/* type ladder (site tokens) */
+.label{font-size:var(--fs-label);font-weight:500;letter-spacing:.08em;text-transform:uppercase;line-height:1.3}
+.small{font-size:var(--fs-small);line-height:1.45}
+.body{font-size:var(--fs-body);line-height:1.55}
+.read{font-size:var(--fs-read);line-height:1.55;color:var(--ink-2)}
+.lead{font-size:var(--fs-lead);line-height:1.35;letter-spacing:-.005em}
+.h3{font-size:var(--fs-h3);line-height:1.2;font-weight:500;letter-spacing:-.01em}
+.h2{font-size:var(--fs-h2);line-height:1.08;font-weight:500;letter-spacing:-.02em}
+.display{font-size:var(--fs-display);line-height:1.1;font-weight:400;letter-spacing:-.025em}
+.stat{font-size:var(--fs-stat);line-height:.9;font-weight:500;letter-spacing:-.04em}
+.mega{font-size:var(--fs-mega);line-height:.85;font-weight:500;letter-spacing:-.05em}
+.m{font-weight:500}.i3{color:var(--ink-3)}.i4{color:var(--ink-4)}.sig{color:var(--signal)}
+.read p+p,.body p+p{margin-top:.8em}
+/* devices */
+.dev{position:relative;overflow:hidden;border-radius:28px 28px 0 0}
+.dev img{width:100%}
+.dev--full{border-radius:0}
+.boxes{display:grid;grid-template-columns:repeat(4,1fr)}
+.boxes div{aspect-ratio:1/1;display:flex;flex-direction:column;justify-content:space-between;padding:16px;color:#fff}
+.boxes img{width:78%;align-self:center;margin-top:-6%}
+/* switcher */
+.bar{position:sticky;top:0;z-index:9;background:rgb(253 253 252/.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.bar .wrap{display:flex;align-items:center;gap:24px;height:56px}
+.bar button{font:inherit;font-size:16px;background:none;border:0;padding:4px 0;color:var(--ink-3);cursor:pointer;border-bottom:1.5px solid transparent}
+.bar button[aria-pressed=true]{color:var(--ink);border-color:var(--ink)}
+.bar .sp{flex:1}
+.legend{padding:64px 0 72px;border-bottom:1px solid var(--rule-s)}
+.legend .rules li{display:grid;grid-template-columns:200px 1fr;gap:24px;padding:12px 0;border-top:1px solid var(--rule)}
+.legend .ladder li{display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:baseline;padding:10px 0;border-top:1px solid var(--rule)}
+section{scroll-margin-top:64px}
+.cap{font-size:var(--fs-small);color:var(--ink-3);line-height:1.45}
+.anchor{font-family:"Geist Mono",monospace;font-size:11px;color:#c0c;letter-spacing:.04em;padding:6px 0;display:block}
+
+/* ============ A — INDEX ROWS ============ */
+.A .ch{padding-top:144px}
+.A .ch.alt{background:var(--alt);padding-bottom:144px;margin-top:144px}
+.A .ch.alt+.ch{padding-top:144px}
+.A .chhead{border-top:1px solid var(--ink);padding-top:16px;margin-bottom:48px;align-items:baseline}
+.A .key{grid-column:1/10;margin-bottom:96px}
+.A .row{border-top:1px solid var(--rule-s);padding:24px 0 72px;align-items:start}
+.A .row>.t{grid-column:1/5}
+.A .row>.x{grid-column:5/11}
+.A .row>.media{grid-column:5/13;margin-top:40px}
+.A .srow{border-top:1px solid var(--rule);padding:24px 0;align-items:end}
+.A .srow:first-child{border-top:0}
+.A .srow .n{grid-column:1/5}
+.A .srow .c{grid-column:5/10;display:flex;gap:16px;align-items:baseline;padding-bottom:10px}
+.A .srow .c:before{content:"";flex:0 0 48px;border-top:1px solid var(--ink);transform:translateY(-6px)}
+.A .tbl .tr{border-top:1px solid var(--rule);padding:20px 0;align-items:baseline}
+.A .tbl .th{border-top:1px solid var(--ink);padding:16px 0}
+.A .pill{display:inline-block;border:1px solid var(--rule-s);border-radius:999px;padding:6px 14px;margin:0 8px 8px 0;font-size:16px}
+.A .final{background:var(--ink);color:#fff}
+.A .final .i3{color:#aaa}
+.A .closing{border-top:1px solid var(--ink);padding:24px 0 160px}
+
+/* ============ B — CELLS ============ */
+.B .ch{padding-top:128px}
+.B .ch.alt{background:var(--alt);padding-bottom:128px;margin-top:128px}
+.B .ch.alt+.ch{padding-top:128px}
+.B .head{align-items:end;margin-bottom:40px}
+.B .chip{display:inline-flex;align-items:center;height:28px;padding:0 10px;border:1px solid var(--rule-s);border-radius:6px;font-size:14px;font-weight:500;width:max-content}
+.B .chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.B .cells{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));border-top:1px solid var(--rule-s);border-left:1px solid var(--rule-s);margin-bottom:40px;background:var(--paper)}
+.B .alt .cells{background:#f8f8f6}
+.B .cell{border-right:1px solid var(--rule-s);border-bottom:1px solid var(--rule-s);padding:24px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.B .cell .push{margin-top:auto}
+.B .cell.ink{background:var(--ink);color:#fff}.B .cell.ink .i3{color:#aaa}
+.B .cell.tint{background:var(--paper-2)}
+.B .cell.pad0{padding:0}
+.B .cell .devbox{background:var(--paper-2);padding:24px 24px 0;margin:0 -24px -24px;margin-top:auto}
+.B .grouphead{margin:72px 0 16px}
+
+/* ============ C — ONE COLUMN ============ */
+.C .col{grid-column:3/11}
+.C .ch{padding-top:160px}
+.C .ch.alt{background:var(--alt);padding-bottom:160px;margin-top:160px}
+.C .ch.alt+.ch{padding-top:160px}
+.C .kick{display:flex;gap:16px;align-items:baseline;margin-bottom:32px}
+.C .kick .ln{flex:0 0 48px;border-top:1px solid var(--ink);transform:translateY(-4px)}
+.C .grp{margin-top:96px}
+.C .grp>.label{margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid var(--rule-s)}
+.C .lead.p{color:var(--ink-2)}
+.C .lead.p+.lead.p{margin-top:.7em}
+.C .stats{display:grid;border-top:1px solid var(--ink);margin-top:96px}
+.C .stats>div{padding:20px 24px 0 0;border-right:1px dashed var(--rule-s);margin-right:24px}
+.C .stats>div:last-child{border-right:0}
+.C .foot{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:40px}
+.C .quote{border-left:1px solid var(--ink);padding-left:24px;margin-top:48px}
+.C .bleed{grid-column:1/13;margin-top:64px}
+.C .final{background:var(--ink);color:#fff;padding:24px}
+.C .final .i3{color:#aaa}
+</style>
+</head>
+<body>
+<div class="bar"><div class="wrap">
+  <span class="m">Case-study structure</span><nav id="nav" class="small" style="display:flex;gap:14px;margin-left:24px"></nav><span class="sp"></span>
+  <button data-p="A">A · Index rows</button>
+  <button data-p="B">B · Cells</button>
+  <button data-p="C">C · One column</button>
+</div></div>
+<main id="out"></main>
+
+<script>
+const IMG='../../src/assets/projects/justcook/';
+const D={
+  title:'JustCook',
+  tagline:'Pre-portioned boxes and an adaptive planning app that turn “I should eat better” into a balanced dinner in twenty minutes.',
+  glance:[['Problem','Off-site students want to eat well, but time, budget and family-sized packs get in the way.'],['Approach','Research in students’ own kitchens, six reframing cycles, then a value proposition map.'],['Outcome','Single-portion boxes paired with a planning app, plus brand, packaging and launch campaign.']],
+  facts:[['Role','End-to-end UX designer'],['Timeline','Sep 2024 – May 2025'],['Team','4 design students'],['Type','Product & communication design'],['Platform','iOS app + physical box'],['Tools','Figma, Miro']],
+  result:'Four pre-dosed boxes cover the week; the app plans around the days students actually cook and nudges them before a delivery app wins.',
+  shots:[['Tonight','home-first-screen'],['From box to stamp','meal-stamp'],['The week','plan']],
+  targets:[['−40%','Food waste in the first month'],['<20 min','From box to plate'],['>60%','Users still active at day 30']],
+  chapters:[['Challenge','Effort, not knowledge'],['Research','Inside students’ kitchens'],['Insights','Time, plans, portions, space'],['Define','Two archetypes'],['Ideate','Six reframing cycles'],['Design','Box, app and launch'],['Reflection','What I’d validate next']],
+  challenge:{key:'Students know what a balanced meal looks like. What stops them is the effort between intention and plate.',
+    paras:['The brief: pick a real problem in our own community. We chose one we were living ourselves as off-site students, and desk research showed how common it is.','The project ran across three courses at the University of Trento, in a team of four. I worked on every phase, from research to packaging.'],
+    big:['92%','of off-site students change their eating habits after moving out.','Lupi et al., 2015 (258 students)'],
+    stats:[['>60%','Eat take-away at least once a week'],['44%','Eat at least one portion of fruit a day']],
+    hmw:'How might we make a balanced, home-cooked meal the path of least resistance for students short on time, money and kitchen space?',
+    reframe:'From “how do we teach students to eat healthily?” to “how do we make the healthy option the easiest one?”'},
+  research:{key:'I moved the research into students’ kitchens, where the problem actually happens.',
+    methods:[['41','Survey responses','Shared in student WhatsApp groups and through QR flyers: the broad picture.'],['4','In-kitchen interviews','In participants’ own kitchens, with photo elicitation: the why.'],['3','Field observations','The three moments that shape a meal: shopping, cooking and storing.']],
+    analysis:'Interviews and field notes were coded in one thematic grid, so a handful of visits became patterns we could compare and defend.',
+    coded:[['8','Themes','From autonomy and weekly planning to budget, shared living and food waste.'],['36','Codes','The same codes applied to every transcript and field note.']]},
+  insights:{key:'Four findings, each one a constraint the solution had to respect.',
+    items:[['Time filters everything','','','Frozen vegetables and ready-made burgers are a survival strategy, not ignorance. A solution has to fit fifteen to twenty minutes.'],['Rigid plans break','>60%','shop once a week','They shop around the days they will be in town. Day-by-day plans collapse at the first exam or trip home.'],['Retail is built for families','95%','blame packs too big for one','About half throw food away. Almost all name the same obstacle: food sized for families expires before it is eaten.'],['The shared kitchen has no rules','≤3','people cooking at once','The first one in gets the stove. Less prep and less counter space make cooking more likely to happen at all.']]},
+  define:{key:'Two archetypes live the same problem in opposite ways: one wants less effort, the other less waste.',
+    intro:'Both are synthesised from the coded interviews and survey answers: two ends of the same problem, not two invented users.',
+    arch:[{name:'The efficiency seeker',alias:'Survivalist',goal:'Less effort',quote:'“If cooking takes more than fifteen minutes or means fighting for the kitchen, I’ll take the path of least resistance.”',f:'A chaotic shared kitchen and no time to plan.',o:'Minimal decisions and meals that fit fifteen minutes.'},
+          {name:'The conscious aspirer',alias:'Manager',goal:'Less waste',quote:'“I want to eat well and not waste food, but the shop is designed for families, not for me.”',f:'A gap between principles and reality, and guilt about forgotten food.',o:'Buying exactly what will be cooked, planned for the real week.'}],
+    must:['Balanced diet','Low cost','Time saved'],nice:['Variety from the same ingredients','Predictable cooking time']},
+  ideate:{key:'Six reframing cycles: each new framing exposed the flaw in the previous idea.',
+    cycles:[[1,'Students who eat out','Meals are rarely balanced.',''],[5,'Students short on time','Cooking takes too long.','Healthy ready-made food.'],[6,'Off-site students, 18–28, cooking for themselves','Little time and limited skills make balanced, portioned meals hard to put together.','Pre-dosed single-portion boxes, planned through an app that keeps the week on track.']],
+    discarded:'Healthy ready-made food. It saved time but took away the autonomy students were proud of, and did nothing for cost or waste.'},
+  design:{key:'Two layers that work together: the app reduces the decisions, the box reduces the effort.',
+    box:'One colour per box, so the week reads at a glance on the shelf and in the app.',
+    boxes:[['Box A','Protein','#ffa91e','a'],['Box B','Energy','#488863','b'],['Box C','Light','#ff7257','c'],['Box D','Comfort','#29bcff','d']],
+    boxStats:[['4–5','Ingredients per box'],['10','Recipes per box'],['~20 min','From box to plate']],
+    decision:'The plan adapts to the week, not the other way round: students mark the days they’re away and the app plans around them.',
+    feats:[['Adaptive planning','Boxes go on the days students will actually cook; the app says whether the week is covered.','plan'],['Swap tonight’s box','Any box already in the pantry can take tonight’s place, and the rest of the week rebalances around it.','home-change-box'],['One code per box','To cook a recipe, students type the code printed inside the box; each code works once.','lid-code'],['Focus mode','Recipes play as a vertical, step-by-step video feed, a pattern students already know.','focus-mode'],['Hold to stamp','Dinner ends with a gesture, not a checkbox: press and hold today until the stamp lands.','meal-stamp'],['The day, stamped','The week fills up like a loyalty card, and tomorrow’s meal is one tap away.','meal-stamped']]},
+  reflection:{key:'The most useful design decision was a reframing: changing what was easy to do, not what students knew.',
+    surprised:['How little the problem had to do with knowledge. The students we spoke to were not missing information: they were busy, tired and cooking in a kitchen shared with flatmates.','It was also my own problem. Designing for people like me made it easy to assume. The research kept correcting me, and I learned to let it.'],
+    again:['Talk to more students, beyond the four in-kitchen interviews.','Analyse what they said in a more structured way.','Put the prototype in students’ hands before polishing it.','Build the targets from data rather than ambition.'],
+    closing:['JustCook is still a concept, on paper and in Figma.','The next version would be a tested one.'],kicker:'What I take with me',line:'Design the easy path, and people will take it.'}
+};
+const pad=n=>String(n).padStart(2,'0');
+const shot=(f,crop=.82,cls='')=>`<div class="dev ${cls}" style="aspect-ratio:960/${Math.round(1963*crop)}"><img src="${IMG}screens/${f}.png" alt=""></div>`;
+const sec=(id,body,cls='')=>`<span class="anchor wrap">§ ${id}</span><section id="${id}" class="ch ${cls}">${body}</section>`;
+const legend=(name,idea,rules,ladder)=>`<div class="wrap legend"><div class="g"><div style="grid-column:1/5"><p class="label sig">Proposal ${name}</p></div><p class="display" style="grid-column:5/13">${idea}</p></div>
+<div class="g" style="margin-top:64px"><p class="label" style="grid-column:1/5">Rules</p><ul class="rules small" style="grid-column:5/13">${rules.map(([a,b])=>`<li><span class="m">${a}</span><span class="i3">${b}</span></li>`).join('')}</ul></div>
+<div class="g" style="margin-top:48px"><p class="label" style="grid-column:1/5">Text levels (only these)</p><ul class="ladder" style="grid-column:5/13">${ladder.map(([a,b,c])=>`<li><span class="small i3">${a}</span><span class="${b}">${c}</span></li>`).join('')}</ul></div></div>`;
+
+/* ================= A ================= */
+function A(){
+ const r=(t,x,media='')=>`<div class="g row"><h3 class="h3 t">${t}</h3><div class="x">${x}</div>${media?`<div class="media">${media}</div>`:''}</div>`;
+ const srow=(n,c,s='')=>`<div class="g srow"><div class="n stat">${n}</div><div class="c body"><span>${c}${s?`<br><span class="cap">${s}</span>`:''}</span></div></div>`;
+ const note=(l,t)=>`<div class="g" style="padding:24px 0 0;border-top:1px solid var(--rule)"><p class="label i3" style="grid-column:1/5">${l}</p><p class="lead" style="grid-column:5/11">${t}</p></div>`;
+ const head=(i,t,s,k)=>`<div class="wrap"><div class="g chhead"><p class="label" style="grid-column:1/5"><span class="sig">${pad(i)}</span>&nbsp;&nbsp;${t}</p><p class="small i3" style="grid-column:5/11">${s}</p></div><div class="g"><p class="display key">${k}</p></div>`;
+ let h=legend('A','Index rows. Every chapter reads as a table of contents you can scan: what on the left, why in the middle, proof below.',
+  [['Grid','12 columns, full width. No sticky title column: the page starts at column 1, always.'],['Reading order','1. chapter label → 2. key sentence (display) → 3. rows. Each row: title cols 1–4, text cols 5–10, media cols 5–12.'],['Separation','Ink rule opens a chapter; strong hairline opens a row; light hairline only between repeated items.'],['Numbers','One size (stat). Always cols 1–4, caption cols 5–9 after a short ink dash. Never inside prose.'],['Boxes','No floating boxes. Notes become a row: label cols 1–4, sentence in lead cols 5–10.']],
+  [['Statement','display','Students know what a balanced meal…'],['Row title','h3','The evidence'],['Running text','read','The brief: pick a real problem…'],['Callout','lead','From “how do we teach…”'],['Number','stat','92%'],['Label / caption','label','06 · Design']]);
+ // intro + overview
+ h+=sec('intro',`<div class="wrap"><div class="g"><p class="label i3" style="grid-column:1/5">← All work</p></div><div class="g" style="margin-top:64px"><h1 class="mega" style="grid-column:1/13">${D.title}</h1><p class="display" style="grid-column:1/10;margin-top:32px">${D.tagline}</p></div><img src="${IMG}cover-app.png" style="margin-top:72px;width:100%" alt=""></div>`);
+ h+=sec('overview',`<div class="wrap"><div class="g chhead"><p class="label" style="grid-column:1/5">Overview</p></div>
+ ${D.glance.map(([a,b])=>`<div class="g row" style="padding-bottom:24px"><h3 class="h3 t">${a}</h3><p class="lead x">${b}</p></div>`).join('')}
+ <div class="g" style="border-top:1px solid var(--rule-s);padding-top:24px;row-gap:24px">${D.facts.map(([a,b])=>`<div style="grid-column:span 2"><p class="label i3">${a}</p><p class="body" style="margin-top:6px">${b}</p></div>`).join('')}</div></div>`);
+ h+=sec('result',`<div class="wrap"><div class="g chhead"><p class="label" style="grid-column:1/5">Result</p></div><div class="g"><p class="display key">${D.result}</p></div>
+ <div class="g row"><h3 class="h3 t">The app</h3><div style="grid-column:5/13;display:grid;grid-template-columns:repeat(3,1fr);gap:24px">${D.shots.map(([l,f],i)=>`<div>${shot(f,.7)}<p class="small" style="border-top:1px solid var(--rule-s);padding-top:10px"><span class="label sig">${pad(i+1)}</span>&nbsp;&nbsp;${l}</p></div>`).join('')}</div></div>
+ <div class="g row" style="padding-bottom:0"><h3 class="h3 t">Targets for a pilot</h3></div>${D.targets.map(([n,c])=>srow(n,c)).join('')}</div>`,'alt');
+ h+=sec('process',`<div class="wrap"><div class="g chhead"><p class="label" style="grid-column:1/5">Process</p></div>${D.chapters.map(([t,s],i)=>`<div class="g" style="border-top:1px solid var(--rule);padding:16px 0;align-items:baseline"><span class="label sig" style="grid-column:1/2">${pad(i+1)}</span><span class="h3" style="grid-column:2/5">${t}</span><span class="lead i3" style="grid-column:5/11">${s}</span></div>`).join('')}</div>`);
+ const c=D.challenge;
+ h+=sec('challenge',head(1,'Challenge','Effort, not knowledge',c.key)+r('The brief',`<div class="read">${c.paras.map(p=>`<p>${p}</p>`).join('')}</div>`)+
+   `<div class="g row" style="padding-bottom:0"><h3 class="h3 t">The evidence</h3></div>${srow(c.big[0],c.big[1],c.big[2])}${c.stats.map(([n,l])=>srow(n,l)).join('')}`+
+   `<div class="g row" style="margin-top:72px"><h3 class="h3 t">The question</h3><p class="lead x">${c.hmw}</p></div>${note('Reframe',c.reframe)}</div>`);
+ const R=D.research;
+ h+=sec('research',head(2,'Research','Inside students’ kitchens',R.key)+`<div class="g row" style="padding-bottom:0"><h3 class="h3 t">Methods</h3></div>${R.methods.map(([n,l,t])=>srow(n,`<span class="m">${l}</span>`,t)).join('')}`+
+   r('Analysis',`<p class="read">${R.analysis}</p>`)+`${R.coded.map(([n,l,t])=>srow(n,`<span class="m">${l}</span>`,t)).join('')}</div>`);
+ const I=D.insights;
+ h+=sec('insights',head(3,'Insights','Time, plans, portions, space',I.key)+I.items.map(([t,s,sl,x],i)=>`<div class="g row" style="padding-bottom:48px"><p class="label sig" style="grid-column:1/2">${pad(i+1)}</p><h3 class="h3" style="grid-column:2/5">${t}</h3><div style="grid-column:5/8">${s?`<p class="stat" style="font-size:72px">${s}</p><p class="cap" style="margin-top:8px">${sl}</p>`:'<p class="cap">—</p>'}</div><p class="read" style="grid-column:8/12">${x}</p></div>`).join('')+'</div>','alt');
+ const F=D.define;
+ h+=sec('define',head(4,'Define','Two archetypes',F.key)+r('The archetypes',`<p class="read">${F.intro}</p>`)+
+  `<div class="tbl"><div class="g th"><span style="grid-column:1/5"></span>${F.arch.map((a,i)=>`<div style="grid-column:${i?9:5}/${i?13:9}"><p class="label i3">${pad(i+1)} · ${a.alias}</p><p class="h3" style="margin-top:8px">${a.name}</p></div>`).join('')}</div>
+  ${[['Wants','goal','h2'],['In their words','quote','lead'],['Friction','f','body'],['Opportunity','o','body']].map(([l,k,cl])=>`<div class="g tr"><p class="label i3" style="grid-column:1/5">${l}</p>${F.arch.map((a,i)=>`<p class="${cl}" style="grid-column:${i?9:5}/${i?13:9}">${a[k]}</p>`).join('')}</div>`).join('')}</div>`+
+  `<div class="g row" style="margin-top:72px"><h3 class="h3 t">Priorities</h3><div class="x"><p class="read">A value proposition canvas turned jobs, pains and gains into priorities.</p></div></div>
+  <div class="g tr" style="border-top:1px solid var(--rule);padding:20px 0"><p class="label i3" style="grid-column:1/5">Must-haves</p><div style="grid-column:5/13">${F.must.map(x=>`<span class="pill">${x}</span>`).join('')}</div></div>
+  <div class="g tr" style="border-top:1px solid var(--rule);padding:20px 0"><p class="label i3" style="grid-column:1/5">Nice-to-haves</p><div style="grid-column:5/13">${F.nice.map(x=>`<span class="pill">${x}</span>`).join('')}</div></div></div>`);
+ const Z=D.ideate;
+ h+=sec('ideate',head(5,'Ideate','Six reframing cycles',Z.key)+`<div class="g row" style="padding-bottom:24px"><h3 class="h3 t">Reframing cycles</h3><p class="read x">Three of the six, from the first framing to the final one.</p></div>
+  <div class="tbl"><div class="g th"><span class="label i3" style="grid-column:1/3">Cycle</span><span class="label i3" style="grid-column:3/6">Who</span><span class="label i3" style="grid-column:6/9">Problem</span><span class="label i3" style="grid-column:9/13">Idea</span></div>
+  ${Z.cycles.map(([n,cl,p,id],i,a)=>`<div class="g tr ${i==a.length-1?'final':''}" style="${i==a.length-1?'padding:24px 0':''}"><span class="h3" style="grid-column:1/3;${i==a.length-1?'padding-left:16px':''}">${pad(n)}</span><span class="body m" style="grid-column:3/6">${cl}</span><span class="body" style="grid-column:6/9">${p}</span><span class="body ${i<a.length-1?'i3':''}" style="grid-column:9/13;${i<a.length-1&&id?'text-decoration:line-through':''}">${id||'—'}</span></div>`).join('')}</div>`+
+  `<div style="margin-top:48px">${note('Discarded',Z.discarded)}</div></div>`);
+ const G=D.design;
+ h+=sec('design',head(6,'Design','Box, app and launch',G.key)+r('The box',`<p class="read">${G.box}</p>`,`<div class="boxes">${G.boxes.map(([n,ro,col,k])=>`<div style="background:${col}"><span class="label">${n}</span><img src="${IMG}boxes/box-${k}-3q.png" alt=""><span class="small">${ro}</span></div>`).join('')}</div>`)+
+   G.boxStats.map(([n,l])=>srow(n,l)).join('')+
+   `<div class="g row" style="margin-top:72px;padding-bottom:24px"><h3 class="h3 t">The app</h3><p class="read x">Each feature removes a decision, or an excuse, from the student’s evening.</p></div>${note('Decision',G.decision)}`+
+   G.feats.map(([t,x,f],i)=>`<div class="g" style="border-top:1px solid var(--rule);padding:24px 0;margin-top:${i?0:48}px;align-items:start"><p class="label sig" style="grid-column:1/2">${pad(i+1)}</p><h3 class="h3" style="grid-column:2/5">${t}</h3><p class="read" style="grid-column:5/8">${x}</p><div style="grid-column:9/12">${shot(f,.55)}</div></div>`).join('')+'</div>');
+ const X=D.reflection;
+ h+=sec('reflection',head(7,'Reflection','What I’d validate next',X.key)+r('What surprised me',`<div class="read">${X.surprised.map(p=>`<p>${p}</p>`).join('')}</div>`)+
+  `<div class="g row" style="padding-bottom:0"><h3 class="h3 t">If I started again</h3></div>${X.again.map((t,i)=>`<div class="g" style="border-top:1px solid var(--rule);padding:16px 0"><span class="label sig" style="grid-column:4/5;text-align:right">${pad(i+1)}</span><span class="read" style="grid-column:5/11;color:var(--ink)">${t}</span></div>`).join('')}
+  <div class="g closing" style="margin-top:120px"><p class="display i4" style="grid-column:1/11">${X.closing[0]} <span style="color:var(--ink)">${X.closing[1]}</span></p><p class="label" style="grid-column:1/5;margin-top:72px;border-top:1px solid var(--rule-s);padding-top:16px">${X.kicker}</p><p class="h2" style="grid-column:5/13;margin-top:72px;border-top:1px solid var(--rule-s);padding-top:16px">${X.line}</p></div></div>`);
+ return h;
+}
+
+/* ================= B ================= */
+function B(){
+ const cells=(inner)=>`<div class="cells">${inner}</div>`;
+ const cell=(span,inner,cls='',st='')=>`<div class="cell ${cls}" style="grid-column:span ${span};${st}">${inner}</div>`;
+ const statc=(span,n,l,t='',cls='')=>cell(span,`<p class="stat" style="font-size:88px">${n}</p><div class="push"><p class="body m">${l}</p>${t?`<p class="cap" style="margin-top:4px">${t}</p>`:''}</div>`,cls,'min-height:300px');
+ const head=(i,t,s,k)=>`<div class="wrap"><div class="g head"><div style="grid-column:1/4;display:flex;gap:8px;align-items:center"><span class="chip on">Step ${i}</span><span class="label">${t}</span></div><p class="h2" style="grid-column:4/12;font-weight:400">${k}</p></div>`;
+ const gh=(t,x='')=>`<div class="g grouphead"><p class="label" style="grid-column:1/4">${t}</p>${x?`<p class="body i3" style="grid-column:4/10">${x}</p>`:''}</div>`;
+ let h=legend('B','Cells. Every piece of content lives in a cell of one hairline grid, like a spec sheet: same edges, same padding, same anchor points.',
+  [['Grid','12 columns; cells span 3, 4, 6 or 12. Cells touch: hairlines are the only separation.'],['Reading order','Chapter: step chip → key sentence (h2 Regular, cols 4–11). Inside each cell: label top-left → content → number or caption pinned to the bottom.'],['Groups','A group is an uppercase label + one grey line above a row of cells.'],['Numbers','Always bottom-left of their cell, one size. The label above tells what it counts.'],['Media','Screens sit inside cells on a tinted ground, cropped by the cell edge.']],
+  [['Key sentence','h2','Students know what a balanced meal…'],['Cell title','h3','Time filters everything'],['Cell text','body','Frozen vegetables and ready-made…'],['Number','stat','92%'],['Label (cell / group)','label','The evidence'],['Caption','small i3','Lupi et al., 2015']]);
+ h+=sec('intro',`<div class="wrap"><p class="label i3">← All work</p><div class="g" style="margin-top:64px;align-items:end"><h1 class="mega" style="grid-column:1/7">${D.title}</h1><p class="lead" style="grid-column:7/13">${D.tagline}</p></div><img src="${IMG}cover-app.png" style="margin-top:56px;width:100%" alt=""></div>`);
+ h+=sec('overview',`<div class="wrap">${gh('Overview')}${cells(D.glance.map(([a,b])=>cell(4,`<p class="label i3">${a}</p><p class="lead push">${b}</p>`,'','min-height:220px')).join('')+D.facts.map(([a,b])=>cell(2,`<p class="label i3">${a}</p><p class="small">${b}</p>`)).join(''))}</div>`);
+ h+=sec('result',`<div class="wrap">${gh('Result')}<div class="g" style="margin-bottom:40px"><p class="h2" style="grid-column:4/12;font-weight:400">${D.result}</p></div>${cells(D.shots.map(([l,f],i)=>cell(4,`<span class="chip">${pad(i+1)}</span><p class="h3">${l}</p><div class="devbox">${shot(f,.62)}</div>`)).join('')+D.targets.map(([n,l])=>statc(4,n,l,'Target for a pilot')).join(''))}</div>`,'alt');
+ h+=sec('process',`<div class="wrap">${gh('Process')}${cells(D.chapters.map(([t,s],i)=>cell(i<4?3:4,`<span class="chip ${i==0?'on':''}">Step ${i+1}</span><p class="h3 push" style="margin-top:48px">${t}</p><p class="small i3">${s}</p>`)).join(''))}</div>`);
+ const c=D.challenge;
+ h+=sec('challenge',head(1,'Challenge','',c.key)+gh('The brief')+cells(c.paras.map(p=>cell(6,`<p class="body">${p}</p>`)).join(''))+gh('The evidence')+cells(statc(6,c.big[0],c.big[1],c.big[2])+c.stats.map(([n,l])=>statc(3,n,l)).join(''))+gh('The question')+cells(cell(8,`<p class="lead">${c.hmw}</p>`,'','min-height:180px')+cell(4,`<p class="label i3">Reframe</p><p class="body push">${c.reframe}</p>`,'tint'))+'</div>');
+ const R=D.research;
+ h+=sec('research',head(2,'Research','',R.key)+gh('Methods')+cells(R.methods.map(([n,l,t])=>statc(4,n,l,t)).join(''))+gh('Analysis',R.analysis)+cells(R.coded.map(([n,l,t])=>statc(6,n,l,t)).join(''))+'</div>');
+ const I=D.insights;
+ h+=sec('insights',head(3,'Insights','',I.key)+cells(I.items.map(([t,s,sl,x],i)=>cell(3,`<span class="chip">${pad(i+1)}</span><p class="h3">${t}</p><p class="body i3">${x}</p>${s?`<div class="push"><p class="stat" style="font-size:72px">${s}</p><p class="cap" style="margin-top:8px">${sl}</p></div>`:'<p class="cap push">No single number: a pattern across all interviews.</p>'}`,'','min-height:520px')).join(''))+'</div>','alt');
+ const F=D.define;
+ h+=sec('define',head(4,'Define','',F.key)+gh('The archetypes',F.intro)+cells(cell(4,'','tint')+F.arch.map((a,i)=>cell(4,`<p class="label i3">${pad(i+1)} · ${a.alias}</p><p class="h3">${a.name}</p>`,'tint')).join('')+
+  [['Wants','goal','h2'],['In their words','quote','lead'],['Friction','f','body'],['Opportunity','o','body']].map(([l,k,cl])=>cell(4,`<p class="label i3">${l}</p>`)+F.arch.map(a=>cell(4,`<p class="${cl}">${a[k]}</p>`)).join('')).join(''))+
+  gh('Priorities','A value proposition canvas turned jobs, pains and gains into priorities.')+cells(cell(3,`<p class="label i3">Must-haves</p>`)+F.must.map(x=>cell(3,`<p class="lead">${x}</p>`)).join('')+cell(3,`<p class="label i3">Nice-to-haves</p>`)+F.nice.map(x=>cell(3,`<p class="lead">${x}</p>`)).join('')+cell(3,''))+'</div>');
+ const Z=D.ideate;
+ h+=sec('ideate',head(5,'Ideate','',Z.key)+gh('Reframing cycles','Three of the six, from the first framing to the final one.')+cells(Z.cycles.map(([n,cl,p,id],i,a)=>cell(4,`<span class="chip ${i==a.length-1?'':''}" style="${i==a.length-1?'border-color:#fff':''}">Cycle ${pad(n)}${i==a.length-1?' · final':''}</span><p class="h3">${cl}</p><div class="push"><p class="label i3">Problem</p><p class="body" style="margin-top:6px">${p}</p></div><div><p class="label i3">Idea</p><p class="body" style="margin-top:6px;${i<a.length-1&&id?'text-decoration:line-through;color:var(--ink-3)':''}">${id||'—'}</p></div>`,i==a.length-1?'ink':'','min-height:420px')).join(''))+cells(cell(4,`<p class="label i3">Discarded</p>`,'tint')+cell(8,`<p class="body">${Z.discarded}</p>`,'tint'))+'</div>');
+ const G=D.design;
+ h+=sec('design',head(6,'Design','',G.key)+gh('The box',G.box)+cells(G.boxes.map(([n,ro,col,k])=>cell(3,`<div class="boxes" style="grid-template-columns:1fr"><div style="background:${col}"><span class="label">${n}</span><img src="${IMG}boxes/box-${k}-3q.png" alt=""><span class="small">${ro}</span></div></div>`,'pad0')).join('')+G.boxStats.map(([n,l])=>statc(4,n,l)).join(''))+
+  gh('The app','Each feature removes a decision, or an excuse, from the student’s evening.')+cells(cell(4,`<p class="label i3">Decision</p>`,'tint')+cell(8,`<p class="lead">${G.decision}</p>`,'tint')+G.feats.map(([t,x,f],i)=>cell(4,`<span class="chip">${pad(i+1)}</span><p class="h3">${t}</p><p class="body i3">${x}</p><div class="devbox">${shot(f,.5)}</div>`)).join(''))+'</div>');
+ const X=D.reflection;
+ h+=sec('reflection',head(7,'Reflection','',X.key)+gh('What surprised me')+cells(X.surprised.map(p=>cell(6,`<p class="body">${p}</p>`)).join(''))+gh('If I started again')+cells(X.again.map((t,i)=>cell(3,`<span class="chip">${pad(i+1)}</span><p class="body push" style="margin-top:40px">${t}</p>`,'','min-height:200px')).join(''))+
+  cells(cell(12,`<p class="label" style="color:#aaa">${X.kicker}</p><p class="display" style="margin-top:48px"><span style="color:#888">${X.closing[0]}</span> ${X.closing[1]}</p><p class="h2" style="margin-top:72px">${X.line}</p>`,'ink','padding:48px'))+'</div>');
+ return h;
+}
+
+/* ================= C ================= */
+function C(){
+ const col=x=>`<div class="g"><div class="col">${x}</div></div>`;
+ const kick=(i,t)=>`<div class="kick"><span class="label sig">${pad(i)}</span><span class="ln"></span><span class="label">${t}</span></div>`;
+ const grp=(t,x)=>`<div class="grp"><p class="label">${t}</p>${x}</div>`;
+ const P=a=>a.map(p=>`<p class="lead p">${p}</p>`).join('');
+ const stats=(arr)=>`<div class="g"><div class="stats" style="grid-column:1/13;grid-template-columns:repeat(${arr.length},1fr)">${arr.map(([n,l,s])=>`<div><p class="stat" style="font-size:80px">${n}</p><p class="small" style="margin-top:16px">${l}</p>${s?`<p class="cap" style="margin-top:4px">${s}</p>`:''}</div>`).join('')}</div></div>`;
+ const quote=(l,t)=>`<div class="quote"><p class="label i3" style="margin-bottom:12px">${l}</p><p class="h3" style="font-weight:400">${t}</p></div>`;
+ let h=legend('C','One column. The page reads like an essay: one axis, top to bottom; numbers gather in a single data row at the end of each part.',
+  [['Grid','Text column = cols 3–10 for everything. Media and data rows break out to the full 12 columns.'],['Reading order','Kicker (number — chapter) → key sentence (display) → groups. Each group: label on a hairline → paragraphs in lead size.'],['Paragraphs','Larger running text (lead, 23px): fewer, shorter paragraphs; no small grey body inside chapters.'],['Numbers','Out of the prose, into one full-width data row per group, columns split by dashed lines, one size.'],['Callouts','A quote with a left ink rule. Nothing parked on the side.']],
+  [['Statement','display','Students know what a balanced meal…'],['Callout / item title','h3','How might we make…'],['Running text','lead','The brief: pick a real problem…'],['Number','stat','92%'],['Group label','label','The evidence'],['Caption','small i3','Lupi et al., 2015']]);
+ h+=sec('intro',`<div class="wrap">${col(`<p class="label i3">← All work</p><h1 class="mega" style="margin-top:64px">${D.title}</h1><p class="display" style="margin-top:32px">${D.tagline}</p>`)}<img src="${IMG}cover-app.png" style="margin-top:72px;width:100%" alt=""></div>`);
+ h+=sec('overview',`<div class="wrap">${col(kick(0,'Overview')+D.glance.map(([a,b])=>`<div style="border-top:1px solid var(--rule-s);padding:16px 0 32px;display:grid;grid-template-columns:1fr 3fr;gap:24px"><p class="label i3" style="padding-top:6px">${a}</p><p class="lead">${b}</p></div>`).join('')+`<div class="foot" style="grid-template-columns:repeat(3,1fr);row-gap:24px">${D.facts.map(([a,b])=>`<div><p class="cap">${a}</p><p class="small">${b}</p></div>`).join('')}</div>`)}</div>`);
+ h+=sec('result',`<div class="wrap">${col(kick(0,'Result')+`<p class="display">${D.result}</p>`)}<div class="g" style="margin-top:72px">${D.shots.map(([l,f],i)=>`<div style="grid-column:span 4">${shot(f,.7)}<p class="small" style="margin-top:16px"><span class="label sig">${pad(i+1)}</span>&nbsp;&nbsp;${l}</p></div>`).join('')}</div>${col('<p class="label" style="margin-top:96px">Targets for a pilot</p>')}${stats(D.targets)}</div>`,'alt');
+ h+=sec('process',`<div class="wrap">${col(kick(0,'Process')+`<ol>${D.chapters.map(([t,s],i)=>`<li style="display:grid;grid-template-columns:48px 1fr 1fr;gap:24px;border-top:1px solid var(--rule);padding:14px 0;align-items:baseline"><span class="label sig">${pad(i+1)}</span><span class="lead m">${t}</span><span class="small i3">${s}</span></li>`).join('')}</ol>`)}</div>`);
+ const c=D.challenge;
+ h+=sec('challenge',`<div class="wrap">${col(kick(1,'Challenge')+`<p class="display">${c.key}</p>`+grp('The brief',P(c.paras))+grp('The evidence',''))}${stats([[c.big[0],c.big[1],c.big[2]],...c.stats])}${col(grp('The question',`<p class="lead p">${c.hmw}</p>`+quote('Reframe',c.reframe)))}</div>`);
+ const R=D.research;
+ h+=sec('research',`<div class="wrap">${col(kick(2,'Research')+`<p class="display">${R.key}</p>`+grp('Methods',''))}${stats(R.methods)}${col(grp('Analysis',`<p class="lead p">${R.analysis}</p>`))}${stats(R.coded)}</div>`);
+ const I=D.insights;
+ h+=sec('insights',`<div class="wrap">${col(kick(3,'Insights')+`<p class="display">${I.key}</p>`+I.items.map(([t,s,sl,x],i)=>`<div style="margin-top:72px;border-top:1px solid var(--rule-s);padding-top:16px"><p class="label sig">${pad(i+1)}</p><p class="h3" style="margin-top:12px">${t}</p><p class="lead p" style="margin-top:12px">${x}</p></div>`).join(''))}${stats(I.items.filter(x=>x[1]).map(([t,s,sl])=>[s,sl]))}</div>`,'alt');
+ const F=D.define;
+ h+=sec('define',`<div class="wrap">${col(kick(4,'Define')+`<p class="display">${F.key}</p>`+grp('The archetypes',`<p class="lead p">${F.intro}</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px">${F.arch.map((a,i)=>`<div style="border-top:1px solid var(--ink);padding-top:16px"><p class="label i3">${pad(i+1)} · ${a.alias}</p><p class="h3" style="margin-top:8px">${a.name}</p><p class="h2" style="margin-top:40px">${a.goal}</p><p class="lead" style="margin-top:24px">${a.quote}</p><p class="cap" style="margin-top:32px">Friction</p><p class="body">${a.f}</p><p class="cap" style="margin-top:16px">Opportunity</p><p class="body">${a.o}</p></div>`).join('')}</div>`)+
+  grp('Priorities',`<p class="lead p">A value proposition canvas turned jobs, pains and gains into priorities.</p><div class="foot"><div><p class="cap">Must-haves</p>${F.must.map(x=>`<p class="lead" style="border-top:1px solid var(--rule);padding:10px 0;margin-top:8px">${x}</p>`).join('')}</div><div><p class="cap">Nice-to-haves</p>${F.nice.map(x=>`<p class="lead" style="border-top:1px solid var(--rule);padding:10px 0;margin-top:8px">${x}</p>`).join('')}</div></div>`))}</div>`);
+ const Z=D.ideate;
+ h+=sec('ideate',`<div class="wrap">${col(kick(5,'Ideate')+`<p class="display">${Z.key}</p>`+grp('Reframing cycles',`<p class="lead p">Three of the six, from the first framing to the final one.</p>${Z.cycles.map(([n,cl,p,id],i,a)=>`<div class="${i==a.length-1?'final':''}" style="display:grid;grid-template-columns:120px 1fr;gap:24px;margin-top:${i?16:48}px;${i<a.length-1?'border-top:1px solid var(--rule-s);padding-top:16px':''}"><p class="h3">${pad(n)}</p><div><p class="lead m">${cl}</p><p class="body" style="margin-top:8px">${p}</p>${id?`<p class="body ${i<a.length-1?'i3':''}" style="margin-top:8px;${i<a.length-1?'text-decoration:line-through':''}">${id}</p>`:''}</div></div>`).join('')}`+quote('Discarded',Z.discarded)))}</div>`);
+ const G=D.design;
+ h+=sec('design',`<div class="wrap">${col(kick(6,'Design')+`<p class="display">${G.key}</p>`+grp('The box',`<p class="lead p">${G.box}</p>`))}<div class="g"><div class="bleed boxes">${G.boxes.map(([n,ro,col,k])=>`<div style="background:${col}"><span class="label">${n}</span><img src="${IMG}boxes/box-${k}-3q.png" alt=""><span class="small">${ro}</span></div>`).join('')}</div></div>${stats(G.boxStats)}
+  ${col(grp('The app',`<p class="lead p">Each feature removes a decision, or an excuse, from the student’s evening.</p>`+quote('Decision',G.decision)))}<div class="g" style="margin-top:72px;row-gap:64px">${G.feats.map(([t,x,f],i)=>`<div style="grid-column:span 4">${shot(f,.62)}<div style="border-top:1px solid var(--ink);padding-top:12px"><p class="label sig">${pad(i+1)}</p><p class="lead m" style="margin-top:8px">${t}</p><p class="small i3" style="margin-top:6px">${x}</p></div></div>`).join('')}</div></div>`);
+ const X=D.reflection;
+ h+=sec('reflection',`<div class="wrap">${col(kick(7,'Reflection')+`<p class="display">${X.key}</p>`+grp('What surprised me',P(X.surprised))+grp('If I started again',`<ol>${X.again.map((t,i)=>`<li style="display:grid;grid-template-columns:48px 1fr;border-top:1px solid var(--rule);padding:12px 0"><span class="label sig" style="padding-top:6px">${pad(i+1)}</span><span class="lead">${t}</span></li>`).join('')}</ol>`)+
+  `<div style="margin-top:160px;padding-bottom:160px"><p class="display"><span class="i4">${X.closing[0]}</span> ${X.closing[1]}</p><div style="border-top:1px solid var(--rule-s);margin-top:64px;padding-top:16px"><p class="label i3">${X.kicker}</p><p class="h2" style="margin-top:24px">${X.line}</p></div></div>`)}</div>`);
+ return h;
+}
+
+const R={A,B,C};
+function show(p){document.getElementById('out').className=p;document.getElementById('out').innerHTML=R[p]();document.querySelectorAll('.bar button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.p===p));history.replaceState(null,'','?p='+p+location.hash)}
+const SECS=['intro','overview','result','process','challenge','research','insights','define','ideate','design','reflection'];
+document.getElementById('nav').innerHTML=SECS.map(s=>`<a href="#${s}" style="color:var(--ink-3);text-decoration:none">${s[0].toUpperCase()+s.slice(1)}</a>`).join('');
+const cur=()=>{let c=null;for(const s of SECS){const e=document.getElementById(s);if(e&&e.getBoundingClientRect().top<120)c=s}return c};
+document.querySelectorAll('.bar button').forEach(b=>b.onclick=()=>{const c=cur();show(b.dataset.p);if(c)document.getElementById(c).scrollIntoView();else scrollTo(0,0)});
+show(new URLSearchParams(location.search).get('p')||'A');
+</script>
+</body>
+</html>
