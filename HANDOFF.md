@@ -57,13 +57,10 @@ then this HANDOFF commit).
   the table mockup, the single big hands scene, the hand-home/hand-plan duo.
 - **Design chapter, app part:** Note (Decision) → `Features` alternate crop 0.82: Adaptive planning, Swap tonight's box,
   A timely nudge (widget medium, crop 0.32), One code per box (flat `screens/lid-code.png`; the code inside each box is
-  unique and validates that a box was really cooked; recipes stay browsable), Focus mode, Streaks with friends →
-  `### The stamp` = two paragraphs + wide Figure `mockups/hand-stamp.jpg` (2000×1848, `ratio="2000/1848"`, ground lightened to #efefef, equal 700 px margins around the two phones at
-  source scale: on the left the flat
-  `screens/meal-stamp.png` device ("Hold today to stamp it"), on the right the owner's hand photo
-  `Media/01-JustCook/mockups-source/hand-grey.png` with "Thursday, stamped" warped in; same scale, matched on screen
-  width, tops aligned; owner 2026-10-20, after trying hand-front.png the other way round) + Note
-  "Principle" →
+  unique and validates that a box was really cooked; recipes stay browsable), Focus mode, Hold to stamp
+  (`meal-stamp.png`), The day, stamped (`meal-stamped.png`), Streaks with friends →
+  Note "Principle" right after the Features (the stamp has no group of its own any more: owner 2026-10-20, after
+  three hand-mockup attempts, wanted the two stamp screens flat, in sequence, among the other Design rows) →
   `### Outside the app` = intro ("hold the thread") + Gallery cutout cols 3 in four moments (the 19:45 hand mockup was
   removed 2026-10-20; its notification is now a cut-out, `screens/out-notif-start-cooking.png`, Figma `2319:5724`): "08:30 – 09:00 · Morning" (use it today, boxes
   ready, large widget) · "All day · The streak" (small, medium streak, 5 hours left) · "19:00 – 19:45 · Before dinner" (medium
@@ -76,7 +73,8 @@ then this HANDOFF commit).
   `C:\Users\rospo\Documents\Designing\1percent\1percent-design-guidelines.md` (§8 Critical Retention Moment:
   participation over spectatorship, put the retention ask inside the peak; §9 Zeigarnik, Hick, Fitts). Use them to show
   that he reflects on behaviour, never with invented data.
-- Mockups in use: only `mockups/hand-stamp.jpg` (Figure in The stamp; no Spot is used on the page now). Owner (2026-10-20): "molti mockup sono fatti male";
+- **No mockups are in use on the JustCook page** (owner, 2026-10-20). `src/assets/projects/justcook/mockups/` is gone.
+  Previous attempts (kept only as notes):
   he removed the hand-home/plan/lid/lock ones and the scroll zoom. Source photos: `Media/01-JustCook/mockups-source/`
   (hand-grey.png = current stamp. Scripts in `Media/_tools/`, run in this order from a scratchpad with sharp:
   `glass.mjs 179 600 0.5` = warp a full-rect screen onto the straight glass edges, then clip it to the REAL glass shape
@@ -868,6 +866,10 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-20 · LOCAL (7)** · JustCook: stamp hand mockup dropped (owner: "torna indietro"). The two stamp screens are
+  flat Features rows 06 Hold to stamp and 07 The day, stamped (between Focus mode and Streaks); the Principle note
+  follows the Features. No mockups left on the page. Pushed `main`.
 
 - **2026-10-20 · LOCAL (6)** · JustCook stamp figure, owner: screen corners now follow the real glass of the hand
   phone exactly (mask from the measured glass profile), ground lightened to #efefef, phones slightly smaller and
