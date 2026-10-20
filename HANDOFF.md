@@ -867,6 +867,9 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-20 · LOCAL (12)** · Numbered lists in chapters ("If I started again") back to a plain list on the A–B
+  measure (number + point, light hairlines), not cells (owner). Pushed `main`.
+
 - **2026-10-20 · LOCAL (11)** · Owner review round 3: chevrons instead of arrows (Process rows, All work); no rule above
   any `###` group; group titles now h3 Medium sentence case (sub-chapters), item titles inside cells/rows lead Medium;
   stamp row lighter (one-sentence text, Principle as a quiet line, shortened: the "8 of 10 meals" clause dropped);

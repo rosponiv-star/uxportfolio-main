@@ -58,7 +58,7 @@ it (the owner removed every such divider, 2026-10-20), one short intro paragraph
 cells and rows (insights, cycles, features, archetype names) and sub-headings inside a group (Chips labels such as
 Must-haves, Channels) are lead Medium. Links that move (back link, Process index) use a small drawn 8px chevron, 1px
 stroke, that steps 4px on hover; no arrow lines.
-Numbers, findings, cycles and numbered lists are CELLS: one hairline grid across the body lane (`.cells` / `.cell` in
+Numbers, findings and cycles are CELLS (numbered lists stay a plain list: number + point, light hairlines): one hairline grid across the body lane (`.cells` / `.cell` in
 global.css, 6 units: third = 2, half = 3), label top-left, number or caption pinned to the bottom, consecutive cell
 blocks join into one grid. Sequence numbers are small signal labels (01), never chips: the owner rejected chips of any
 kind ("tolgono l'aria di editorialità"). Dense comparisons stay light (Archetypes, priority Chips: hairlines only, no

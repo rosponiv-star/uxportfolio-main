@@ -536,34 +536,28 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
   color: var(--ink-4);
 }
 
-/* A numbered list in a chapter is a row of cells: number on top, the point below (3 items = thirds,
-   2 or 4 = halves). */
+/* A numbered list in a chapter is a plain list on the A–B measure: number and point on one baseline,
+   light hairlines between the points (owner, 2026-10-20: a list, not cells). */
 .prose > ol:not([class]) {
   counter-reset: li;
-  max-width: none;
   gap: 0;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  border-top: 1px solid var(--rule-strong);
-  border-left: 1px solid var(--rule-strong);
 }
 
 .prose > ol:not([class]) > li {
   counter-increment: li;
-  grid-column: span 2;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-  padding: var(--space-3);
-  border-right: 1px solid var(--rule-strong);
-  border-bottom: 1px solid var(--rule-strong);
-  font-size: var(--fs-body);
-  line-height: 1.5;
+  display: grid;
+  grid-template-columns: var(--space-5) minmax(0, 1fr);
+  align-items: baseline;
+  padding-block: var(--space-2);
   color: var(--ink);
 }
 
-.prose > ol:not([class]):has(> li:nth-child(4):last-child) > li,
-.prose > ol:not([class]):has(> li:nth-child(2):last-child) > li {
-  grid-column: span 3;
+.prose > ol:not([class]) > li + li {
+  border-top: 1px solid var(--rule);
+}
+
+.prose > ol:not([class]) > li:first-child {
+  padding-top: 0;
 }
 
 .prose > ol:not([class]) > li::before {
@@ -571,12 +565,11 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
   font-size: var(--fs-label);
   font-weight: 500;
   letter-spacing: 0.08em;
-  line-height: 1.3;
   font-variant-numeric: tabular-nums;
   color: var(--signal);
 }
 
-/* Cells: the shared grid for numbers, findings, cycles and lists in a chapter. One hairline grid across
+/* Cells: the shared grid for numbers, findings and cycles in a chapter. One hairline grid across
    the body lane (6 units: a third = 2, a half = 3, all = 6); cells touch, hairlines are the only
    separation; inside, the label sits top-left and the number or caption is pinned to the bottom.
    Two cell blocks in a row join into one grid. */
@@ -601,19 +594,17 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
   margin-top: auto;
 }
 
-.prose > :is(.cells, .metrics, ol:not([class])) + :is(.cells, .metrics, ol:not([class])) {
+.prose > :is(.cells, .metrics) + :is(.cells, .metrics) {
   margin-top: 0;
   border-top: 0;
 }
 
 @media (max-width: 640px) {
-  .cells,
-  .prose > ol:not([class]) {
+  .cells {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .cells > .cell,
-  .prose > ol:not([class]) > li {
+  .cells > .cell {
     grid-column: auto !important;
   }
 }
