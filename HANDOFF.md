@@ -867,6 +867,14 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-20 · LOCAL (9)** · **Case-study structure "B-mix" implemented** (owner's pick from the three prototypes in
+  `notes/proposals/`): rules and text levels of B (cells), Overview as cells, Result untouched, Process = clickable
+  index rows (A, with a drawn arrow), sticky chapter titles kept, Key in h2 Regular, `###` groups as uppercase labels,
+  numbers/insights/cycles/numbered lists as hairline cells (`.cells` in global.css), no chips anywhere (sequence numbers
+  = small signal labels), Archetypes and priority Chips lightened (no boxes/tints), Features as A rows with the
+  alternating sides, Closing = bold sentence in mega, all ink. Reframes no longer draws "6 → 1". All five case studies
+  share the components. Checked JustCook at 1440 and 375 (no overflow, Rehabeat too). Pushed `main`.
+
 - **2026-10-20 · LOCAL (8)** · Owner: case-study pages are confusing (no entry point, unclear order and hierarchy of
   text, labels, numbers, boxes). Three full structural proposals built with real JustCook content in
   `notes/proposals/case-structure.html` (?p=A|B|C): **A Index rows** (no sticky title lane; title cols 1–4, text 5–10,

@@ -1,6 +1,6 @@
 ---
-// The last word of a case study: a statement in display size across tracks A–C (plain text in grey,
-// <strong> in ink), then, below a hairline, the one lesson to remember, large, with its kicker right above it.
+// The last word of a case study: the plain sentence as a short lead-in, then the <strong> sentence alone in
+// mega size, all ink; below a hairline, the one lesson to remember, large, with its kicker right above it.
 //   <Closing kicker="What I take with me" line="Make the right thing the easy thing.">
 //     JustCook is still a concept. **The next version would be a tested one.**
 //   </Closing>
@@ -35,17 +35,22 @@ const { kicker, line } = Astro.props;
 
   .closing__statement :global(p) {
     max-width: none;
-    font-size: var(--fs-display);
-    font-weight: 400;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    color: var(--ink-4);
-    text-wrap: balance;
+    font-size: var(--fs-lead);
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+    color: var(--ink-2);
   }
 
   .closing__statement :global(strong) {
-    font-weight: 400;
+    display: block;
+    margin-top: var(--space-4);
+    margin-left: -0.04em;
+    font-size: var(--fs-mega);
+    font-weight: 500;
+    line-height: 0.92;
+    letter-spacing: -0.055em;
     color: var(--ink);
+    text-wrap: balance;
   }
 
   .closing__lesson {

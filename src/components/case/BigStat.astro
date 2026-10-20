@@ -1,6 +1,6 @@
 ---
-// The one number a chapter hinges on: mega size on an ink rule, its caption and source right below it
-// (read in one column, no side caption). Counts up once like every other stat.
+// The one number a chapter hinges on, as a full-width cell: the number on top, its caption and source pinned
+// to the bottom. Same size as every other number; a <Metrics> row right after it joins the same cell grid.
 //   <BigStat value="92%" label="of off-site students change their eating habits after moving out" source="Lupi et al., 2015" />
 import Stat from './Stat.astro';
 
@@ -12,49 +12,43 @@ interface Props {
 const { value, label, source } = Astro.props;
 ---
 
-<figure class="bigstat" data-reveal>
-  <div class="bigstat__value">
-    <Stat value={value} class="bigstat__stat" />
+<figure class="bigstat cells" data-reveal>
+  <div class="cell bigstat__cell">
+    <Stat value={value} />
+    <figcaption class="cell__foot bigstat__cap">
+      <p class="bigstat__label">{label}</p>
+      {source && <p class="bigstat__source">Source: {source}</p>}
+    </figcaption>
   </div>
-  <figcaption class="bigstat__cap">
-    <p class="bigstat__label">{label}</p>
-    {source && <p class="bigstat__source field">Source: {source}</p>}
-  </figcaption>
 </figure>
 
 <style>
   .bigstat {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    padding-top: var(--space-3);
-    border-top: 1px solid var(--ink);
+    margin: 0;
   }
 
-  .bigstat .bigstat__value :global(.stat.bigstat__stat) {
-    font-size: var(--fs-mega);
-    line-height: 0.82;
-    letter-spacing: -0.06em;
+  .bigstat__cell {
+    grid-column: 1 / -1;
+    min-height: 240px;
   }
 
   .bigstat__cap {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
-    max-width: calc((200% - var(--gutter)) / 3);
+    gap: 4px;
+    max-width: 40ch;
   }
 
   .bigstat__label {
-    font-size: var(--fs-lead);
+    font-size: var(--fs-body);
     font-weight: 500;
-    line-height: 1.3;
-    letter-spacing: -0.015em;
+    line-height: 1.4;
     color: var(--ink);
   }
 
-  @media (max-width: 640px) {
-    .bigstat__cap {
-      max-width: none;
-    }
+  .bigstat__source {
+    font-size: var(--fs-small);
+    line-height: 1.45;
+    color: var(--ink-3);
   }
 </style>

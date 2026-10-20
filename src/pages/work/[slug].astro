@@ -89,29 +89,25 @@ const facts = [
     <div class="wrap">
       <!-- Overview: the 30-second read ----------------------------------- -->
       <Section title="Overview" id="overview" class="overview">
-        <div class="sheet">
-        <div class="trio sheet__glance">
+        <!-- One cell grid: the three sentences on top, the facts below. -->
+        <dl class="cells sheet">
           {
             glanceItems.map((g, i) => (
-              <div class="glance" data-reveal style={`--d:${i}`}>
-                <p class="label label--group">{g.label}</p>
-                <p class="glance__text">{g.text}</p>
+              <div class="cell glance" data-reveal style={`--d:${i}`}>
+                <dt class="label label--group">{g.label}</dt>
+                <dd class="glance__text cell__foot">{g.text}</dd>
               </div>
             ))
           }
-        </div>
-
-        <dl class="trio sheet__facts">
           {
             facts.map((f) => (
-              <div>
+              <div class="cell fact">
                 <dt class="label muted">{f.label}</dt>
                 <dd>{f.value}</dd>
               </div>
             ))
           }
         </dl>
-        </div>
       </Section>
 
       <!-- Result: what was made and what it achieves, before the process ---- -->
@@ -267,21 +263,26 @@ const facts = [
   }
 
   /* Overview ------------------------------------------------------------- */
-  .glance {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
+  .sheet dd {
+    margin: 0;
   }
 
-  .glance .label {
-    text-box: trim-start cap alphabetic;
+  .glance {
+    grid-column: span 2;
+    min-height: 240px;
   }
 
   .glance__text {
+    padding-top: var(--space-4);
     font-size: var(--fs-lead);
     line-height: 1.35;
     letter-spacing: -0.015em;
     max-width: 30ch;
+  }
+
+  .fact {
+    grid-column: span 2;
+    gap: var(--space-1);
   }
 
   /* Set apart by an ink rule instead of the usual grey one; inside, only space separates
@@ -290,22 +291,15 @@ const facts = [
     background: var(--ink);
   }
 
-  .sheet__facts {
-    margin-top: var(--space-6);
-    row-gap: var(--space-3);
-  }
-
-  .sheet__facts dt {
-    margin-bottom: 4px;
-  }
-
+  /* Phones: the three sentences full width, the facts two per row. */
   @media (max-width: 640px) {
-    .sheet__glance {
-      row-gap: var(--space-4);
+    .sheet {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .sheet__facts {
-      margin-top: var(--space-5);
+    .glance {
+      grid-column: 1 / -1 !important;
+      min-height: 0;
     }
   }
 

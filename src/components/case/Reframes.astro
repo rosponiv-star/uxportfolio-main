@@ -1,42 +1,26 @@
 ---
-// Problem-reframing cycles (e.g. Client–Problem–Solution iterations) as a stepped funnel: each cycle is a box
-// that starts one track further right than the previous one (A–C → B–C → C), narrowing towards the final
-// framing, which is the dark box. Ideas from earlier cycles were discarded, so they are struck through.
-// `n` is the real cycle number (shown large behind each box); `cycles` opens the funnel with "6 → 1".
-import Stat from './Stat.astro';
-
+// Problem-reframing cycles (Client–Problem–Solution iterations) as one row of cells, read left to right:
+// each cycle's number, who it was for, the problem and the idea. Ideas from earlier cycles were discarded,
+// so they are struck through; the last cell, the final framing, is inked in.
+// `n` is the real cycle number. `cycles` (the total) is accepted for older MDX but no longer drawn:
+// the chapter's key sentence already says how many there were.
 interface Props {
   items: { client: string; problem: string; idea?: string; n?: number }[];
   cycles?: number;
 }
-const { items, cycles } = Astro.props;
+const { items } = Astro.props;
 const last = items.length - 1;
 const pad = (v: number) => String(v).padStart(2, '0');
-// Start track per step, spread over A (1), B (2), C (3).
-const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last));
 ---
 
-{
-  cycles && (
-    <div class="funnel__head" data-reveal>
-      <p class="funnel__ratio">
-        <Stat value={String(cycles)} />
-        <span class="funnel__arrow" aria-hidden="true" />
-        <Stat value="1" />
-      </p>
-      <p class="funnel__cap field">{cycles} Client–Problem–Solution cycles, one final framing.</p>
-    </div>
-  )
-}
-<ol class="funnel">
+<ol class="reframes cells">
   {
     items.map((it, i) => (
       <li
-        class:list={['step', { 'step--final': i === last }]}
+        class:list={['cell step', { 'step--final': i === last }]}
         data-reveal
-        style={`--d: ${i}; --i: ${i}; grid-column: ${startOf(i)} / -1`}
+        style={`--d: ${i}; grid-column: span ${6 / Math.min(items.length, 3)}`}
       >
-        <span class="step__big" aria-hidden="true">{pad(it.n ?? i + 1)}</span>
         <span class="step__n label">
           {i === last ? `Cycle ${pad(it.n ?? i + 1)} · Final framing` : `Cycle ${pad(it.n ?? i + 1)}`}
         </span>
@@ -59,107 +43,32 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
 </ol>
 
 <style>
-  .funnel {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    column-gap: var(--gutter);
-    row-gap: var(--space-2);
-  }
-
-  /* The ratio and its caption, read in one column above the funnel. */
-  .funnel__head {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-    margin-bottom: var(--space-5);
-  }
-
-  .funnel__ratio {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-  }
-
-  .funnel__ratio :global(.stat) {
-    font-size: var(--fs-mega);
-    line-height: 0.82;
-    letter-spacing: -0.06em;
-  }
-
-  /* A drawn arrow: one hairline and a chevron head, nothing else. */
-  .funnel__arrow {
-    position: relative;
-    flex: none;
-    width: clamp(48px, 6vw, 96px);
-    height: 1.5px;
-    background: var(--ink);
-  }
-
-  .funnel__arrow::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    width: 12px;
-    height: 12px;
-    border-top: 1.5px solid var(--ink);
-    border-right: 1.5px solid var(--ink);
-    transform: translate(1px, -50%) rotate(45deg);
-    transform-origin: center;
-  }
-
-  .funnel__cap {
-    line-height: 1.45;
-  }
-
+  /* Subgrid: number, client and fields line up across the cells, whatever each one's length. */
   .step {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-    padding: var(--space-3);
-    border: 1px solid var(--rule-strong);
-    background: var(--paper);
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: var(--space-2);
+    align-content: start;
   }
 
   .step__n {
     color: var(--signal);
   }
 
-  /* The real cycle number, oversized and faint, behind the box content. */
-  .step__big {
-    position: absolute;
-    bottom: -0.18em;
-    right: var(--space-2);
-    font-size: var(--fs-mega);
-    font-weight: 500;
-    line-height: 1;
-    letter-spacing: -0.06em;
-    font-variant-numeric: tabular-nums;
-    color: color-mix(in srgb, var(--ink) 6%, transparent);
-    pointer-events: none;
-  }
-
-  .step--final .step__big {
-    color: color-mix(in srgb, var(--paper) 12%, transparent);
-  }
-
-  .step > :not(.step__big) {
-    position: relative;
-  }
-
   .step__client {
-    font-size: var(--fs-body);
+    font-size: var(--fs-h3);
     font-weight: 500;
-    letter-spacing: -0.01em;
+    line-height: 1.15;
+    letter-spacing: -0.022em;
     color: var(--ink);
   }
 
   .step__rows {
     display: grid;
-    gap: var(--space-1);
-    margin: var(--space-1) 0 0;
+    gap: var(--space-2);
+    margin-bottom: 0;
+    padding-top: var(--space-4);
     font-size: var(--fs-body);
     line-height: 1.45;
     color: var(--ink-2);
@@ -167,13 +76,7 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
 
   .step__rows > div {
     display: grid;
-    grid-template-columns: 9rem minmax(0, 1fr);
-    align-items: baseline;
-    column-gap: var(--space-2);
-  }
-
-  .step__rows dt {
-    color: var(--ink-3);
+    gap: 2px;
   }
 
   .step__rows dd {
@@ -189,49 +92,26 @@ const startOf = (i: number) => (last === 0 ? 1 : 1 + Math.round((i * 2) / last))
     text-decoration-color: var(--ink-3);
   }
 
-  /* The final framing: the one box that is inked in, its text the largest of the funnel. */
+  /* The final framing: the one cell that is inked in. */
   .step--final {
-    border-color: var(--ink);
     background: var(--ink);
     color: var(--paper);
   }
 
-  .step--final .step__n {
-    color: color-mix(in srgb, var(--paper) 60%, transparent);
-  }
-
-  .step--final .step__client {
-    font-size: var(--fs-lead);
-    line-height: 1.25;
-    letter-spacing: -0.015em;
-    color: var(--paper);
-  }
-
-  .step--final .step__rows {
-    color: var(--paper);
-  }
-
-  .step--final .step__rows > div {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 2px;
-  }
-
+  .step--final .step__n,
   .step--final .step__rows dt {
     color: color-mix(in srgb, var(--paper) 60%, transparent);
   }
 
-  /* Narrower screens: full-width boxes, the funnel kept as a growing left indent. */
-  @media (max-width: 960px) {
-    .step {
-      grid-column: 1 / -1 !important;
-      margin-left: calc(var(--i) * var(--space-4));
-    }
+  .step--final .step__client,
+  .step--final .step__rows {
+    color: var(--paper);
   }
 
   @media (max-width: 640px) {
-    .step__rows > div {
-      grid-template-columns: minmax(0, 1fr);
-      row-gap: 2px;
+    .step {
+      grid-row: auto;
+      grid-template-rows: none;
     }
   }
 </style>

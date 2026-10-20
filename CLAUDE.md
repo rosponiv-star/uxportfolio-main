@@ -44,60 +44,69 @@ role, timeline, team, tools, tone (placeholder cover colour), toneDark, cover {i
 glance {problem, approach, outcome} (one short sentence each), result {text, media [{label, image?, kind: screen|wide}],
 showcase?, metricsLabel, metrics}, placeholder (set to `false` once the content is real).
 
-Page order (owner, 2026-10-03): title + tagline → cover → Overview (ink top rule instead of the grey one; 3
-one-sentence glance items, then the facts, separated by space only: the owner found inner hairlines too busy) →
+Page order (owner, 2026-10-03): title + tagline → cover → Overview (one cell grid, owner 2026-10-20: three cells
+Problem/Approach/Outcome with the sentence pinned to the bottom, then six fact cells, three per row) →
 **Result** (alt band: screens/boards, 1–2 sentences, key numbers; placeholders until images exist) → Process (`case/ProcessIndex.astro`:
-steps hanging from an ink line, each with number, title (lead) and the chapter `summary` (2–4 words); once it scrolls away a slim fixed bar under the header shows the steps, fills each
+a clickable index, one row per chapter: number, title (h3), the chapter `summary` (2–4 words) and a drawn arrow that stretches on hover; once it scrolls away a slim fixed bar under the header shows the steps, fills each
 segment in --signal as its chapter is read and replaces the progress bar) → chapters. Recruiters must see interface and result first; the full process stays one scroll away.
 
 Chapters: Challenge, Research, Insights (tone="alt"), Define, Ideate, Design, [Validate, only if tested], Reflection.
-Each chapter opens with a `<Key>` sentence (h3 size, Regular, ink), then SHORT paragraphs (2–3 lines). Running text in
-chapters is `--fs-read` (17→19px, line-height 1.55). Text levels: Key (h3 Regular, ink) → group headings → paragraphs
-(read, ink-2) → text inside blocks: archetype quotes/traits, insight evidence, reframe values (body 17) → notes, captions (small). No filler: cut anything that doesn't carry a fact, a decision or a reason.
+**Structure "B-mix" (owner, 2026-10-20, chosen from three prototypes in `notes/proposals/`):** the chapter title stays
+sticky in the head lane; the body lane starts with the `<Key>` sentence (h2 size, Regular, ink: where reading starts),
+then groups. A group = `### Title` rendered as an uppercase ink label, one short intro paragraph, then its content.
+Numbers, findings, cycles and numbered lists are CELLS: one hairline grid across the body lane (`.cells` / `.cell` in
+global.css, 6 units: third = 2, half = 3), label top-left, number or caption pinned to the bottom, consecutive cell
+blocks join into one grid. Sequence numbers are small signal labels (01), never chips: the owner rejected chips of any
+kind ("tolgono l'aria di editorialità"). Dense comparisons stay light (Archetypes, priority Chips: hairlines only, no
+boxes or tints). Tinted `<Note>` boxes stay for the few notes worth highlighting; don't overuse them.
+Text levels: Key (h2 Regular) → group label → paragraphs (read 17→19, ink-2) → cell titles (h3) → cell text (body 17)
+→ numbers (stat, one size everywhere) → captions (small, grey). No filler: cut anything that doesn't carry a fact, a decision or a reason.
 
 **One reading column (owner, 2026-10-09):** chapter text reads strictly top to bottom from the left edge of track A;
 nothing is parked in track C for the eye to hunt for (notes, captions, kickers sit right under what they refer to).
-A chapter is split into groups with `### Title`, rendered as the title alone in lead Medium (group numbers like 01.1
+A chapter is split into groups with `### Title`, rendered as an uppercase ink label (group numbers like 01.1
 were tried and rejected, 2026-10-09: "troppi numeri"). Proximity carries the structure: `--space-item` before a group, `--space-3` from its heading to its
 content, `--space-block` inside it. Wide media (strips, galleries, metric rows, funnels) may still span A–C.
 
 Components available in MDX without imports:
 - `<Chapter title="…" summary="2–4 words">…</Chapter>`: a numbered chapter. Title and summary feed the Process index.
-- `<Key>…</Key>`: the chapter's key sentence, first thing in a chapter.
+- `<Key>…</Key>`: the chapter's key sentence (h2 Regular), first thing in a chapter.
 - `<Note label="Decision" text="Why…">paragraph(s)</Note>`: the content it annotates, then the note
   right below it as a tinted callout on the A–B measure. Self-closing `<Note … />` renders the callout alone.
 - `<Figure src={img} alt="" caption="" ratio="16/9" size="wide|text" />`: `wide` (the default) spans the
   whole body lane. Import the image at the top of the MDX file. A `video="/media/x.mp4"` prop is also
   supported.
-- `<Metrics items={[{ value, label, text? }]} />`: large bare numbers (`--fs-stat`) on an ink hairline, sign/unit
-  small (unit raised, leading sign centred), caption below, optional context line; digits count up once (~1.2s,
-  `case/Stat.astro`; ranges like "4–5" do not count). Use it wherever there are numbers, never bury them in prose.
-- `<Chips label="…" intro="…" items={[{ label, note?, color?, image? }]} variant="chips|cards" />`: a short list:
-  label (optional) + one line of context, then the chips right below (cards: two per row on tracks A and B). Hover shows `note` in the cursor label, or `image`
-  (e.g. the box) with the note as caption. `cards` = boxes with the note visible (channels).
-- `<Closing kicker? line?>statement</Closing>`: the case study's last word, at the end of Reflection: statement in
-  display size (plain = grey, **bold** = ink), then a hairline, the kicker and, below it, the one lesson to remember in h2.
+- `<Metrics items={[{ value, label, text? }]} />`: in a chapter, a row of equal cells (number on top, label + context
+  pinned to the bottom); in the Result, bare numbers on ink hairlines (unchanged). Sign/unit small (unit raised,
+  leading sign centred); digits count up once (~1.2s, `case/Stat.astro`; ranges like "4–5" do not count). Use it
+  wherever there are numbers, never bury them in prose.
+- `<Chips label="…" intro="…" items={[{ label, note?, color?, image? }]} variant="chips|cards" />`: a light row, no
+  boxes: label + one line of context on track A, the items as plain lead lines on B–C. Hover shows `note` in the cursor
+  label, or `image` (e.g. the box) with the note as caption. `cards` = cells, two per row, note visible (channels).
+- `<Closing kicker? line?>statement</Closing>`: the case study's last word, at the end of Reflection: the plain
+  sentence as a lead-in, the **bold** sentence alone in mega size, all ink; then a hairline, the kicker and the one
+  lesson to remember in h2.
 - `<BoxStrip items={[{ name, role, color, image, hover?, alt }]} />`: a product line as solid colour panels (one per
   product, its own colour), the product cut-out large inside; hover cross-fades to a second view (front ↔ perspective).
 - `<Features … alternate crop={0.82} />`: bigger devices that switch side row by row; items may override `crop` and take
   `anchor: 'bottom'` (widgets need ~0.3, lock-screen notifications show the bottom share).
 - Gallery items may take `span: 2` (a 2×2 hero tile; the grid packs densely around it).
-- `<BigStat value label source? />`: the one number a chapter hinges on, mega size on an ink rule, caption + source
-  right below it.
-- `<Features items={[{ title, text, image, alt }]} />`: product features, each with its screen cropped to the top in
-  track A, number/title/text in B–C.
+- `<BigStat value label source? />`: the one number a chapter hinges on, as a full-width cell (same stat size as all
+  numbers), caption + source pinned to the bottom; a `<Metrics>` right after it joins the same grid.
+- `<Features items={[{ title, text, image, alt }]} />`: product features as rows, each opening on a strong hairline:
+  number/title/text at the top of B–C, the screen cropped and standing on the row's bottom edge in track A.
 - `<Gallery groups={[{ label, kind: cutout|tile, cols?, items: [{ image, alt, caption? }] }]} />`: brand material
   (packaging cut-outs on a hairline, flyers, posts) in a tinted panel across A–C.
 - Metrics also take `title` (prefer a `###` group instead) and `variant="boxed"` (tinted boxes, for a second kind of number).
-  Reframes take `cycles` (opens with a big "6 → 1") and a real cycle number `n` per item (shown large, faint).
+  Reframes take a real cycle number `n` per item (`cycles` is accepted but no longer drawn).
 - Cursor label variants (scripts/site.ts): `data-cursor` text; `data-cursor-style="note"` = sentence-case note;
   `data-cursor-image="url"` = image preview with `data-cursor` as caption. Clamped inside the viewport.
-- `<Insights items={[{ title, text, stat?, statLabel? }]} />`: stacked in one column (number, title, the
-  stat large, the evidence). `variant="compact"`: a lighter list (number + lead title on one line, text below) for plans.
-- `<Reframes items={[{ client, problem, idea? }]} />`: stepped funnel of boxes (A–C → B–C → C); earlier ideas are
-  struck through as discarded; the last item is the final framing in an ink box. Show ~3 key cycles.
-- `<Archetypes items={[{ name, alias?, quote, traits: [{ label, text }] }]} />`: two light boxes compared side by side
-  (row labels in track A, archetypes in B and C; tinted header band; optional `goal` row in h2 size, e.g. "Less
+- `<Insights items={[{ title, text, stat?, statLabel? }]} />`: cells (4 = 2×2, 3 = thirds, 5 = 3 + 2): number,
+  title, evidence, and the stat pinned to the bottom of the cell. `variant="compact"`: a lighter list (number + lead title on one line, text below) for plans.
+- `<Reframes items={[{ client, problem, idea? }]} />`: one row of cells read left to right (subgrid keeps the fields
+  aligned); earlier ideas are struck through as discarded; the last cell, the final framing, is inked in. Show ~3 key cycles.
+- `<Archetypes items={[{ name, alias?, quote, traits: [{ label, text }] }]} />`: a light comparison, no boxes
+  (row labels in track A, archetypes in B and C under an ink rule, hairlines between rows; optional `goal` row in h2 size, e.g. "Less
   effort" vs "Less waste"; quote in lead size). Same trait labels, same order, for both.
 - `result.showcase` (frontmatter, not MDX): labelled groups of device shots rendered by `case/Showcase.astro`:
   `{ label, layout: trio|pair|quad|scene, crop?, anchor?: top|bottom, stagger?, items: [{ image, alt, caption? }] }`.

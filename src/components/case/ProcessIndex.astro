@@ -1,7 +1,7 @@
 ---
 // The case-study process as a line of steps.
-// - `inline` (default): sits in the "Process" section. A hairline runs across the body lane; each
-//   chapter hangs from it on a tick with its number and title.
+// - `inline` (default): sits in the "Process" section as a clickable index: one row per chapter
+//   across the body lane (number, title, summary) with a drawn arrow that stretches on hover.
 // - `bar`: the same steps, fixed under the header while the chapters are being read. Each step's
 //   segment of the line fills with the signal colour as its chapter is read (it replaces the
 //   page progress bar). Hidden before the first chapter and after the last one.
@@ -34,14 +34,14 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
       </div>
     </nav>
   ) : (
-    <ol class="steps" style={`--count: ${chapters.length}`}>
+    <ol class="pidx" data-pidx>
       {chapters.map((c, i) => (
-        <li class="step" data-reveal style={`--d: ${i}`}>
-          <a href={`#${c.id}`}>
-            <span class="step__tick" aria-hidden="true" />
-            <span class="step__n label">{n(i)}</span>
-            <span class="step__t">{c.title}</span>
-            {c.summary && <span class="step__s">{c.summary}</span>}
+        <li data-reveal style={`--d: ${i}`}>
+          <a href={`#${c.id}`} class="pidx__row" data-cursor="Go to chapter">
+            <span class="pidx__n label">{n(i)}</span>
+            <span class="pidx__t">{c.title}</span>
+            {c.summary && <span class="pidx__s">{c.summary}</span>}
+            <span class="pidx__go" aria-hidden="true" />
           </a>
         </li>
       ))}
@@ -82,52 +82,94 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     color: var(--ink);
   }
 
-  /* Inline ---------------------------------------------------------------- */
-  .steps:not(.steps--bar) {
-    border-top: 1px solid var(--ink);
+  /* Inline index ------------------------------------------------------------ */
+  .pidx {
+    border-bottom: 1px solid var(--rule-strong);
   }
 
-  .steps:not(.steps--bar) .step a {
-    padding-top: var(--space-3);
-  }
-
-  .step__tick {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 10px;
-    background: var(--ink);
-    transition: height 0.4s var(--ease-out);
-  }
-
-  .step a:hover .step__tick,
-  .step a:focus-visible .step__tick {
-    height: 18px;
-  }
-
-  .steps:not(.steps--bar) .step__n {
-    padding-left: 10px;
-  }
-
-  .steps:not(.steps--bar) .step__t {
-    padding-left: 10px;
-    font-size: var(--fs-lead);
-    letter-spacing: -0.02em;
+  .pidx__row {
+    display: grid;
+    grid-template-columns: var(--space-6) minmax(0, 4fr) minmax(0, 5fr) var(--space-5);
+    align-items: baseline;
+    column-gap: var(--gutter);
+    padding-block: var(--space-2);
+    border-top: 1px solid var(--rule-strong);
     color: var(--ink);
+    transition:
+      background 0.3s,
+      padding 0.5s var(--ease-out);
   }
 
-  .step__s {
-    padding-left: 10px;
-    padding-right: var(--space-1);
-    font-size: var(--fs-small);
-    line-height: 1.4;
+  .pidx__n {
+    color: var(--signal);
+  }
+
+  .pidx__t {
+    font-size: var(--fs-h3);
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.022em;
+  }
+
+  .pidx__s {
+    font-size: var(--fs-body);
     color: var(--ink-3);
-    text-wrap: pretty;
   }
 
-  .steps:not(.steps--bar) .step a {
-    gap: var(--space-1);
+  /* The row is the link: a drawn arrow at its end says so, and stretches on hover. */
+  .pidx__go {
+    position: relative;
+    justify-self: end;
+    align-self: center;
+    width: 28px;
+    height: 1.5px;
+    background: currentColor;
+    transition: width 0.5s var(--ease-out);
+  }
+
+  .pidx__go::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 7px;
+    height: 7px;
+    border-top: 1.5px solid currentColor;
+    border-right: 1.5px solid currentColor;
+    transform: translate(0, -50%) rotate(45deg);
+  }
+
+  .pidx__row:hover,
+  .pidx__row:focus-visible {
+    background: var(--paper-2);
+    padding-inline: var(--space-2);
+  }
+
+  .pidx__row:hover .pidx__go,
+  .pidx__row:focus-visible .pidx__go {
+    width: 44px;
+  }
+
+  @media (max-width: 640px) {
+    .pidx__row {
+      grid-template-columns: var(--space-5) minmax(0, 1fr) var(--space-4);
+      row-gap: 2px;
+    }
+
+    .pidx__t {
+      font-size: var(--fs-lead);
+    }
+
+    .pidx__s {
+      grid-column: 2;
+      grid-row: 2;
+      font-size: var(--fs-small);
+    }
+
+    .pidx__go {
+      grid-column: 3;
+      grid-row: 1;
+    }
   }
 
   /* Bar ------------------------------------------------------------------- */
@@ -227,45 +269,6 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
 
   /* Phones ---------------------------------------------------------------- */
   @media (max-width: 640px) {
-    .steps:not(.steps--bar) {
-      grid-template-columns: minmax(0, 1fr);
-      border-top: 0;
-      border-left: 1px solid var(--ink);
-    }
-
-    .steps:not(.steps--bar) .step a {
-      flex-direction: row;
-      align-items: baseline;
-      gap: var(--space-2);
-      padding: 6px 0 6px var(--space-2);
-    }
-
-    .steps:not(.steps--bar) .step a {
-      display: grid;
-      grid-template-columns: 2.5em minmax(0, 1fr);
-      column-gap: var(--space-1);
-      row-gap: 2px;
-    }
-
-    .steps:not(.steps--bar) .step__n,
-    .steps:not(.steps--bar) .step__t,
-    .step__s {
-      padding-left: 0;
-    }
-
-    .step__s {
-      grid-column: 2;
-    }
-
-    .step__tick {
-      top: 0.95em;
-      width: 10px;
-      height: 1px;
-    }
-
-    .step a:hover .step__tick {
-      height: 1px;
-    }
 
     /* Bar: segments only, plus the current chapter as text. */
     .steps--bar {
@@ -294,7 +297,7 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     const steps = Array.from(bar.querySelectorAll<HTMLElement>('[data-step]'));
     const sections = steps.map((s) => document.getElementById(s.dataset.step!));
     const now = bar.querySelector<HTMLElement>('[data-pbar-now]');
-    const inline = document.querySelector<HTMLElement>('.steps:not(.steps--bar)');
+    const inline = document.querySelector<HTMLElement>('[data-pidx]');
     const root = document.documentElement;
     const update = () => {
       const line = window.innerHeight * 0.35;

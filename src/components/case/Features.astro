@@ -54,17 +54,16 @@ const phRatio = (device?: 'phone' | 'tv') => (device === 'tv' ? '16/9' : `9/${Ma
 </ol>
 
 <style>
+  /* Each row opens on a strong hairline: number, title and text start right under it, the device
+     stands on the row's bottom edge. */
   .feature {
     align-items: end;
-    padding-block: var(--space-5) 0;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule-strong);
   }
 
   .feature + .feature {
-    border-top: 1px solid var(--rule);
-  }
-
-  .feature:first-child {
-    padding-top: 0;
+    margin-top: var(--space-5);
   }
 
   /* The device stands on the row's bottom edge: cropped, it reads like a phone rising from the line. */
@@ -100,8 +99,8 @@ const phRatio = (device?: 'phone' | 'tv') => (device === 'tv' ? '16/9' : `9/${Ma
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
-    align-self: center;
-    padding-block: var(--space-4);
+    align-self: start;
+    padding-bottom: var(--space-4);
   }
 
   .feature__n {

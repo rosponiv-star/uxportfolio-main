@@ -1,6 +1,7 @@
 ---
-// Numbered key insights, read top to bottom on the A–B measure: number and finding, then the number that
-// backs it (large, `stat` with an optional short `statLabel`), then the evidence.
+// Numbered key insights as cells across the body lane: number and finding on top, the evidence below it,
+// and the number that backs it (`stat` + short `statLabel`) pinned to the bottom of the cell.
+// 4 items = 2 × 2, 3 = thirds, 5 = three thirds then two halves.
 // variant 'compact': a lighter list (title in lead size) for plans and short points.
 // items: [{ title: '...', text: '...', stat?: '95%', statLabel?: '…' }, ...]
 import Stat from './Stat.astro';
@@ -10,56 +11,42 @@ interface Props {
   variant?: 'default' | 'compact';
 }
 const { items, variant = 'default' } = Astro.props;
+const n = items.length;
+// Width of each cell in the 6-unit cell grid.
+const spanOf = (i: number) => (n % 3 === 0 ? 2 : n % 2 === 0 ? 3 : i < n - 2 ? 2 : 3);
+const compact = variant === 'compact';
 ---
 
-<ol class:list={['insights', `insights--${variant}`]}>
+<ol class:list={['insights', `insights--${variant}`, { cells: !compact }]}>
   {
     items.map((it, i) => (
-      <li class="insight" data-reveal style={`--d: ${i}`}>
+      <li class:list={['insight', { cell: !compact }]} data-reveal style={`--d: ${i}${compact ? '' : `; grid-column: span ${spanOf(i)}`}`}>
         <p class="insight__head">
           <span class="insight__n label">{String(i + 1).padStart(2, '0')}</span>
           <span class="insight__title">{it.title}</span>
         </p>
+        <p class="insight__text">{it.text}</p>
         {it.stat && (
-          <p class="insight__stat">
+          <p class="insight__stat cell__foot">
             <Stat value={it.stat} />
-            {it.statLabel && <span class="field">{it.statLabel}</span>}
+            {it.statLabel && <span class="insight__statlabel">{it.statLabel}</span>}
           </p>
         )}
-        <p class="insight__text">{it.text}</p>
       </li>
     ))
   }
 </ol>
 
 <style>
-  .insights {
-    max-width: calc((200% - var(--gutter)) / 3);
-  }
-
-  .insight {
-    display: flex;
-    flex-direction: column;
+  .insights--default .insight {
     gap: var(--space-3);
-    padding-block: var(--space-5);
-  }
-
-  .insight:first-child {
-    padding-top: 0;
-  }
-
-  .insight:last-child {
-    padding-bottom: 0;
-  }
-
-  .insight + .insight {
-    border-top: 1px solid var(--rule);
+    min-height: 380px;
   }
 
   .insight__head {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-2);
   }
 
   .insight__n {
@@ -74,28 +61,41 @@ const { items, variant = 'default' } = Astro.props;
     color: var(--ink);
   }
 
-  .insight__stat {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    column-gap: var(--space-2);
-    row-gap: var(--space-1);
-  }
-
   .insight__text {
     font-size: var(--fs-body);
-    line-height: 1.55;
+    line-height: 1.5;
     color: var(--ink-2);
-    max-width: 58ch;
+    max-width: 52ch;
   }
 
-  /* Compact: number and title on one baseline, the text right under it. */
+  .insight__stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding-top: var(--space-4);
+  }
+
+  .insight__statlabel {
+    font-size: var(--fs-small);
+    line-height: 1.4;
+    color: var(--ink-3);
+  }
+
+  /* Compact: a light list, number and title on one baseline, the text right under it. */
+  .insights--compact {
+    max-width: calc((200% - var(--gutter)) / 3);
+  }
+
   .insights--compact .insight {
     display: grid;
     grid-template-columns: var(--space-5) minmax(0, 1fr);
     align-items: baseline;
     row-gap: var(--space-1);
     padding-block: var(--space-3);
+  }
+
+  .insights--compact .insight + .insight {
+    border-top: 1px solid var(--rule);
   }
 
   .insights--compact .insight:first-child {
@@ -112,12 +112,17 @@ const { items, variant = 'default' } = Astro.props;
     line-height: 1.3;
   }
 
-  .insights--compact .insight__text {
+  .insights--compact .insight__text,
+  .insights--compact .insight__stat {
     grid-column: 2;
   }
 
   @media (max-width: 640px) {
-    .insights {
+    .insights--default .insight {
+      min-height: 0;
+    }
+
+    .insights--compact {
       max-width: none;
     }
   }

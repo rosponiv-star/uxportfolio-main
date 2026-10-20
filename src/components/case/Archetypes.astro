@@ -1,6 +1,6 @@
 ---
-// Behavioural archetypes side by side, as a comparison: row labels in track A, one light box per archetype
-// in tracks B and C, so every row (quote, friction, opportunity…) reads across. Trait labels come from the
+// Behavioural archetypes side by side, as a light comparison: row labels in track A, one column per archetype
+// in tracks B and C (an ink rule on top, hairlines between rows, no boxes), so every row (quote, friction, opportunity…) reads across. Trait labels come from the
 // first archetype; give both the same labels in the same order. `goal` (2–3 words) opens each box in large type:
 // it is what the two disagree on, so it is the first thing to compare. On phones each archetype is its own box.
 interface Props {
@@ -66,54 +66,36 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     column-gap: var(--gutter);
   }
 
-  /* One light box per archetype, behind its column. */
+  /* Light comparison: no boxes, no tint. An ink rule opens each archetype's column; light hairlines run
+     across all three tracks between rows, so every row reads left to right. */
   .arch__box {
-    grid-row: 1 / -1;
-    border: 1px solid var(--rule-strong);
-    background: var(--paper);
+    display: none;
   }
 
   .arch__cell {
     position: relative;
-    padding: var(--space-3);
+    padding-block: var(--space-3);
   }
 
+  .arch__goal,
   .arch__quote,
-  .arch__trait {
+  .arch__trait,
+  .arch__rowlabel {
     border-top: 1px solid var(--rule);
   }
 
-  /* Row labels sit against the boxes (right-aligned in track A), so they read as the rows' headings,
-     joined to them by a short hairline across the gutter. */
   .arch__rowlabel {
-    position: relative;
-    align-self: start;
-    text-align: right;
-  }
-
-  .arch__rowlabel::after {
-    content: '';
-    position: absolute;
-    top: calc(var(--space-3) + 0.45em);
-    right: calc(var(--gutter) * -1);
-    width: calc(var(--gutter) - 6px);
-    height: 1px;
-    background: var(--rule-strong);
-  }
-
-  .arch__rowlabel {
+    align-self: stretch;
     padding-top: var(--space-3);
-    text-box: trim-start cap alphabetic;
+    color: var(--ink-3);
   }
 
-  /* Tinted header band: the two boxes read as two opposing cards. */
   .arch__head {
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
-    padding-block: var(--space-3);
-    background: var(--paper-2);
-    border-bottom: 1px solid var(--rule-strong);
+    padding-block: var(--space-2) var(--space-4);
+    border-top: 1px solid var(--ink);
   }
 
   /* What they want: the largest text in the box, the first thing to compare. */
@@ -139,11 +121,11 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     color: var(--ink);
   }
 
-  /* The quote is the voice of the archetype: the largest text in the box. */
+  /* The quote is the voice of the archetype. */
   .arch__quote {
     margin: 0;
     border-left: 0;
-    padding-left: var(--space-3);
+    padding-left: 0;
     font-size: var(--fs-lead);
     line-height: 1.35;
     letter-spacing: -0.015em;
@@ -161,7 +143,7 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     display: none;
   }
 
-  /* Phones: one box per archetype, labels inside. */
+  /* Phones: one archetype after the other, labels inside. */
   @media (max-width: 640px) {
     .arch {
       display: flex;
@@ -175,19 +157,10 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
 
     .arch__cell {
       order: var(--o);
-      border-inline: 1px solid var(--rule-strong);
-    }
-
-    .arch__head {
-      border-top: 1px solid var(--rule-strong);
     }
 
     .arch__head:not(:first-of-type) {
       margin-top: var(--space-4);
-    }
-
-    .arch__trait.is-last {
-      border-bottom: 1px solid var(--rule-strong);
     }
 
     .arch__mlabel {
