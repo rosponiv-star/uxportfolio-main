@@ -42,12 +42,7 @@ const rows = await Promise.all(
           data-cursor-style={variant !== 'cards' && c.note && !c.src ? 'note' : undefined}
           data-cursor-image={c.src}
         >
-          {variant === 'cards' && (
-            <span class="chip__top">
-              <span class="chip__n label">{String(i + 1).padStart(2, '0')}</span>
-              {c.logo && <span class="chip__logo" aria-hidden="true" set:html={c.logo} />}
-            </span>
-          )}
+          {variant === 'cards' && c.logo && <span class="chip__logo" aria-hidden="true" set:html={c.logo} />}
           <span class="chip__title">
             {c.color && <span class="chip__swatch" style={`background: ${c.color}`} aria-hidden="true" />}
             {c.label}
@@ -127,7 +122,8 @@ const rows = await Promise.all(
     flex: none;
   }
 
-  /* Cards: cells across the body lane (thirds for 3 or 6 items, halves otherwise), note visible. */
+  /* Cards: tiles like About's tools (separate hairline boxes, the brand mark top-left in ink, signal on
+     hover), thirds for 3 or 6 items, halves otherwise, note visible. */
   .chips--cards {
     display: flex;
     flex-direction: column;
@@ -137,22 +133,31 @@ const rows = await Promise.all(
   .chips--cards .chips__list {
     display: grid;
     grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
-    border-top: 1px solid var(--rule-strong);
-    border-left: 1px solid var(--rule-strong);
+    gap: var(--gutter);
   }
 
   .chips--cards .chip {
-    gap: var(--space-2);
-    min-height: 200px;
+    gap: var(--space-1);
     padding: var(--space-3);
-    border-right: 1px solid var(--rule-strong);
-    border-bottom: 1px solid var(--rule-strong);
+    border: 1px solid var(--rule-strong);
+    transition:
+      border-color 0.4s var(--ease-out),
+      background 0.4s var(--ease-out);
   }
 
-  .chip__top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+  .chips--cards .chip__title {
+    font-weight: 500;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .chips--cards .chip:hover {
+      border-color: var(--ink);
+      background: var(--paper-2);
+    }
+
+    .chips--cards .chip:hover .chip__logo {
+      color: var(--signal);
+    }
   }
 
   .chip__n {
@@ -161,9 +166,11 @@ const rows = await Promise.all(
 
   .chip__logo {
     display: block;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
+    margin-bottom: var(--space-4);
     color: var(--ink);
+    transition: color 0.4s var(--ease-out);
   }
 
   .chip__logo :global(svg) {
@@ -174,7 +181,6 @@ const rows = await Promise.all(
   }
 
   .chip__note {
-    margin-top: auto;
     font-size: var(--fs-small);
     line-height: 1.45;
     color: var(--ink-3);
@@ -194,8 +200,5 @@ const rows = await Promise.all(
       grid-template-columns: minmax(0, 1fr);
     }
 
-    .chips--cards .chip {
-      min-height: 0;
-    }
   }
 </style>

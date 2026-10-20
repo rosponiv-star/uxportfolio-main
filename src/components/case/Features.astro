@@ -100,13 +100,13 @@ const phRatio = (device?: 'phone' | 'tv') => (device === 'tv' ? '16/9' : `9/${Ma
   .feature__note {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
-    margin-top: var(--space-2);
-    padding: var(--space-3);
-    background: var(--paper-2);
+    gap: 6px;
+    margin-top: var(--space-3);
+    padding-top: var(--space-2);
+    border-top: 1px solid var(--rule);
     font-size: var(--fs-small);
     line-height: 1.45;
-    color: var(--ink);
+    color: var(--ink-3);
   }
 
   .feature__note .label {
@@ -155,10 +155,10 @@ const phRatio = (device?: 'phone' | 'tv') => (device === 'tv' ? '16/9' : `9/${Ma
   }
 
   .feature__title {
-    font-size: var(--fs-h3);
+    font-size: var(--fs-lead);
     font-weight: 500;
-    line-height: 1.15;
-    letter-spacing: -0.022em;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
     color: var(--ink);
   }
 

@@ -867,6 +867,11 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-20 · LOCAL (11)** · Owner review round 3: chevrons instead of arrows (Process rows, All work); no rule above
+  any `###` group; group titles now h3 Medium sentence case (sub-chapters), item titles inside cells/rows lead Medium;
+  stamp row lighter (one-sentence text, Principle as a quiet line, shortened: the "8 of 10 meals" clause dropped);
+  no hairline under the last Outside-the-app gallery group; channel cards as About-style tool tiles. Pushed `main`.
+
 - **2026-10-20 · LOCAL (10)** · Owner's annotated review of B-mix: no rule above Overview; thinner arrows (Process +
   All work); number cells without the fixed min-height; Research "Codes" explained ("short tags marking what each
   passage … is about; the same 36 applied to all"); Archetypes rows as continuous light hairlines (no column rules);

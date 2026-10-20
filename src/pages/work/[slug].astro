@@ -204,7 +204,7 @@ const facts = [
     padding-top: calc(var(--header-h) + var(--space-6));
   }
 
-  /* Back link, editorial: a drawn hairline arrow and a label; the line stretches on hover. */
+  /* Back link, editorial: a small drawn chevron and a label; the chevron steps back on hover. */
   .intro__back {
     display: inline-flex;
     align-items: center;
@@ -215,23 +215,13 @@ const facts = [
   }
 
   .intro__arrow {
-    position: relative;
-    width: 20px;
-    height: 1px;
-    background: currentColor;
-    transition: width 0.6s var(--ease-out);
-  }
-
-  .intro__arrow::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 5px;
-    height: 5px;
+    width: 8px;
+    height: 8px;
+    margin-left: 4px;
     border-left: 1px solid currentColor;
     border-bottom: 1px solid currentColor;
-    transform: translate(0, -50%) rotate(45deg);
+    transform: rotate(45deg);
+    transition: transform 0.5s var(--ease-out);
   }
 
   .intro__back:hover,
@@ -241,7 +231,7 @@ const facts = [
 
   .intro__back:hover .intro__arrow,
   .intro__back:focus-visible .intro__arrow {
-    width: 32px;
+    transform: translateX(-4px) rotate(45deg);
   }
 
 

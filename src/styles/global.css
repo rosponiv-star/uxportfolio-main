@@ -489,19 +489,16 @@ main:has(> .wrap:last-child > .sec--alt:last-child) + .footer .footer__contact {
   margin-top: 1em;
 }
 
-/* Groups inside a chapter: `### Title` opens one as an uppercase ink label (the group-heading role of
-   .label--group). Proximity carries the structure: a wide gap before each group, a short one between its
-   label and its content, the block rhythm inside. */
+/* Groups inside a chapter: `### Title` opens a sub-chapter, titled in h3 Medium (sentence case, no rule):
+   below the Key sentence (h2 Regular), above the titles inside cells and rows (lead Medium). Proximity
+   carries the structure: a wide gap before each group, a short one between its title and its content. */
 .prose > h3 {
   max-width: none;
   margin-top: var(--space-item);
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--rule-strong);
-  font-size: var(--fs-label);
+  font-size: var(--fs-h3);
   font-weight: 500;
-  letter-spacing: 0.08em;
-  line-height: 1.3;
-  text-transform: uppercase;
+  letter-spacing: -0.022em;
+  line-height: 1.15;
   color: var(--ink);
 }
 

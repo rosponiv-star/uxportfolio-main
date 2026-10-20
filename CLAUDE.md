@@ -53,21 +53,22 @@ segment in --signal as its chapter is read and replaces the progress bar) → ch
 Chapters: Challenge, Research, Insights (tone="alt"), Define, Ideate, Design, [Validate, only if tested], Reflection.
 **Structure "B-mix" (owner, 2026-10-20, chosen from three prototypes in `notes/proposals/`):** the chapter title stays
 sticky in the head lane; the body lane starts with the `<Key>` sentence (h2 size, Regular, ink: where reading starts),
-then groups. A group = `### Title` rendered as an uppercase ink label on a strong full-width hairline (so it reads as
-a section), one short intro paragraph, then its content. Sub-headings inside a group (Chips labels such as
-Must-haves, Channels) are lead Medium, sentence case, never uppercase. Arrows (back link, Process index) are drawn
-1px lines with a small 5px chevron.
+then groups. A group = `### Title` rendered as a sub-chapter title in h3 Medium, sentence case, with NO rule above
+it (the owner removed every such divider, 2026-10-20), one short intro paragraph, then its content. Titles inside
+cells and rows (insights, cycles, features, archetype names) and sub-headings inside a group (Chips labels such as
+Must-haves, Channels) are lead Medium. Links that move (back link, Process index) use a small drawn 8px chevron, 1px
+stroke, that steps 4px on hover; no arrow lines.
 Numbers, findings, cycles and numbered lists are CELLS: one hairline grid across the body lane (`.cells` / `.cell` in
 global.css, 6 units: third = 2, half = 3), label top-left, number or caption pinned to the bottom, consecutive cell
 blocks join into one grid. Sequence numbers are small signal labels (01), never chips: the owner rejected chips of any
 kind ("tolgono l'aria di editorialità"). Dense comparisons stay light (Archetypes, priority Chips: hairlines only, no
 boxes or tints). Tinted `<Note>` boxes stay for the few notes worth highlighting; don't overuse them.
-Text levels: Key (h2 Regular) → group label → paragraphs (read 17→19, ink-2) → cell titles (h3) → cell text (body 17)
+Text levels: Key (h2 Regular) → group title (h3 Medium) → paragraphs (read 17→19, ink-2) → item titles (lead Medium) → cell text (body 17)
 → numbers (stat, one size everywhere) → captions (small, grey). No filler: cut anything that doesn't carry a fact, a decision or a reason.
 
 **One reading column (owner, 2026-10-09):** chapter text reads strictly top to bottom from the left edge of track A;
 nothing is parked in track C for the eye to hunt for (notes, captions, kickers sit right under what they refer to).
-A chapter is split into groups with `### Title`, rendered as an uppercase ink label (group numbers like 01.1
+A chapter is split into groups with `### Title`, rendered as an h3 Medium sub-chapter title (group numbers like 01.1
 were tried and rejected, 2026-10-09: "troppi numeri"). Proximity carries the structure: `--space-item` before a group, `--space-3` from its heading to its
 content, `--space-block` inside it. Wide media (strips, galleries, metric rows, funnels) may still span A–C.
 
@@ -85,8 +86,8 @@ Components available in MDX without imports:
   wherever there are numbers, never bury them in prose.
 - `<Chips label="…" intro="…" items={[{ label, note?, color?, image? }]} variant="chips|cards" />`: a light row, no
   boxes: label + one line of context on track A, the items as plain lead lines on B–C. Hover shows `note` in the cursor
-  label, or `image` (e.g. the box) with the note as caption. `cards` = cells (thirds for 3 or 6 items, otherwise
-  halves), note visible; items may take `logo` (a raw SVG, `import x from '…svg?raw'`, Simple Icons CC0 in
+  label, or `image` (e.g. the box) with the note as caption. `cards` = tiles in the style of About's tools (separate
+  hairline boxes, mark top-left, signal on hover; thirds for 3 or 6 items, otherwise halves), note visible; items may take `logo` (a raw SVG, `import x from '…svg?raw'`, Simple Icons CC0 in
   `src/assets/logos/`) shown top-right (JustCook channels: Instagram, WhatsApp, QR, TikTok).
 - `<Closing kicker? line?>statement</Closing>`: the case study's last word, at the end of Reflection: the plain
   sentence as a lead-in, the **bold** sentence alone in mega size, all ink; then a hairline, the kicker and the one
@@ -101,7 +102,7 @@ Components available in MDX without imports:
 - `<Features items={[{ title, text, image, alt }]} />`: product features as rows: the screen cropped and standing on
   the hairline that closes its row, number/title/text centred on it. An item may take `also` + `alsoAlt` (a second
   screen: both devices side by side on two tracks, text on the third, e.g. JustCook's hold to stamp → stamped) and
-  `note: { label, text }` (a tinted callout under its text, so the note stays with the screen it explains).
+  `note: { label, text }` (a quiet line under its text: hairline, signal label, small grey text; keep it short).
 - `<Gallery groups={[{ label, kind: cutout|tile, cols?, items: [{ image, alt, caption? }] }]} />`: brand material
   (packaging cut-outs on a hairline, flyers, posts) in a tinted panel across A–C.
 - Metrics also take `title` (prefer a `###` group instead) and `variant="boxed"` (tinted boxes, for a second kind of number).
