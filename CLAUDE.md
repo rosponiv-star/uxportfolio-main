@@ -106,8 +106,9 @@ Components available in MDX without imports:
   cut at the top (sticky bars, before/after); caption = a short field under a shot. Use cut-out device PNGs (960px).
 - `<Reference logo={img} name role? text />`: a product used as a reference, as an editorial tile with its logo in
   monochrome (alpha as mask). `<SystemMap />`: Rehabeat's wiring diagram (nodes + arrows, hover lights the links).
-- Showcase `duo` = two photos side by side (6 + 6 cols, stacked on phones). `<Spot image alt label?>text</Spot>`: a key
-  screen in someone’s hand, photo on B–C, framing text on A sitting on a hairline at the photo’s baseline.
+- Showcase `duo` = two photos side by side (6 + 6 cols, stacked on phones). `<Spot image alt label? zoom?>text</Spot>`: a key
+  screen in someone’s hand, photo on B–C, framing text on A sitting on a hairline at the photo’s baseline; `zoom="52% 47%"` =
+  scroll-linked zoom (1 → 1.4) onto that point. Gallery cutout groups become swipe rows on phones.
 - Showcase `scene` stays inside the 12-col grid (full-bleed 100svh + scroll zoom was tried and reverted, 2026-10-13).
 - Case-study intro: back link = hairline arrow + label (role/team/timeline live only in the Overview, owner 2026-10-16).
   Every page has an Open Graph image (Base `image` prop; case studies pass their cover, default JustCook's).

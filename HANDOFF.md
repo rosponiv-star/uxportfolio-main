@@ -50,21 +50,21 @@ then this HANDOFF commit).
   stamped" component `2287:5416`, device `2287:5417`). Pages "Redesign" and "Redesign v2" are obsolete.
 - **Cover** `cover-app.png` 3840×2400 on #f5f5f5: three phones 869×1776, centres x 942.5 / 1919.5 / 2896.5, top 312:
   Home first screen, Home scrolled, Boxes (owner: the same three, updated).
-- **Result showcase**, in order: 01 **In hand** = `layout: duo`, `mockups/hand-home.jpg` (Today) + `mockups/hand-plan.jpg`
-  (Plan on a palm): the only mockup allowed in Result · 02 Tonight, trio (home first screen, focus mode, streak) ·
+- **Result showcase**, in order (no mockups in Result: the owner removed the In hand duo on 2026-10-20): 01 Tonight, trio (home first screen, focus mode, streak) ·
   03 From box to stamp, trio stagger (lid code with keyboard, "Hold today to stamp it", "Thursday, stamped") ·
   04 Live Activity, pair crop 0.4 · 05 Widgets, quad crop 0.5 (small, small ending, medium, large) · 06 Buy boxes, quad ·
   07 The week, quad (home scrolled, plan, boxes, ingredients). Removed by the owner: "code accepted", "dinner is served",
-  the table mockup, the single big hands scene.
+  the table mockup, the single big hands scene, the hand-home/hand-plan duo.
 - **Design chapter, app part:** Note (Decision) → `Features` alternate crop 0.82: Adaptive planning, Swap tonight's box,
   A timely nudge (widget medium, crop 0.32), Focus mode, Streaks with friends →
-  `### One code per box` = `<Spot image={handLid} label="Before cooking">` (owner: the code inside each box is unique and
+  `### One code per box` = `<Spot zoom="52% 47%" image={handLid} label="Before cooking">` (scroll-linked zoom 1 → 1.4 onto the screen, owner 2026-10-20) (owner: the code inside each box is unique and
   validates that a box was really cooked; recipes stay browsable at any time) →
-  `### The stamp` = two paragraphs + wide Figure `mockups/hand-stamp.jpg` (a finger about to press) + Note "Principle" →
-  `### Outside the app` = intro ("hold the thread") + `<Spot image={handLock} label="19:45">` (raised hand, lock screen
-  "Time to start cooking") + Gallery cutout cols 3 in three moments: "08:30 – 09:00 · Morning" (use it today, boxes
-  ready, large widget) · "All day · The streak" (small, medium streak, 5 hours left) · "19:00 – 20:00 · Dinner" (medium
-  widget, Live Activity compact + expanded). Gallery pieces are `screens/out-*.png`, one uniform 0.53 crop
+  `### The stamp` = two paragraphs + Note "Principle" (the finger mockup was removed 2026-10-20: **the owner will send a new stamp mockup**, put it back here) →
+  `### Outside the app` = intro ("hold the thread") + Gallery cutout cols 3 in four moments (the 19:45 hand mockup was
+  removed 2026-10-20; its notification is now a cut-out, `screens/out-notif-start-cooking.png`, Figma `2319:5724`): "08:30 – 09:00 · Morning" (use it today, boxes
+  ready, large widget) · "All day · The streak" (small, medium streak, 5 hours left) · "19:00 – 19:45 · Before dinner" (medium
+  widget, 19:45 notification) · "19:45 – 20:00 · While cooking" (Live Activity compact + expanded). On phones each cutout
+  group is a swipe row (62%), like the Result showcase. Gallery pieces are `screens/out-*.png`, one uniform 0.53 crop
   (notifications from the bottom, widgets and Live Activity from the top). Then Brand and campaign, the launch plan and
   Reflection (unchanged).
 - **What the stamp means (owner, 2026-10-19; matters for any copy):** the long press is NOT a safety lock. It is an
@@ -72,7 +72,7 @@ then this HANDOFF commit).
   `C:\Users\rospo\Documents\Designing\1percent\1percent-design-guidelines.md` (§8 Critical Retention Moment:
   participation over spectatorship, put the retention ask inside the peak; §9 Zeigarnik, Hick, Fitts). Use them to show
   that he reflects on behaviour, never with invented data.
-- All 5 owner mockups are in use. Source photos are kept in `Media/01-JustCook/mockups-source/`: hand-ultra → home,
+- Mockups in use: only hand-lid (Spot). Owner (2026-10-20): "molti mockup sono fatti male". Source photos are kept in `Media/01-JustCook/mockups-source/`: hand-ultra → home,
   palm → plan, hand-holding → lid, finger-press → stamp, hand-raised → lock (table.webp and two-hands.jpg no longer used).
 
 ### Components added or changed since 2026-10-16
@@ -744,7 +744,7 @@ git push
 > showcase, Features images, `placeholder: false`. (2) Rehabeat: Design Features 01/02/03/05 from its Figma + the
 > working-prototype section (ask for material). (3) Write Realiti (04) with the Appendix B process (sources in
 > `Media/04-Realiti/`). (4) Open items: the CV contains the phone number; no Lighthouse/accessibility pass yet; the
-> JustCook mockup sections were checked only at 1440 px, not on phones.
+> JustCook stamp mockup (owner will send a new one).
 
 **First step, unambiguous:** run the LOCAL session-start sync from §10 right now — `git fetch origin`, check
 `git branch -r --no-merged main` for any cloud work waiting, merge it in, build, push. Only after that is the
@@ -854,6 +854,13 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-20 · LOCAL (2)** · JustCook, owner: removed the In hand duo from Result, the 19:45 hand Spot and the stamp
+  finger Figure (files deleted). 19:45 notification exported from Figma (2319:5724) as `out-notif-start-cooking.png`
+  (0.53 bottom crop) into Outside the app: Dinner split into Before dinner + While cooking. Spot takes `zoom="x% y%"`
+  (CSS scroll-driven `animation-timeline: view()`, 1 → 1.4, cover 20–60%, off for reduced motion / unsupported), used
+  on the lid code. Gallery cutout groups are swipe rows on phones. Phone check of JustCook at 375 px: no overflow.
+  **Pending: the owner will send a new stamp mockup** for The stamp. Pushed `main`.
 
 - **2026-10-20 · LOCAL** · HANDOFF §0 and §9 rewritten for a new chat (full current state of all five projects, the
   exact JustCook structure, new components, image recipes). Mockup source photos copied to

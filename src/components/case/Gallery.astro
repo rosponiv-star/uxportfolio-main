@@ -107,5 +107,26 @@ const n = (i: number) => String(i + 1).padStart(2, '0');
     .gal__grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    /* Cut-outs: one swipe row per group, like the Result showcase. */
+    .gal--cutout .gal__grid {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 62%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      margin-inline: calc(var(--space-3) * -1);
+      padding-inline: var(--space-3);
+      scroll-padding-inline: var(--space-3);
+    }
+
+    .gal--cutout .gal__grid::-webkit-scrollbar {
+      display: none;
+    }
+
+    .gal--cutout .gal__item {
+      scroll-snap-align: start;
+    }
   }
 </style>

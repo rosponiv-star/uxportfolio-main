@@ -23,13 +23,6 @@ glance:
 result:
   text: 'Four pre-dosed boxes cover the week; the app plans around the days students actually cook and nudges them before a delivery app wins.'
   showcase:
-    - label: 'In hand'
-      layout: duo
-      items:
-        - image: '../../assets/projects/justcook/mockups/hand-home.jpg'
-          alt: 'A hand holding a phone with the Today screen: start cooking at 19:45, tonight’s box and the recipe card.'
-        - image: '../../assets/projects/justcook/mockups/hand-plan.jpg'
-          alt: 'A phone resting on an open palm with the Plan screen: the week, lunch and dinner for each day.'
     - label: 'Tonight'
       layout: trio
       stagger: true
@@ -126,8 +119,7 @@ import oMedium from '../../assets/projects/justcook/screens/out-widget-medium.pn
 import oLaC from '../../assets/projects/justcook/screens/out-live-activity-compact.png';
 import oLaE from '../../assets/projects/justcook/screens/out-live-activity-expanded.png';
 import handLid from '../../assets/projects/justcook/mockups/hand-lid.jpg';
-import handStamp from '../../assets/projects/justcook/mockups/hand-stamp.jpg';
-import handLock from '../../assets/projects/justcook/mockups/hand-lock.jpg';
+import oStart from '../../assets/projects/justcook/screens/out-notif-start-cooking.png';
 import changeBox from '../../assets/projects/justcook/screens/home-change-box.png';
 import postA from '../../assets/projects/justcook/brand/post-box-a.jpg';
 import postB from '../../assets/projects/justcook/brand/post-box-b.jpg';
@@ -367,7 +359,7 @@ Each feature removes a decision, or an excuse, from the student’s evening.
 
 ### One code per box
 
-<Spot image={handLid} alt="A hand holding a phone with the lid code screen: D7K-4 typed, the keyboard open." label="Before cooking">
+<Spot zoom="52% 47%" image={handLid} alt="A hand holding a phone with the lid code screen: D7K-4 typed, the keyboard open." label="Before cooking">
 
 Recipes are open to browse at any time. To cook one, students type the code printed inside the box.
 
@@ -381,19 +373,11 @@ Dinner ends with a gesture, not a checkbox. Students press and hold today until 
 
 The long press is not there for safety. It is there for the feeling: stamping the day with their own hand turns a logged meal into something they did, and the week fills up like a loyalty card they are proud of.
 
-<Figure src={handStamp} alt="A finger about to press and hold today on the stamp screen, the week with three days already stamped." ratio="3/2" />
-
 <Note label="Principle" text="A reward people perform themselves feels earned. The peak also carries the next step: right after the stamp, tomorrow’s meal and its reminder are one tap away, and 8 of 10 meals keeps the next stamp within reach." />
 
 ### Outside the app
 
 Most of JustCook happens without opening it. The lock screen, the Home Screen and the Dynamic Island hold the thread through the day, so the evening needs no decision.
-
-<Spot image={handLock} alt="A hand raising a phone at 19:45: the lock screen says time to start cooking, dinner on the table at 20:00." label="19:45">
-
-The one notification that matters, timed backwards from the recipe’s duration and the dinner time.
-
-</Spot>
 
 <Gallery
   groups={[
@@ -418,11 +402,19 @@ The one notification that matters, timed backwards from the recipe’s duration 
       ],
     },
     {
-      label: '19:00 – 20:00 · Dinner',
+      label: '19:00 – 19:45 · Before dinner',
       kind: 'cutout',
       cols: 3,
       items: [
         { image: oMedium, alt: 'Medium widget: tonight’s box, start cooking in 45 minutes.', caption: 'In 45 minutes' },
+        { image: oStart, alt: 'Lock screen notification at 19:45: time to start cooking, dinner on the table at 20:00.', caption: 'Time to start cooking' },
+      ],
+    },
+    {
+      label: '19:45 – 20:00 · While cooking',
+      kind: 'cutout',
+      cols: 3,
+      items: [
         { image: oLaC, alt: 'Live Activity in the Dynamic Island, compact: the step timer while cooking.', caption: 'Step timer, always in view' },
         { image: oLaE, alt: 'Live Activity expanded: current step, time left, next step and a shortcut to the recipe.', caption: 'The next step, one glance away' },
       ],
