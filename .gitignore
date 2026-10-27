@@ -23,3 +23,6 @@ Media/
 
 # local Claude settings
 .claude/settings.local.json
+
+# portfolio deck build output (regenerate with: node deck/build.mjs)
+deck/out/

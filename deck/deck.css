@@ -1,0 +1,174 @@
+/* Portfolio deck (PDF, 16:9). One system for every slide:
+   canvas 1920 × 1080 · 12 columns of 122px, 24px gutters, 96px side margins · 8px rhythm.
+   Every slide = the chrome (section on the left, page number on the right, both at y 56) + one content
+   frame (y 144 → 984) laid out on the 12 columns. Text uses only the sizes below. */
+
+@font-face {
+  font-family: 'Geist';
+  src: url('../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2') format('woff2');
+  font-weight: 100 900;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Geist';
+  src: url('../node_modules/@fontsource-variable/geist/files/geist-latin-ext-wght-normal.woff2') format('woff2');
+  font-weight: 100 900;
+  unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+  --paper: #fdfdfc;
+  --paper-2: #f2f2ef;
+  --ink: #111111;
+  --ink-2: #33332f;
+  --ink-3: #6b6b65;
+  --ink-4: #8a8a84;
+  --rule: rgb(17 17 17 / 0.1);
+  --rule-strong: rgb(17 17 17 / 0.24);
+  --signal: #3d5a73;
+  --accent: #1f3c88; /* strong accent: section dividers only (candidates in build.mjs) */
+  --on-accent: #fdfdfc;
+
+  /* type scale at 1920 px (≈ the site's scale × 1.5) */
+  --fs-label: 18px;   /* uppercase, Medium, 8% tracking */
+  --fs-small: 22px;   /* captions, facts, notes */
+  --fs-body: 26px;    /* running text */
+  --fs-lead: 34px;    /* lead paragraphs, item titles */
+  --fs-h3: 44px;      /* cell / group titles */
+  --fs-h2: 72px;      /* slide titles */
+  --fs-display: 104px;/* statements */
+  --fs-mega: 232px;   /* cover name, divider numbers */
+
+  --m: 96px;          /* side margins */
+  --g: 24px;          /* gutter */
+  --top: 144px;       /* content frame top */
+  --bottom: 96px;     /* content frame bottom margin */
+}
+
+* { box-sizing: border-box; }
+@page { size: 1920px 1080px; margin: 0; }
+html, body { margin: 0; padding: 0; background: #d9d9d4; }
+body {
+  font-family: 'Geist', system-ui, sans-serif;
+  font-size: var(--fs-body);
+  line-height: 1.45;
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'tnum';
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+p, h1, h2, h3, ol, ul, dl, dd, figure { margin: 0; padding: 0; }
+ol, ul { list-style: none; }
+a { color: inherit; text-decoration: none; }
+
+/* Slide ------------------------------------------------------------------ */
+.slide {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--paper);
+  break-after: page;
+}
+@media screen { .slide { margin: 0 auto 40px; } }
+
+/* Chrome: section (number + name) left, page number right, on one line at the top. */
+.chrome {
+  position: absolute;
+  top: 56px;
+  left: var(--m);
+  right: var(--m);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.chrome__sec { display: flex; gap: 16px; }
+.chrome__sec .n, .chrome__pg { color: var(--signal); }
+.chrome__mid { color: var(--ink-3); }
+
+/* Content frame on the 12-column grid. */
+.frame {
+  position: absolute;
+  top: var(--top);
+  left: var(--m);
+  right: var(--m);
+  bottom: var(--bottom);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--g);
+}
+
+/* Type ----------------------------------------------------------------- */
+.label { font-size: var(--fs-label); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.3; }
+.small { font-size: var(--fs-small); line-height: 1.45; }
+.body { font-size: var(--fs-body); line-height: 1.45; }
+.lead { font-size: var(--fs-lead); line-height: 1.3; letter-spacing: -0.01em; }
+.h3 { font-size: var(--fs-h3); font-weight: 500; line-height: 1.12; letter-spacing: -0.02em; }
+.h2 { font-size: var(--fs-h2); font-weight: 500; line-height: 1.02; letter-spacing: -0.035em; }
+.display { font-size: var(--fs-display); font-weight: 400; line-height: 1.02; letter-spacing: -0.04em; }
+.mega { font-size: var(--fs-mega); font-weight: 500; line-height: 0.86; letter-spacing: -0.06em; }
+.display, .h2, .h3 { text-wrap: balance; }
+.lead, .body, .small { text-wrap: pretty; }
+.m { font-weight: 500; }
+.i2 { color: var(--ink-2); }
+.i3 { color: var(--ink-3); }
+.i4 { color: var(--ink-4); }
+.sig { color: var(--signal); }
+
+/* Cells: one hairline grid, label top, content bottom (same rule as the site). */
+.cells { display: grid; border-top: 1px solid var(--rule-strong); border-left: 1px solid var(--rule-strong); }
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  padding: 32px;
+  border-right: 1px solid var(--rule-strong);
+  border-bottom: 1px solid var(--rule-strong);
+}
+.cell__foot { margin-top: auto; }
+/* Cells that hold text keep their natural height: no empty band inside (owner, 2026-10-20). */
+.cells--fit { align-self: end; }
+.cells--fit .cell__foot { margin-top: 40px; }
+
+/* Rows: a light list on hairlines. */
+.rows > * { border-top: 1px solid var(--rule); padding-block: 14px; }
+.rows > *:last-child { border-bottom: 1px solid var(--rule); }
+
+/* Placeholder: work still to be added (grey, never mistaken for content). */
+.ph { color: var(--ink-4); }
+.ph-box {
+  background:
+    repeating-linear-gradient(135deg, transparent 0 14px, rgb(17 17 17 / 0.05) 14px 15px),
+    var(--paper-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-4);
+}
+
+/* Section divider: full-bleed accent, white type. */
+.slide--divider { background: var(--accent); color: var(--on-accent); }
+.slide--divider .chrome, .slide--divider .chrome__sec .n, .slide--divider .chrome__pg { color: var(--on-accent); }
+.slide--divider .chrome__mid { color: color-mix(in srgb, var(--on-accent) 65%, transparent); }
+.slide--divider .muted { color: color-mix(in srgb, var(--on-accent) 65%, transparent); }
+.slide--divider .rule { border-color: color-mix(in srgb, var(--on-accent) 35%, transparent); }
+
+/* Logos (Simple Icons, monochrome). */
+.logo svg { display: block; width: 100%; height: 100%; fill: currentColor; }
+
+/* Grid overlay (preview only): ?grid */
+.show-grid .slide::after {
+  content: '';
+  position: absolute;
+  inset: 0 var(--m);
+  background: repeating-linear-gradient(90deg, rgb(230 40 90 / 0.08) 0 calc((100% - 11 * var(--g)) / 12), transparent calc((100% - 11 * var(--g)) / 12) calc((100% - 11 * var(--g)) / 12 + var(--g)));
+  pointer-events: none;
+}
+.show-grid .frame { outline: 1px dashed rgb(230 40 90 / 0.5); }
