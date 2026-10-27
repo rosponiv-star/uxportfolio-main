@@ -867,6 +867,10 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-27 · LOCAL (5)** · Pastel project colours rejected ("scuri come prima!"): reverted to the dark palette with
+  white type (01 teal 2b5c6b, 02 terracotta b04a32, 03 aubergine 5a3a5e, 04 forest 2e5e4e, 05 ochre 8f6519). Do not
+  propose pastels again.
+
 - **2026-10-27 · LOCAL (3)** · Deck aligned with the course: DID is strongly about interactive systems with physical,
   connected, tangible and embodied parts (Embodied Interaction Studio, Tangible and Embedded Technologies, Hardware &
   Software Technologies for Design, Final Design Studio on connected products, Virtual & Physical Prototyping, Smart
