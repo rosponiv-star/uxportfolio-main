@@ -36,7 +36,7 @@
   --fs-lead: 34px;    /* lead paragraphs, item titles */
   --fs-h3: 44px;      /* cell / group titles */
   --fs-h2: 72px;      /* slide titles */
-  --fs-display: 104px;/* statements */
+  --fs-display: 88px; /* statements: one sentence per line across the 12 columns */
   --fs-mega: 232px;   /* cover name, divider numbers */
 
   --m: 96px;          /* side margins */
@@ -153,12 +153,39 @@ a { color: inherit; text-decoration: none; }
   color: var(--ink-4);
 }
 
-/* Section divider: full-bleed accent, white type. */
-.slide--divider { background: var(--accent); color: var(--on-accent); }
-.slide--divider .chrome, .slide--divider .chrome__sec .n, .slide--divider .chrome__pg { color: var(--on-accent); }
-.slide--divider .chrome__mid { color: color-mix(in srgb, var(--on-accent) 65%, transparent); }
-.slide--divider .muted { color: color-mix(in srgb, var(--on-accent) 65%, transparent); }
-.slide--divider .rule { border-color: color-mix(in srgb, var(--on-accent) 35%, transparent); }
+/* Colour slides (the cover and every project cover): full-bleed colour, paper-white type, the 12 columns drawn
+   as faint hairlines (the motif of the site's About page). --pc = the slide's colour. */
+.slide--color { background: var(--pc, var(--accent)); color: var(--on-accent); }
+.slide--color .chrome, .slide--color .chrome__sec .n, .slide--color .chrome__pg { color: var(--on-accent); }
+.slide--color .chrome__mid, .slide--color .muted { color: color-mix(in srgb, var(--on-accent) 68%, transparent); }
+.slide--color .ph { color: color-mix(in srgb, var(--on-accent) 55%, transparent); }
+.slide--color .rule { border-color: color-mix(in srgb, var(--on-accent) 40%, transparent); }
+.cols {
+  position: absolute;
+  inset: 0 var(--m);
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--g);
+  pointer-events: none;
+}
+.cols > span { border-inline: 1px solid color-mix(in srgb, var(--on-accent) 10%, transparent); }
+
+/* Project cover: tone-on-tone mega number bleeding off the bottom-right corner. */
+.pcover__num {
+  position: absolute;
+  right: -48px;
+  bottom: -230px;
+  font-size: 860px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.07em;
+  color: color-mix(in srgb, var(--pc) 78%, #000);
+  pointer-events: none;
+}
+.pcover .frame { z-index: 1; }
+
+/* Project swatch (contents). */
+.sw { display: inline-block; width: 18px; height: 18px; background: var(--pc); }
 
 /* Logos (Simple Icons, monochrome). */
 .logo svg { display: block; width: 100%; height: 100%; fill: currentColor; }

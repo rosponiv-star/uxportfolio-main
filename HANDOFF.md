@@ -867,6 +867,19 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-27 · LOCAL (2)** · Deck round 2 (owner): **3 main projects + 2 additional**, each opening on a full-bleed cover
+  in its own colour (01 terracotta b04a32, 02 forest 2e5e4e, 03 aubergine 5a3a5e, 04 ochre 8f6519, 05 teal 2b5c6b;
+  placeholders except 01 = UX Challenge 2026); cover in ultramarine 1f3c88 with the name at 312 px; the 12 columns drawn
+  as faint hairlines on colour slides; tone-on-tone mega project number bleeding off the corner. Removed "What I bring"
+  and "How I approach design": **the approach must show through the project explanations, PROCESS IS THE FOCUS**
+  (owner, in capitals; also saved in memory). Who I am now holds profile, education, details and a 4-cell
+  "Recognition and experience" row (highlights only: the full list belongs in the CV, which is scored separately).
+  Contents in three groups (About · Main projects · Additional projects) with colour swatches; Selected projects =
+  photos and white space only (3 large main images, the 2 additional smaller in the last track; placeholders = the
+  project colour). Display size in the deck = 88 px, one sentence per line. 10 slides, 0.2 MB. The contents, the
+  project index and the page numbers are generated from the `.pcover` sections (data-num, data-kind, data-title,
+  data-sub, --pc): adding a project = adding a cover. Next: the project content slides (process first).
+
 - **2026-10-27 · LOCAL** · **New: portfolio PDF for the Politecnico di Milano application** (MSc Digital and Interaction
   Design). Rules (School of Design Open Day 2026 deck): portfolio PDF max 20 MB, no imposed format, IT or EN, no special
   characters in the file name (hyphen included); score = portfolio max 50 (below 30/50 = not eligible) + CV max 20 +
