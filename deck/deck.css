@@ -170,6 +170,10 @@ a { color: inherit; text-decoration: none; }
 }
 .cols > span { border-inline: 1px solid color-mix(in srgb, var(--on-accent) 10%, transparent); }
 
+/* Light (pastel) colour slides: the same rules with ink type (project covers, owner 2026-10-27: vivid pastels). */
+.slide--light { --on-accent: #111111; }
+.slide--light .pcover__num { color: color-mix(in srgb, var(--pc) 86%, #000); }
+
 /* Project cover: tone-on-tone mega number bleeding off the bottom-right corner. */
 .pcover__num {
   position: absolute;

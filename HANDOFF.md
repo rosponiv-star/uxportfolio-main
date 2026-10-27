@@ -867,6 +867,10 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-27 · LOCAL (4)** · Deck: project colours now vivid pastels with ink type (owner): 01 aqua 86d3d4, 02 coral
+  ffa48a, 03 lavender bfaaf5, 04 mint 93dcb3, 05 butter f6d46e (`.slide--light` sets --on-accent to ink; tone-on-tone
+  number = 86% colour + black). The cover stays ultramarine 1f3c88 for now.
+
 - **2026-10-27 · LOCAL (3)** · Deck aligned with the course: DID is strongly about interactive systems with physical,
   connected, tangible and embodied parts (Embodied Interaction Studio, Tangible and Embedded Technologies, Hardware &
   Software Technologies for Design, Final Design Studio on connected products, Virtual & Physical Prototyping, Smart
