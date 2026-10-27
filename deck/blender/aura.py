@@ -114,7 +114,8 @@ def grille(name, dark, slit):
     sn = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(g.outputs['Normal'], sn.inputs[0])
     side = op('LESS_THAN', op('ABSOLUTE', sn.outputs[2]), 0.5)
     ring = op('MULTIPLY', op('MULTIPLY', op('LESS_THAN', sn.outputs[2], -0.5), op('GREATER_THAN', rad, 0.0335)), op('LESS_THAN', rad, 0.0405))
-    mask = op('MULTIPLY', stripe, op('MAXIMUM', side, ring))
+    zdots = op('GREATER_THAN', op('SINE', op('MULTIPLY', sep.outputs[2], 2600.0)), 0.35)
+    mask = op('MAXIMUM', op('MULTIPLY', op('MULTIPLY', stripe, zdots), side), op('MULTIPLY', stripe, ring))
     mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'
     mix.inputs[6].default_value = dark; mix.inputs[7].default_value = slit
     nt.links.new(mask, mix.inputs['Factor']); nt.links.new(mix.outputs[2], b.inputs['Base Color'])
@@ -135,7 +136,7 @@ def bump_tex(m, kind, scale, strength, dist=0.0002, vec=None):
     nt.links.new(t.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
     return m
 
-STUDIO = SHOT in ('front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit')
+STUDIO = SHOT in ('front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band')
 if MODE == 'real':
     MATS = {
         'alu': bump_tex(principled('alu', srgb('#18181b'), metal=1.0, rough=0.5), 'noise', 4000, 0.04),
@@ -144,7 +145,7 @@ if MODE == 'real':
         'print': principled('print', srgb('#7a7a7e'), rough=0.6),
         'pin': principled('pin', srgb('#c8c8cc'), metal=1.0, rough=0.25),
         'led_under': principled('led_under', srgb('#8e8e92'), rough=0.35) if STUDIO and SHOT != 'lit' else
-                     emit('led_under', srgb(NIGHT if SHOT == 'night' else DAWN), 90.0 if SHOT == 'night' else 40.0 if SHOT == 'lit' else 70.0),
+                     emit('led_under', srgb(NIGHT if SHOT == 'night' else DAWN), 90.0 if SHOT == 'night' else 160.0 if SHOT == 'lit' else 70.0),
         'led_front': emit('led_front', srgb('#ffffff'), 3.0 if STUDIO else 0.0),
         'dots': emit('dots', srgb('#ffd9a0'), 7.0),
         'band': bump_tex(principled('band', srgb('#08080a'), rough=0.78), 'wave', 260, 0.25),
@@ -238,13 +239,13 @@ FONT = {'0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
         '6': ['00110', '01000', '10000', '11110', '10001', '10001', '01110'],
         ':': ['0', '0', '1', '0', '1', '0', '0']}
 
-def time_dots(text, zc, pitch=0.0021, r=0.00062):
+def time_dots(text, zc, pitch=0.0017, r=0.0005, xo=-0.006):
     cols = []
     for i, ch in enumerate(text):
         if i: cols.append(None)
         g = FONT[ch]
         for c in range(len(g[0])): cols.append([g[row][c] == '1' for row in range(7)])
-    x0 = -(len(cols) - 1) * pitch / 2
+    x0 = xo - (len(cols) - 1) * pitch / 2
     bm = bmesh.new()
     for ci, c in enumerate(cols):
         if c is None: continue
@@ -281,16 +282,17 @@ def cut(ob, bm, loc, mat):
     shade(ob)
 
 def build_base(with_time=False, time='06:14'):
-    body = rbox('body', W, W, H, 0.0235, 0.0007, 'alu', (0, 0, PL + ST), sp=24, se=2)
+    body = rbox('body', W, W, H, 0.031, 0.0018, 'alu', (0, 0, PL + ST), sp=32, se=4)
     # back: figure-8 power inlet (the only cable) and the Bluetooth pairing button; no power button
     PX, BX = -0.016, 0.016
     for dx in (-0.0029, -0.00145, 0.0, 0.00145, 0.0029): cut(body, cutter_bm([(PX + dx, 0, 0.00128)], 0.012), (0, W / 2, MID), 'rubber')
-    cut(body, cutter_bm([(BX, 0, 0.0034)], 0.002), (0, W / 2, MID), 'rubber')
+    cut(body, cutter_bm([(BX, 0, 0.0043)], 0.002), (0, W / 2, MID), 'rubber')
     wn = body.modifiers.new('wn', 'WEIGHTED_NORMAL'); wn.keep_sharp = True; wn.mode = 'FACE_AREA'
-    btn = cyl('button', 0.0028, 0.002, 'alu', (BX, W / 2 - 0.0009, MID), axis='Y')
+    btn = cyl('button', 0.0037, 0.002, 'alu', (BX, W / 2 - 0.0009, MID), axis='Y')
     bpy.ops.mesh.primitive_torus_add(major_radius=0.00312, minor_radius=0.00013, location=(BX, W / 2 + 0.00002, MID), rotation=(math.pi / 2, 0, 0))
     ringb = bpy.context.active_object; ringb.data.materials.append(M('print'))
-    pins = [rbox('tongue', 0.0066, 0.004, 0.0007, 0.0003, 0.0, 'print', (PX, W / 2 - 0.0035, MID - 0.00035), sp=4), ringb]
+    bpy.data.objects.remove(ringb)
+    pins = [rbox('tongue', 0.0066, 0.004, 0.0007, 0.0003, 0.0, 'print', (PX, W / 2 - 0.0035, MID - 0.00035), sp=4)]
     back = math.pi / 2, 0, math.pi
     marks = [label('5V 3A', 0.0026, (PX, W / 2 + 0.00003, MID + 0.0085), back)]
     bt = [(-0.25, 0.25), (0.25, -0.25), (0, -0.5), (0, 0.5), (0.25, 0.25), (-0.25, -0.25)]
@@ -299,14 +301,14 @@ def build_base(with_time=False, time='06:14'):
     for pt, (x, z) in zip(sp.points, bt): pt.co = (BX - x * 0.0052, W / 2 + 0.0001, MID + 0.0085 + z * 0.0044, 1)
     bto = bpy.data.objects.new('bt', cu); col.objects.link(bto); cu.materials.append(M('print')); marks.append(bto)
     # plinth = speaker grille, tapered; light strip between plinth and body; foot and name underneath
-    bm = rbox_bm(0.094, 0.094, PL, 0.0185, 0.0008, sp=24, se=2)
+    bm = rbox_bm(0.094, 0.094, PL, 0.026, 0.0008, sp=32, se=2)
     for v in bm.verts:
         if v.co.z < PL / 2: v.co.x *= 0.95; v.co.y *= 0.95
     plinth = link('plinth', bm, 'grille')
-    strip = rbox('strip', 0.0936, 0.0936, ST, 0.0185, 0.0, 'led_under', (0, 0, PL), sp=24)
+    strip = rbox('strip', 0.0965, 0.0965, ST, 0.0275, 0.0, 'led_under', (0, 0, PL), sp=32)
     foot = cyl('foot', 0.031, 0.0006, 'rubber', (0, 0, -0.0002), seg=96)
     name = label('AuraWake', 0.0058, (0, 0, -0.00052), (math.pi, 0, 0)); name.scale.x = -1
-    dot = cyl('led_front', 0.00085, 0.0003, 'led_front', (W * 0.236, -W / 2 - 0.00002, MID), axis='Y', seg=24)
+    dot = cyl('led_front', 0.00085, 0.0003, 'led_front', (W * 0.3, -W / 2 - 0.00002, MID), axis='Y', seg=24)
     obs = [body, btn, plinth, strip, foot, name, dot] + pins + marks
     if with_time: obs.append(time_dots(time, MID))
     return group('base', obs)
@@ -352,7 +354,7 @@ def build_cable():
     """USB-C power adapter (EU pins) and braided USB-C cable."""
     brick = rbox('brick', 0.032, 0.032, 0.028, 0.006, 0.0012, 'plug', sp=12, se=2)
     brick.rotation_euler = (0, math.pi / 2, 0); brick.location = (0.0, 0, 0.016)
-    pins = [cyl(f'p{i}', 0.002, 0.019, 'pin', (-0.0235, y, 0.016), axis='X', seg=32) for i, y in enumerate((-0.0095, 0.0095))]
+    pins = [cyl(f'p{i}', 0.002, 0.019, 'pin', (-0.0085, y, 0.016), axis='X', seg=32) for i, y in enumerate((-0.0095, 0.0095))]
     boot1 = rbox('boot1', 0.011, 0.0068, 0.016, 0.0028, 0.0008, 'plug', sp=8, se=2); boot1.rotation_euler = (0, math.pi / 2, 0); boot1.location = (0.022, 0, 0.016)
     cable = cyl('cable', 0.0022, 0.2, 'cable', (0.138, 0, 0.016), axis='X', seg=48)
     boot2 = rbox('boot2', 0.011, 0.0068, 0.02, 0.0028, 0.0008, 'plug', sp=8, se=2); boot2.rotation_euler = (0, math.pi / 2, 0); boot2.location = (0.238, 0, 0.016)
@@ -464,6 +466,8 @@ def studio(view):
     lens = 135
     if view == 'cable':
         build_cable(); fw, tgt, pos = 0.34, (0.115, 0, 0.016), (0.115, -1, 0.016)
+    elif view == 'band':
+        build_bracelet(); fw, tgt, pos = 0.12, (0, 0, 0.035), (0.6, -0.9, 0.35)
     elif view in ('persp', 'lit'):
         build_base(with_time=(view == 'lit')); fw, tgt, pos = W / 0.55, (0, 0, TOP * 0.42), (0.62, -0.95, 0.2)
     else:
@@ -478,6 +482,7 @@ def studio(view):
     area('left', (-0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('right', (0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('cam', tuple(Vector(cam.location) * 0.9 + Vector((0, 0, 0.3))), tgt, 1.2, 25)
+    if view in ('persp', 'lit', 'band'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 90)
     if view in ('back', 'bottom'): area('cam2', tuple(Vector(cam.location) * 0.9), tgt, 1.2, 40)
 
 def real():
@@ -499,7 +504,7 @@ def real():
         else:
             world(srgb('#2a1c12'), 0.06)
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
-            area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 4, (1.0, 0.85, 0.7))
+            area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
     scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
@@ -535,7 +540,7 @@ def line():
     # (group builder, size shown on the slide in px, named points for callouts)
     items = {
         'base': (lambda: build_base(with_time=True, time='06:30'), 400, {
-            'top': (0.02, 0.025, TOP), 'time': (-0.012, -W / 2, MID + 0.004), 'led': (W * 0.236, -W / 2, MID),
+            'top': (0.02, 0.025, TOP), 'time': (-0.012, -W / 2, MID + 0.004), 'led': (W * 0.3, -W / 2, MID),
             'light': (0.046, -0.03, PL + ST / 2)}),
         'bracelet': (build_bracelet, 240, {}),
         'phone': (build_phone, 250, {}),

@@ -653,7 +653,7 @@
   const iso = document.querySelector('[data-iso]');
   if (iso) {
     const C = 0.866, S = 0.5, A = 'assets/aurawake/';
-    const AN = {"base":{"size":400,"ground":[200.0,245.2],"points":{"top":[270.5,161.5],"time":[95.0,231.7],"led":[154.5,273.3],"light":[225.1,303.8]}},"bracelet":{"size":240,"ground":[120.0,188.5],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}}};
+    const AN = {"base":{"size":400,"ground":[200.0,245.2],"points":{"top":[270.5,161.5],"time":[95.0,231.7],"led":[165.5,279.6],"light":[225.1,303.8]}},"bracelet":{"size":240,"ground":[120.0,188.5],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}}};
     const N = { // [cx, cy, name, role] = where the object touches the ground
       phone: [690, 660, 'Phone', 'Plans and explains'],
       bracelet: [430, 800, 'Bracelet', 'Senses sleep'],
@@ -705,8 +705,8 @@
       ['light', 'Light strip', 'Between body and grille: washes the nightstand', 1, 1], [null, 'Back', 'Power inlet and the Bluetooth pairing button']];
     KEYS.forEach(([k, , , ox, oy], i) => {
       if (!k) return;
-      const [px, py] = [bx + P[k][0], by + P[k][1]], [qx, qy] = [px + ox * 62, py + oy * 62];
-      g += `<circle cx="${px}" cy="${py}" r="3.5" fill="var(--ink)" /><path class="co" d="M${px} ${py} L${px + ox * 50} ${py + oy * 50}" /><circle cx="${qx}" cy="${qy}" r="16" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2" /><text class="cn" x="${qx}" y="${qy + 6}" text-anchor="middle" style="letter-spacing:0">${i + 1}</text>`;
+      const [px, py] = [bx + P[k][0], by + P[k][1]], [qx, qy] = [px + ox * 96, py + oy * 96];
+      g += `<linearGradient id="kf${i}" gradientUnits="userSpaceOnUse" x1="${qx}" y1="${qy}" x2="${px}" y2="${py}"><stop offset="0" stop-color="#111" stop-opacity="1" /><stop offset="1" stop-color="#111" stop-opacity="0.08" /></linearGradient><circle cx="${px}" cy="${py}" r="3" fill="var(--ink)" fill-opacity=".5" /><path d="M${px} ${py} L${qx - ox * 12} ${qy - oy * 12}" stroke="url(#kf${i})" stroke-width="1.2" /><circle cx="${qx}" cy="${qy}" r="16" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2" /><text class="cn" x="${qx}" y="${qy + 6}" text-anchor="middle" style="letter-spacing:0">${i + 1}</text>`;
     });
     const keys = document.querySelector('[data-keys]');
     if (keys) keys.innerHTML = KEYS.map(([, t, s], i) => `<li><span class="label kick"><span class="n">0${i + 1}</span></span><span class="small"><span class="m">${t}</span><span class="i3"> · ${s}</span></span></li>`).join('');
