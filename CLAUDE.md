@@ -34,6 +34,9 @@ all site copy is in **English**.
 - `src/content/projects/NN-name.mdx`: one file per case study. The `NN-` prefix is stripped from the URL.
 - `src/data/site.ts`: personal info (email, LinkedIn, CV path).
 - `src/styles/global.css`: tokens, type scale, motion primitives.
+- `deck/`: the portfolio PDF for the Politecnico di Milano application (MSc Digital and Interaction Design), not
+  published by Astro. HTML slides 1920×1080 on a 12-column grid → `node deck/build.mjs` → `deck/out/` (git-ignored).
+  Everything about it (rules, decisions, system, next steps) is in HANDOFF §0.B. PROCESS is the focus of project slides.
 - `Media/`: raw source material from the owner. It is git-ignored. Copy processed assets into
   `src/assets/` (images, optimised by Astro) or `public/` (video, PDF).
 

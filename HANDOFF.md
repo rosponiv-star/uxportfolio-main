@@ -5,7 +5,7 @@ This file hands the project over between Claude sessions — LOCAL (Windows PC, 
 Read this file **in full**, then read `CLAUDE.md` (persistent rules, auto-loaded every session). Where the two
 disagree, this file is newer and wins.
 
-**New chat: read §0 first (current state), then sync git as §10 describes, then re-read this file** — another session may have pushed a
+**New chat: read §0 first (current state: website §0.A, Polimi PDF §0.B, research how-to §0.C, tooling §0.D), then sync git as §10 describes, then re-read this file** — another session may have pushed a
 newer version while you were away.
 
 Structure of this document (10 fixed sections + two appendices):
@@ -24,121 +24,227 @@ Structure of this document (10 fixed sections + two appendices):
 
 ---
 
-## 0. Current state — 2026-10-20 (read this first; it overrides older details in §1–§9)
+## 0. Current state — 2026-10-27 (read this first; it overrides older details in §1–§9)
 
-**Live:** https://www.valeriorosponi.com — Cloudflare **Worker** `uxportfolio-main` (Workers Builds from GitHub `main`,
-~2–4 min per deploy). `wrangler.jsonc` + `worker/index.js`: the worker 301-redirects `http://` and the bare domain to
-`https://www.valeriorosponi.com`; everything else is served from `dist/` (ASSETS binding, `404-page`,
-`auto-trailing-slash`). `astro.config.mjs` has `trailingSlash: 'always'`; every internal link ends with "/". Search
-Console fixes were requested by the owner (not reachable from Claude). Cloudflare MCP (workers/KV/R2/D1/docs only) and
-Figma MCP are connected. Git at the end of the last session: `main` = `origin/main`, clean (last code commit `db7252d`,
-then this HANDOFF commit).
+Two workstreams live in this repo:
+- **A. The website** (Astro, live at https://www.valeriorosponi.com): case studies for recruiters and hiring managers.
+- **B. The portfolio PDF for the Politecnico di Milano application** (`deck/`, started 2026-10-27): a 16:9 deck built
+  from HTML and printed to PDF. Not published on the site. Details in **§0.B** below.
 
-### Projects (`src/content/projects/`)
+**Git:** `main` = `origin/main`, clean at the end of the 2026-10-27 session (last commits: deck work + this HANDOFF).
+**Deploy:** Cloudflare **Worker** `uxportfolio-main` (Workers Builds from GitHub `main`, ~2–4 min). `wrangler.jsonc` +
+`worker/index.js` 301-redirect `http://` and the bare domain to `https://www.valeriorosponi.com`; everything else is
+served from `dist/` (ASSETS binding, `404-page`, `auto-trailing-slash`). `astro.config.mjs` has `trailingSlash:
+'always'`: every internal link ends with "/". Connected MCPs: Figma, Cloudflare (workers/KV/R2/D1/docs only).
+
+### 0.1 Who the owner is and the vision (both workstreams)
+- **Valerio Rosponi**, 3rd-year BSc student in Interfaces and Communication Technologies (L-20), University of Trento;
+  diploma in Informatics and Telecommunications (Istituto Tecnico C.A. Pilati, Cles); based in Trentino; Italian native,
+  English B2 (Cambridge). CV: `C:\Users\rospo\Downloads\CV_Valerio_Rosponi.pdf` (contains the phone number: never put it
+  in public material). Recognition (from the CV): UX Challenge 2026 Social Impact Award (Trentino Innovation Hub, for
+  Gruppo Spes, team leader + UX designer), AI2B University AI Championship 2026 (participant), Italian Olympiads in
+  Informatics 2022 (participant), 2022 internship as UI developer (front-end of a Java school-management system in a
+  startup simulation).
+- **Positioning:** interaction and UX designer with a computer-science background: designs end to end, from research in
+  people's real context to interfaces he can also build and test (Figma, Claude/Codex coding agents, Unity, Meta Quest,
+  Affinity/Illustrator, Git).
+- **Vision of the site:** show case studies, process and mindset; not a "hire me" site; contact stays discreet. Swiss
+  editorial base + tech precision + a touch of brutalism (oversized type); one accent (`--signal` #3d5a73); no
+  gradients, no fluorescent colours; medium motion; restraint over clever interaction.
+- **Vision of the PDF:** get into the MSc Digital and Interaction Design (DID) at Politecnico di Milano. **PROCESS IS
+  THE FOCUS** (owner, in capitals): the approach and skills must show through how each project is explained, not
+  through separate slides. The course is about interactive systems with physical, connected, tangible and embodied
+  parts: every project must show its **system** and its **prototypes**, not only screens.
+
+### 0.2 Working with the owner (current, both workstreams)
+- Italian to him; English in all site/PDF copy. He often asks for **"caveman mode"**: terse answers, tokens spent on the
+  work. He is short on credits: batch edits, avoid re-reading big files, take only the screenshots you need.
+- **"Se hai domande falle, non lasciare nulla al caso"**: ask (AskUserQuestion, 1–4 questions with options and a
+  "(Recommended)" pick) before guessing facts, purposes or placements. **Never invent facts or numbers.**
+- He reviews by **annotated screenshots** (red notes on the page). Do every note, then show proof (screenshots).
+  Short reactions: "rimetti com'era" / "torna indietro" / "scuri come prima!" = revert exactly.
+- For taste questions show quick visual options and implement only his pick. He edits Figma himself.
+- LOCAL sessions push `main` after every change and add an Appendix A entry each time. Commit trailer:
+  `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>` (or whatever the current system reminder says).
+- **Rejected in the last sessions (do not bring back):** hand-held phone mockups in JustCook (all of them, after many
+  attempts), scroll-linked zoom on images, chips of any kind (step chips, number chips, pill tags), rules/dividers above
+  `###` groups, uppercase-label group titles, big faint "6 → 1" cycle numbers, pastel project colours in the PDF,
+  arrow lines on links (now small chevrons), tinted boxes for dense comparisons.
+
+### 0.A The website
+
+**Projects (`src/content/projects/`)**
 | File | Status |
 |---|---|
-| `01-justcook.mdx` | **Live, complete.** All interfaces are the owner's **Redesign v3** from Figma. Exact structure in "JustCook page" below. |
-| `02-rehabeat.mdx` | **Live** since 2026-10-12. Text real (`notes/02-rehab.md`). Result showcase from Figma `xmb1334lJ54M35DwB9PFnl`. Course written as "Human–Computer Interaction 1, a course at the University of Trento" (same wording as AuraWake, owner 2026-10-16). **Still placeholders:** Design Features rows 01, 02, 03, 05 (only 04 has `tv-workout.jpg`). To-do (memory): a working-prototype section. |
-| `03-smart-home-hub.mdx` | **Text written** 2026-10-16 from `Media/03-Smart Home Ecosystem/REPORT FINALE PIG.pdf`; facts + owner answers in `notes/03-smart-home-hub.md`. `placeholder: true` (Coming soon) until the owner sends the interfaces. PIG course, Sep–Dec 2025, 3 students, all phases shared equally (teammates Marco Scognamiglio, Giorgia Pajola: not named on the page), Android MD3, Figma + FigJam, proto-personas (no interviews, said on the page), no Validate chapter. Archetypes Marco vs Franco. Design: 4 placeholder Features rows (floor plan, intercom, access codes, security) + "Beyond the screens" (e-commerce shipping code, automatic emergency call, smoke defence = system ideas, not interfaces, owner's request). When interfaces arrive: cover, `result.showcase`, Features images, `placeholder: false`. |
-| `04-realiti.mdx` | Placeholder with INVENTED facts; the name stays **Realiti**. Not started. Sources in `Media/04-Realiti/`. |
-| `05-aurawake.mdx` | **Text written** 2026-10-16 from `Media/05-AuraWake/AuraWake1.pdf` + `AuraWake2.pdf`; `notes/05-aurawake.md`. Junior project: HCI 1, spring 2024, team of 2 (Valerio did almost everything; Nicolò Lisci not named), Figma only. Short page: Challenge, Define, Design (3 placeholder Features rows: routines, set the alarm, your sleep), Reflection. Keeps its existing cover `cover.png` (owner). Coming soon until the interfaces arrive. |
+| `01-justcook.mdx` | **Live, complete.** Interfaces = owner's Figma **Redesign v3** (file `9kVAJhXfvlz569AYMRGGCn`, page `2056:180`). No mockups on the page. Structure in "JustCook page" below. |
+| `02-rehabeat.mdx` | **Live** since 2026-10-12. Real text (`notes/02-rehab.md`); Result showcase from Figma `xmb1334lJ54M35DwB9PFnl`. Still placeholders: Design Features rows 01, 02, 03, 05. To-do: a working-prototype section. **Not** in the PDF line-up. |
+| `03-smart-home-hub.mdx` | Text written (PIG = "Progettazione di Interfacce Grafiche", Sep–Dec 2025, 3 students, Android MD3); `notes/03-smart-home-hub.md`. `placeholder: true` (Coming soon) until the owner sends interfaces. **Main project 01 in the PDF.** |
+| `04-realiti.mdx` | Placeholder with INVENTED facts (only the name "Realiti" is real; XR / Meta Quest project). Sources in `Media/04-Realiti/`. **Additional project 04 in the PDF.** |
+| `05-aurawake.mdx` | Text written (HCI 1, spring 2024, team of 2, mobile app + alarm + wearable); `notes/05-aurawake.md`. Coming soon. **Additional project 05 in the PDF.** |
 
-### JustCook page (`01-justcook.mdx`): exact current structure
-- **Figma:** file `9kVAJhXfvlz569AYMRGGCn`, page **"JustCook — Redesign v3"** (`2056:180`). 28 device frames named
-  `"<Screen> · device"` (each = a `Screen` instance + a `Bezel` instance of "iPhone 16 Pro Max" `2211:1515`), in 5 flows
-  (Home / Cook / Buy / Plan and pantry / Widgets). The Screen components sit above each device frame (e.g. "Meal done ·
-  stamped" component `2287:5416`, device `2287:5417`). Pages "Redesign" and "Redesign v2" are obsolete.
-- **Cover** `cover-app.png` 3840×2400 on #f5f5f5: three phones 869×1776, centres x 942.5 / 1919.5 / 2896.5, top 312:
-  Home first screen, Home scrolled, Boxes (owner: the same three, updated).
-- **Result showcase**, in order (no mockups in Result: the owner removed the In hand duo on 2026-10-20): 01 Tonight, trio (home first screen, focus mode, streak) ·
-  03 From box to stamp, trio stagger (lid code with keyboard, "Hold today to stamp it", "Thursday, stamped") ·
-  04 Live Activity, pair crop 0.4 · 05 Widgets, quad crop 0.5 (small, small ending, medium, large) · 06 Buy boxes, quad ·
-  07 The week, quad (home scrolled, plan, boxes, ingredients). Removed by the owner: "code accepted", "dinner is served",
-  the table mockup, the single big hands scene, the hand-home/hand-plan duo.
-- **Design chapter, app part:** Note (Decision) → `Features` alternate crop 0.82: Adaptive planning, Swap tonight's box,
-  A timely nudge (widget medium, crop 0.32), One code per box (flat `screens/lid-code.png`; the code inside each box is
-  unique and validates that a box was really cooked; recipes stay browsable), Focus mode, Hold to stamp
-  (`meal-stamp.png`), The day, stamped (`meal-stamped.png`), Streaks with friends →
-  Note "Principle" right after the Features (the stamp has no group of its own any more: owner 2026-10-20, after
-  three hand-mockup attempts, wanted the two stamp screens flat, in sequence, among the other Design rows) →
-  `### Outside the app` = intro ("hold the thread") + Gallery cutout cols 3 in four moments (the 19:45 hand mockup was
-  removed 2026-10-20; its notification is now a cut-out, `screens/out-notif-start-cooking.png`, Figma `2319:5724`): "08:30 – 09:00 · Morning" (use it today, boxes
-  ready, large widget) · "All day · The streak" (small, medium streak, 5 hours left) · "19:00 – 19:45 · Before dinner" (medium
-  widget, 19:45 notification) · "19:45 – 20:00 · While cooking" (Live Activity compact + expanded). On phones each cutout
-  group is a swipe row (62%), like the Result showcase. Gallery pieces are `screens/out-*.png`, one uniform 0.53 crop
-  (notifications from the bottom, widgets and Live Activity from the top). Then Brand and campaign, the launch plan and
-  Reflection (unchanged).
-- **What the stamp means (owner, 2026-10-19; matters for any copy):** the long press is NOT a safety lock. It is an
-  emotional gesture: stamping the day yourself gives completion and pride. Concepts from the owner's guidelines
-  `C:\Users\rospo\Documents\Designing\1percent\1percent-design-guidelines.md` (§8 Critical Retention Moment:
-  participation over spectatorship, put the retention ask inside the peak; §9 Zeigarnik, Hick, Fitts). Use them to show
-  that he reflects on behaviour, never with invented data.
-- **No mockups are in use on the JustCook page** (owner, 2026-10-20). `src/assets/projects/justcook/mockups/` is gone.
-  Previous attempts (kept only as notes):
-  he removed the hand-home/plan/lid/lock ones and the scroll zoom. Source photos: `Media/01-JustCook/mockups-source/`
-  (hand-grey.png = current stamp. Scripts in `Media/_tools/`, run in this order from a scratchpad with sharp:
-  `glass.mjs 179 600 0.5` = warp a full-rect screen onto the straight glass edges, then clip it to the REAL glass shape
-  measured row by row (lum 110 crossing; the corners are continuous curves, not a radius) + 0.5 px dilation, purple
-  fringe neutralised; `ground.mjs 239` = lighten the flat #b3b3b3 ground via a flood fill from the borders (tol 14) plus
-  a 5 px edge band, so skin highlights are untouched; `comp.mjs 700` = place the flat meal-stamp device (glass width
-  matched, tops aligned, 290 px gap) and crop with equal margins measured from the phones' outer frames). Older recipe for the backlit photo: screen corners by fitting lines to the
-  bezel→glass edges (thresholds dark<30, bright>60): TL 506.1,166.2 · TR 871.5,171.4 · BR 757.5,1121.1 · BL 382.7,1071.4;
-  flatten the 3× screen on a white rounded rect, paint the island into it, `warp2 … 2 out 0 0 1.5`, then
-  `Media/_tools/handmask.js` (flood-fill the dark hand from 900,900, lum<70, only bottom/right edge) and `desat.js`
-  (neutralise the old orange glow on the bezel).
+**Case-study structure "B-mix" (owner, 2026-10-20; full rules in CLAUDE.md "Writing a case study")**
+- Intro (back link with a small chevron) → cover → **Overview** as one cell grid (3 sentence cells + 6 fact cells, no
+  rule above) → **Result** (unchanged: showcase + bare numbers) → **Process** = clickable index rows (number, h3 title,
+  summary, chevron that steps on hover) → chapters.
+- Chapters: sticky title in the head lane; body starts with `<Key>` (h2 Regular); `###` groups = h3 Medium sentence-case
+  titles, **no rule above**; paragraphs `--fs-read`; numbers/findings/cycles = hairline **cells** (`.cells`/`.cell` in
+  global.css, 6 units); numbered lists = plain list (number + point, light hairlines); item titles inside cells/rows =
+  lead Medium; sequence numbers = small signal labels, never chips.
+- Components changed: `Key` (h2 Regular), `BigStat` (full-width cell), `Metrics` (cells in chapters, bare in Result),
+  `Insights` (cells 2×2 / thirds / 3+2), `Reframes` (row of cells with subgrid; `cycles` no longer drawn), `Archetypes`
+  (light: continuous row hairlines, no boxes/tints/column rules), `Chips` (light row; `cards` = About-style tool tiles
+  with optional `logo` raw SVG), `Features` (rows: device on the hairline, text centred; new `also`/`alsoAlt` = two
+  screens side by side, `note` = quiet line under the text), `Closing` (bold sentence in mega, all ink: owner loved it),
+  `ProcessIndex` (index rows + fixed bar), `Gallery` (no hairline under the last cutout group; cutout groups are swipe
+  rows on phones). `Spot` exists but is unused.
+- Logos: `src/assets/logos/` (Simple Icons CC0 + a hand-drawn `qr.svg`; Instagram/WhatsApp/TikTok added 2026-10-20).
 
-### Components added or changed since 2026-10-16
-- `case/Spot.astro` (new, registered in `[slug].astro`): photo on tracks B–C, framing text on A (optional ink group
-  label) on a `--rule-strong` hairline at the photo's baseline; on phones the text goes under the photo.
-- `case/Showcase.astro`: new layout **`duo`** (two photos, 6 + 6 cols, stacked on phones, no drift); enum in
-  `content.config.ts`.
-- `case/Features.astro`: items take their own `crop` and `anchor: 'bottom'` (bottom share; img `flex-shrink: 0` so the
-  phone's bottom edge shows). Component default stays 0.55; JustCook uses 0.82.
-- `case/Gallery.astro` unchanged; used for the JustCook day narrative (cutout + captions).
+**JustCook page (`01-justcook.mdx`) — exact current structure**
+- Cover `cover-app.png` (3 phones on #f5f5f5). Result showcase: Tonight (trio) · From box to stamp (trio stagger) · Live
+  Activity (pair crop 0.4) · Widgets (quad crop 0.5) · Buy boxes (quad) · The week (quad).
+- Research: Methods cells (41 / 4 / 3) + Analysis boxed cells (8 themes, 36 codes = "short tags marking what each passage
+  of an interview or field note is about; the same 36 applied to all of them").
+- Design, app part: Note (Decision) → `Features` alternate crop 0.82: 01 Adaptive planning · 02 Swap tonight's box ·
+  03 A timely nudge (widget, crop 0.32) · 04 One code per box (flat `lid-code.png`) · 05 Focus mode · 06 **Hold to stamp**
+  = pair row (`meal-stamp.png` + `meal-stamped.png`, text: "Dinner ends with a gesture, not a checkbox: press and hold
+  today, and the stamp lands on the week like on a loyalty card.", note Principle: "A reward people perform themselves
+  feels earned. Right after the stamp, tomorrow's meal and its reminder are one tap away.") · 07 Streaks with friends.
+  Then `### Outside the app` (Gallery cutout in four moments incl. the 19:45 notification `out-notif-start-cooking.png`,
+  Figma 2319:5724) → Brand and campaign (Channels = tool tiles with Instagram, WhatsApp, QR, TikTok logos) → launch plan
+  → Reflection ("If I started again" plain list) → Closing in mega.
+- The stamp is an **emotional gesture**, not a safety lock (owner's guidelines
+  `C:\Users\rospo\Documents\Designing\1percent\1percent-design-guidelines.md` §8–§9). Never invent data for it.
+- Mockup source photos kept only locally in `Media/01-JustCook/mockups-source/` (none in use).
 
-### Image recipes (scripts saved in `Media/_tools/`; run them from a session scratchpad that has `node_modules`)
-- **Figma export at 960 px:** `get_screenshot` never upscales beyond 1×. Load the `figma:figma-use` skill, then with
-  `use_figma` `clone()` the device frame, `rescale(960 / w)`, park it at x ≥ 8000, name it `TMP export · …`;
-  `get_screenshot` (`maxDimension 1963`, `contentsOnly: true`), curl the URL, then delete every `TMP export ·` node.
-  Device PNGs are 960×1963 with transparent corners. For mockups clone the `Screen` instance (no bezel) and
-  `rescale(3)` → 1206×2622 (corner radius 165).
-- **Screen into a photo:** `node warp2.js mock screen '{"TL":[x,y],"TR":…,"BR":…,"BL":…}' 2 out.jpg skin island grow skinVmin`.
-  Homography, 3×3 supersampling, mockup upscaled ×2. `skin=1` keeps fingers on top (skin = r>g≥b−3, r−b>18); `skinVmin`
-  limits that to the lower part of the screen (needed when the original screen shows skin-like colours); `island=1`
-  copies the original Dynamic Island back; for dark original screens paint the island into the screen PNG instead
-  (rect x415 y33 w376 h111 rx55.5 at 3×). `grow` (px) pushes the quad out to hide the old glass. Corners: `glass.js`
-  (largest blob of pink/white glass → hull → 4 longest sides) or `refine.js` (fits the glass/bezel transition); check
-  with `outline.js`; for dark screens sample luminance rows/columns by hand. `grid.js` draws a grid whose labels are
-  absolute pixels.
-- **Site screenshots:** `node sec.mjs URL prefix "selector|text" …` (puppeteer-core + Chrome at 1440×900; the fixed
-  header appears in shots, ignore it). Chrome: `C:/Program Files/Google/Chrome/Application/chrome.exe`.
-- Older recipes (PDF render with pdf.js, cut-outs by flood fill, masked SVG logos) are in Appendix A. `node_modules`
-  (puppeteer-core, sharp, pdfjs-dist) can be copied from an older session scratchpad under
-  `%TEMP%/claude/C--Users-rospo-Documents-ClaudeCode-Websites-uxportfolio/*/scratchpad` (some get cleaned up).
+**Home, About** unchanged since 2026-10-16 (home hero with per-word blur reveal: "lasciamola così"; About: drawn column
+hairlines + two-sentence statement + B/W portrait + five accordion sections).
 
-### Home, About, template (unchanged since 2026-10-16)
-Home statement with the per-word blur reveal; the hero is left as is ("lasciamola così per ora": every redesign was
-rejected, see §4). About: column hairlines + two-sentence statement + B/W portrait; five accordion sections. Case
-template: hairline back arrow + "ALL WORK"; role/team/timeline only in the Overview; OG images everywhere; favicon "VR".
+### 0.B The portfolio PDF for Politecnico di Milano (`deck/`)
 
-### Working with the owner (current)
-- Italian to him, English on the site. He often asks for **"caveman mode"**: terse answers, tokens spent on the work,
-  not on prose. He is short on credits: batch edits with small node scripts, avoid re-reading big files, take only the
-  screenshots you need (crop and resize them).
-- He says **"se hai domande falle, non lasciare nulla al caso"**: ask (AskUserQuestion, few questions, with options)
-  before guessing facts, feature purposes or placements. Never invent facts or numbers (an invented "fifteen minutes"
-  claim was caught and removed on 2026-10-19).
-- Short visual feedback, often "rimetti com'era". For taste questions show quick previews and implement only his pick.
-- He edits Figma himself; when he says a screen changed, re-export it. If the export is identical, tell him and ask
-  (on 2026-10-19 nothing had actually changed).
-- Commit trailer from the system reminder (currently `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`). In LOCAL
-  sessions push `main` after every change and add an Appendix A entry each time.
+**Admission facts (verified 2026-10-27; re-check the new admission guide published ~21/22 April each year)**
+- Source: School of Design "Open Day LM 2026 — Modalità di ammissione" deck
+  (https://www.design.polimi.it/fileadmin/user_upload/upload/News_2026/Open_Day_LM_2026_Presentazione_Modalita_Ammissione.pdf).
+- Documents: **portfolio PDF max 20 MB, no imposed graphic format**; CV PDF max 4 MB (must highlight extra training and
+  professional activities); motivation letter PDF max 4 MB; bachelor study plan PDF max 4 MB (other universities).
+  Italian or English. **File names without special characters, hyphen included** (use `Rosponi_Valerio_Portfolio.pdf`).
+- Scoring: **portfolio max 50** (below 30/50 = declared not eligible, whatever the GPA) + **CV max 20** + weighted GPA
+  (in 30ths) + **5-point bonus** if DID is the first choice. DID has **50 places** (Italian/EU), taught in English at
+  Bovisa, sections DID1/DID2. Applications ~**22 June – 7 July**, 12:00 (to be confirmed), rankings ~31 July.
+- Prerequisites: weighted average ≥ 25/30 for other Italian universities; ≥ 145 CFU by the application date for
+  undergraduates; English certificate uploaded by the deadline (Cambridge ≥ B2 First grade B or ≥ C1 Advanced grade C,
+  IELTS ≥ 6, TOEFL iBT ≥ 78…; `C:\Users\rospo\Documents\Magistrali\Polimi\requisito inglese.pdf`).
+- Curricular requirement (helpdesk ticket #101683052, 19 Oct 2026, saved in `…\Magistrali\Polimi\`): the 36 CFU in
+  CEAR-08/D + IINF-05 can include Informatics (INFO-01/A) credits; then he is evaluated with candidates who need no
+  curricular integration, provided GPA ≥ 25/30 and a valid English certificate.
+- **Course profile** (manifesto `…\Magistrali\Polimi\manifestoDID.pdf` + https://www.polimi.it/en/education/laurea-magistrale-programmes/programme-detail/digital-and-interaction-design):
+  designing and developing interactive artefacts, digital AND physical: interactive and connected products, responsive
+  environments, tangible and multimedia interfaces. Year 1: Embodied Interaction Studio (Design of Interactive Systems,
+  Design of Blended Interaction, Tangible and Embedded Technologies) or Envisioning AI through Design; Digital Design
+  Studio; Hardware & Software Technologies for Design; UX Design; Cognitive Science for UX; Digital Art. Year 2: Final
+  Design Studio (complex products/systems, technologies for connected products, envisioning interactive scenarios; or
+  Smart Wearables), Living Interaction Design or Virtual & Physical Prototyping, electives, internship, thesis. The
+  school has a prototyping lab with microcontrollers and sensors.
+- **Reference:** Silvia Gori's accepted portfolio, `…\Magistrali\Polimi\SILVIA_GORI_Portfolio.pdf` (19 MB, 59 slides
+  16:9, same UniTrento BSc, opened with her UX Challenge 2025 Social Impact Award project). Good content model (cover,
+  contents, about, internship, case studies with overview & role, process, solution, outcome, learnings, additional
+  projects incl. programming/ML, "what sets me apart"); graphically loose (alternating green/white/black, small text,
+  bullets, no constant grid): that is where we beat it.
 
-### Tooling on this PC
-Build with PowerShell `npx astro build` (Git Bash cannot load Rolldown). Dev server via `preview_start` name
-`portfolio` (`.claude/launch.json`, port 4321, autoPort). Never delete `.astro` / `node_modules/.astro` / `.vite` while
-the dev server runs. Set `document.documentElement.style.scrollBehavior='auto'` before scripted scrolls. Rehabeat Figma
-`xmb1334lJ54M35DwB9PFnl` (page "Redesign"); `resize()` applies constraints to children (use `resizeWithoutConstraints`).
+**Owner's decisions so far**
+- English. Site identity + a strong accent. No photo of him. A short "Where I'm heading" slide (course themes ↔ projects;
+  personal motivations stay in the motivation letter). AI2B and the Olympiads = participation only. No thesis yet.
+- Removed on purpose: "How I approach design" and "What I bring" (must show through the projects: PROCESS FIRST).
+- Recognition: highlights only in "Who I am" (room for 8, 4 per row); the full list goes in the CV (scored separately).
+- **Line-up:** main **01 Smart Home Hub**, **02 JustCook**, **03 UX Challenge 2026 (Gruppo Spes, app/web only) OR a new
+  thesis project (to be decided)**; additional **04 Realiti**, **05 AuraWake**. Rehabeat is out (flagged to the owner as
+  the closest to the course; he chose this line-up).
+- The owner has prototype material for Realiti (XR), AuraWake and Smart Home; a small new physical prototype
+  (Arduino/ESP32 + sensor) before July is "maybe, to evaluate" (it would fill the biggest gap vs the course).
+- Colours: cover ultramarine `#1f3c88`; projects **dark** with white type: 01 teal `#2b5c6b`, 02 terracotta `#b04a32`,
+  03 aubergine `#5a3a5e`, 04 forest `#2e5e4e`, 05 ochre `#8f6519`. Pastels were tried and rejected ("scuri come prima!").
+
+**The system (deck/deck.css + deck/index.html)**
+- Canvas **1920×1080**; **12 columns** of 122 px, **24 px** gutters, **96 px** side margins; 8 px rhythm.
+- **Chrome** on every slide at y 56: section (signal number + name) left, sub-title centre, page "NN / NN" right.
+  **Content frame** y 144 → 984 (`.frame`, a 12-col grid).
+- Type (site scale ×1.5): label 18 (uppercase Medium 8%), small 22, body 26, lead 34, h3 44, h2 72, display **88**
+  (statements: one sentence per line across the 12 columns), mega 232 (cover name at 312, project-cover title 136).
+- Site rules reused: Geist only (local woff2 from `node_modules/@fontsource-variable/geist`), paper #fdfdfc, ink greys,
+  `--signal` for small sequence numbers, hairline **cells** (label top, content bottom), light **rows**, grey hatched /
+  grey-text **placeholders** (`.ph`, `.ph-box`).
+- **Colour slides** (`.slide--color`, `--pc`): full-bleed colour, white type, the 12 columns drawn as faint hairlines
+  (`.cols`, the site About motif). Project covers (`.pcover`) add a tone-on-tone mega number bleeding off the
+  bottom-right corner (`.pcover__num`, 860 px, colour = 78% --pc + black).
+- **Generated by the inline script** (so the deck scales): page numbers; the Contents (three groups: About · Main
+  projects · Additional projects, with colour swatches, all links); the Selected projects index (3 large main images
+  3:4 + 2 smaller additional 16:10 in the last track, number + title only; placeholder = the project colour). Sources:
+  slides with `data-intro` (About entries) and every `section.pcover` (`data-num`, `data-kind` main|additional,
+  `data-title`, `data-sub`, `data-ph`, `--pc`). **Adding a project = adding a cover section; its content slides go
+  right after it.**
+- `?grid` draws the columns (preview only); `?accent=hex` overrides `--accent`.
+
+**Current slides (10):** 01 Cover (ultramarine, name 312 px, "Interaction and UX designer with a background in computer
+science.", application + contact) · 02 Contents · 03 Who I am ("Useful to as many people as possible. / Beautiful
+enough to make them stay." + Profile / Education / Details + Recognition row) · 04 Where I'm heading ("Designing the
+experience, / and building the technology behind it." + 3 cells: Connected products and systems → Smart Home Hub,
+AuraWake · Tangible and embodied interaction → AuraWake, Realiti, JustCook · Physical and virtual prototyping →
+Realiti, Smart Home Hub) · 05 Selected projects · 06–10 project covers 01–05 (real facts from the MDX; Realiti and
+project 03 still placeholders).
+
+**Build**
+```bash
+node deck/build.mjs              # → deck/out/Rosponi_Valerio_Portfolio.pdf + deck/out/preview/NN-id.png (1920×1080)
+node deck/build.mjs --grid       # previews with the column grid → deck/out/preview-grid/
+node deck/build.mjs --accent=1f3c88
+```
+`puppeteer-core` is a devDependency; Chrome path from `CHROME` env (default the Windows install). `deck/out/` is
+git-ignored: rebuild it. The script warns if the PDF exceeds 20 MB. Internal `<a href="#id">` links and mail/web links
+stay clickable in the PDF. Contact sheet for review: resize the previews with sharp (640×360 each, 3 per row).
+
+**Next for the PDF (in order)** — see also §9
+1. Project content slides, starting with **01 Smart Home Hub**: ask the owner for the interfaces and prototype
+   material. Template to design first (repeatable for every project): overview & role → problem/context → research →
+   insights → framing → ideas → **system map** (devices, data, touchpoints, space) → prototypes & tests → solution
+   screens (payoff) → outcome/learnings. Process gets the space; UI is the payoff. Main projects ~8–12 slides,
+   additional ~3–4.
+2. Decide project 03 (UX Challenge 2026 vs thesis) and get its material (the owner has UX Challenge material).
+3. Real photos for the Selected projects index and, if wanted, the covers (objects, contexts, devices: not only phones).
+4. Closing slide (contact, thank you) — not built yet. Final check: size < 20 MB, file name, links, typos.
+5. Optional: propose a concrete small physical prototype (Arduino/ESP32) tied to one project.
+
+### 0.C How to research and read sources
+- **Web:** `WebSearch` (mode "standard" first; "extended" for thin or niche results) and `WebFetch` for a page.
+  Official sources: www.polimi.it (programme pages), www.design.polimi.it (School of Design: guides under
+  Didattica → Documenti → Guide alla carriera; manifesti; news with rankings), www.digitalinteractiondesign.polimi.it.
+  Reddit/aggregators had nothing reliable on portfolio tips.
+- **PDFs from the web:** `WebFetch` on a PDF returns binary, but saves it under
+  `C:\Users\rospo\.claude\projects\C--Users-rospo-Documents-ClaudeCode-Websites-uxportfolio\<session>\tool-results\webfetch-*.pdf`;
+  read that saved file with the `Read` tool (small PDFs read whole, text + page images).
+- **Local PDFs:** `Read` works without `pages` for small files. `pdftoppm` is NOT installed, so `pages` fails; for big PDFs
+  render them with **`Media/_tools/pdfrender.mjs`** (pdf.js inside headless Chrome via a tiny local HTTP server):
+  `node pdfrender.mjs <pdf> <outdir> 1000` from a scratchpad with `puppeteer-core` + `pdfjs-dist@4.10.38` (+ `sharp` for
+  contact sheets) installed (`npm i puppeteer-core sharp pdfjs-dist@4.10.38`).
+- Owner's application folder: `C:\Users\rospo\Documents\Magistrali\Polimi\` (manifestoDID.pdf, helpdesk ticket,
+  requisito inglese.pdf, SILVIA_GORI_Portfolio.pdf).
+
+### 0.D Tooling on this PC (both workstreams)
+- Build the site with PowerShell `npx astro build` (Git Bash cannot load Rolldown). Dev server: `preview_start` name
+  `portfolio` (`.claude/launch.json`, autoPort: often 4322/4323). **The dev server's HMR often serves stale scoped CSS
+  after component edits: restart it (preview_stop + preview_start) before trusting screenshots.**
+- Screenshots: puppeteer-core + Chrome (`C:/Program Files/Google/Chrome/Application/chrome.exe`). Chrome full-page shots
+  break above ~16 384 px (tiles repeat): capture **per element** (`el.screenshot()` on `section#id`), hiding `header` and
+  `[data-pbar]` and making `.sec__sticky` static. Scroll the page first so reveals fire. Review as contact sheets made
+  with sharp. Scripts from this session were in the (now cleaned) scratchpad; `Media/_tools/sec.mjs` is the older
+  equivalent; rewrite small ones as needed.
+- **Shell pitfalls:** long `node -e "…"` with backticks, `$`, `!` or nested quotes breaks in Git Bash: write the script
+  with the Write tool into the scratchpad and run it. Never `cat > file` without a heredoc (it waits on stdin).
+- Image recipes (Figma export at 960 px via clone + rescale; screen-into-photo warps; glass masks; ground lightening):
+  scripts in `Media/_tools/` (warp2.js, glass.mjs, ground.mjs, comp.mjs, handmask.js, desat.js, grid.js, refine.js,
+  outline.js). Figma export: load the `figma:figma-use` skill, `use_figma` → `clone()` the device, `rescale(960 / w)`,
+  park at x ≥ 8000 named `TMP export · …`, `get_screenshot` (maxDimension 1963, contentsOnly), curl, delete the clone.
+  For a bare screen clone the `Screen` instance and `rescale(3)` → 1206×2622.
+- Memory files (auto-loaded): `portfolio-project-goal`, `design-taste-feedback`, `rehabeat-prototype-todo`,
+  `polimi-portfolio-deck`.
 
 ---
 
@@ -751,12 +857,13 @@ git push
 
 ## 9. Immediate Task & Roadmap
 
-> **2026-10-20 next steps:** (1) nothing is pending on Claude's side; wait for the owner. Likely requests: more
-> JustCook polish (mockups, copy, layout); the interfaces for Smart Home Hub (03) and AuraWake (05) → cover, Result
-> showcase, Features images, `placeholder: false`. (2) Rehabeat: Design Features 01/02/03/05 from its Figma + the
-> working-prototype section (ask for material). (3) Write Realiti (04) with the Appendix B process (sources in
-> `Media/04-Realiti/`). (4) Open items: the CV contains the phone number; no Lighthouse/accessibility pass yet; the
-> JustCook mockups (owner may send more photos).
+> **2026-10-27 next steps.** The active workstream is the **Politecnico portfolio PDF** (§0.B). (1) Ask the owner for
+> Smart Home Hub interfaces + prototype material, then design the repeatable project template (process first, system
+> map, prototypes, UI as payoff) and build project 01. (2) Owner decides project 03 (UX Challenge 2026 vs thesis).
+> (3) Photos for the project index/covers, closing slide, final checks (< 20 MB, file name, links). Website side, only
+> on request: Smart Home Hub / AuraWake interfaces → covers, showcase, Features images, `placeholder: false` (the same
+> material serves the PDF); Realiti real facts (`Media/04-Realiti/`); Rehabeat Features 01/02/03/05 + prototype
+> section. Open items: CV has the phone number; no Lighthouse/accessibility pass yet.
 
 **First step, unambiguous:** run the LOCAL session-start sync from §10 right now — `git fetch origin`, check
 `git branch -r --no-merged main` for any cloud work waiting, merge it in, build, push. Only after that is the
@@ -866,6 +973,12 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-27 · LOCAL (6)** · **Full HANDOFF rewrite for a new chat:** §0 now has 0.1 owner + vision, 0.2 working with
+  the owner (incl. everything rejected lately), 0.A the website (projects, B-mix structure, components, JustCook), 0.B
+  the Polimi PDF (admission rules, course profile, reference portfolio, owner's decisions, line-up, colours, the deck
+  system, slides, build, next steps), 0.C how to research (web, PDFs, local files), 0.D tooling and pitfalls. §9 next
+  steps updated. CLAUDE.md points to `deck/`. `Media/_tools/pdfrender.mjs` saved (render any PDF to JPGs).
 
 - **2026-10-27 · LOCAL (5)** · Pastel project colours rejected ("scuri come prima!"): reverted to the dark palette with
   white type (01 teal 2b5c6b, 02 terracotta b04a32, 03 aubergine 5a3a5e, 04 forest 2e5e4e, 05 ochre 8f6519). Do not
