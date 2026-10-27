@@ -189,7 +189,19 @@ enough to make them stay." + Profile / Education / Details + Recognition row) ·
 experience, / and building the technology behind it." + 3 cells: Connected products and systems → Smart Home Hub,
 AuraWake · Tangible and embodied interaction → AuraWake, Realiti, JustCook · Physical and virtual prototyping →
 Realiti, Smart Home Hub) · 05 Selected projects · 06 cover 01 · **07–17 main-project TEMPLATE** (below) · 18–21
-covers 02–05 (real facts from the MDX; Realiti and project 03 still placeholders).
+covers 02–05 (real facts from the MDX; Realiti and project 03 still placeholders) · **22–25 AuraWake content** (below).
+
+**AuraWake (05, additional) — 4 slides after its cover (2026-10-27).** Chosen for its physical interaction (objects,
+states, signals, links). Sources: `notes/05-aurawake.md` + `C:\Users\rospo\Documents\ClaudeCode\Design\AuraWake\AuraWake - Interaction Design Spec.md`
+(Oct 2026 spec; owner: "usa le info, non importa di quando sono"). Slides (`data-page`: colour + name from the cover,
+no process bar): **System** (SVG map: phone, bracelet → base (hub) → lamp, shutters, diffuser; cloud optional; links
+labelled Wi-Fi local / BLE 5 / Thread-Matter) · **One night** (swimlane generated from data in the script: 9 moments
+21:30→07:10 not to scale; lanes You/Bracelet/Base/Phone = events, Lamp (amber area)/Shutters/Sound (indigo)/Scent =
+0–100% areas; smart-window band 06:00–06:30) · **Gestures and signals** (take the bracelet / palm 2 s / put it back,
+illustration placeholders; light-line states drawn as waveforms) · **App and safety** (3 phone placeholders Evening
+21:40 / Night 03:12 / Morning 07:10 + "What if…" list). Product colours used only here: `--night` #7a86e8,
+`--dawn` #f2c074 (from the spec). **Placeholders:** object illustrations (owner has "un'idea complessa" for them) and
+app screens (redesign in Figma `SVEGLIA-1 › Redesign · Home`). Physical prototype: owner decides later.
 
 **Main-project template (2026-10-27, owner: "pagine mockup con la struttura generale")** — 11 slides after cover 01
 (ids `p01-*`), all copy grey placeholder saying what goes where; to be filled with Smart Home Hub only when the owner
@@ -990,6 +1002,11 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-27 · LOCAL (8)** · Deck: **AuraWake** 4 content slides (system map, one-night swimlane, gestures + light
+  language, app + what-if) from the Interaction Design Spec; details in §0.B. Owner: 3–4 slides, use the spec facts
+  regardless of date, objects as placeholders for now, prototype decided later. Pending: object illustrations, app
+  screens, owner review.
 
 - **2026-10-27 · LOCAL (7)** · Deck: **main-project template** = 11 grey placeholder slides after cover 01 (overview,
   context, research, insights, framing, ideas, system map, prototypes, solution ×2, outcome) with a process bar at the
