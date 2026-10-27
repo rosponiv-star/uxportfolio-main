@@ -574,6 +574,10 @@
   .iso .ft { font-size: 18px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
   .iso .nm { font-size: 20px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; fill: var(--ink); }
   .iso .rl { font-size: 18px; fill: var(--ink-3); }
+  .iso .grp { fill: none; stroke-width: 1.5; stroke-linejoin: round; }
+  .iso path.grp-room { stroke: #c98f2a; } .iso path.grp-you { stroke: var(--ink-3); } .iso path.grp-cloud { stroke: var(--ink-4); stroke-dasharray: 6 6; }
+  .iso .gn { font-size: 18px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+  .iso text.grp-room { fill: #a8741c; } .iso text.grp-you { fill: var(--ink-3); }
   .iso .co { stroke: var(--ink); stroke-width: 1.2; fill: none; }
   .iso .cn { font-size: 18px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
   .iso .ct { font-size: 18px; fill: var(--ink-3); }
@@ -649,67 +653,68 @@
   const iso = document.querySelector('[data-iso]');
   if (iso) {
     const C = 0.866, S = 0.5, A = 'assets/aurawake/';
-    const k5 = 400 / 520, sc = (p) => p.map((v) => v * k5);
-    const AN = {base: {size: 400, ground: sc([260, 321.5]), points: {cradle: sc([282.4, 205]), palm: sc([383.3, 217.9]), time: sc([125.5, 302.1]), led: sc([228.2, 400.2]), light: sc([260, 407.7])}},
-      bracelet: {size: 240, ground: [120, 196.8]}, phone: {size: 250, ground: [125, 129.4]}, lamp: {size: 170, ground: [85, 144.8]},
-      shutters: {size: 300, ground: [147.5, 234.7]}, diffuser: {size: 200, ground: [100, 143.8]}};
-    const tone = {wifi: '#e4e4e0', ble: 'color-mix(in srgb, var(--night) 26%, #fff)', thread: 'color-mix(in srgb, var(--dawn) 38%, #fff)', base: '#f2f2ef'};
-    const N = { // [cx, cy, half size, tone, name, role]
-      cloud: [1060, 70, 55, 'none', 'Cloud', 'Opt-in backup'],
-      phone: [420, 715, 128, 'wifi', 'Phone', 'Plans and explains'],
-      bracelet: [745, 690, 112, 'ble', 'Bracelet', 'Senses sleep'],
-      base: [1010, 420, 250, 'base', 'Base', 'Runs every ramp'],
-      lamp: [1460, 180, 80, 'thread', 'Lamp', 'Dusk and dawn'],
-      shutters: [1615, 440, 122, 'thread', 'Shutters', 'Daylight'],
-      diffuser: [1450, 700, 85, 'thread', 'Diffuser', 'Scent'],
+    const AN = {"base":{"size":400,"ground":[200.0,247.0],"points":{"top":[270.5,162.4],"time":[95.0,231.7],"led":[154.5,273.3],"light":[225.1,302.9]}},"bracelet":{"size":240,"ground":[120.0,188.5],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}}};
+    const N = { // [cx, cy, name, role] = where the object touches the ground
+      cloud: [1060, 80, 'Cloud', 'Opt-in backup'],
+      phone: [690, 660, 'Phone', 'Plans and explains'],
+      bracelet: [430, 800, 'Bracelet', 'Senses sleep'],
+      base: [1000, 420, 'Base', 'Runs every ramp'],
+      lamp: [1590, 520, 'Lamp', 'Dusk and dawn'],
+      shutters: [1382, 640, 'Shutters', 'Daylight'],
+      diffuser: [1174, 760, 'Diffuser', 'Scent'],
     };
-    const mU = (x, y) => `matrix(${C},${S},${-C},${S},${x},${y})`, mV = (x, y) => `matrix(${C},${-S},${C},${S},${x},${y})`;
+    const mU = (x, y) => `matrix(${C},${S},${-C},${S},${x},${y})`;
+    const toUV = ([x, y]) => [(x / C + y / S) / 2, (x / C - y / S) / 2], toXY = ([u, v]) => [(u + v) * C, (u - v) * S];
+    const rounded = (P, r) => P.map((p, i) => {
+      const a = P[(i + P.length - 1) % P.length], b = P[(i + 1) % P.length];
+      const f = (q, t) => [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t];
+      const la = Math.hypot(a[0] - p[0], a[1] - p[1]), lb = Math.hypot(b[0] - p[0], b[1] - p[1]);
+      const p1 = f(a, r / la), p2 = f(b, r / lb);
+      return `${i ? 'L' : 'M'}${p1} Q${p} ${p2}`;
+    }).join(' ') + ' Z';
     let g = '';
-    // flows: [from, to, kind, label, u-first?]
-    const F = [['phone', 'base', 'wifi', '', true], ['bracelet', 'base', 'ble', '', true],
-      ['base', 'lamp', 'thread', '', false], ['base', 'shutters', 'thread', '', false],
-      ['base', 'diffuser', 'thread', '', true], ['base', 'cloud', 'cloud', '', false]];
-    F.forEach(([a, b, k, lab, uf]) => {
+    // groups: one hairline outline around related objects, drawn on the floor plane
+    const G = [[['lamp', 'shutters', 'diffuser'], 'Bedroom · Thread / Matter', 'grp-room', [125, 115]], [['phone', 'bracelet'], 'With you', 'grp-you', [125, 105]]];
+    G.forEach(([ids, name, cls, [mu, mv]]) => {
+      const uv = ids.map((id) => toUV(N[id]));
+      const u0 = Math.min(...uv.map((p) => p[0])) - mu, u1 = Math.max(...uv.map((p) => p[0])) + mu;
+      const v0 = Math.min(...uv.map((p) => p[1])) - mv, v1 = Math.max(...uv.map((p) => p[1])) + mv;
+      const P = [[u0, v0], [u0, v1], [u1, v1], [u1, v0]].map(toXY);
+      g += `<path class="grp ${cls}" d="${rounded(P, 28)}" />`;
+      const [lx, ly] = toXY([u0 + 24, v0]);
+      g += `<text class="gn ${cls}" transform="${mU(lx, ly)}" dy="30">${name}</text>`;
+    });
+    const cl = N.cloud, Pc = [[-80, 0], [0, -46], [80, 0], [0, 46]].map(([x, y]) => [cl[0] + x, cl[1] + y]);
+    g += `<path class="grp grp-cloud" d="${rounded(Pc, 14)}" />`;
+    // flows along the iso axes: [from, to, kind, u-first?]
+    [['phone', 'base', 'wifi', false], ['bracelet', 'base', 'ble', true], ['base', 'lamp', 'thread', false],
+     ['base', 'shutters', 'thread', false], ['base', 'diffuser', 'thread', true], ['base', 'cloud', 'cloud', false]].forEach(([a, b, k, uf]) => {
       const [x1, y1] = N[a], [x2, y2] = N[b], dx = x2 - x1, dy = y2 - y1;
       const t = (dx / C + dy / S) / 2, kk = (dx / C - dy / S) / 2;
       const [mx, my] = uf ? [x1 + t * C, y1 + t * S] : [x1 + kk * C, y1 - kk * S];
       g += `<path class="fl fl-${k}" d="M${x1} ${y1} L${mx} ${my} L${x2} ${y2}" />`;
-      // label on the longer segment, near its middle, just above the line
-      const first = Math.hypot(mx - x1, my - y1) >= Math.hypot(x2 - mx, y2 - my);
-      const [sx, sy, ex, ey] = first ? [x1, y1, mx, my] : [mx, my, x2, y2];
-      const alongU = (ey - sy) * (ex - sx) > 0, fwd = ex >= sx;
-      const [lx, ly] = fwd ? [sx + (ex - sx) * 0.42, sy + (ey - sy) * 0.42] : [ex + (sx - ex) * 0.42, ey + (sy - ey) * 0.42];
-      if (lab) g += `<text class="ft fl-${k}" style="fill:currentColor;color:${k === 'ble' ? 'var(--night)' : k === 'thread' ? '#a8741c' : 'var(--ink-3)'}" transform="${alongU ? mU(lx, ly) : mV(lx, ly)}" dy="-10">${lab}</text>`;
     });
-    // platforms, then objects (back to front by screen y)
-    Object.entries(N).sort((p, q) => p[1][1] - q[1][1]).forEach(([id, [cx, cy, h, tn, name, role]]) => {
-      const a = h * C * 2 / 2 * 1, b = h * S, d = 10, top = `${cx - 2 * a / 2 * 1},${cy}`;
-      const L = [cx - a, cy], T = [cx, cy - b], R = [cx + a, cy], B = [cx, cy + b];
-      const dash = tn === 'none' ? ' stroke-dasharray="6 6"' : '';
-      const fill = tn === 'none' ? 'none' : tone[tn];
-      if (tn !== 'none') {
-        g += `<path class="pf-side" d="M${L} L${B} L${B[0]},${B[1] + d} L${L[0]},${L[1] + d} Z" style="fill:${fill};filter:brightness(.9)" />`;
-        g += `<path class="pf-side" d="M${B} L${R} L${R[0]},${R[1] + d} L${B[0]},${B[1] + d} Z" style="fill:${fill};filter:brightness(.82)" />`;
-      }
-      g += `<path class="pf-top" d="M${L} L${T} L${R} L${B} Z" style="fill:${fill}"${dash} />`;
-      g += `<text class="nm" transform="${mU(L[0] + 14, L[1] + 8)}" dy="30">${name}</text><text class="rl" transform="${mU(L[0] + 14, L[1] + 8)}" dy="54">${role}</text>`;
+    // objects (back to front), each with its name and role on the floor, in front of it
+    Object.entries(N).sort((p, q) => p[1][1] - q[1][1]).forEach(([id, [cx, cy, name, role]]) => {
       const o = AN[id];
       if (o) g += `<image href="${A}iso-${id}.png" x="${cx - o.ground[0]}" y="${cy - o.ground[1]}" width="${o.size}" height="${o.size}" />`;
+      const off = o ? o.size * 0.3 : 60, [tx, ty] = id === 'base' ? [cx + 150, cy + 10] : [cx - off * C, cy + off * S * 0.2];
+      g += `<text class="nm" transform="${mU(tx, ty)}" dy="34">${name}</text><text class="rl" transform="${mU(tx, ty)}" dy="58">${role}</text>`;
     });
-    // TE-style keys: a numbered dot on each part of the base, the list in the left column
+    // TE-style keys: a numbered dot on each visible part of the base; the list (incl. the back) under the title
     const [bx, by] = [N.base[0] - AN.base.ground[0], N.base[1] - AN.base.ground[1]], P = AN.base.points;
-    const KEYS = [['cradle', 'Cradle', 'The bracelet charges here', -1, -1], ['palm', 'Top surface', 'Palm for 2 s: ten more minutes', 1, -1],
-      ['time', 'Time', 'Behind micro-perforations, only when awake', -1, -1], ['led', 'Front LED', 'The only light at the front', -1, 1],
-      ['light', 'Light line', 'Underneath: washes the nightstand', 1, 1]];
+    const KEYS = [['top', 'Top surface', 'Charges the bracelet; palm for 2 s, ten more minutes', 1, -1],
+      ['time', 'Time', 'Behind micro-perforations, only when you are awake', -1, -1], ['led', 'Front LED', 'The only light at the front', 1, 1],
+      ['light', 'Light strip', 'Between body and grille: washes the nightstand', 1, 1], [null, 'Back', 'Power inlet and the Bluetooth pairing button']];
     KEYS.forEach(([k, , , ox, oy], i) => {
+      if (!k) return;
       const [px, py] = [bx + P[k][0], by + P[k][1]], [qx, qy] = [px + ox * 34, py + oy * 34];
       g += `<circle cx="${px}" cy="${py}" r="3.5" fill="var(--ink)" /><path class="co" d="M${px} ${py} L${px + ox * 22} ${py + oy * 22}" /><circle cx="${qx}" cy="${qy}" r="16" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2" /><text class="cn" x="${qx}" y="${qy + 6}" text-anchor="middle" style="letter-spacing:0">${i + 1}</text>`;
     });
     const keys = document.querySelector('[data-keys]');
     if (keys) keys.innerHTML = KEYS.map(([, t, s], i) => `<li><span class="label kick"><span class="n">0${i + 1}</span></span><span class="small"><span class="m">${t}</span><span class="i3"> · ${s}</span></span></li>`).join('');
-    // legend
     const LG = [['wifi', 'Wi-Fi, local'], ['ble', 'BLE 5'], ['thread', 'Thread / Matter'], ['cloud', 'Optional cloud']];
-    LG.forEach(([k, t], i) => (g += `<path class="fl fl-${k}" d="M${(i % 2) * 300} ${560 + Math.floor(i / 2) * 36} h48" /><text class="lg" x="${(i % 2) * 300 + 62}" y="${566 + Math.floor(i / 2) * 36}">${t}</text>`));
+    LG.forEach(([k, t], i) => (g += `<path class="fl fl-${k}" d="M${1300 + (i % 2) * 230} ${-30 + Math.floor(i / 2) * 36} h40" /><text class="lg" x="${1352 + (i % 2) * 230}" y="${-24 + Math.floor(i / 2) * 36}">${t}</text>`));
     iso.innerHTML = g;
   }
 

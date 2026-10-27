@@ -1003,6 +1003,18 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-27 · LOCAL (10)** · AuraWake base **redesigned on the owner's Mac mini refs**: 11 × 11 × 4.4 cm, matte black
+  bead-blasted aluminium, tapered black speaker-grille plinth (slits on sides + radial ring underneath, foot disc with
+  "AuraWake"), thin continuous light strip between body and plinth, front LED right at mid height, time 5×7 dots behind
+  micro-perforations (invisible when off), back = figure-8 power inlet with "~" + Bluetooth pairing button with its
+  glyph (no power button: it turns on when plugged in), top flat (no cradle) with the band lying open on it like an
+  Apple Watch on its puck. Studio renders like Apple's (white, no shadows, near-flat perspective):
+  `deck/assets/aurawake/render-front|back|top|bottom|cable.jpg` + `render-night|dawn.jpg` (room moods); hero dropped.
+  Schema (slide 22): base drawn light grey so time/LED read; **no platforms** — related objects inside one hairline
+  outline each ("Bedroom · Thread / Matter" amber: diffuser, shutters, lamp along one iso axis; "With you" grey: phone,
+  bracelet; cloud dashed); keys 1–4 on the base + 05 Back in the list; legend top right. Known: the bottom-view
+  "AuraWake" may read mirrored (check). Renders still not placed in the PDF: ask the owner where.
+
 - **2026-10-27 · LOCAL (9)** · AuraWake objects designed and modelled in **Blender 5.2** (installed via winget):
   `deck/blender/aura.py` builds base (rounded square block, black anodised aluminium, Mac mini proportions, TE
   restraint: power cable only, small front LED, time 5×7 dots behind micro-perforations, cradle on top, light line

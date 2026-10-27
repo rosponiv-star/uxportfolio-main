@@ -20,8 +20,10 @@ col = scene.collection
 
 # ---------------------------------------------------------------------------------------------------------------
 # Dimensions (metres)
-W, H, PL = 0.12, 0.045, 0.006   # base width/depth, body height, plinth height
-TOP = PL + H                    # top surface
+W, H, PL, ST = 0.11, 0.0365, 0.0065, 0.0012   # width/depth, body height, plinth height, light strip
+TOP = PL + ST + H                               # top surface
+MID = PL + ST + H / 2                           # middle of the front and back faces
+FONT_PATH = 'C:/Windows/Fonts/segoeuisl.ttf'
 NIGHT, DAWN = '#7a86e8', '#f2c074'
 
 def srgb(h):
@@ -94,26 +96,65 @@ def wood():
     b.inputs['Roughness'].default_value = 0.42
     return m
 
+def grille(name, dark, slit):
+    """Plinth = speaker grille: vertical slits on the sides, a ring of radial slits on the bottom (Mac mini language)."""
+    m = principled(name, dark, rough=0.88); nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    tc = nt.nodes.new('ShaderNodeTexCoord'); g = nt.nodes.new('ShaderNodeNewGeometry')
+    sep = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], sep.inputs[0])
+    def op(o, a, b=None, v=None):
+        n = nt.nodes.new('ShaderNodeMath'); n.operation = o
+        for i, x in enumerate((a, b)):
+            if x is None: continue
+            if isinstance(x, (int, float)): n.inputs[i].default_value = x
+            else: nt.links.new(x, n.inputs[i])
+        return n.outputs[0]
+    ang = op('ARCTAN2', sep.outputs[1], sep.outputs[0])
+    stripe = op('GREATER_THAN', op('SINE', op('MULTIPLY', ang, 220.0)), 0.35)
+    rad = op('SQRT', op('ADD', op('POWER', sep.outputs[0], 2.0), op('POWER', sep.outputs[1], 2.0)))
+    sn = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(g.outputs['Normal'], sn.inputs[0])
+    side = op('LESS_THAN', op('ABSOLUTE', sn.outputs[2]), 0.5)
+    ring = op('MULTIPLY', op('MULTIPLY', op('LESS_THAN', sn.outputs[2], -0.5), op('GREATER_THAN', rad, 0.0335)), op('LESS_THAN', rad, 0.0405))
+    mask = op('MULTIPLY', stripe, op('MAXIMUM', side, ring))
+    mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'
+    mix.inputs[6].default_value = dark; mix.inputs[7].default_value = slit
+    nt.links.new(mask, mix.inputs['Factor']); nt.links.new(mix.outputs[2], b.inputs['Base Color'])
+    bump = nt.nodes.new('ShaderNodeBump'); bump.inputs['Strength'].default_value = 0.6; bump.inputs['Distance'].default_value = 0.0004
+    nt.links.new(op('SUBTRACT', 1.0, mask), bump.inputs['Height']); nt.links.new(bump.outputs[0], b.inputs['Normal'])
+    return m
+
+def bump_tex(m, kind, scale, strength, dist=0.0002, vec=None):
+    """Micro texture: bead-blasted noise or fine diagonal ribs (band, braided cable)."""
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']; tc = nt.nodes.new('ShaderNodeTexCoord')
+    if kind == 'noise':
+        t = nt.nodes.new('ShaderNodeTexNoise'); t.inputs['Scale'].default_value = scale; t.inputs['Detail'].default_value = 2
+    else:
+        t = nt.nodes.new('ShaderNodeTexWave'); t.wave_type = 'BANDS'; t.bands_direction = 'DIAGONAL'
+        t.inputs['Scale'].default_value = scale
+    nt.links.new(tc.outputs['Object'], t.inputs['Vector'])
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = strength; bp.inputs['Distance'].default_value = dist
+    nt.links.new(t.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
+    return m
+
+STUDIO = SHOT in ('front', 'back', 'top', 'bottom', 'cable')
 if MODE == 'real':
     MATS = {
-        'alu': principled('alu', srgb('#16161a'), metal=1.0, rough=0.34),
-        'rubber': principled('rubber', srgb('#0b0b0c'), rough=0.85),
-        'led_under': emit('led_under', srgb(NIGHT if SHOT == 'night' else DAWN), 0.0),
-        'led_front': emit('led_front', srgb('#fff4e0'), 0.0),
-        'dots': emit('dots', srgb('#ffd9a0'), 0.0),
-        'band': principled('band', srgb('#0f0f11'), rough=0.6),
-        'pod': principled('pod', srgb('#121214'), metal=0.6, rough=0.28),
-        'cable': principled('cable', srgb('#0e0e10'), rough=0.75),
+        'alu': bump_tex(principled('alu', srgb('#18181b'), metal=1.0, rough=0.5), 'noise', 4000, 0.04),
+        'grille': grille('grille', srgb('#060607'), srgb('#000000')),
+        'rubber': principled('rubber', srgb('#0a0a0b'), rough=0.8),
+        'print': principled('print', srgb('#7a7a7e'), rough=0.6),
+        'pin': principled('pin', srgb('#c8c8cc'), metal=1.0, rough=0.25),
+        'led_under': principled('led_under', srgb('#8e8e92'), rough=0.35) if STUDIO else
+                     emit('led_under', srgb(NIGHT if SHOT == 'night' else DAWN), 90.0 if SHOT == 'night' else 70.0),
+        'led_front': emit('led_front', srgb('#ffffff'), 3.0 if STUDIO else 0.0),
+        'dots': emit('dots', srgb('#ffd9a0'), 7.0),
+        'band': bump_tex(principled('band', srgb('#08080a'), rough=0.78), 'wave', 260, 0.25),
+        'cable': bump_tex(principled('cable', srgb('#0e0e10'), rough=0.8), 'wave', 420, 0.5),
+        'plug': principled('plug', srgb('#0a0a0b'), rough=0.6),
     }
-    if SHOT == 'hero': MATS['led_front'].node_tree.nodes['Emission'].inputs['Strength'].default_value = 6.0
-    if SHOT == 'night': MATS['led_under'].node_tree.nodes['Emission'].inputs['Strength'].default_value = 120.0
-    if SHOT == 'dawn':
-        MATS['led_under'].node_tree.nodes['Emission'].inputs['Strength'].default_value = 90.0
-        MATS['dots'].node_tree.nodes['Emission'].inputs['Strength'].default_value = 7.0
 else:
-    T = {'alu': 0.36, 'rubber': 0.22, 'band': 0.52, 'pod': 0.36, 'cable': 0.25, 'dots': 0.97, 'led_front': 0.97,
-         'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98, 'frame': 0.96,
-         'slat': 0.80, 'pane': 0.90, 'cap': 0.86}
+    T = {'alu': 0.86, 'grille': 0.42, 'rubber': 0.3, 'print': 0.4, 'pin': 0.75, 'band': 0.5, 'cable': 0.25, 'dots': 0.28,
+         'led_front': 0.25, 'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98,
+         'frame': 0.96, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3}
     MATS = {k: toon(k, grey(v)) for k, v in T.items()}
     MATS['led_under'] = toon('led_under', srgb(DAWN))
 
@@ -215,32 +256,106 @@ def time_dots(text, zc, pitch=0.0021, r=0.00062):
 
 # ---------------------------------------------------------------------------------------------------------------
 # Objects
+def label(text, size, loc, rot, mat='print'):
+    cu = bpy.data.curves.new('t', 'FONT'); cu.body = text; cu.font = bpy.data.fonts.load(FONT_PATH, check_existing=True)
+    cu.size = size; cu.align_x = 'CENTER'; cu.align_y = 'CENTER'; cu.extrude = 0.00002
+    ob = bpy.data.objects.new('t', cu); col.objects.link(ob); ob.location = loc; ob.rotation_euler = rot
+    cu.materials.append(M(mat)); return ob
+
+def cutter_bm(shapes, depth):
+    """Union of cylinders along Y (x, z, r) as one cutter mesh."""
+    bm = bmesh.new()
+    for x, z, r in shapes:
+        m = Matrix.Translation((x, 0, z)) @ Matrix.Rotation(math.pi / 2, 4, 'X')
+        bmesh.ops.create_cone(bm, cap_ends=True, segments=64, radius1=r, radius2=r, depth=depth, matrix=m)
+    return bm
+
+def cut(ob, bm, loc, mat):
+    me = bpy.data.meshes.new('c'); bm.to_mesh(me); bm.free(); me.materials.append(M(mat))
+    c = bpy.data.objects.new('c', me); col.objects.link(c); c.location = loc
+    mod = ob.modifiers.new('cut', 'BOOLEAN'); mod.operation = 'DIFFERENCE'; mod.object = c
+    if hasattr(mod, 'solver'): mod.solver = 'EXACT'
+    if hasattr(mod, 'material_mode'): mod.material_mode = 'TRANSFER'
+    dg = bpy.context.evaluated_depsgraph_get(); new = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+    ob.modifiers.remove(mod); old = ob.data; ob.data = new; bpy.data.meshes.remove(old); bpy.data.objects.remove(c)
+    shade(ob)
+
 def build_base(with_time=False, time='06:14'):
-    body = rbox('body', W, W, H, 0.023, 0.0032, 'alu', (0, 0, PL), sp=20, se=5)
-    cutter = bpy.data.objects.new('cutter', None)
-    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=96, v_segments=48, radius=1.0)
-    for v in bm.verts: v.co = Vector((v.co.x * 0.0155, v.co.y * 0.026, v.co.z * 0.012))
-    me = bpy.data.meshes.new('cut'); bm.to_mesh(me); bm.free()
-    cutter = bpy.data.objects.new('cutter', me); col.objects.link(cutter)
-    cutter.location = (0, 0, TOP + 0.012 - 0.0042)
-    boolean_diff(body, cutter)
-    plinth = rbox('plinth', 0.098, 0.098, PL, 0.016, 0.0012, 'rubber')
-    led = rbox('led_line', 0.103, 0.103, 0.0012, 0.0185, 0.0, 'led_under', (0, 0, PL - 0.0016))
-    dot = cyl('led_front', 0.00105, 0.0004, 'led_front', (0.043, -W / 2 - 0.0001, PL + 0.009), axis='Y', seg=24)
-    port = cyl('port', 0.0032, 0.004, 'rubber', (0, W / 2, PL + 0.012), axis='Y')
-    cable = curve('cable', [(0, W / 2 - 0.002, PL + 0.012), (0, W / 2 + 0.03, PL + 0.011), (0.03, W / 2 + 0.07, 0.0016),
-                            (0.10, W / 2 + 0.13, 0.0016)], 0.0019, 'cable')
-    obs = [body, plinth, led, dot, port, cable]
-    if with_time: obs.append(time_dots(time, PL + H * 0.56))
+    body = rbox('body', W, W, H, 0.0235, 0.0042, 'alu', (0, 0, PL + ST), sp=24, se=6)
+    # back: figure-8 power inlet (the only cable) and the Bluetooth pairing button; no power button
+    PX, BX = -0.016, 0.016
+    for dx in (-0.0042, 0.0042): cut(body, cutter_bm([(PX + dx, 0, 0.0047)], 0.016), (0, W / 2, MID), 'rubber')
+    cut(body, cutter_bm([(BX, 0, 0.0034)], 0.002), (0, W / 2, MID), 'rubber')
+    wn = body.modifiers.new('wn', 'WEIGHTED_NORMAL'); wn.keep_sharp = True; wn.mode = 'FACE_AREA'
+    btn = cyl('button', 0.0028, 0.002, 'alu', (BX, W / 2 - 0.0013, MID), axis='Y')
+    pins = [cyl(f'pin{i}', 0.0009, 0.004, 'pin', (PX + dx, W / 2 - 0.0062, MID), axis='Y', seg=24) for i, dx in enumerate((-0.0042, 0.0042))]
+    back = math.pi / 2, 0, math.pi
+    marks = [label('~', 0.0065, (PX, W / 2 + 0.00003, MID + 0.0102), back)]
+    bt = [(-0.25, 0.25), (0.25, -0.25), (0, -0.5), (0, 0.5), (0.25, 0.25), (-0.25, -0.25)]
+    cu = bpy.data.curves.new('bt', 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.00016
+    sp = cu.splines.new('POLY'); sp.points.add(len(bt) - 1)
+    for pt, (x, z) in zip(sp.points, bt): pt.co = (BX - x * 0.0052, W / 2 + 0.0001, MID + 0.0102 + z * 0.0052, 1)
+    bto = bpy.data.objects.new('bt', cu); col.objects.link(bto); cu.materials.append(M('print')); marks.append(bto)
+    # plinth = speaker grille, tapered; light strip between plinth and body; foot and name underneath
+    bm = rbox_bm(0.094, 0.094, PL, 0.0185, 0.0008, sp=24, se=2)
+    for v in bm.verts:
+        if v.co.z < PL / 2: v.co.x *= 0.95; v.co.y *= 0.95
+    plinth = link('plinth', bm, 'grille')
+    strip = rbox('strip', 0.0936, 0.0936, ST, 0.0185, 0.0, 'led_under', (0, 0, PL), sp=24)
+    foot = cyl('foot', 0.031, 0.0006, 'rubber', (0, 0, -0.0002), seg=96)
+    name = label('AuraWake', 0.0058, (0, 0, -0.00052), (math.pi, 0, 0)); name.scale.x = -1
+    dot = cyl('led_front', 0.00085, 0.0003, 'led_front', (W * 0.236, -W / 2 - 0.00002, MID), axis='Y', seg=24)
+    obs = [body, btn, plinth, strip, foot, name, dot] + pins + marks
+    if with_time: obs.append(time_dots(time, MID))
     return group('base', obs)
 
-POD_Z = TOP - 0.0042  # pod bottom in the cradle
+def band_profile(w=0.0195, t=0.0034):
+    cu = bpy.data.curves.new('prof', 'CURVE'); cu.dimensions = '2D'
+    sp = cu.splines.new('POLY'); r = t / 2; pts = []
+    for cx, a0 in ((w / 2 - r, -90), (-(w / 2 - r), 90)):
+        for k in range(9):
+            a = math.radians(a0 + 180 * k / 8); pts.append((cx + r * math.cos(a), r * math.sin(a)))
+    sp.points.add(len(pts) - 1); sp.use_cyclic_u = True
+    for pt, (x, y) in zip(sp.points, pts): pt.co = (x, y, 0, 1)
+    ob = bpy.data.objects.new('prof', cu); col.objects.link(ob); ob.hide_render = True
+    return ob
 
-def build_bracelet(z0=POD_Z):
-    pod = rbox('pod', 0.02, 0.032, 0.0082, 0.0075, 0.0032, 'pod', (0, 0, z0), sp=12, se=4)
-    R, t = 0.029, 0.0026
-    band = link('band', ring_bm(R, 0.0165, t), 'band', (0, 0, z0 + 0.0082 + R + t / 2))
-    return group('bracelet', [pod, band])
+def sweep(name, pts, mat, cyclic=False):
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_mode = 'OBJECT'
+    cu.bevel_object = band_profile(); cu.use_fill_caps = True; cu.resolution_u = 24; cu.twist_mode = 'MINIMUM'
+    sp = cu.splines.new('BEZIER'); sp.bezier_points.add(len(pts) - 1); sp.use_cyclic_u = cyclic; sp.use_smooth = True
+    for bp, p in zip(sp.bezier_points, pts): bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
+    ob = bpy.data.objects.new(name, cu); col.objects.link(ob); cu.materials.append(M(mat))
+    return ob
+
+def build_bracelet_open():
+    """Unbuckled band lying on top of the base, sensor side down, straps over the front and back edges."""
+    t, z = 0.0034, TOP + 0.0017
+    e = W / 2
+    pts = [(0, -e - 0.0016, TOP - 0.03), (0, -e - 0.0019, TOP - 0.008), (0, -e + 0.0035, z), (0, 0, z),
+           (0, e - 0.0035, z), (0, e + 0.0019, TOP - 0.008), (0, e + 0.0016, TOP - 0.034)]
+    band = sweep('band', pts, 'band')
+    pod = rbox('pod', 0.0198, 0.036, 0.0024, 0.006, 0.0011, 'band', (0, 0, TOP + t - 0.0004), sp=12, se=3)
+    return group('bracelet', [band, pod])
+
+def build_bracelet():
+    """Closed band standing, as in the owner's reference (technical drawing)."""
+    R = 0.03; pts = []
+    for k in range(12):
+        a = 2 * math.pi * k / 12; pts.append((0, R * 0.82 * math.cos(a), R * 1.12 * math.sin(a) + R * 1.12 + 0.0017))
+    band = sweep('band', pts, 'band', cyclic=True)
+    return group('bracelet', [band])
+
+def build_cable():
+    head = rbox('head', 0.038, 0.038, 0.013, 0.0189, 0.0035, 'plug', sp=32, se=4)
+    head.rotation_euler = (0, math.pi / 2, 0); head.location = (0.0, 0, 0.019)
+    bpy.ops.mesh.primitive_cone_add(vertices=64, radius1=0.0115, radius2=0.0042, depth=0.026, location=(0.026, 0, 0.019), rotation=(0, math.pi / 2, 0))
+    neck = bpy.context.active_object; neck.data.materials.append(M('plug')); shade(neck)
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.0042, minor_radius=0.0012, location=(0.04, 0, 0.019), rotation=(0, math.pi / 2, 0))
+    ring = bpy.context.active_object; ring.data.materials.append(M('plug')); shade(ring)
+    cable = cyl('cable', 0.0029, 0.24, 'cable', (0.16, 0, 0.019), axis='X', seg=48)
+    pins = [cyl(f'p{i}', 0.0024, 0.019, 'pin', (-0.016, y, 0.019), axis='X', seg=32) for i, y in enumerate((-0.0095, 0.0095))]
+    return group('cable', [head, neck, ring, cable] + pins)
 
 def build_phone():
     body = rbox('phone_body', 0.0715, 0.147, 0.0078, 0.011, 0.0026, 'phone', sp=16, se=4)
@@ -341,21 +456,32 @@ def colour_management(view):
             try: scene.view_settings.look = lk; break
             except TypeError: continue
 
+def studio(view):
+    scene.render.film_transparent = True
+    world(srgb('#9a9aa0'), 0.12)
+    lens = 135
+    if view == 'cable':
+        build_cable(); fw, tgt, pos = 0.30, (0.1, 0, 0.019), (0.1, -1, 0.019)
+    else:
+        build_base()
+        if view == 'top': build_bracelet_open()
+        if view in ('front', 'back'):
+            fw = W / 0.62; tgt = (0, 0, TOP * 0.5); pos = (0, -1 if view == 'front' else 1, TOP * 0.42)
+        else:
+            fw = (W / 0.80) * 16 / 9; tgt = (0, 0, TOP / 2); pos = (0, 0.0001, 1 if view == 'top' else -1)
+    d = fw * lens / 36; v = Vector(pos) - Vector(tgt); v.normalize(); cam = look(tuple(Vector(tgt) + v * d), tgt, lens)
+    area('key', (0, -0.5, 1.2), (0, 0, 0.02), 1.6, 110)
+    area('left', (-0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
+    area('right', (0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
+    area('cam', tuple(Vector(cam.location) * 0.9 + Vector((0, 0, 0.3))), tgt, 1.2, 25)
+    if view in ('back', 'bottom'): area('cam2', tuple(Vector(cam.location) * 0.9), tgt, 1.2, 40)
+
 def real():
-    res = (960, 540) if PREVIEW else (1920, 1080)
-    cycles(48 if PREVIEW else 256, res)
+    res = (1200, 675) if PREVIEW else (2400, 1350)
+    cycles(64 if PREVIEW else 384, res)
     colour_management('AgX')
-    if SHOT == 'hero':
-        build_base(); build_bracelet()
-        backdrop = principled('backdrop', srgb('#dcdcd8'), rough=0.9)
-        MATS['backdrop'] = backdrop
-        plane('floor', 4.0, (0, 0, 0), (0, 0, 0), 'backdrop')
-        plane('wall', 4.0, (0, 0.6, 0), (math.pi / 2, 0, 0), 'backdrop')
-        world(srgb('#d8d8d4'), 0.25)
-        area('key', (-0.35, -0.25, 0.55), (0, 0, 0.04), 0.6, 60)
-        area('rim', (0.4, 0.35, 0.3), (0, 0, 0.05), 0.4, 25)
-        area('fill', (0.5, -0.4, 0.1), (0, 0, 0.04), 0.5, 8)
-        look((0.36, -0.46, 0.24), (0, 0.004, 0.048), 75, 5.6)
+    if STUDIO:
+        studio(SHOT)
     else:
         build_base(with_time=(SHOT == 'dawn'))
         MATS['wood'] = wood()
@@ -370,7 +496,7 @@ def real():
             world(srgb('#2a1c12'), 0.06)
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 4, (1.0, 0.85, 0.7))
-        look((0.36, -0.50, 0.15), (0.0, 0.01, 0.028), 70, 2.8)
+        look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
     scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
@@ -404,10 +530,10 @@ def line():
 
     # (group builder, size shown on the slide in px, named points for callouts)
     items = {
-        'base': (lambda: build_base(with_time=True, time='06:30'), 520, {
-            'cradle': (0, 0.012, TOP - 0.003), 'palm': (0.036, 0.03, TOP), 'time': (-0.012, -W / 2, PL + H * 0.6),
-            'led': (0.043, -W / 2, PL + 0.009), 'light': (0.045, -0.045, PL - 0.001), 'power': (0.05, W / 2 + 0.105, 0.0016)}),
-        'bracelet': (lambda: build_bracelet(0.0), 240, {'pod': (0, -0.012, 0.004), 'band': (0, -0.02, 0.058)}),
+        'base': (lambda: build_base(with_time=True, time='06:30'), 400, {
+            'top': (0.02, 0.025, TOP), 'time': (-0.012, -W / 2, MID + 0.004), 'led': (W * 0.236, -W / 2, MID),
+            'light': (0.046, -0.03, PL + ST / 2)}),
+        'bracelet': (build_bracelet, 240, {}),
         'phone': (build_phone, 250, {}),
         'lamp': (build_bulb, 170, {}),
         'shutters': (build_shutters, 300, {}),
@@ -418,7 +544,7 @@ def line():
         for o in list(col.objects):
             if o.type != 'CAMERA': bpy.data.objects.remove(o, do_unlink=True)
         g = fn(); bpy.context.view_layer.update()
-        cs = [o.matrix_world @ Vector(c) for o in g.children_recursive if o.type == 'MESH' for c in o.bound_box]
+        cs = [o.matrix_world @ Vector(c) for o in g.children_recursive if o.type == 'MESH' or o.name.startswith('band') for c in o.bound_box]
         xs = [c.dot(right) for c in cs]; ys = [c.dot(up) for c in cs]
         span = max(max(xs) - min(xs), max(ys) - min(ys)) * 1.16
         cx, cy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
