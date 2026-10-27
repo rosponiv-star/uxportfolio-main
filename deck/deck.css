@@ -38,6 +38,7 @@
   --fs-h2: 72px;      /* slide titles */
   --fs-display: 88px; /* statements: one sentence per line across the 12 columns */
   --fs-mega: 232px;   /* cover name, divider numbers */
+  --fs-stat: 136px;   /* key numbers only (Medium), one size everywhere */
 
   --m: 96px;          /* side margins */
   --g: 24px;          /* gutter */
@@ -113,6 +114,7 @@ a { color: inherit; text-decoration: none; }
 .h2 { font-size: var(--fs-h2); font-weight: 500; line-height: 1.02; letter-spacing: -0.035em; }
 .display { font-size: var(--fs-display); font-weight: 400; line-height: 1.02; letter-spacing: -0.04em; }
 .mega { font-size: var(--fs-mega); font-weight: 500; line-height: 0.86; letter-spacing: -0.06em; }
+.stat { font-size: var(--fs-stat); font-weight: 500; line-height: 0.9; letter-spacing: -0.05em; }
 .display, .h2, .h3 { text-wrap: balance; }
 .lead, .body, .small { text-wrap: pretty; }
 .m { font-weight: 500; }
@@ -183,6 +185,37 @@ a { color: inherit; text-decoration: none; }
   pointer-events: none;
 }
 .pcover .frame { z-index: 1; }
+
+/* Project content slides (data-step): the project's process as a bar at the bottom, one segment per step,
+   the current one in the project colour. Built by the script from STEPS; --pc comes from the project cover. */
+.steps {
+  position: absolute;
+  left: var(--m);
+  right: var(--m);
+  bottom: 36px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  column-gap: 8px;
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  color: var(--ink-4);
+}
+.slide[data-step] .frame { bottom: 128px; } /* room for the bar */
+.steps > span { padding-top: 10px; border-top: 2px solid var(--rule); white-space: nowrap; }
+.steps .n { margin-right: 10px; }
+.steps .done { border-top-color: var(--ink-4); }
+.steps .now { border-top-color: var(--pc); color: var(--ink); }
+.steps .now .n { color: var(--pc); }
+
+/* Chapter kicker on content slides: step number in the project colour + name. */
+.kick .n { color: var(--pc, var(--signal)); margin-right: 16px; }
+
+/* Device placeholder (phone, portrait). */
+.phone { aspect-ratio: 9 / 19.5; border-radius: 40px; }
 
 /* Project swatch (contents). */
 .sw { display: inline-block; width: 18px; height: 18px; background: var(--pc); }

@@ -188,8 +188,25 @@ science.", application + contact) · 02 Contents · 03 Who I am ("Useful to as m
 enough to make them stay." + Profile / Education / Details + Recognition row) · 04 Where I'm heading ("Designing the
 experience, / and building the technology behind it." + 3 cells: Connected products and systems → Smart Home Hub,
 AuraWake · Tangible and embodied interaction → AuraWake, Realiti, JustCook · Physical and virtual prototyping →
-Realiti, Smart Home Hub) · 05 Selected projects · 06–10 project covers 01–05 (real facts from the MDX; Realiti and
-project 03 still placeholders).
+Realiti, Smart Home Hub) · 05 Selected projects · 06 cover 01 · **07–17 main-project TEMPLATE** (below) · 18–21
+covers 02–05 (real facts from the MDX; Realiti and project 03 still placeholders).
+
+**Main-project template (2026-10-27, owner: "pagine mockup con la struttura generale")** — 11 slides after cover 01
+(ids `p01-*`), all copy grey placeholder saying what goes where; to be filled with Smart Home Hub only when the owner
+says ("un progetto alla volta, per ora aspetta"), then copied for 02/03. Order: Overview (h2 sentence + cell grid:
+Problem/Approach/Outcome + Course/Timeline/Team/My role/Methods/Tools) · 01 Context (text + 2 stat cells | photo
+16:10) · 02 Research (3 photos 5:2 + 4 method stat cells) · 03 Insights (quote + 4 cells: number, title, evidence,
+stat) · 04 Framing (HMW in h2; two personas compared on rows | 3 design principles) · 05 Ideas (4 square sketches,
+the chosen one outlined in --pc) · 06 System (legend | SVG map: people → touchpoints → hub → devices, dashed data,
+dashed space boundary; generic, redraw per project) · 07 Prototypes (3 iterations: image, fidelity, tested, changed) ·
+08 Solution (4 phones on a hairline + captions) · 08 Solution, key interaction (Trigger/Action/Feedback/Why | photo
+16:10) · 09 Outcome (2 stat cells | "If I started again" list).
+Mechanics: a content slide has `data-step` (key from `STEPS` in the script; "" = overview); the script copies `--pc`
+and "NN Title" (`[data-proj]`) from the preceding cover, writes the kicker (`[data-kick]` = step number in --pc +
+name) and appends the **process bar** (`.steps`, bottom 36 px: 9 segments, done = grey line, current = --pc line +
+ink label). On those slides the frame ends at y 952 (`bottom: 128px`). New token `--fs-stat` 136 (`.stat`).
+`build.mjs` now empties `out/preview/` each run. Contact-sheet helper (git-ignored): `deck/out/_sheet.mjs <dir> <out.jpg>
+<regex> [w] [cols]`.
 
 **Build**
 ```bash
@@ -202,11 +219,11 @@ git-ignored: rebuild it. The script warns if the PDF exceeds 20 MB. Internal `<a
 stay clickable in the PDF. Contact sheet for review: resize the previews with sharp (640×360 each, 3 per row).
 
 **Next for the PDF (in order)** — see also §9
-1. Project content slides, starting with **01 Smart Home Hub**: ask the owner for the interfaces and prototype
-   material. Template to design first (repeatable for every project): overview & role → problem/context → research →
-   insights → framing → ideas → **system map** (devices, data, touchpoints, space) → prototypes & tests → solution
-   screens (payoff) → outcome/learnings. Process gets the space; UI is the payoff. Main projects ~8–12 slides,
-   additional ~3–4.
+1. **Template built (07–17), waiting for the owner's review.** Then fill it with **01 Smart Home Hub** only when he
+   says so. Material: only what is in the report (`Media/03-Smart Home Ecosystem/REPORT FINALE PIG.pdf`: sketches,
+   Design Space, flows; owner 2026-10-27) + interfaces still undecided (original report MD3 screens vs the Oct 2026
+   Figma redesign in `om273DJAb0sL3whUHJE0IO`, notes in `C:\Users\rospo\Documents\ClaudeCode\Design\HANDOFF-PIG-REDESIGN.md`):
+   ask. Additional projects need a shorter template (~3–4 slides).
 2. Decide project 03 (UX Challenge 2026 vs thesis) and get its material (the owner has UX Challenge material).
 3. Real photos for the Selected projects index and, if wanted, the covers (objects, contexts, devices: not only phones).
 4. Closing slide (contact, thank you) — not built yet. Final check: size < 20 MB, file name, links, typos.
@@ -973,6 +990,12 @@ When a CLOUD session hits something that needs the local environment, it must:
 ---
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
+
+- **2026-10-27 · LOCAL (7)** · Deck: **main-project template** = 11 grey placeholder slides after cover 01 (overview,
+  context, research, insights, framing, ideas, system map, prototypes, solution ×2, outcome) with a process bar at the
+  bottom (current step in the project colour); details in §0.B. Owner: one project at a time, wait before filling
+  Smart Home Hub; prototype material = only the report; project 03 still undecided. Pending: owner review of the
+  template.
 
 - **2026-10-27 · LOCAL (6)** · **Full HANDOFF rewrite for a new chat:** §0 now has 0.1 owner + vision, 0.2 working with
   the owner (incl. everything rejected lately), 0.A the website (projects, B-mix structure, components, JustCook), 0.B

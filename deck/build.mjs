@@ -13,6 +13,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const args = Object.fromEntries(process.argv.slice(2).map((a) => a.replace(/^--/, '').split('=')).map(([k, v]) => [k, v ?? true]));
 const out = path.join(here, 'out');
 const prev = path.join(out, args.grid ? 'preview-grid' : 'preview');
+fs.rmSync(prev, { recursive: true, force: true }); // no stale previews after slides move
 fs.mkdirSync(prev, { recursive: true });
 
 const q = new URLSearchParams();

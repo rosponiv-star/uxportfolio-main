@@ -141,6 +141,223 @@
   </div>
 </section>
 
+<!-- MAIN-PROJECT TEMPLATE (owner, 2026-10-27: "pagine mockup" = the general structure for every main project).
+     Placeholder copy (grey) says what goes where. One slide per step of the process, in this order:
+     overview · context · research · insights · framing · ideas · system · prototypes · solution (×2) · outcome.
+     data-step = the step key (STEPS in the script); the bottom bar, the project name in the chrome and --pc come
+     from the project cover above. PROCESS gets the space; the UI is the payoff. -->
+<section class="slide" id="p01-overview" data-step="">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1">Overview</p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">One sentence on the project: who it is for, and what it changes for them.</p>
+    <div class="cells" style="grid-column: 1 / -1; align-self: end; grid-template-columns: repeat(6, minmax(0, 1fr))">
+      <div class="cell" style="grid-column: span 2; min-height: 248px"><span class="label i3">Problem</span><p class="lead ph cell__foot">The need or friction, in people’s words, in one short sentence.</p></div>
+      <div class="cell" style="grid-column: span 2"><span class="label i3">Approach</span><p class="lead ph cell__foot">How we tackled it: the method and the key decision.</p></div>
+      <div class="cell" style="grid-column: span 2"><span class="label i3">Outcome</span><p class="lead ph cell__foot">What came out of it: the product and its result.</p></div>
+      <div class="cell"><span class="label i3">Course</span><p class="small ph cell__foot">Course name, university</p></div>
+      <div class="cell"><span class="label i3">Timeline</span><p class="small ph cell__foot">Months, year</p></div>
+      <div class="cell"><span class="label i3">Team</span><p class="small ph cell__foot">Size and disciplines</p></div>
+      <div class="cell"><span class="label i3">My role</span><p class="small ph cell__foot">What I did, in a few words</p></div>
+      <div class="cell"><span class="label i3">Methods</span><p class="small ph cell__foot">Interviews, mapping, prototyping…</p></div>
+      <div class="cell"><span class="label i3">Tools</span><p class="small ph cell__foot">Figma, Unity, Arduino…</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="p01-context" data-step="context">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">The problem in one sentence, seen from the people who live it.</p>
+    <div style="grid-column: 1 / 7; align-self: end; display: grid; gap: 40px">
+      <p class="body ph" style="max-width: 92%">Two or three lines of context: where it happens, who is involved, why it matters now. Facts only, no filler.</p>
+      <div class="cells" style="grid-template-columns: repeat(2, minmax(0, 1fr))">
+        <div class="cell" style="min-height: 280px"><p class="stat ph">00%</p><p class="small ph cell__foot">What the number means, in one line.<br /><span class="i4">Source, year</span></p></div>
+        <div class="cell"><p class="stat ph">0 in 0</p><p class="small ph cell__foot">A second fact that frames the problem.<br /><span class="i4">Source, year</span></p></div>
+      </div>
+    </div>
+    <figure style="grid-column: 7 / 13; align-self: end; display: grid; gap: 14px">
+      <div class="ph-box small" style="aspect-ratio: 16 / 10">Photo · the real context (place, people, objects)</div>
+      <figcaption class="small ph">Caption: what the photo shows.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="slide" id="p01-research" data-step="research">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">What we did to understand people, and with whom.</p>
+    <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid; row-gap: 32px">
+      <figure style="grid-column: span 4; display: grid; gap: 14px"><div class="ph-box small" style="aspect-ratio: 5 / 2">Photo · interviews in context</div><figcaption class="small ph">Caption</figcaption></figure>
+      <figure style="grid-column: span 4; display: grid; gap: 14px"><div class="ph-box small" style="aspect-ratio: 5 / 2">Photo · affinity wall / mapping</div><figcaption class="small ph">Caption</figcaption></figure>
+      <figure style="grid-column: span 4; display: grid; gap: 14px"><div class="ph-box small" style="aspect-ratio: 5 / 2">Photo · field visit / artefacts</div><figcaption class="small ph">Caption</figcaption></figure>
+      <div class="cells" style="grid-column: 1 / -1; grid-template-columns: repeat(4, minmax(0, 1fr))">
+        <div class="cell" style="min-height: 208px"><p class="stat ph">00</p><p class="small cell__foot"><span class="m ph">Interviews</span><br /><span class="ph">With whom, where, how long</span></p></div>
+        <div class="cell"><p class="stat ph">00</p><p class="small cell__foot"><span class="m ph">Survey answers</span><br /><span class="ph">Sample and channel</span></p></div>
+        <div class="cell"><p class="stat ph">00</p><p class="small cell__foot"><span class="m ph">Observations</span><br /><span class="ph">Where and when</span></p></div>
+        <div class="cell"><p class="stat ph">00</p><p class="small cell__foot"><span class="m ph">Benchmarks</span><br /><span class="ph">Products compared</span></p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="p01-insights" data-step="insights">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">The few findings that changed the design.</p>
+    <blockquote class="lead ph" style="grid-column: 1 / 7; margin: 48px 0 0">“A participant’s quote that sums the research up.”<br /><span class="small">— Participant, context</span></blockquote>
+    <ol class="cells" style="grid-column: 1 / -1; align-self: end; grid-template-columns: repeat(4, minmax(0, 1fr))">
+      <li class="cell" style="min-height: 400px"><span class="label kick"><span class="n">01</span></span><p class="lead m ph">Insight title</p><p class="small ph">The evidence behind it, in two lines: what we saw or heard.</p><p class="cell__foot"><span class="stat ph" style="display: block">0/0</span><span class="small ph">participants said so</span></p></li>
+      <li class="cell"><span class="label kick"><span class="n">02</span></span><p class="lead m ph">Insight title</p><p class="small ph">The evidence behind it, in two lines: what we saw or heard.</p><p class="cell__foot"><span class="stat ph" style="display: block">0/0</span><span class="small ph">participants said so</span></p></li>
+      <li class="cell"><span class="label kick"><span class="n">03</span></span><p class="lead m ph">Insight title</p><p class="small ph">The evidence behind it, in two lines: what we saw or heard.</p><p class="cell__foot"><span class="stat ph" style="display: block">0/0</span><span class="small ph">participants said so</span></p></li>
+      <li class="cell"><span class="label kick"><span class="n">04</span></span><p class="lead m ph">Insight title</p><p class="small ph">The evidence behind it, in two lines: what we saw or heard.</p><p class="cell__foot"><span class="stat ph" style="display: block">0/0</span><span class="small ph">participants said so</span></p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="slide" id="p01-framing" data-step="framing">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">How might we … for … so that … ?</p>
+    <!-- Who we design for: two people compared on the same rows (light: hairlines only). -->
+    <div class="arch" style="grid-column: 1 / 7; align-self: end">
+      <p class="label i3" style="grid-column: 1 / -1; margin-bottom: 16px">Who we design for</p>
+      <span></span><p class="lead m ph">Persona A</p><p class="lead m ph">Persona B</p>
+      <span class="small i3">Goal</span><p class="small ph">What they want</p><p class="small ph">What they want</p>
+      <span class="small i3">Context</span><p class="small ph">Where, when, with whom</p><p class="small ph">Where, when, with whom</p>
+      <span class="small i3">Friction</span><p class="small ph">What gets in the way</p><p class="small ph">What gets in the way</p>
+      <span class="small i3">Quote</span><p class="small ph">“In their words.”</p><p class="small ph">“In their words.”</p>
+    </div>
+    <!-- Design principles that came out of the insights. -->
+    <div style="grid-column: 8 / 13; align-self: end">
+      <p class="label i3" style="margin-bottom: 16px">Design principles</p>
+      <ol class="rows">
+        <li class="prin"><span class="label kick"><span class="n">01</span></span><span><span class="body m ph">Principle</span><br /><span class="small ph">Which insight it comes from, and what it rules out.</span></span></li>
+        <li class="prin"><span class="label kick"><span class="n">02</span></span><span><span class="body m ph">Principle</span><br /><span class="small ph">Which insight it comes from, and what it rules out.</span></span></li>
+        <li class="prin"><span class="label kick"><span class="n">03</span></span><span><span class="body m ph">Principle</span><br /><span class="small ph">Which insight it comes from, and what it rules out.</span></span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="p01-ideas" data-step="ideas">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">From many sketches to one concept, and why this one.</p>
+    <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid; row-gap: 32px">
+      <figure class="idea"><div class="ph-box small" style="aspect-ratio: 1 / 1">Scan · sketch</div><figcaption><span class="label i3">Concept A · Discarded</span><span class="small ph">Why it was dropped, in one line.</span></figcaption></figure>
+      <figure class="idea"><div class="ph-box small" style="aspect-ratio: 1 / 1">Scan · sketch</div><figcaption><span class="label i3">Concept B · Discarded</span><span class="small ph">Why it was dropped, in one line.</span></figcaption></figure>
+      <figure class="idea"><div class="ph-box small" style="aspect-ratio: 1 / 1">Scan · sketch</div><figcaption><span class="label i3">Concept C · Merged</span><span class="small ph">What it gave to the final concept.</span></figcaption></figure>
+      <figure class="idea idea--kept"><div class="ph-box small" style="aspect-ratio: 1 / 1">Scan · chosen concept</div><figcaption><span class="label kick"><span class="n">Chosen</span></span><span class="small ph">The concept, and why it won.</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="p01-system" data-step="system">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">How the pieces work together: people, devices, data and space.</p>
+    <ol class="rows" style="grid-column: 1 / 4; align-self: end">
+      <li class="leg"><span class="mk mk--person"></span><span class="small"><span class="m">People</span><br /><span class="i3">Who acts</span></span></li>
+      <li class="leg"><span class="mk"></span><span class="small"><span class="m">Touchpoints</span><br /><span class="i3">Where they act: app, panel, object</span></span></li>
+      <li class="leg"><span class="mk mk--hub"></span><span class="small"><span class="m">Hub and services</span><br /><span class="i3">What decides and connects</span></span></li>
+      <li class="leg"><span class="mk mk--dev"></span><span class="small"><span class="m">Devices</span><br /><span class="i3">What senses and responds</span></span></li>
+      <li class="leg"><span class="mk mk--data"></span><span class="small"><span class="m">Data</span><br /><span class="i3">What flows, and when</span></span></li>
+      <li class="leg"><span class="mk mk--space"></span><span class="small"><span class="m">Space</span><br /><span class="i3">Where it all happens</span></span></li>
+    </ol>
+    <!-- Placeholder diagram: to be redrawn per project (nodes and flows are generic). -->
+    <svg class="sysmap" style="grid-column: 4 / 13; align-self: end" viewBox="0 0 1290 640" role="img" aria-label="System map placeholder">
+      <rect x="300" y="24" width="966" height="592" rx="24" class="sp" />
+      <text x="324" y="64" class="t lab">SPACE · HOME</text>
+      <g class="n"><rect x="0" y="150" width="200" height="80" rx="40" /><text x="100" y="197">Person A</text></g>
+      <g class="n"><rect x="0" y="420" width="200" height="80" rx="40" /><text x="100" y="467">Person B</text></g>
+      <g class="n"><rect x="380" y="150" width="220" height="80" /><text x="490" y="197">Touchpoint</text></g>
+      <g class="n"><rect x="380" y="420" width="220" height="80" /><text x="490" y="467">Touchpoint</text></g>
+      <g class="n hub"><rect x="700" y="270" width="200" height="120" /><text x="800" y="337">Hub</text></g>
+      <g class="n"><rect x="1010" y="110" width="220" height="80" rx="8" /><text x="1120" y="157">Device</text></g>
+      <g class="n"><rect x="1010" y="290" width="220" height="80" rx="8" /><text x="1120" y="337">Device</text></g>
+      <g class="n"><rect x="1010" y="470" width="220" height="80" rx="8" /><text x="1120" y="517">Device</text></g>
+      <path class="l" d="M200 190 H380 M200 460 H380 M600 190 H650 V300 H700 M600 460 H650 V360 H700" />
+      <path class="l d" d="M900 300 H955 V150 H1010 M900 330 H1010 M900 360 H955 V510 H1010" />
+      <text x="955" y="96" class="t lab">DATA</text>
+    </svg>
+  </div>
+</section>
+
+<section class="slide" id="p01-prototypes" data-step="prototypes">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">Built early, tested with people, changed by what we saw.</p>
+    <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid">
+      <div class="iter"><div class="ph-box small" style="aspect-ratio: 16 / 10">Photo · paper prototype</div><span class="label kick"><span class="n">01</span>Low fidelity</span><p class="body m ph">What we tested, and with whom</p><p class="small ph">What we saw, and what changed in the next round.</p></div>
+      <div class="iter"><div class="ph-box small" style="aspect-ratio: 16 / 10">Video still · clickable prototype</div><span class="label kick"><span class="n">02</span>Interactive</span><p class="body m ph">What we tested, and with whom</p><p class="small ph">What we saw, and what changed in the next round.</p></div>
+      <div class="iter"><div class="ph-box small" style="aspect-ratio: 16 / 10">Photo · physical / XR prototype</div><span class="label kick"><span class="n">03</span>Working prototype</span><p class="body m ph">What we tested, and with whom</p><p class="small ph">What we saw, and what changed in the final design.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="p01-solution" data-step="solution">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">The result in one sentence: what people can now do.</p>
+    <div class="shots" style="grid-column: 1 / -1; align-self: end">
+      <figure><div class="ph-box phone small">Screen</div><figcaption><span class="label kick"><span class="n">01</span></span><span class="small"><span class="m ph">Feature</span><br /><span class="ph">Which need it answers.</span></span></figcaption></figure>
+      <figure><div class="ph-box phone small">Screen</div><figcaption><span class="label kick"><span class="n">02</span></span><span class="small"><span class="m ph">Feature</span><br /><span class="ph">Which need it answers.</span></span></figcaption></figure>
+      <figure><div class="ph-box phone small">Screen</div><figcaption><span class="label kick"><span class="n">03</span></span><span class="small"><span class="m ph">Feature</span><br /><span class="ph">Which need it answers.</span></span></figcaption></figure>
+      <figure><div class="ph-box phone small">Screen</div><figcaption><span class="label kick"><span class="n">04</span></span><span class="small"><span class="m ph">Feature</span><br /><span class="ph">Which need it answers.</span></span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="p01-interaction" data-step="solution">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">The key interaction, step by step.</p>
+    <ol class="rows" style="grid-column: 1 / 6; align-self: end">
+      <li class="prin"><span class="label kick"><span class="n">01</span></span><span><span class="body m ph">Trigger</span><br /><span class="small ph">What starts it: a moment, a signal, a gesture.</span></span></li>
+      <li class="prin"><span class="label kick"><span class="n">02</span></span><span><span class="body m ph">Action</span><br /><span class="small ph">What the person does, on screen or in space.</span></span></li>
+      <li class="prin"><span class="label kick"><span class="n">03</span></span><span><span class="body m ph">Feedback</span><br /><span class="small ph">How the system answers: light, sound, screen, object.</span></span></li>
+      <li class="prin"><span class="label kick"><span class="n">04</span></span><span><span class="body m ph">Why it works</span><br /><span class="small ph">The insight or principle behind the choice.</span></span></li>
+    </ol>
+    <figure style="grid-column: 7 / 13; align-self: end; display: grid; gap: 14px">
+      <div class="ph-box small" style="aspect-ratio: 16 / 10">Photo or video still · the interaction in its real setting</div>
+      <figcaption class="small ph">Caption: where, who, which device.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="slide" id="p01-outcome" data-step="outcome">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2 ph" style="grid-column: 1 / 11; margin-top: 24px">What it achieved, and what I would do differently.</p>
+    <div style="grid-column: 1 / 7; align-self: end">
+      <p class="label i3" style="margin-bottom: 16px">Results</p>
+      <div class="cells" style="grid-template-columns: repeat(2, minmax(0, 1fr))">
+        <div class="cell" style="min-height: 240px"><p class="stat ph">00</p><p class="small ph cell__foot">Measured result, or target (never mixed).</p></div>
+        <div class="cell"><p class="stat ph">00</p><p class="small ph cell__foot">Grade, award, test score or adoption.</p></div>
+      </div>
+    </div>
+    <div style="grid-column: 8 / 13; align-self: end">
+      <p class="label i3" style="margin-bottom: 16px">If I started again</p>
+      <ol class="rows">
+        <li class="prin"><span class="label kick"><span class="n">01</span></span><span class="body ph">One honest limit, and what I would change.</span></li>
+        <li class="prin"><span class="label kick"><span class="n">02</span></span><span class="body ph">One thing to test with more people.</span></li>
+        <li class="prin"><span class="label kick"><span class="n">03</span></span><span class="body ph">The one lesson I take to the next project.</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
 <section class="slide slide--color pcover" id="p02" style="--pc: #b04a32" data-num="02" data-kind="main" data-title="JustCook">
   <div class="cols" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
   <p class="pcover__num" aria-hidden="true">02</p>
@@ -224,6 +441,37 @@
   /* Project cover meta */
   .pmeta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--g); padding-top: 20px; border-top: 1px solid; font-size: var(--fs-small); }
   .pmeta dt { margin-bottom: 6px; }
+
+  /* Main-project template */
+  .arch { display: grid; grid-template-columns: 140px 1fr 1fr; column-gap: var(--g); }
+  .arch > * { padding-block: 14px; border-top: 1px solid var(--rule); }
+  .arch > .label { border-top: 0; padding-block: 0; }
+  .arch > :nth-child(2), .arch > :nth-child(3), .arch > :nth-child(4) { border-top-color: var(--rule-strong); }
+  .prin { display: grid; grid-template-columns: 64px 1fr; align-items: baseline; padding-block: 20px; }
+  .idea { grid-column: span 3; display: grid; gap: 14px; align-content: end; }
+  .idea figcaption, .shots figcaption { display: grid; gap: 6px; }
+  .idea--kept .ph-box { outline: 2px solid var(--pc); outline-offset: -2px; }
+  .iter { grid-column: span 4; display: grid; gap: 14px; align-content: end; }
+  .iter .label { margin-top: 10px; }
+  .shots { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--g); }
+  .shots figure { display: grid; gap: 20px; }
+  .shots .phone { height: 470px; justify-self: center; padding-inline: 8px; text-align: center; }
+  .shots figcaption { grid-template-columns: 64px 1fr; padding-top: 16px; border-top: 1px solid var(--rule-strong); }
+  .leg { display: grid; grid-template-columns: 40px 1fr; align-items: center; padding-block: 12px; }
+  .mk { width: 24px; height: 16px; border: 1.5px solid var(--ink-4); }
+  .mk--person { border-radius: 8px; }
+  .mk--hub { background: var(--paper-2); }
+  .mk--dev { border-radius: 3px; }
+  .mk--data { height: 0; border-width: 1.5px 0 0; border-style: dashed; }
+  .mk--space { border-style: dashed; border-radius: 4px; }
+  .sysmap { width: 100%; height: auto; display: block; }
+  .sysmap .sp { fill: none; stroke: var(--ink-4); stroke-width: 1.5; stroke-dasharray: 6 6; }
+  .sysmap .n rect { fill: var(--paper); stroke: var(--ink-4); stroke-width: 1.5; }
+  .sysmap .hub rect { fill: var(--paper-2); }
+  .sysmap text { font-size: 24px; fill: var(--ink-4); text-anchor: middle; dominant-baseline: middle; }
+  .sysmap .lab { font-size: 18px; font-weight: 500; letter-spacing: 0.08em; text-anchor: start; }
+  .sysmap .l { fill: none; stroke: var(--ink-4); stroke-width: 1.5; }
+  .sysmap .l.d { stroke-dasharray: 8 6; }
 </style>
 
 <script>
@@ -261,6 +509,24 @@
       projects.filter((p) => p.kind === 'main').map((p) => `<div class="main">${thumb(p, '3 / 4')}</div>`).join('') +
       `<div class="side">${projects.filter((p) => p.kind === 'additional').map((p) => thumb(p, '16 / 10')).join('')}</div>`;
   }
+
+  // Project content slides: project colour + name from the preceding cover, chapter kicker, process bar.
+  const STEPS = [['context', 'Context'], ['research', 'Research'], ['insights', 'Insights'], ['framing', 'Framing'],
+    ['ideas', 'Ideas'], ['system', 'System'], ['prototypes', 'Prototypes'], ['solution', 'Solution'], ['outcome', 'Outcome']];
+  let cover = null;
+  slides.forEach((s) => {
+    if (s.classList.contains('pcover')) cover = s;
+    if (!cover || !('step' in s.dataset)) return;
+    s.style.setProperty('--pc', cover.style.getPropertyValue('--pc'));
+    s.querySelectorAll('[data-proj]').forEach((e) => (e.innerHTML = `<span class="n">${cover.dataset.num}</span>${cover.dataset.title}`));
+    const at = STEPS.findIndex(([k]) => k === s.dataset.step);
+    s.querySelectorAll('[data-kick]').forEach((e) => (e.innerHTML = `<span class="n">${pad(at + 1)}</span>${STEPS[at][1]}`));
+    const bar = document.createElement('nav');
+    bar.className = 'steps';
+    bar.innerHTML = STEPS.map(([, name], i) =>
+      `<span class="${i < at ? 'done' : i === at ? 'now' : ''}"><span class="n">${pad(i + 1)}</span>${name}</span>`).join('');
+    s.append(bar);
+  });
 
   const q = new URLSearchParams(location.search);
   if (q.has('grid')) document.documentElement.classList.add('show-grid');
