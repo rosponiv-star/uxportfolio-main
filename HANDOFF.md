@@ -1003,6 +1003,17 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-27 · LOCAL (9)** · AuraWake objects designed and modelled in **Blender 5.2** (installed via winget):
+  `deck/blender/aura.py` builds base (rounded square block, black anodised aluminium, Mac mini proportions, TE
+  restraint: power cable only, small front LED, time 5×7 dots behind micro-perforations, cradle on top, light line
+  underneath), bracelet (standing band loop + pod in the cradle), phone, bulb, roller shutter, diffuser (same family).
+  `-- real <out> hero|night|dawn [preview]` → Cycles renders (GPU RTX 5060); `-- line <out>` → true-isometric
+  technical drawings (flat 3-tone fills + Freestyle lines, Walkman/TE style) + `anchors.json`. Outputs in
+  `deck/assets/aurawake/` (iso-*.png, render-hero|night|dawn.jpg). **System slide (22) rebuilt** as an isometric
+  plan: drawings on platforms coloured by protocol (grey Wi-Fi, indigo BLE, amber Thread, dashed cloud), dotted flows
+  along iso axes, numbered keys on the base (1–5) listed under the title, legend. Renders **not placed yet**: ask the
+  owner where (AuraWake cover / gestures). Owner prefers parallel runs and few tokens (870% of his 5-hour limit).
+
 - **2026-10-27 · LOCAL (8)** · Deck: **AuraWake** 4 content slides (system map, one-night swimlane, gestures + light
   language, app + what-if) from the Interaction Design Spec; details in §0.B. Owner: 3–4 slides, use the spec facts
   regardless of date, objects as placeholders for now, prototype decided later. Pending: object illustrations, app

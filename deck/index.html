@@ -422,28 +422,9 @@
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1">System</p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">It doesn’t ring: it changes the room. The phone sets the plan, the base runs the night.</p>
-    <svg class="map" style="grid-column: 1 / -1; align-self: end" viewBox="0 0 1728 600" role="img" aria-label="AuraWake system: phone, bracelet, base, lamp, shutters, diffuser">
-      <!-- links (drawn first, under the nodes) -->
-      <path class="l" d="M480 115 H540 V250 H600" /><text class="lt" x="492" y="100">Wi-Fi, local · BLE for setup</text>
-      <path class="l d" d="M480 480 H540 V350 H600" /><text class="lt" x="492" y="505">BLE 5, all night</text>
-      <path class="l w" d="M1160 300 H1240 M1240 90 V510 M1240 90 H1348 M1240 300 H1348 M1240 510 H1348" /><text class="lt" x="1252" y="205">Thread / Matter</text>
-      <path class="l d" d="M880 450 V520" /><text class="lt" x="896" y="492">Optional, opt-in</text>
-      <!-- phone -->
-      <g class="nd"><rect x="0" y="40" width="480" height="150" /><text x="24" y="84" class="nt">Phone app</text><text x="24" y="118" class="nr">Plans the routines, explains the night</text><text x="24" y="160" class="ni">App · widget · Live Activity · backup alarm</text></g>
-      <!-- bracelet -->
-      <g class="nd"><rect x="0" y="390" width="480" height="180" /><text x="24" y="434" class="nt">Bracelet</text><text x="24" y="468" class="nr">Senses sleep and presence</text><text x="24" y="510" class="ni">In · heart rate, HRV, SpO₂, movement</text><text x="24" y="542" class="ni">Out · haptics</text></g>
-      <!-- base -->
-      <g class="nd hub"><rect x="600" y="150" width="560" height="300" /><rect x="624" y="174" width="160" height="150" class="ph-r" /><text x="704" y="255" class="ph-t">Object</text>
-        <text x="808" y="200" class="nt">Base · the brain</text><text x="808" y="234" class="nr">Keeps the routines,</text><text x="808" y="262" class="nr">runs every ramp</text>
-        <text x="624" y="364" class="ni">In · palm, bracelet on the pad, mic, light</text><text x="624" y="396" class="ni">Out · time through aluminium, light line, speaker</text><text x="624" y="428" class="ni">Charges the bracelet on its pad</text></g>
-      <!-- room -->
-      <g class="nd"><rect x="1348" y="20" width="380" height="140" /><text x="1372" y="64" class="nt">Lamp</text><text x="1372" y="98" class="nr">Artificial dusk and dawn</text><text x="1372" y="136" class="ni">0–100% · 1800–6500 K</text></g>
-      <g class="nd"><rect x="1348" y="230" width="380" height="140" /><text x="1372" y="274" class="nt">Shutters</text><text x="1372" y="308" class="nr">Daylight, let in slowly</text><text x="1372" y="346" class="ni">Opening 0–100%, gradual</text></g>
-      <g class="nd"><rect x="1348" y="440" width="380" height="140" /><text x="1372" y="484" class="nt">Diffuser</text><text x="1372" y="518" class="nr">Scent at night and at dawn</text><text x="1372" y="556" class="ni">Two cartridges · vanilla, lemon</text></g>
-      <!-- cloud -->
-      <g class="nd cl"><rect x="720" y="520" width="320" height="64" /><text x="744" y="560" class="nr">Cloud · backup and reports</text></g>
-    </svg>
+    <p class="h2" style="grid-column: 1 / 6; margin-top: 24px; position: relative; z-index: 1">It doesn’t ring: it changes the room.</p>
+    <ol class="keys" style="grid-column: 1 / 6; grid-row: 3; align-self: start; margin-top: 48px; position: relative; z-index: 1" data-keys></ol>
+    <svg class="iso" viewBox="0 0 1728 840" role="img" aria-label="AuraWake system: phone, bracelet, base, lamp, shutters, diffuser, cloud" data-iso></svg>
   </div>
 </section>
 
@@ -584,6 +565,21 @@
   .lanes .a-grey { fill: rgb(17 17 17 / 0.08); stroke: var(--ink-3); stroke-width: 1.5; }
   .lanes .a-night { fill: color-mix(in srgb, var(--night) 30%, transparent); stroke: var(--night); stroke-width: 1.5; }
   .lanes .dot { fill: var(--ink); }
+  .iso { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .iso .pf-top { stroke: rgb(17 17 17 / .35); stroke-width: 1.2; }
+  .iso .pf-side { stroke: rgb(17 17 17 / .35); stroke-width: 1.2; }
+  .iso .fl { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 0.1 9; }
+  .iso .fl-wifi { stroke: var(--ink-3); } .iso .fl-ble { stroke: var(--night); } .iso .fl-thread { stroke: #c98f2a; }
+  .iso .fl-cloud { stroke: var(--ink-4); }
+  .iso .ft { font-size: 18px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
+  .iso .nm { font-size: 20px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; fill: var(--ink); }
+  .iso .rl { font-size: 18px; fill: var(--ink-3); }
+  .iso .co { stroke: var(--ink); stroke-width: 1.2; fill: none; }
+  .iso .cn { font-size: 18px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+  .iso .ct { font-size: 18px; fill: var(--ink-3); }
+  .iso .lg { font-size: 18px; fill: var(--ink-2); }
+  .keys li { display: grid; grid-template-columns: 56px 1fr; align-items: baseline; padding-block: 10px; border-top: 1px solid var(--rule); }
+  .keys li:last-child { border-bottom: 1px solid var(--rule); }
   .gest { grid-column: span 4; display: grid; gap: 10px; align-content: end; }
   .gest .label { margin-top: 8px; }
   .waves { grid-template-columns: repeat(6, minmax(0, 1fr)); }
@@ -646,6 +642,76 @@
       `<span class="${i < at ? 'done' : i === at ? 'now' : ''}"><span class="n">${pad(i + 1)}</span>${name}</span>`).join('');
     s.append(bar);
   });
+
+  // AuraWake · system as an isometric plan (owner refs: isometric interface architecture + TE / Walkman drawings).
+  // Objects = Blender technical drawings (deck/blender/aura.py → deck/assets/aurawake, anchors.json = where each
+  // object touches the ground). Platforms coloured by protocol; flows run along the iso axes.
+  const iso = document.querySelector('[data-iso]');
+  if (iso) {
+    const C = 0.866, S = 0.5, A = 'assets/aurawake/';
+    const k5 = 400 / 520, sc = (p) => p.map((v) => v * k5);
+    const AN = {base: {size: 400, ground: sc([260, 321.5]), points: {cradle: sc([282.4, 205]), palm: sc([383.3, 217.9]), time: sc([125.5, 302.1]), led: sc([228.2, 400.2]), light: sc([260, 407.7])}},
+      bracelet: {size: 240, ground: [120, 196.8]}, phone: {size: 250, ground: [125, 129.4]}, lamp: {size: 170, ground: [85, 144.8]},
+      shutters: {size: 300, ground: [147.5, 234.7]}, diffuser: {size: 200, ground: [100, 143.8]}};
+    const tone = {wifi: '#e4e4e0', ble: 'color-mix(in srgb, var(--night) 26%, #fff)', thread: 'color-mix(in srgb, var(--dawn) 38%, #fff)', base: '#f2f2ef'};
+    const N = { // [cx, cy, half size, tone, name, role]
+      cloud: [1060, 70, 55, 'none', 'Cloud', 'Opt-in backup'],
+      phone: [420, 715, 128, 'wifi', 'Phone', 'Plans and explains'],
+      bracelet: [745, 690, 112, 'ble', 'Bracelet', 'Senses sleep'],
+      base: [1010, 420, 250, 'base', 'Base', 'Runs every ramp'],
+      lamp: [1460, 180, 80, 'thread', 'Lamp', 'Dusk and dawn'],
+      shutters: [1615, 440, 122, 'thread', 'Shutters', 'Daylight'],
+      diffuser: [1450, 700, 85, 'thread', 'Diffuser', 'Scent'],
+    };
+    const mU = (x, y) => `matrix(${C},${S},${-C},${S},${x},${y})`, mV = (x, y) => `matrix(${C},${-S},${C},${S},${x},${y})`;
+    let g = '';
+    // flows: [from, to, kind, label, u-first?]
+    const F = [['phone', 'base', 'wifi', '', true], ['bracelet', 'base', 'ble', '', true],
+      ['base', 'lamp', 'thread', '', false], ['base', 'shutters', 'thread', '', false],
+      ['base', 'diffuser', 'thread', '', true], ['base', 'cloud', 'cloud', '', false]];
+    F.forEach(([a, b, k, lab, uf]) => {
+      const [x1, y1] = N[a], [x2, y2] = N[b], dx = x2 - x1, dy = y2 - y1;
+      const t = (dx / C + dy / S) / 2, kk = (dx / C - dy / S) / 2;
+      const [mx, my] = uf ? [x1 + t * C, y1 + t * S] : [x1 + kk * C, y1 - kk * S];
+      g += `<path class="fl fl-${k}" d="M${x1} ${y1} L${mx} ${my} L${x2} ${y2}" />`;
+      // label on the longer segment, near its middle, just above the line
+      const first = Math.hypot(mx - x1, my - y1) >= Math.hypot(x2 - mx, y2 - my);
+      const [sx, sy, ex, ey] = first ? [x1, y1, mx, my] : [mx, my, x2, y2];
+      const alongU = (ey - sy) * (ex - sx) > 0, fwd = ex >= sx;
+      const [lx, ly] = fwd ? [sx + (ex - sx) * 0.42, sy + (ey - sy) * 0.42] : [ex + (sx - ex) * 0.42, ey + (sy - ey) * 0.42];
+      if (lab) g += `<text class="ft fl-${k}" style="fill:currentColor;color:${k === 'ble' ? 'var(--night)' : k === 'thread' ? '#a8741c' : 'var(--ink-3)'}" transform="${alongU ? mU(lx, ly) : mV(lx, ly)}" dy="-10">${lab}</text>`;
+    });
+    // platforms, then objects (back to front by screen y)
+    Object.entries(N).sort((p, q) => p[1][1] - q[1][1]).forEach(([id, [cx, cy, h, tn, name, role]]) => {
+      const a = h * C * 2 / 2 * 1, b = h * S, d = 10, top = `${cx - 2 * a / 2 * 1},${cy}`;
+      const L = [cx - a, cy], T = [cx, cy - b], R = [cx + a, cy], B = [cx, cy + b];
+      const dash = tn === 'none' ? ' stroke-dasharray="6 6"' : '';
+      const fill = tn === 'none' ? 'none' : tone[tn];
+      if (tn !== 'none') {
+        g += `<path class="pf-side" d="M${L} L${B} L${B[0]},${B[1] + d} L${L[0]},${L[1] + d} Z" style="fill:${fill};filter:brightness(.9)" />`;
+        g += `<path class="pf-side" d="M${B} L${R} L${R[0]},${R[1] + d} L${B[0]},${B[1] + d} Z" style="fill:${fill};filter:brightness(.82)" />`;
+      }
+      g += `<path class="pf-top" d="M${L} L${T} L${R} L${B} Z" style="fill:${fill}"${dash} />`;
+      g += `<text class="nm" transform="${mU(L[0] + 14, L[1] + 8)}" dy="30">${name}</text><text class="rl" transform="${mU(L[0] + 14, L[1] + 8)}" dy="54">${role}</text>`;
+      const o = AN[id];
+      if (o) g += `<image href="${A}iso-${id}.png" x="${cx - o.ground[0]}" y="${cy - o.ground[1]}" width="${o.size}" height="${o.size}" />`;
+    });
+    // TE-style keys: a numbered dot on each part of the base, the list in the left column
+    const [bx, by] = [N.base[0] - AN.base.ground[0], N.base[1] - AN.base.ground[1]], P = AN.base.points;
+    const KEYS = [['cradle', 'Cradle', 'The bracelet charges here', -1, -1], ['palm', 'Top surface', 'Palm for 2 s: ten more minutes', 1, -1],
+      ['time', 'Time', 'Behind micro-perforations, only when awake', -1, -1], ['led', 'Front LED', 'The only light at the front', -1, 1],
+      ['light', 'Light line', 'Underneath: washes the nightstand', 1, 1]];
+    KEYS.forEach(([k, , , ox, oy], i) => {
+      const [px, py] = [bx + P[k][0], by + P[k][1]], [qx, qy] = [px + ox * 34, py + oy * 34];
+      g += `<circle cx="${px}" cy="${py}" r="3.5" fill="var(--ink)" /><path class="co" d="M${px} ${py} L${px + ox * 22} ${py + oy * 22}" /><circle cx="${qx}" cy="${qy}" r="16" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2" /><text class="cn" x="${qx}" y="${qy + 6}" text-anchor="middle" style="letter-spacing:0">${i + 1}</text>`;
+    });
+    const keys = document.querySelector('[data-keys]');
+    if (keys) keys.innerHTML = KEYS.map(([, t, s], i) => `<li><span class="label kick"><span class="n">0${i + 1}</span></span><span class="small"><span class="m">${t}</span><span class="i3"> · ${s}</span></span></li>`).join('');
+    // legend
+    const LG = [['wifi', 'Wi-Fi, local'], ['ble', 'BLE 5'], ['thread', 'Thread / Matter'], ['cloud', 'Optional cloud']];
+    LG.forEach(([k, t], i) => (g += `<path class="fl fl-${k}" d="M${(i % 2) * 300} ${560 + Math.floor(i / 2) * 36} h48" /><text class="lg" x="${(i % 2) * 300 + 62}" y="${566 + Math.floor(i / 2) * 36}">${t}</text>`));
+    iso.innerHTML = g;
+  }
 
   // AuraWake · one night (spec §6, routine Work: bed 22:30, wake 06:30, window 06:00–06:30). Columns = moments,
   // equally spaced (time not to scale). Areas = 0–100% per channel; events = short lines of text.

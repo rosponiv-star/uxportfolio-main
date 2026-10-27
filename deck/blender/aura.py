@@ -1,0 +1,437 @@
+# AuraWake objects for the Polimi deck (owner, 2026-10-27).
+# One model, two outputs:
+#   blender -b -P deck/blender/aura.py -- real <outdir> <shot> [preview]   shot = hero | night | dawn
+#   blender -b -P deck/blender/aura.py -- line <outdir>                      isometric technical drawings + anchors.json
+# Base: rounded square block of black anodised aluminium (Mac mini proportions, Teenage Engineering restraint), only a
+# power cable at the back, one small LED at the front, the time behind micro-perforations (lit only when needed), a
+# shallow cradle on top for the bracelet pod, a light line underneath that washes the nightstand.
+import bpy, bmesh, math, json, sys, os
+from mathutils import Vector, Matrix
+from bpy_extras.object_utils import world_to_camera_view
+
+argv = sys.argv[sys.argv.index('--') + 1:]
+MODE, OUT = argv[0], os.path.abspath(argv[1])
+SHOT = argv[2] if len(argv) > 2 else ''
+PREVIEW = 'preview' in argv
+os.makedirs(OUT, exist_ok=True)
+bpy.ops.wm.read_factory_settings(use_empty=True)
+scene = bpy.context.scene
+col = scene.collection
+
+# ---------------------------------------------------------------------------------------------------------------
+# Dimensions (metres)
+W, H, PL = 0.12, 0.045, 0.006   # base width/depth, body height, plinth height
+TOP = PL + H                    # top surface
+NIGHT, DAWN = '#7a86e8', '#f2c074'
+
+def srgb(h):
+    h = h.lstrip('#')
+    c = [int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+    return tuple(((v + 0.055) / 1.055) ** 2.4 if v > 0.04045 else v / 12.92 for v in c) + (1.0,)
+
+def grey(v):
+    return srgb('#%02x%02x%02x' % ((round(v * 255),) * 3))
+
+# ---------------------------------------------------------------------------------------------------------------
+# Materials: one name per role; built differently for the realistic and the line mode.
+MATS = {}
+
+def principled(name, color, metal=0.0, rough=0.5, coat=0.0, aniso=0.0):
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    b = m.node_tree.nodes['Principled BSDF']
+    b.inputs['Base Color'].default_value = color
+    b.inputs['Metallic'].default_value = metal
+    b.inputs['Roughness'].default_value = rough
+    for k, v in (('Coat Weight', coat), ('Clearcoat', coat), ('Anisotropic', aniso)):
+        if k in b.inputs: b.inputs[k].default_value = v
+    return m
+
+def emit(name, color, strength):
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; nt.nodes.clear()
+    e = nt.nodes.new('ShaderNodeEmission'); o = nt.nodes.new('ShaderNodeOutputMaterial')
+    e.inputs['Color'].default_value = color; e.inputs['Strength'].default_value = strength
+    nt.links.new(e.outputs[0], o.inputs[0])
+    return m
+
+def toon(name, color):
+    """Flat fill for the technical drawings: three tones from the face normal (top light, sides darker)."""
+    m = bpy.data.materials.new(name); m.use_nodes = True
+    nt = m.node_tree; nt.nodes.clear()
+    g = nt.nodes.new('ShaderNodeNewGeometry')
+    d = nt.nodes.new('ShaderNodeVectorMath'); d.operation = 'DOT_PRODUCT'
+    d.inputs[1].default_value = Vector((0.25, -0.45, 0.86)).normalized()
+    r = nt.nodes.new('ShaderNodeValToRGB'); r.color_ramp.interpolation = 'CONSTANT'
+    els = r.color_ramp.elements
+    els[0].position, els[0].color = 0.0, (0.80, 0.80, 0.80, 1)
+    els[1].position, els[1].color = 0.62, (1, 1, 1, 1)
+    mid = els.new(0.25); mid.color = (0.90, 0.90, 0.90, 1)
+    mul = nt.nodes.new('ShaderNodeMix'); mul.data_type = 'RGBA'; mul.blend_type = 'MULTIPLY'
+    mul.inputs['Factor'].default_value = 1.0
+    mul.inputs[6].default_value = color
+    e = nt.nodes.new('ShaderNodeEmission'); o = nt.nodes.new('ShaderNodeOutputMaterial')
+    nt.links.new(g.outputs['Normal'], d.inputs[0])
+    nt.links.new(d.outputs['Value'], r.inputs['Fac'])
+    nt.links.new(r.outputs['Color'], mul.inputs[7])
+    nt.links.new(mul.outputs[2], e.inputs['Color'])
+    nt.links.new(e.outputs[0], o.inputs[0])
+    return m
+
+def wood():
+    m = bpy.data.materials.new('wood'); m.use_nodes = True
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    tc = nt.nodes.new('ShaderNodeTexCoord')
+    mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1.0, 14.0, 1.0)
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 3.0; nz.inputs['Detail'].default_value = 8
+    wv = nt.nodes.new('ShaderNodeTexWave'); wv.inputs['Scale'].default_value = 6.0; wv.inputs['Distortion'].default_value = 6.0
+    wv.inputs['Detail'].default_value = 4
+    ramp = nt.nodes.new('ShaderNodeValToRGB')
+    ramp.color_ramp.elements[0].color = srgb('#2a170c'); ramp.color_ramp.elements[1].color = srgb('#5a3820')
+    nt.links.new(tc.outputs['Object'], mp.inputs['Vector'])
+    nt.links.new(mp.outputs['Vector'], wv.inputs['Vector'])
+    nt.links.new(wv.outputs['Fac'], ramp.inputs['Fac'])
+    nt.links.new(ramp.outputs['Color'], b.inputs['Base Color'])
+    b.inputs['Roughness'].default_value = 0.42
+    return m
+
+if MODE == 'real':
+    MATS = {
+        'alu': principled('alu', srgb('#16161a'), metal=1.0, rough=0.34),
+        'rubber': principled('rubber', srgb('#0b0b0c'), rough=0.85),
+        'led_under': emit('led_under', srgb(NIGHT if SHOT == 'night' else DAWN), 0.0),
+        'led_front': emit('led_front', srgb('#fff4e0'), 0.0),
+        'dots': emit('dots', srgb('#ffd9a0'), 0.0),
+        'band': principled('band', srgb('#0f0f11'), rough=0.6),
+        'pod': principled('pod', srgb('#121214'), metal=0.6, rough=0.28),
+        'cable': principled('cable', srgb('#0e0e10'), rough=0.75),
+    }
+    if SHOT == 'hero': MATS['led_front'].node_tree.nodes['Emission'].inputs['Strength'].default_value = 6.0
+    if SHOT == 'night': MATS['led_under'].node_tree.nodes['Emission'].inputs['Strength'].default_value = 120.0
+    if SHOT == 'dawn':
+        MATS['led_under'].node_tree.nodes['Emission'].inputs['Strength'].default_value = 90.0
+        MATS['dots'].node_tree.nodes['Emission'].inputs['Strength'].default_value = 7.0
+else:
+    T = {'alu': 0.36, 'rubber': 0.22, 'band': 0.52, 'pod': 0.36, 'cable': 0.25, 'dots': 0.97, 'led_front': 0.97,
+         'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98, 'frame': 0.96,
+         'slat': 0.80, 'pane': 0.90, 'cap': 0.86}
+    MATS = {k: toon(k, grey(v)) for k, v in T.items()}
+    MATS['led_under'] = toon('led_under', srgb(DAWN))
+
+def M(name):
+    return MATS.get(name) or MATS.setdefault(name, principled(name, grey(0.5)))
+
+# ---------------------------------------------------------------------------------------------------------------
+# Geometry helpers
+def link(name, bm, mat, loc=(0, 0, 0), smooth=True):
+    me = bpy.data.meshes.new(name); bm.to_mesh(me); bm.free()
+    ob = bpy.data.objects.new(name, me); col.objects.link(ob)
+    ob.location = loc; me.materials.append(M(mat))
+    if smooth: shade(ob)
+    return ob
+
+def shade(ob, angle=32):
+    me = ob.data
+    for p in me.polygons: p.use_smooth = True
+    try: me.set_sharp_from_angle(angle=math.radians(angle))
+    except AttributeError:
+        me.use_auto_smooth = True; me.auto_smooth_angle = math.radians(angle)
+
+def rbox_bm(w, d, h, rp, re, sp=16, se=4):
+    bm = bmesh.new(); bmesh.ops.create_cube(bm, size=1.0)
+    for v in bm.verts: v.co = Vector((v.co.x * w, v.co.y * d, v.co.z * h + h / 2))
+    if rp > 0:
+        ve = [e for e in bm.edges if abs(e.verts[0].co.z - e.verts[1].co.z) > 1e-7]
+        bmesh.ops.bevel(bm, geom=ve, offset=rp, segments=sp, profile=0.5, affect='EDGES', clamp_overlap=True)
+    if re > 0:
+        he = [e for e in bm.edges if abs(e.verts[0].co.z - e.verts[1].co.z) < 1e-7]
+        bmesh.ops.bevel(bm, geom=he, offset=re, segments=se, profile=0.5, affect='EDGES', clamp_overlap=True)
+    return bm
+
+def rbox(name, w, d, h, rp, re, mat, loc=(0, 0, 0), sp=16, se=4):
+    return link(name, rbox_bm(w, d, h, rp, re, sp, se), mat, loc)
+
+def cyl(name, r, h, mat, loc, axis='Z', seg=48):
+    bm = bmesh.new()
+    rot = {'Z': Matrix(), 'Y': Matrix.Rotation(math.pi / 2, 4, 'X'), 'X': Matrix.Rotation(math.pi / 2, 4, 'Y')}[axis]
+    bmesh.ops.create_cone(bm, cap_ends=True, segments=seg, radius1=r, radius2=r, depth=h, matrix=rot)
+    return link(name, bm, mat, loc)
+
+def ring_bm(R, w, t, n=128):
+    """Band loop in the YZ plane: rectangular section, width w along X, thickness t radial."""
+    bm = bmesh.new(); rings = []
+    for i in range(n):
+        a = 2 * math.pi * i / n; c, s = math.cos(a), math.sin(a)
+        rings.append([bm.verts.new((x, (R + rr) * c, (R + rr) * s)) for x, rr in ((-w / 2, -t / 2), (w / 2, -t / 2), (w / 2, t / 2), (-w / 2, t / 2))])
+    for i in range(n):
+        a, b = rings[i], rings[(i + 1) % n]
+        for k in range(4): bm.faces.new((a[k], a[(k + 1) % 4], b[(k + 1) % 4], b[k]))
+    return bm
+
+def boolean_diff(ob, cutter):
+    mod = ob.modifiers.new('cut', 'BOOLEAN'); mod.operation = 'DIFFERENCE'; mod.object = cutter
+    if hasattr(mod, 'solver'): mod.solver = 'EXACT'
+    dg = bpy.context.evaluated_depsgraph_get()
+    me = bpy.data.meshes.new_from_object(ob.evaluated_get(dg))
+    ob.modifiers.remove(mod); old = ob.data; ob.data = me; bpy.data.meshes.remove(old)
+    bpy.data.objects.remove(cutter); shade(ob)
+    wn = ob.modifiers.new('wn', 'WEIGHTED_NORMAL'); wn.keep_sharp = True; wn.mode = 'FACE_AREA'
+
+def curve(name, pts, r, mat):
+    cu = bpy.data.curves.new(name, 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = r; cu.bevel_resolution = 4
+    sp = cu.splines.new('BEZIER'); sp.bezier_points.add(len(pts) - 1)
+    for bp, p in zip(sp.bezier_points, pts):
+        bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
+    ob = bpy.data.objects.new(name, cu); col.objects.link(ob); cu.materials.append(M(mat))
+    return ob
+
+def group(name, obs, loc=(0, 0, 0)):
+    e = bpy.data.objects.new(name, None); col.objects.link(e); e.location = loc
+    for o in obs: o.parent = e
+    return e
+
+# 5×7 dot-matrix digits for the time behind the micro-perforation
+FONT = {'0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
+        '1': ['00100', '01100', '00100', '00100', '00100', '00100', '01110'],
+        '3': ['11111', '00010', '00100', '00010', '00001', '10001', '01110'],
+        '4': ['00010', '00110', '01010', '10010', '11111', '00010', '00010'],
+        '6': ['00110', '01000', '10000', '11110', '10001', '10001', '01110'],
+        ':': ['0', '0', '1', '0', '1', '0', '0']}
+
+def time_dots(text, zc, pitch=0.0021, r=0.00062):
+    cols = []
+    for i, ch in enumerate(text):
+        if i: cols.append(None)
+        g = FONT[ch]
+        for c in range(len(g[0])): cols.append([g[row][c] == '1' for row in range(7)])
+    x0 = -(len(cols) - 1) * pitch / 2
+    bm = bmesh.new()
+    for ci, c in enumerate(cols):
+        if c is None: continue
+        for row, on in enumerate(c):
+            if on:
+                m = Matrix.Translation((x0 + ci * pitch, -W / 2 - 0.00005, zc + (3 - row) * pitch)) @ Matrix.Rotation(math.pi / 2, 4, 'X')
+                bmesh.ops.create_cone(bm, cap_ends=True, segments=12, radius1=r, radius2=r, depth=0.0003, matrix=m)
+    return link('time', bm, 'dots', smooth=False)
+
+# ---------------------------------------------------------------------------------------------------------------
+# Objects
+def build_base(with_time=False, time='06:14'):
+    body = rbox('body', W, W, H, 0.023, 0.0032, 'alu', (0, 0, PL), sp=20, se=5)
+    cutter = bpy.data.objects.new('cutter', None)
+    bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=96, v_segments=48, radius=1.0)
+    for v in bm.verts: v.co = Vector((v.co.x * 0.0155, v.co.y * 0.026, v.co.z * 0.012))
+    me = bpy.data.meshes.new('cut'); bm.to_mesh(me); bm.free()
+    cutter = bpy.data.objects.new('cutter', me); col.objects.link(cutter)
+    cutter.location = (0, 0, TOP + 0.012 - 0.0042)
+    boolean_diff(body, cutter)
+    plinth = rbox('plinth', 0.098, 0.098, PL, 0.016, 0.0012, 'rubber')
+    led = rbox('led_line', 0.103, 0.103, 0.0012, 0.0185, 0.0, 'led_under', (0, 0, PL - 0.0016))
+    dot = cyl('led_front', 0.00105, 0.0004, 'led_front', (0.043, -W / 2 - 0.0001, PL + 0.009), axis='Y', seg=24)
+    port = cyl('port', 0.0032, 0.004, 'rubber', (0, W / 2, PL + 0.012), axis='Y')
+    cable = curve('cable', [(0, W / 2 - 0.002, PL + 0.012), (0, W / 2 + 0.03, PL + 0.011), (0.03, W / 2 + 0.07, 0.0016),
+                            (0.10, W / 2 + 0.13, 0.0016)], 0.0019, 'cable')
+    obs = [body, plinth, led, dot, port, cable]
+    if with_time: obs.append(time_dots(time, PL + H * 0.56))
+    return group('base', obs)
+
+POD_Z = TOP - 0.0042  # pod bottom in the cradle
+
+def build_bracelet(z0=POD_Z):
+    pod = rbox('pod', 0.02, 0.032, 0.0082, 0.0075, 0.0032, 'pod', (0, 0, z0), sp=12, se=4)
+    R, t = 0.029, 0.0026
+    band = link('band', ring_bm(R, 0.0165, t), 'band', (0, 0, z0 + 0.0082 + R + t / 2))
+    return group('bracelet', [pod, band])
+
+def build_phone():
+    body = rbox('phone_body', 0.0715, 0.147, 0.0078, 0.011, 0.0026, 'phone', sp=16, se=4)
+    scr = rbox('screen', 0.0668, 0.1423, 0.0004, 0.0094, 0.0, 'screen', (0, 0, 0.0078))
+    bpy.ops.mesh.primitive_torus_add(major_radius=0.019, minor_radius=0.0009, major_segments=96, minor_segments=8,
+                                     location=(0, 0.024, 0.0083))
+    dial = bpy.context.active_object; dial.data.materials.append(M('ui'))
+    cards = [rbox(f'card{i}', 0.054, 0.013, 0.0004, 0.003, 0.0, 'card', (0, y, 0.0082)) for i, y in enumerate((-0.022, -0.041))]
+    return group('phone', [body, scr, dial] + cards)
+
+def build_bulb():
+    base = cyl('bulb_base', 0.0135, 0.024, 'metal', (0, 0, 0.012))
+    rings = []
+    for i in range(4):
+        bpy.ops.mesh.primitive_torus_add(major_radius=0.0136, minor_radius=0.0012, major_segments=64, minor_segments=8,
+                                         location=(0, 0, 0.004 + i * 0.005))
+        o = bpy.context.active_object; o.data.materials.append(M('metal')); shade(o); rings.append(o)
+    prof = [(0.0142, 0.024), (0.0152, 0.032), (0.0175, 0.041)]
+    zc, R = 0.071, 0.031
+    for k in range(25):
+        z = 0.049 + (zc + R - 0.049) * k / 24
+        prof.append((math.sqrt(max(R * R - (z - zc) ** 2, 0.0)), z))
+    bm = bmesh.new(); vs = [bm.verts.new((r, 0, z)) for r, z in prof]
+    es = [bm.edges.new((vs[i], vs[i + 1])) for i in range(len(vs) - 1)]
+    bmesh.ops.spin(bm, geom=vs + es, axis=(0, 0, 1), cent=(0, 0, 0), steps=64, angle=2 * math.pi, use_duplicate=False)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=1e-6)
+    glass = link('bulb_glass', bm, 'glass')
+    return group('lamp', [base, glass] + rings)
+
+def build_shutters():
+    Wd, Hh = 0.30, 0.30
+    parts = [rbox('cassette', Wd, 0.075, 0.055, 0.0, 0.004, 'frame', (0, 0.008, Hh), sp=1),
+             rbox('sill', Wd + 0.02, 0.07, 0.014, 0.0, 0.002, 'frame', (0, 0.006, 0), sp=1)]
+    for x in (-Wd / 2 + 0.011, Wd / 2 - 0.011):
+        parts.append(rbox(f'rail{x:.2f}', 0.022, 0.05, Hh - 0.014, 0.0, 0.002, 'frame', (x, 0, 0.014), sp=1))
+    parts.append(rbox('pane', Wd - 0.044, 0.004, Hh - 0.014, 0.0, 0.0, 'pane', (0, 0.012, 0.014), sp=1))
+    parts.append(rbox('mullion', 0.012, 0.012, Hh - 0.014, 0.0, 0.001, 'frame', (0, 0.008, 0.014), sp=1))
+    for i in range(8):
+        parts.append(rbox(f'slat{i}', Wd - 0.044, 0.012, 0.0205, 0.0, 0.0035, 'slat', (0, -0.006, Hh - 0.0225 * (i + 1)), sp=1, se=3))
+    return group('shutters', parts)
+
+def build_diffuser():
+    body = rbox('dif_body', 0.072, 0.072, 0.058, 0.015, 0.003, 'alu', (0, 0, 0.004), sp=16, se=4)
+    pl = rbox('dif_plinth', 0.06, 0.06, 0.004, 0.012, 0.001, 'rubber')
+    caps = [cyl(f'cap{i}', 0.0115, 0.012, 'cap', (x, 0.004, 0.062 + 0.006)) for i, x in enumerate((-0.016, 0.016))]
+    mist = cyl('mist', 0.0035, 0.0006, 'rubber', (0, -0.021, 0.0623), seg=24)
+    slots = [rbox(f'slot{i}', 0.032, 0.002, 0.0018, 0.0, 0.0, 'rubber', (0, -0.0361, 0.016 + i * 0.006), sp=1) for i in range(3)]
+    cable = curve('dif_cable', [(0, 0.034, 0.012), (0, 0.06, 0.012), (0.02, 0.09, 0.0016), (0.06, 0.12, 0.0016)], 0.0018, 'cable')
+    return group('diffuser', [body, pl, mist, cable] + caps + slots)
+
+# ---------------------------------------------------------------------------------------------------------------
+def cycles(samples, res):
+    scene.render.engine = 'CYCLES'
+    cy = scene.cycles; cy.samples = samples; cy.use_denoising = True
+    try:
+        prefs = bpy.context.preferences.addons['cycles'].preferences
+        for t in ('OPTIX', 'CUDA', 'HIP', 'ONEAPI'):
+            try:
+                prefs.compute_device_type = t; prefs.get_devices()
+                if any(d.type == t for d in prefs.devices):
+                    for d in prefs.devices: d.use = True
+                    cy.device = 'GPU'; print('GPU', t); break
+            except TypeError: pass
+    except Exception as e: print('CPU only', e)
+    scene.render.resolution_x, scene.render.resolution_y = res
+    scene.render.resolution_percentage = 100
+
+def look(cam_loc, target, lens, fstop=None, focus=None):
+    cd = bpy.data.cameras.new('cam'); cd.lens = lens
+    cam = bpy.data.objects.new('cam', cd); col.objects.link(cam); cam.location = cam_loc
+    d = Vector(target) - Vector(cam_loc); cam.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
+    if fstop:
+        cd.dof.use_dof = True; cd.dof.aperture_fstop = fstop; cd.dof.focus_distance = focus or d.length
+    scene.camera = cam
+    return cam
+
+def area(name, loc, target, size, power, color=(1, 1, 1)):
+    ld = bpy.data.lights.new(name, 'AREA'); ld.size = size; ld.energy = power; ld.color = color
+    lo = bpy.data.objects.new(name, ld); col.objects.link(lo); lo.location = loc
+    lo.rotation_euler = (Vector(target) - Vector(loc)).to_track_quat('-Z', 'Y').to_euler()
+    return lo
+
+def world(color, strength):
+    w = bpy.data.worlds.new('w'); w.use_nodes = True; scene.world = w
+    bg = w.node_tree.nodes['Background']; bg.inputs[0].default_value = color; bg.inputs[1].default_value = strength
+
+def plane(name, size, loc, rot, mat):
+    bm = bmesh.new(); bmesh.ops.create_grid(bm, x_segments=1, y_segments=1, size=size / 2)
+    ob = link(name, bm, mat, loc, smooth=False); ob.rotation_euler = rot
+    return ob
+
+def colour_management(view):
+    for v in (view, 'AgX', 'Filmic', 'Standard'):
+        try: scene.view_settings.view_transform = v; break
+        except TypeError: continue
+    if view != 'Standard':
+        for lk in ('AgX - Medium High Contrast', 'Medium High Contrast', 'None'):
+            try: scene.view_settings.look = lk; break
+            except TypeError: continue
+
+def real():
+    res = (960, 540) if PREVIEW else (1920, 1080)
+    cycles(48 if PREVIEW else 256, res)
+    colour_management('AgX')
+    if SHOT == 'hero':
+        build_base(); build_bracelet()
+        backdrop = principled('backdrop', srgb('#dcdcd8'), rough=0.9)
+        MATS['backdrop'] = backdrop
+        plane('floor', 4.0, (0, 0, 0), (0, 0, 0), 'backdrop')
+        plane('wall', 4.0, (0, 0.6, 0), (math.pi / 2, 0, 0), 'backdrop')
+        world(srgb('#d8d8d4'), 0.25)
+        area('key', (-0.35, -0.25, 0.55), (0, 0, 0.04), 0.6, 60)
+        area('rim', (0.4, 0.35, 0.3), (0, 0, 0.05), 0.4, 25)
+        area('fill', (0.5, -0.4, 0.1), (0, 0, 0.04), 0.5, 8)
+        look((0.36, -0.46, 0.24), (0, 0.004, 0.048), 75, 5.6)
+    else:
+        build_base(with_time=(SHOT == 'dawn'))
+        MATS['wood'] = wood()
+        MATS['wall'] = principled('wall', srgb('#2b2a2e' if SHOT == 'night' else '#6b5a4a'), rough=0.95)
+        plane('table', 1.2, (0, 0.05, 0), (0, 0, 0), 'wood')
+        plane('wall', 3.0, (0, 0.38, 0), (math.pi / 2, 0, 0), 'wall')
+        if SHOT == 'night':
+            world(srgb('#0b0d18'), 0.02)
+            area('moon', (-0.9, -0.2, 0.7), (0, 0, 0), 0.8, 10, (0.62, 0.68, 1.0))
+            area('rim', (0.2, 0.5, 0.25), (0, 0, 0.05), 0.4, 6, (0.55, 0.6, 1.0))
+        else:
+            world(srgb('#2a1c12'), 0.06)
+            area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
+            area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 4, (1.0, 0.85, 0.7))
+        look((0.36, -0.50, 0.15), (0.0, 0.01, 0.028), 70, 2.8)
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-preview" if PREVIEW else ""}.png')
+    bpy.ops.render.render(write_still=True)
+
+# ---------------------------------------------------------------------------------------------------------------
+# Technical drawings: true isometric ortho camera, flat fills, Freestyle lines (outline heavier than inner lines).
+ISO = (math.radians(54.7356), 0.0, math.radians(45))
+SS = 2.5  # render scale over the size shown on the slide
+
+def freestyle(px_inner, px_outline):
+    r = scene.render; r.use_freestyle = True; r.line_thickness_mode = 'ABSOLUTE'; r.line_thickness = 1.0
+    vl = scene.view_layers[0]; vl.use_freestyle = True; fs = vl.freestyle_settings
+    fs.crease_angle = math.radians(138)
+    for ls in list(fs.linesets): fs.linesets.remove(ls)
+    def lineset(name, px, **types):
+        ls = fs.linesets.new(name); ls.select_by_visibility = True; ls.visibility = 'VISIBLE'; ls.select_by_edge_types = True
+        for k in ('silhouette', 'border', 'crease', 'external_contour', 'material_boundary', 'contour'):
+            setattr(ls, 'select_' + k, types.get(k, False))
+        st = ls.linestyle; st.color = (0.02, 0.02, 0.02); st.thickness = px; st.caps = 'ROUND'
+    lineset('inner', px_inner, silhouette=True, border=True, crease=True, material_boundary=True, contour=True)
+    lineset('outline', px_outline, external_contour=True)
+
+def line():
+    scene.render.engine = 'CYCLES'; scene.cycles.samples = 16; scene.cycles.use_denoising = False
+    scene.render.film_transparent = True
+    colour_management('Standard')
+    world((1, 1, 1, 1), 0.0)
+    cd = bpy.data.cameras.new('iso'); cd.type = 'ORTHO'
+    cam = bpy.data.objects.new('iso', cd); col.objects.link(cam); cam.rotation_euler = ISO; scene.camera = cam
+    bpy.context.view_layer.update()
+    R = cam.matrix_world.to_3x3(); right, up, back = R.col[0], R.col[1], R.col[2]
+
+    # (group builder, size shown on the slide in px, named points for callouts)
+    items = {
+        'base': (lambda: build_base(with_time=True, time='06:30'), 520, {
+            'cradle': (0, 0.012, TOP - 0.003), 'palm': (0.036, 0.03, TOP), 'time': (-0.012, -W / 2, PL + H * 0.6),
+            'led': (0.043, -W / 2, PL + 0.009), 'light': (0.045, -0.045, PL - 0.001), 'power': (0.05, W / 2 + 0.105, 0.0016)}),
+        'bracelet': (lambda: build_bracelet(0.0), 240, {'pod': (0, -0.012, 0.004), 'band': (0, -0.02, 0.058)}),
+        'phone': (build_phone, 250, {}),
+        'lamp': (build_bulb, 170, {}),
+        'shutters': (build_shutters, 300, {}),
+        'diffuser': (build_diffuser, 200, {'caps': (0.016, 0.004, 0.074)}),
+    }
+    anchors = {}
+    for name, (fn, size, pts) in items.items():
+        for o in list(col.objects):
+            if o.type != 'CAMERA': bpy.data.objects.remove(o, do_unlink=True)
+        g = fn(); bpy.context.view_layer.update()
+        cs = [o.matrix_world @ Vector(c) for o in g.children_recursive if o.type == 'MESH' for c in o.bound_box]
+        xs = [c.dot(right) for c in cs]; ys = [c.dot(up) for c in cs]
+        span = max(max(xs) - min(xs), max(ys) - min(ys)) * 1.16
+        cx, cy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
+        cam.location = right * cx + up * cy + back * 2.0
+        cd.ortho_scale = span; cd.clip_end = 10
+        px = round(size * SS); scene.render.resolution_x = scene.render.resolution_y = px
+        freestyle(2.6, 5.2)
+        bpy.context.view_layer.update()
+        def proj(p):
+            v = world_to_camera_view(scene, cam, Vector(p)); return [round(v.x * size, 1), round((1 - v.y) * size, 1)]
+        anchors[name] = {'size': size, 'ground': proj((0, 0, 0)), 'points': {k: proj(p) for k, p in pts.items()}}
+        scene.render.filepath = os.path.join(OUT, f'iso-{name}.png')
+        bpy.ops.render.render(write_still=True)
+    with open(os.path.join(OUT, 'anchors.json'), 'w') as f: json.dump(anchors, f, indent=1)
+
+real() if MODE == 'real' else line()
