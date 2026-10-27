@@ -867,6 +867,18 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-27 · LOCAL (3)** · Deck aligned with the course: DID is strongly about interactive systems with physical,
+  connected, tangible and embodied parts (Embodied Interaction Studio, Tangible and Embedded Technologies, Hardware &
+  Software Technologies for Design, Final Design Studio on connected products, Virtual & Physical Prototyping, Smart
+  Wearables). Owner's line-up: **main 01 Smart Home Hub (teal 2b5c6b), 02 JustCook (terracotta b04a32), 03 UX Challenge
+  2026 or a new thesis project (aubergine, to be decided); additional 04 Realiti (forest 2e5e4e), 05 AuraWake (ochre
+  8f6519)**. Rehabeat is out. Covers carry the real facts from the MDX (Realiti still placeholders: its MDX facts are
+  invented). "Where I'm heading" now uses the course's words: connected products and systems · tangible and embodied
+  interaction · physical and virtual prototyping, each with its related projects. For every project: show the SYSTEM
+  (devices, data, physical touchpoints, use in space) and the PROTOTYPES, not only screens. The UX Challenge project is
+  app/web only. The owner has prototype material for Realiti (XR), AuraWake and Smart Home; a small new physical
+  prototype (Arduino/ESP32) before July is "maybe, to evaluate".
+
 - **2026-10-27 · LOCAL (2)** · Deck round 2 (owner): **3 main projects + 2 additional**, each opening on a full-bleed cover
   in its own colour (01 terracotta b04a32, 02 forest 2e5e4e, 03 aubergine 5a3a5e, 04 ochre 8f6519, 05 teal 2b5c6b;
   placeholders except 01 = UX Challenge 2026); cover in ultramarine 1f3c88 with the name at 312 px; the 12 columns drawn
