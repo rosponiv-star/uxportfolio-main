@@ -653,9 +653,8 @@
   const iso = document.querySelector('[data-iso]');
   if (iso) {
     const C = 0.866, S = 0.5, A = 'assets/aurawake/';
-    const AN = {"base":{"size":400,"ground":[200.0,247.0],"points":{"top":[270.5,162.4],"time":[95.0,231.7],"led":[154.5,273.3],"light":[225.1,302.9]}},"bracelet":{"size":240,"ground":[120.0,188.5],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}}};
+    const AN = {"base":{"size":400,"ground":[200.0,245.2],"points":{"top":[270.5,161.5],"time":[95.0,231.7],"led":[154.5,273.3],"light":[225.1,303.8]}},"bracelet":{"size":240,"ground":[120.0,188.5],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}}};
     const N = { // [cx, cy, name, role] = where the object touches the ground
-      cloud: [1060, 80, 'Cloud', 'Opt-in backup'],
       phone: [690, 660, 'Phone', 'Plans and explains'],
       bracelet: [430, 800, 'Bracelet', 'Senses sleep'],
       base: [1000, 420, 'Base', 'Runs every ramp'],
@@ -681,14 +680,12 @@
       const v0 = Math.min(...uv.map((p) => p[1])) - mv, v1 = Math.max(...uv.map((p) => p[1])) + mv;
       const P = [[u0, v0], [u0, v1], [u1, v1], [u1, v0]].map(toXY);
       g += `<path class="grp ${cls}" d="${rounded(P, 28)}" />`;
-      const [lx, ly] = toXY([u0 + 24, v0]);
+      const [lx, ly] = toXY([u0 + 24, v0 - 4]);
       g += `<text class="gn ${cls}" transform="${mU(lx, ly)}" dy="30">${name}</text>`;
     });
-    const cl = N.cloud, Pc = [[-80, 0], [0, -46], [80, 0], [0, 46]].map(([x, y]) => [cl[0] + x, cl[1] + y]);
-    g += `<path class="grp grp-cloud" d="${rounded(Pc, 14)}" />`;
     // flows along the iso axes: [from, to, kind, u-first?]
     [['phone', 'base', 'wifi', false], ['bracelet', 'base', 'ble', true], ['base', 'lamp', 'thread', false],
-     ['base', 'shutters', 'thread', false], ['base', 'diffuser', 'thread', true], ['base', 'cloud', 'cloud', false]].forEach(([a, b, k, uf]) => {
+     ['base', 'shutters', 'thread', false], ['base', 'diffuser', 'thread', true]].forEach(([a, b, k, uf]) => {
       const [x1, y1] = N[a], [x2, y2] = N[b], dx = x2 - x1, dy = y2 - y1;
       const t = (dx / C + dy / S) / 2, kk = (dx / C - dy / S) / 2;
       const [mx, my] = uf ? [x1 + t * C, y1 + t * S] : [x1 + kk * C, y1 - kk * S];
@@ -698,7 +695,7 @@
     Object.entries(N).sort((p, q) => p[1][1] - q[1][1]).forEach(([id, [cx, cy, name, role]]) => {
       const o = AN[id];
       if (o) g += `<image href="${A}iso-${id}.png" x="${cx - o.ground[0]}" y="${cy - o.ground[1]}" width="${o.size}" height="${o.size}" />`;
-      const off = o ? o.size * 0.3 : 60, [tx, ty] = id === 'base' ? [cx + 150, cy + 10] : [cx - off * C, cy + off * S * 0.2];
+      const off = o ? o.size * 0.42 : 60, [tx, ty] = id === 'base' ? [cx + 150, cy + 10] : [cx - off * C, cy + off * S * 0.2];
       g += `<text class="nm" transform="${mU(tx, ty)}" dy="34">${name}</text><text class="rl" transform="${mU(tx, ty)}" dy="58">${role}</text>`;
     });
     // TE-style keys: a numbered dot on each visible part of the base; the list (incl. the back) under the title
@@ -708,12 +705,12 @@
       ['light', 'Light strip', 'Between body and grille: washes the nightstand', 1, 1], [null, 'Back', 'Power inlet and the Bluetooth pairing button']];
     KEYS.forEach(([k, , , ox, oy], i) => {
       if (!k) return;
-      const [px, py] = [bx + P[k][0], by + P[k][1]], [qx, qy] = [px + ox * 34, py + oy * 34];
-      g += `<circle cx="${px}" cy="${py}" r="3.5" fill="var(--ink)" /><path class="co" d="M${px} ${py} L${px + ox * 22} ${py + oy * 22}" /><circle cx="${qx}" cy="${qy}" r="16" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2" /><text class="cn" x="${qx}" y="${qy + 6}" text-anchor="middle" style="letter-spacing:0">${i + 1}</text>`;
+      const [px, py] = [bx + P[k][0], by + P[k][1]], [qx, qy] = [px + ox * 62, py + oy * 62];
+      g += `<circle cx="${px}" cy="${py}" r="3.5" fill="var(--ink)" /><path class="co" d="M${px} ${py} L${px + ox * 50} ${py + oy * 50}" /><circle cx="${qx}" cy="${qy}" r="16" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2" /><text class="cn" x="${qx}" y="${qy + 6}" text-anchor="middle" style="letter-spacing:0">${i + 1}</text>`;
     });
     const keys = document.querySelector('[data-keys]');
     if (keys) keys.innerHTML = KEYS.map(([, t, s], i) => `<li><span class="label kick"><span class="n">0${i + 1}</span></span><span class="small"><span class="m">${t}</span><span class="i3"> · ${s}</span></span></li>`).join('');
-    const LG = [['wifi', 'Wi-Fi, local'], ['ble', 'BLE 5'], ['thread', 'Thread / Matter'], ['cloud', 'Optional cloud']];
+    const LG = [['wifi', 'Wi-Fi, local'], ['ble', 'BLE 5'], ['thread', 'Thread / Matter']];
     LG.forEach(([k, t], i) => (g += `<path class="fl fl-${k}" d="M${1300 + (i % 2) * 230} ${-30 + Math.floor(i / 2) * 36} h40" /><text class="lg" x="${1352 + (i % 2) * 230}" y="${-24 + Math.floor(i / 2) * 36}">${t}</text>`));
     iso.innerHTML = g;
   }
