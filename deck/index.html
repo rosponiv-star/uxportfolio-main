@@ -680,13 +680,13 @@
       const v0 = Math.min(...uv.map((p) => p[1])) - mv, v1 = Math.max(...uv.map((p) => p[1])) + mv;
       const P = [[u0, v0], [u0, v1], [u1, v1], [u1, v0]].map(toXY);
       g += `<path class="grp ${cls}" d="${rounded(P, 28)}" />`;
-      const [lx, ly] = toXY([u0 + 24, v0 - 4]);
+      const [lx, ly] = toXY([u1 - 300, v0 - 4]);
       g += `<text class="gn ${cls}" transform="${mU(lx, ly)}" dy="30">${name}</text>`;
     });
     // flows along the iso axes: [from, to, kind, u-first?]
-    [['phone', 'base', 'wifi', false], ['bracelet', 'base', 'ble', true], ['base', 'lamp', 'thread', false],
-     ['base', 'shutters', 'thread', false], ['base', 'diffuser', 'thread', true]].forEach(([a, b, k, uf]) => {
-      const [x1, y1] = N[a], [x2, y2] = N[b], dx = x2 - x1, dy = y2 - y1;
+    [['phone', 'base', 'wifi', false, -40], ['bracelet', 'base', 'ble', false, 40], ['base', 'lamp', 'thread', false],
+     ['base', 'shutters', 'thread', false], ['base', 'diffuser', 'thread', true]].forEach(([a, b, k, uf, sh = 0]) => {
+      const [x1, y1] = N[a], x2 = N[b][0] + sh * C, y2 = N[b][1] + sh * S, dx = x2 - x1, dy = y2 - y1;
       const t = (dx / C + dy / S) / 2, kk = (dx / C - dy / S) / 2;
       const [mx, my] = uf ? [x1 + t * C, y1 + t * S] : [x1 + kk * C, y1 - kk * S];
       g += `<path class="fl fl-${k}" d="M${x1} ${y1} L${mx} ${my} L${x2} ${y2}" />`;
@@ -695,7 +695,7 @@
     Object.entries(N).sort((p, q) => p[1][1] - q[1][1]).forEach(([id, [cx, cy, name, role]]) => {
       const o = AN[id];
       if (o) g += `<image href="${A}iso-${id}.png" x="${cx - o.ground[0]}" y="${cy - o.ground[1]}" width="${o.size}" height="${o.size}" />`;
-      const off = o ? o.size * 0.42 : 60, [tx, ty] = id === 'base' ? [cx + 150, cy + 10] : [cx - off * C, cy + off * S * 0.2];
+      const off = o ? o.size * 0.42 : 60, [tx, ty] = id === 'base' ? [cx + 150, cy + 10] : [cx + o.size * 0.12, cy + o.size * 0.3];
       g += `<text class="nm" transform="${mU(tx, ty)}" dy="34">${name}</text><text class="rl" transform="${mU(tx, ty)}" dy="58">${role}</text>`;
     });
     // TE-style keys: a numbered dot on each visible part of the base; the list (incl. the back) under the title
