@@ -20,7 +20,7 @@ col = scene.collection
 
 # ---------------------------------------------------------------------------------------------------------------
 # Dimensions (metres)
-W, H, PL, ST = 0.11, 0.0375, 0.005, 0.0012   # width/depth, body height, plinth height, light strip
+W, H, PL, ST = 0.12, 0.0435, 0.0015, 0.0   # width/depth, body height, plinth height, light strip
 TOP = PL + ST + H                               # top surface
 MID = PL + ST + H / 2                           # middle of the front and back faces
 FONT_PATH = 'C:/Windows/Fonts/segoeuisl.ttf'
@@ -136,9 +136,55 @@ def bump_tex(m, kind, scale, strength, dist=0.0002, vec=None):
     nt.links.new(t.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
     return m
 
-STUDIO = SHOT in ('front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band')
+BTN_X = -0.036  # Bluetooth button: right of the inlet, seen from behind (world -X)
+
+def speaker_mask(nt, pitch=0.003, r=0.00085, margin=0.009):
+    tc = nt.nodes.new('ShaderNodeTexCoord'); g = nt.nodes.new('ShaderNodeNewGeometry')
+    P = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], P.inputs[0])
+    Nn = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(g.outputs['Normal'], Nn.inputs[0])
+    def op(o, a, b=None):
+        n = nt.nodes.new('ShaderNodeMath'); n.operation = o
+        for i, x in enumerate((a, b)):
+            if x is None: continue
+            if isinstance(x, (int, float)): n.inputs[i].default_value = x
+            else: nt.links.new(x, n.inputs[i])
+        return n.outputs[0]
+    x, y, z = P.outputs[0], P.outputs[1], P.outputs[2]
+    isX = op('GREATER_THAN', op('ABSOLUTE', Nn.outputs[0]), 0.5)
+    isB = op('GREATER_THAN', Nn.outputs[1], 0.5)
+    u = op('ADD', op('MULTIPLY', isX, y), op('MULTIPLY', isB, x))
+    v = op('SUBTRACT', z, MID)
+    fu = op('SUBTRACT', op('DIVIDE', u, pitch), op('ROUND', op('DIVIDE', u, pitch)))
+    fv = op('SUBTRACT', op('DIVIDE', v, pitch), op('ROUND', op('DIVIDE', v, pitch)))
+    hole = op('LESS_THAN', op('ADD', op('MULTIPLY', fu, fu), op('MULTIPLY', fv, fv)), (r / pitch) ** 2)
+    region = op('MULTIPLY', op('LESS_THAN', op('ABSOLUTE', u), W / 2 - margin), op('LESS_THAN', op('ABSOLUTE', v), H / 2 - margin * 0.8))
+    def away(cx, rr):
+        d = op('ADD', op('POWER', op('SUBTRACT', x, cx), 2.0), op('POWER', v, 2.0))
+        return op('GREATER_THAN', d, rr * rr)
+    back = op('MULTIPLY', isB, op('MULTIPLY', away(0.0, 0.0125), away(BTN_X, 0.0105)))
+    return op('MULTIPLY', op('MULTIPLY', hole, region), op('MAXIMUM', isX, back))
+
+def body_real(name, color):
+    m = bump_tex(principled(name, color, metal=1.0, rough=0.42), 'noise', 5000, 0.035)
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']; mk = speaker_mask(nt)
+    mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'
+    mix.inputs[6].default_value = color; mix.inputs[7].default_value = (0.005, 0.005, 0.006, 1)
+    nt.links.new(mk, mix.inputs['Factor']); nt.links.new(mix.outputs[2], b.inputs['Base Color'])
+    mr = nt.nodes.new('ShaderNodeMath'); mr.operation = 'SUBTRACT'; mr.inputs[0].default_value = 1.0
+    nt.links.new(mk, mr.inputs[1]); nt.links.new(mr.outputs[0], b.inputs['Metallic'])
+    return m
+
+def body_toon(name, color):
+    m = toon(name, color); nt = m.node_tree; mk = speaker_mask(nt)
+    e = next(n for n in nt.nodes if n.type == 'EMISSION'); src = e.inputs['Color'].links[0].from_socket
+    mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'; mix.inputs[7].default_value = grey(0.32)
+    nt.links.new(src, mix.inputs[6]); nt.links.new(mk, mix.inputs['Factor']); nt.links.new(mix.outputs[2], e.inputs['Color'])
+    return m
+
+STUDIO = SHOT in ('front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
     MATS = {
+        'body': body_real('body', srgb('#3b3c40')),
         'alu': bump_tex(principled('alu', srgb('#18181b'), metal=1.0, rough=0.5), 'noise', 4000, 0.04),
         'grille': grille('grille', srgb('#060607'), srgb('#000000')),
         'rubber': principled('rubber', srgb('#0a0a0b'), rough=0.8),
@@ -157,6 +203,7 @@ else:
          'led_front': 0.25, 'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98,
          'frame': 0.96, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3}
     MATS = {k: toon(k, grey(v)) for k, v in T.items()}
+    MATS['body'] = body_toon('body', grey(0.86))
     MATS['led_under'] = toon('led_under', srgb(DAWN))
 
 def M(name):
@@ -282,34 +329,18 @@ def cut(ob, bm, loc, mat):
     shade(ob)
 
 def build_base(with_time=False, time='06:14'):
-    body = rbox('body', W, W, H, 0.031, 0.0018, 'alu', (0, 0, PL + ST), sp=32, se=4)
-    # back: figure-8 power inlet (the only cable) and the Bluetooth pairing button; no power button
-    PX, BX = -0.016, 0.016
-    for dx in (-0.0029, -0.00145, 0.0, 0.00145, 0.0029): cut(body, cutter_bm([(PX + dx, 0, 0.00128)], 0.012), (0, W / 2, MID), 'rubber')
-    cut(body, cutter_bm([(BX, 0, 0.0043)], 0.002), (0, W / 2, MID), 'rubber')
+    """Solid graphite block: speakers behind dot grilles on the sides and back, time + LED at the front, USB-C and the
+    Bluetooth button at the back, haptic + magnetic top for the bracelet, thin rubber disc ringed by the light strip."""
+    body = rbox('body', W, W, H, 0.0035, 0.0011, 'body', (0, 0, PL), sp=8, se=3)
+    for dx in (-0.0029, -0.00145, 0.0, 0.00145, 0.0029): cut(body, cutter_bm([(dx, 0, 0.00128)], 0.012), (0, W / 2, MID), 'rubber')
+    cut(body, cutter_bm([(BTN_X, 0, 0.0046)], 0.002), (0, W / 2, MID), 'rubber')
     wn = body.modifiers.new('wn', 'WEIGHTED_NORMAL'); wn.keep_sharp = True; wn.mode = 'FACE_AREA'
-    btn = cyl('button', 0.0037, 0.002, 'alu', (BX, W / 2 - 0.0009, MID), axis='Y')
-    bpy.ops.mesh.primitive_torus_add(major_radius=0.00312, minor_radius=0.00013, location=(BX, W / 2 + 0.00002, MID), rotation=(math.pi / 2, 0, 0))
-    ringb = bpy.context.active_object; ringb.data.materials.append(M('print'))
-    bpy.data.objects.remove(ringb)
-    pins = [rbox('tongue', 0.0066, 0.004, 0.0007, 0.0003, 0.0, 'print', (PX, W / 2 - 0.0035, MID - 0.00035), sp=4)]
-    back = math.pi / 2, 0, math.pi
-    marks = [label('5V 3A', 0.0026, (PX, W / 2 + 0.00003, MID + 0.0085), back)]
-    bt = [(-0.25, 0.25), (0.25, -0.25), (0, -0.5), (0, 0.5), (0.25, 0.25), (-0.25, -0.25)]
-    cu = bpy.data.curves.new('bt', 'CURVE'); cu.dimensions = '3D'; cu.bevel_depth = 0.00019
-    sp = cu.splines.new('POLY'); sp.points.add(len(bt) - 1)
-    for pt, (x, z) in zip(sp.points, bt): pt.co = (BX - x * 0.0052, W / 2 + 0.0001, MID + 0.0085 + z * 0.0044, 1)
-    bto = bpy.data.objects.new('bt', cu); col.objects.link(bto); cu.materials.append(M('print')); marks.append(bto)
-    # plinth = speaker grille, tapered; light strip between plinth and body; foot and name underneath
-    bm = rbox_bm(0.094, 0.094, PL, 0.026, 0.0008, sp=32, se=2)
-    for v in bm.verts:
-        if v.co.z < PL / 2: v.co.x *= 0.95; v.co.y *= 0.95
-    plinth = link('plinth', bm, 'grille')
-    strip = rbox('strip', 0.0965, 0.0965, ST, 0.0275, 0.0, 'led_under', (0, 0, PL), sp=32)
-    foot = cyl('foot', 0.031, 0.0006, 'rubber', (0, 0, -0.0002), seg=96)
-    name = label('AuraWake', 0.0058, (0, 0, -0.00052), (math.pi, 0, 0)); name.scale.x = -1
-    dot = cyl('led_front', 0.00085, 0.0003, 'led_front', (W * 0.3, -W / 2 - 0.00002, MID), axis='Y', seg=24)
-    obs = [body, btn, plinth, strip, foot, name, dot] + pins + marks
+    btn = cyl('button', 0.0038, 0.002, 'alu', (BTN_X, W / 2 - 0.0008, MID), axis='Y')
+    tongue = rbox('tongue', 0.0066, 0.004, 0.0007, 0.0003, 0.0, 'print', (0, W / 2 - 0.0035, MID - 0.00035), sp=4)
+    disc = cyl('disc', 0.034, PL, 'rubber', (0, 0, PL / 2), seg=128)
+    ring = cyl('ring', 0.0365, 0.0007, 'led_under', (0, 0, PL * 0.55), seg=128)
+    dot = cyl('led_front', 0.00085, 0.0003, 'led_front', (0.036, -W / 2 - 0.00002, MID), axis='Y', seg=24)
+    obs = [body, btn, tongue, disc, ring, dot]
     if with_time: obs.append(time_dots(time, MID))
     return group('base', obs)
 
@@ -468,11 +499,12 @@ def studio(view):
         build_cable(); fw, tgt, pos = 0.34, (0.115, 0, 0.016), (0.115, -1, 0.016)
     elif view == 'band':
         build_bracelet(); fw, tgt, pos = 0.12, (0, 0, 0.035), (0.6, -0.9, 0.35)
-    elif view in ('persp', 'lit'):
-        build_base(with_time=(view == 'lit')); fw, tgt, pos = W / 0.55, (0, 0, TOP * 0.42), (0.62, -0.95, 0.2)
+    elif view in ('persp', 'lit', 'persp_back'):
+        build_base(with_time=(view == 'lit')); fw, tgt = W / 0.55, (0, 0, TOP * 0.42)
+        pos = (-0.62, 0.95, 0.24) if view == 'persp_back' else (0.62, -0.95, 0.24)
     else:
         build_base()
-        if view == 'top': build_bracelet_open()
+        if view == 'top': build_bracelet_open().rotation_euler = (0, 0, math.pi / 2)
         if view in ('front', 'back'):
             fw = W / 0.62; tgt = (0, 0, TOP * 0.5); pos = (0, -1 if view == 'front' else 1, TOP * 0.42)
         else:
@@ -482,7 +514,7 @@ def studio(view):
     area('left', (-0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('right', (0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('cam', tuple(Vector(cam.location) * 0.9 + Vector((0, 0, 0.3))), tgt, 1.2, 25)
-    if view in ('persp', 'lit', 'band'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 90)
+    if view in ('persp', 'lit', 'band', 'persp_back'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 90)
     if view in ('back', 'bottom'): area('cam2', tuple(Vector(cam.location) * 0.9), tgt, 1.2, 40)
 
 def real():
@@ -540,8 +572,8 @@ def line():
     # (group builder, size shown on the slide in px, named points for callouts)
     items = {
         'base': (lambda: build_base(with_time=True, time='06:30'), 400, {
-            'top': (0.02, 0.025, TOP), 'time': (-0.012, -W / 2, MID + 0.004), 'led': (W * 0.3, -W / 2, MID),
-            'light': (0.046, -0.03, PL + ST / 2)}),
+            'top': (0.02, 0.02, TOP), 'time': (-0.012, -W / 2, MID + 0.003), 'led': (0.036, -W / 2, MID),
+            'grille': (W / 2, 0.012, MID + 0.006)}),
         'bracelet': (build_bracelet, 240, {}),
         'phone': (build_phone, 250, {}),
         'lamp': (build_bulb, 170, {}),

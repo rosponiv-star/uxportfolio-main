@@ -576,6 +576,7 @@
   .iso .rl { font-size: 18px; fill: var(--ink-3); }
   .iso .grp { fill: none; stroke-width: 1.5; stroke-linejoin: round; }
   .iso path.grp-room { stroke: #c98f2a; } .iso path.grp-you { stroke: var(--ink-3); } .iso path.grp-cloud { stroke: var(--ink-4); stroke-dasharray: 6 6; }
+  .iso .nm, .iso .rl, .iso .gn { paint-order: stroke; stroke: var(--paper); stroke-width: 10px; stroke-linejoin: round; }
   .iso .gn { font-size: 18px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
   .iso text.grp-room { fill: #a8741c; } .iso text.grp-you { fill: var(--ink-3); }
   .iso .co { stroke: var(--ink); stroke-width: 1.2; fill: none; }
@@ -653,14 +654,14 @@
   const iso = document.querySelector('[data-iso]');
   if (iso) {
     const C = 0.866, S = 0.5, A = 'assets/aurawake/';
-    const AN = {"base":{"size":400,"ground":[200.0,245.2],"points":{"top":[270.5,161.5],"time":[95.0,231.7],"led":[165.5,279.6],"light":[225.1,303.8]}},"bracelet":{"size":240,"ground":[120.0,188.5],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}}};
+    const AN = {"base":{"size":400,"ground":[200.0,238.6],"points":{"top":[257.5,163.9],"time":[96.6,234.8],"led":[165.5,279.6],"grille":[303.4,229.9]}},"bracelet":{"size":240,"ground":[120.0,188.5],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}}};
     const N = { // [cx, cy, name, role] = where the object touches the ground
-      phone: [690, 660, 'Phone', 'Plans and explains'],
-      bracelet: [430, 800, 'Bracelet', 'Senses sleep'],
-      base: [1000, 420, 'Base', 'Runs every ramp'],
-      lamp: [1590, 520, 'Lamp', 'Dusk and dawn'],
-      shutters: [1382, 640, 'Shutters', 'Daylight'],
-      diffuser: [1174, 760, 'Diffuser', 'Scent'],
+      phone: [800, 650, 'Phone', 'Plans and explains'],
+      bracelet: [550, 780, 'Bracelet', 'Senses sleep'],
+      base: [1010, 360, 'Base', 'Runs every ramp'],
+      lamp: [1590, 455, 'Lamp', 'Dusk and dawn'],
+      shutters: [1382, 575, 'Shutters', 'Daylight'],
+      diffuser: [1174, 695, 'Diffuser', 'Scent'],
     };
     const mU = (x, y) => `matrix(${C},${S},${-C},${S},${x},${y})`;
     const toUV = ([x, y]) => [(x / C + y / S) / 2, (x / C - y / S) / 2], toXY = ([u, v]) => [(u + v) * C, (u - v) * S];
@@ -673,15 +674,15 @@
     }).join(' ') + ' Z';
     let g = '';
     // groups: one hairline outline around related objects, drawn on the floor plane
-    const G = [[['lamp', 'shutters', 'diffuser'], 'Bedroom · Thread / Matter', 'grp-room', [125, 115]], [['phone', 'bracelet'], 'With you', 'grp-you', [125, 105]]];
+    const G = [[['lamp', 'shutters', 'diffuser'], 'Bedroom · Thread / Matter', 'grp-room', [112, 100]], [['phone', 'bracelet'], 'With you', 'grp-you', [100, 92]]];
     G.forEach(([ids, name, cls, [mu, mv]]) => {
       const uv = ids.map((id) => toUV(N[id]));
       const u0 = Math.min(...uv.map((p) => p[0])) - mu, u1 = Math.max(...uv.map((p) => p[0])) + mu;
       const v0 = Math.min(...uv.map((p) => p[1])) - mv, v1 = Math.max(...uv.map((p) => p[1])) + mv;
       const P = [[u0, v0], [u0, v1], [u1, v1], [u1, v0]].map(toXY);
       g += `<path class="grp ${cls}" d="${rounded(P, 28)}" />`;
-      const [lx, ly] = toXY([u1 - 300, v0 - 4]);
-      g += `<text class="gn ${cls}" transform="${mU(lx, ly)}" dy="30">${name}</text>`;
+      const tp = P.reduce((a, b) => (b[1] < a[1] ? b : a));
+      g += `<text class="gn ${cls}" x="${tp[0]}" y="${tp[1] - 16}" text-anchor="middle">${name}</text>`;
     });
     // flows along the iso axes: [from, to, kind, u-first?]
     [['phone', 'base', 'wifi', false, -40], ['bracelet', 'base', 'ble', false, 40], ['base', 'lamp', 'thread', false],
@@ -695,14 +696,15 @@
     Object.entries(N).sort((p, q) => p[1][1] - q[1][1]).forEach(([id, [cx, cy, name, role]]) => {
       const o = AN[id];
       if (o) g += `<image href="${A}iso-${id}.png" x="${cx - o.ground[0]}" y="${cy - o.ground[1]}" width="${o.size}" height="${o.size}" />`;
-      const off = o ? o.size * 0.42 : 60, [tx, ty] = id === 'base' ? [cx + 150, cy + 10] : [cx + o.size * 0.12, cy + o.size * 0.3];
-      g += `<text class="nm" transform="${mU(tx, ty)}" dy="34">${name}</text><text class="rl" transform="${mU(tx, ty)}" dy="58">${role}</text>`;
+      const ly = cy + (o ? o.size - o.ground[1] : 0) + 26;
+      g += `<text class="nm" x="${cx}" y="${ly}" text-anchor="middle">${name}</text><text class="rl" x="${cx}" y="${ly + 24}" text-anchor="middle">${role}</text>`;
     });
     // TE-style keys: a numbered dot on each visible part of the base; the list (incl. the back) under the title
     const [bx, by] = [N.base[0] - AN.base.ground[0], N.base[1] - AN.base.ground[1]], P = AN.base.points;
-    const KEYS = [['top', 'Top surface', 'Charges the bracelet; palm for 2 s, ten more minutes', 1, -1],
+    const KEYS = [['top', 'Top surface', 'Haptic and magnetic: the bracelet charges here; palm for 2 s, ten more minutes', 1, -1],
       ['time', 'Time', 'Behind micro-perforations, only when you are awake', -1, -1], ['led', 'Front LED', 'The only light at the front', 1, 1],
-      ['light', 'Light strip', 'Between body and grille: washes the nightstand', 1, 1], [null, 'Back', 'Power inlet and the Bluetooth pairing button']];
+      ['grille', 'Speakers', 'Dot grilles on the sides and the back', 1, -1], [null, 'Underneath', 'A thin rubber disc ringed by the light strip'],
+      [null, 'Back', 'USB-C power and the Bluetooth pairing button']];
     KEYS.forEach(([k, , , ox, oy], i) => {
       if (!k) return;
       const [px, py] = [bx + P[k][0], by + P[k][1]], [qx, qy] = [px + ox * 96, py + oy * 96];
