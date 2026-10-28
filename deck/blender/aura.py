@@ -20,7 +20,7 @@ col = scene.collection
 
 # ---------------------------------------------------------------------------------------------------------------
 # Dimensions (metres)
-W, H, PL, ST = 0.12, 0.0435, 0.0015, 0.0   # width/depth, body height, plinth height, light strip
+W, H, PL, ST = 0.12, 0.0428, 0.0022, 0.0   # width/depth, body height, plinth height, light strip
 TOP = PL + ST + H                               # top surface
 MID = PL + ST + H / 2                           # middle of the front and back faces
 FONT_PATH = 'C:/Windows/Fonts/segoeuisl.ttf'
@@ -138,7 +138,7 @@ def bump_tex(m, kind, scale, strength, dist=0.0002, vec=None):
 
 BTN_X = -0.036  # Bluetooth button: right of the inlet, seen from behind (world -X)
 
-def speaker_mask(nt, pitch=0.003, r=0.00085, margin=0.009):
+def speaker_mask(nt, pitch=0.0032, r=0.00108, margin=0.0016):
     tc = nt.nodes.new('ShaderNodeTexCoord'); g = nt.nodes.new('ShaderNodeNewGeometry')
     P = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], P.inputs[0])
     Nn = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(g.outputs['Normal'], Nn.inputs[0])
@@ -157,15 +157,24 @@ def speaker_mask(nt, pitch=0.003, r=0.00085, margin=0.009):
     fu = op('SUBTRACT', op('DIVIDE', u, pitch), op('ROUND', op('DIVIDE', u, pitch)))
     fv = op('SUBTRACT', op('DIVIDE', v, pitch), op('ROUND', op('DIVIDE', v, pitch)))
     hole = op('LESS_THAN', op('ADD', op('MULTIPLY', fu, fu), op('MULTIPLY', fv, fv)), (r / pitch) ** 2)
-    region = op('MULTIPLY', op('LESS_THAN', op('ABSOLUTE', u), W / 2 - margin), op('LESS_THAN', op('ABSOLUTE', v), H / 2 - margin * 0.8))
+    region = op('MULTIPLY', op('LESS_THAN', op('ABSOLUTE', u), W / 2 - margin), op('LESS_THAN', op('ABSOLUTE', v), H / 2 - margin))
     def away(cx, rr):
         d = op('ADD', op('POWER', op('SUBTRACT', x, cx), 2.0), op('POWER', v, 2.0))
         return op('GREATER_THAN', d, rr * rr)
-    back = op('MULTIPLY', isB, op('MULTIPLY', away(0.0, 0.0125), away(BTN_X, 0.0105)))
+    back = op('MULTIPLY', isB, op('MULTIPLY', away(0.0, 0.0085), away(BTN_X, 0.0085)))
     return op('MULTIPLY', op('MULTIPLY', hole, region), op('MAXIMUM', isX, back))
 
+def satin(name, color):
+    m = principled(name, color, metal=1.0, rough=0.34); nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    tc = nt.nodes.new('ShaderNodeTexCoord'); mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (40, 40, 9000)
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 1.0; nz.inputs['Detail'].default_value = 3
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.05; bp.inputs['Distance'].default_value = 0.0001
+    nt.links.new(tc.outputs['Object'], mp.inputs['Vector']); nt.links.new(mp.outputs['Vector'], nz.inputs['Vector'])
+    nt.links.new(nz.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
+    return m
+
 def body_real(name, color):
-    m = bump_tex(principled(name, color, metal=1.0, rough=0.42), 'noise', 5000, 0.035)
+    m = satin(name, color)
     nt = m.node_tree; b = nt.nodes['Principled BSDF']; mk = speaker_mask(nt)
     mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'
     mix.inputs[6].default_value = color; mix.inputs[7].default_value = (0.005, 0.005, 0.006, 1)
@@ -185,6 +194,7 @@ STUDIO = SHOT in ('front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'ba
 if MODE == 'real':
     MATS = {
         'body': body_real('body', srgb('#3b3c40')),
+        'shell': satin('shell', srgb('#3b3c40')),
         'alu': bump_tex(principled('alu', srgb('#18181b'), metal=1.0, rough=0.5), 'noise', 4000, 0.04),
         'grille': grille('grille', srgb('#060607'), srgb('#000000')),
         'rubber': principled('rubber', srgb('#0a0a0b'), rough=0.8),
@@ -204,6 +214,7 @@ else:
          'frame': 0.96, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3}
     MATS = {k: toon(k, grey(v)) for k, v in T.items()}
     MATS['body'] = body_toon('body', grey(0.86))
+    MATS['shell'] = toon('shell', grey(0.86))
     MATS['led_under'] = toon('led_under', srgb(DAWN))
 
 def M(name):
@@ -331,11 +342,11 @@ def cut(ob, bm, loc, mat):
 def build_base(with_time=False, time='06:14'):
     """Solid graphite block: speakers behind dot grilles on the sides and back, time + LED at the front, USB-C and the
     Bluetooth button at the back, haptic + magnetic top for the bracelet, thin rubber disc ringed by the light strip."""
-    body = rbox('body', W, W, H, 0.0035, 0.0011, 'body', (0, 0, PL), sp=8, se=3)
+    body = rbox('body', W, W, H, 0.0012, 0.0006, 'body', (0, 0, PL), sp=4, se=2)
     for dx in (-0.0029, -0.00145, 0.0, 0.00145, 0.0029): cut(body, cutter_bm([(dx, 0, 0.00128)], 0.012), (0, W / 2, MID), 'rubber')
-    cut(body, cutter_bm([(BTN_X, 0, 0.0046)], 0.002), (0, W / 2, MID), 'rubber')
+    cut(body, cutter_bm([(BTN_X, 0, 0.0057)], 0.002), (0, W / 2, MID), 'rubber')
     wn = body.modifiers.new('wn', 'WEIGHTED_NORMAL'); wn.keep_sharp = True; wn.mode = 'FACE_AREA'
-    btn = cyl('button', 0.0038, 0.002, 'alu', (BTN_X, W / 2 - 0.0008, MID), axis='Y')
+    btn = cyl('button', 0.0049, 0.002, 'shell', (BTN_X, W / 2 - 0.0008, MID), axis='Y')
     tongue = rbox('tongue', 0.0066, 0.004, 0.0007, 0.0003, 0.0, 'print', (0, W / 2 - 0.0035, MID - 0.00035), sp=4)
     disc = cyl('disc', 0.034, PL, 'rubber', (0, 0, PL / 2), seg=128)
     ring = cyl('ring', 0.0365, 0.0007, 'led_under', (0, 0, PL * 0.55), seg=128)
@@ -515,6 +526,7 @@ def studio(view):
     area('right', (0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('cam', tuple(Vector(cam.location) * 0.9 + Vector((0, 0, 0.3))), tgt, 1.2, 25)
     if view in ('persp', 'lit', 'band', 'persp_back'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 90)
+    if view == 'persp_back': area('backkey', (0.2, 0.9, 0.6), (0, 0, 0.02), 1.4, 120)
     if view in ('back', 'bottom'): area('cam2', tuple(Vector(cam.location) * 0.9), tgt, 1.2, 40)
 
 def real():
