@@ -227,6 +227,29 @@ def fabric(name, color):
     nt.links.new(weave, bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
     return m
 
+def loop_fabric(name, base, edge):
+    """Ribbed woven strap: ribs across the width, a fine knit, the two edges in the accent colour."""
+    m = principled(name, base, rough=0.88); nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    for k in ('Sheen Weight', 'Sheen'):
+        if k in b.inputs: b.inputs[k].default_value = 0.3; break
+    tc = nt.nodes.new('ShaderNodeTexCoord'); P = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], P.inputs[0])
+    def op(o, a, c=None):
+        n = nt.nodes.new('ShaderNodeMath'); n.operation = o
+        for i, x in enumerate((a, c)):
+            if x is None: continue
+            if isinstance(x, (int, float)): n.inputs[i].default_value = x
+            else: nt.links.new(x, n.inputs[i])
+        return n.outputs[0]
+    z = P.outputs[2]
+    edge_m = op('MAXIMUM', op('LESS_THAN', z, 0.0031), op('GREATER_THAN', z, 0.0202))
+    mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'; mix.inputs[6].default_value = base; mix.inputs[7].default_value = edge
+    nt.links.new(edge_m, mix.inputs['Factor']); nt.links.new(mix.outputs[2], b.inputs['Base Color'])
+    ribs = op('ABSOLUTE', op('SINE', op('MULTIPLY', op('ARCTAN2', P.outputs[1], P.outputs[0]), 62.0)))
+    knit = op('MULTIPLY', op('SINE', op('MULTIPLY', z, 9000.0)), 0.04)
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.7; bp.inputs['Distance'].default_value = 0.0005
+    nt.links.new(op('ADD', op('POWER', ribs, 0.5), knit), bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
+    return m
+
 TABLE = SHOT == 'table'
 STUDIO = SHOT in ('persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
@@ -245,6 +268,7 @@ if MODE == 'real':
         'dots': emit('dots', srgb('#ffd9a0'), 7.0),
         'band': principled('band', srgb('#2a2b2f'), rough=0.62),
         'fabric': fabric('fabric', srgb('#1c1d20')),
+        'loop': loop_fabric('loop', srgb('#26272b'), srgb('#e2622a')),
         'modalu': bump_tex(principled('modalu', srgb('#2c2d31'), metal=1.0, rough=0.38), 'noise', 9000, 0.05),
         'cable': bump_tex(principled('cable', srgb('#0e0e10'), rough=0.8), 'wave', 420, 0.5),
         'plug': principled('plug', srgb('#0a0a0b'), rough=0.6),
@@ -252,7 +276,7 @@ if MODE == 'real':
 else:
     T = {'alu': 0.86, 'grille': 0.42, 'rubber': 0.3, 'print': 0.4, 'pin': 0.75, 'band': 0.5, 'cable': 0.25, 'dots': 0.28,
          'led_front': 0.25, 'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98,
-         'frame': 0.96, 'fabric': 0.5, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3}
+         'frame': 0.96, 'fabric': 0.5, 'loop': 0.5, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3}
     MATS = {k: toon(k, grey(v)) for k, v in T.items()}
     MATS['body'] = body_toon('body', grey(0.86))
     MATS['shell'] = toon('shell', grey(0.86))
@@ -460,22 +484,49 @@ def frame(name, sx, sy, sz, bar, mat, loc):
     return [rbox(f'{name}{i}', w, d, sz, 0.0, 0.0004, mat, (x + dx, y + dy, z), sp=1, se=2) for i, (w, d, dx, dy) in enumerate((
         (sx, bar, 0, -(sy - bar) / 2), (sx, bar, 0, (sy - bar) / 2), (bar, sy, -(sx - bar) / 2, 0), (bar, sy, (sx - bar) / 2, 0)))]
 
-def build_bracelet(z0=0.0, L=0.1, w=0.018, t=0.0026, hump=0.0022):
-    """Closed woven-fabric loop (slips on, no buckle) laid down flat: it flattens into a double band with soft folds at
-    both ends. The sensor is a soft hump in the middle, under the same fabric; a coil along the band charges from the
-    ring coil under the top, in any orientation."""
-    rr = t * 0.9; pts = []
-    for k in range(25):                                   # lower layer, front → back
-        y = -L / 2 + L * k / 24; pts.append((0, y, z0 + t / 2))
-    for k in range(1, 8):                                 # back fold
-        a = -math.pi / 2 + math.pi * k / 8; pts.append((0, L / 2 + rr * math.cos(a), z0 + t / 2 + rr + rr * math.sin(a)))
-    for k in range(25):                                   # upper layer, back → front, lifted by the sensor in the middle
-        y = L / 2 - L * k / 24; pts.append((0, y, z0 + t / 2 + 2 * rr + hump * math.exp(-(y / 0.016) ** 2)))
-    for k in range(1, 8):                                 # front fold
-        a = math.pi / 2 + math.pi * k / 8; pts.append((0, -L / 2 + rr * math.cos(a), z0 + t / 2 + rr + rr * math.sin(a)))
-    band = sweep('band', pts, 'fabric', cyclic=True)
-    band.data.bevel_object.data.splines[0].points  # profile stays the default band section
-    return group('bracelet', [band])
+def strap_ring(name, R, h, t, z, flat=None, arc=None, n=240, cr=0.0009):
+    """Strap as a ring with the axis vertical (lying on its edge). flat=(angle, D) flattens it against the pod;
+    arc=(a0, a1) makes an open segment (the overlapping tail)."""
+    bm = bmesh.new(); rings = []
+    a0, a1 = arc if arc else (0.0, 2 * math.pi)
+    m = n if not arc else max(8, int(n * (a1 - a0) / (2 * math.pi)))
+    for i in range(m + (1 if arc else 0)):
+        a = a0 + (a1 - a0) * i / m
+        r = R
+        if flat:
+            c = math.cos(a - flat[0])
+            if c > 1e-3: r = min(R, flat[1] / c)
+        pts = []
+        for (cx, cz, q0) in ((r - cr, z + h - cr, 0), (r - t + cr, z + h - cr, 90), (r - t + cr, z + cr, 180), (r - cr, z + cr, 270)):
+            for k in range(4):
+                q = math.radians(q0 + 90 * k / 3); pts.append((cx + cr * math.cos(q), cz + cr * math.sin(q)))
+        rings.append([bm.verts.new((rr * math.cos(a), rr * math.sin(a), zz)) for rr, zz in pts])
+    k = len(rings[0])
+    for i in range(len(rings) - (1 if arc else 0)):
+        A, B = rings[i], rings[(i + 1) % len(rings)]
+        for q in range(k): bm.faces.new((A[q], A[(q + 1) % k], B[(q + 1) % k], B[q]))
+    if arc:
+        for ring in (rings[0], rings[-1]): bm.faces.new(ring if ring is rings[-1] else list(reversed(ring)))
+    return link(name, bm, 'loop')
+
+def build_bracelet(z0=0.0, R=0.031, h=0.020, t=0.0026, lift=0.0015):
+    """Woven loop strap (owner refs: Sport Loop, graphite with orange edges), closed, lying on its edge as a ring. The
+    sensor pod hides inside the strap and protrudes 1.5 mm below its edge: that small flat face is the magnetic,
+    charging contact on the alarm's top. The strap flattens against the pod; graphite aluminium loop + tail opposite."""
+    ap, D = math.radians(-60), R * 0.84
+    parts = [strap_ring('strap', R, h, t, lift, flat=(ap, D))]
+    ad = ap + math.pi
+    parts.append(strap_ring('tail', R + t, h, t, lift, arc=(ad - 0.05, ad + 1.25)))
+    pod = rbox('pod', 0.0056, 0.031, h + lift - 0.0004, 0.0018, 0.0008, 'modalu', (0, 0, 0), sp=6, se=2)
+    pod.location = ((D - t - 0.0029) * math.cos(ap), (D - t - 0.0029) * math.sin(ap), 0); pod.rotation_euler = (0, 0, ap)
+    parts.append(pod)
+    lp = frame('dring', 0.0074 + 2 * t, h + 0.0034, 0.0032, 0.0014, 'modalu', (0, 0, 0))
+    e = bpy.data.objects.new('dring', None); col.objects.link(e)
+    e.location = ((R + t / 2) * math.cos(ad), (R + t / 2) * math.sin(ad), lift + h / 2); e.rotation_euler = (math.pi / 2, 0, ad + math.pi / 2)
+    for o in lp: o.parent = e
+    parts.append(e)
+    g = group('bracelet', parts); g.location.z = z0
+    return g
 
 def build_cable():
     """USB-C power adapter (EU pins) and braided USB-C cable."""
@@ -594,10 +645,10 @@ def studio(view):
     if view == 'cable':
         build_cable(); fw, tgt, pos = 0.34, (0.115, 0, 0.016), (0.115, -1, 0.016)
     elif view == 'band':
-        build_bracelet(); fw, tgt, pos = 0.16, (0, 0, 0.004), (0.6, -0.9, 0.7)
+        build_bracelet(); fw, tgt, pos = 0.13, (0, 0, 0.011), (0.6, -0.9, 0.55)
     elif view in ('persp', 'lit', 'persp_back', 'persp_band'):
         build_base(with_time=(view == 'lit')); fw, tgt = W / 0.55, (0, 0, TOP * 0.42)
-        if view == 'persp_band': build_bracelet(TOP); fw, tgt = W / 0.52, (0, 0, TOP * 0.6)
+        if view == 'persp_band': build_bracelet(TOP); fw, tgt = W / 0.52, (0, 0, TOP * 0.75)
         pos = (-0.62, 0.95, 0.24) if view == 'persp_back' else (0.62, -0.95, 0.24)
     else:
         build_base()
