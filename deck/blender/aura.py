@@ -13,6 +13,7 @@ argv = sys.argv[sys.argv.index('--') + 1:]
 MODE, OUT = argv[0], os.path.abspath(argv[1])
 SHOT = argv[2] if len(argv) > 2 else ''
 PREVIEW = 'preview' in argv
+PLASTIC = 'plastic' in argv
 os.makedirs(OUT, exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)
 scene = bpy.context.scene
@@ -137,15 +138,17 @@ def bump_tex(m, kind, scale, strength, dist=0.0002, vec=None):
     return m
 
 HOLE_D = 0.0022
+EDGE_P, EDGE_T = 0.0012, 0.0006   # corner and top/bottom edge radii: the grid sits on the flat part of each face
 
-def grid(L, d, g0=0.001):
-    """Odd number of holes so one sits on the centre line; the gap between holes = the gap to the face edge."""
-    n = int((L - g0) / (d + g0)); n -= (n % 2 == 0)
-    return n, d + (L - n * d) / (n + 1)
+def grid(L, n, d=HOLE_D):
+    """n holes on a flat length L: the gap between holes equals the gap to the edge. Returns (pitch, offset, n)."""
+    g = (L - n * d) / (n + 1)
+    return d + g, (0.0 if n % 2 else (d + g) / 2), n
 
-NU, PU = grid(W, HOLE_D)   # 37 holes across a face
-NV, PV = grid(H, HOLE_D)   # 13 rows
-BTN_X = -11 * PU           # Bluetooth button on a hole position, right of the inlet seen from behind (world -X)
+PU, OU, NU = grid(W - 2 * EDGE_P, 35)   # gap ≈ 1.13 mm
+PV, OV, NV = grid(H - 2 * EDGE_T, 12)   # gap ≈ 1.17 mm (as close as whole holes allow)
+def cols(p, o, n): return [-(n - 1) / 2 * p + i * p for i in range(n)]
+BTN_X = -11 * PU           # Bluetooth button on a hole column, right of the inlet seen from behind (world -X)
 
 def speaker_mask(nt):
     """Speaker holes on the sides and the back; around the inlet and the button whole holes are left out, so both sit
@@ -165,20 +168,20 @@ def speaker_mask(nt):
     isB = op('GREATER_THAN', Nn.outputs[1], 0.5)
     u = op('ADD', op('MULTIPLY', isX, y), op('MULTIPLY', isB, x))
     v = op('SUBTRACT', z, MID)
-    iu, iv = op('ROUND', op('DIVIDE', u, PU)), op('ROUND', op('DIVIDE', v, PV))
-    fu, fv = op('SUBTRACT', u, op('MULTIPLY', iu, PU)), op('SUBTRACT', v, op('MULTIPLY', iv, PV))
+    iu, iv = op('ROUND', op('DIVIDE', op('SUBTRACT', u, OU), PU)), op('ROUND', op('DIVIDE', op('SUBTRACT', v, OV), PV))
+    cu, cv = op('ADD', op('MULTIPLY', iu, PU), OU), op('ADD', op('MULTIPLY', iv, PV), OV)
+    fu, fv = op('SUBTRACT', u, cu), op('SUBTRACT', v, cv)
     hole = op('LESS_THAN', op('ADD', op('MULTIPLY', fu, fu), op('MULTIPLY', fv, fv)), (HOLE_D / 2) ** 2)
-    region = op('MULTIPLY', op('LESS_THAN', op('ABSOLUTE', iu), (NU - 1) / 2 + 0.5), op('LESS_THAN', op('ABSOLUTE', iv), (NV - 1) / 2 + 0.5))
-    cu, cv = op('MULTIPLY', iu, PU), op('MULTIPLY', iv, PV)
+    region = op('MULTIPLY', op('LESS_THAN', op('ABSOLUTE', cu), (NU - 1) / 2 * PU + 1e-5), op('LESS_THAN', op('ABSOLUTE', cv), (NV - 1) / 2 * PV + 1e-5))
     def away(cx, rr):  # whole holes only: distance from the hole centre
         return op('GREATER_THAN', op('ADD', op('POWER', op('SUBTRACT', cu, cx), 2.0), op('POWER', cv, 2.0)), rr * rr)
     back = op('MULTIPLY', isB, op('MULTIPLY', away(0.0, 0.0072), away(BTN_X, 0.0082)))
     return op('MULTIPLY', op('MULTIPLY', hole, region), op('MAXIMUM', isX, back))
 
 def satin(name, color):
-    m = principled(name, color, metal=1.0, rough=0.34); nt = m.node_tree; b = nt.nodes['Principled BSDF']
-    tc = nt.nodes.new('ShaderNodeTexCoord'); mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (40, 40, 9000)
-    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 1.0; nz.inputs['Detail'].default_value = 3
+    m = principled(name, color, metal=0.0 if PLASTIC else 1.0, rough=0.7 if PLASTIC else 0.38); nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    tc = nt.nodes.new('ShaderNodeTexCoord'); mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1, 1, 1)
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 9000.0; nz.inputs['Detail'].default_value = 2
     bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.05; bp.inputs['Distance'].default_value = 0.0001
     nt.links.new(tc.outputs['Object'], mp.inputs['Vector']); nt.links.new(mp.outputs['Vector'], nz.inputs['Vector'])
     nt.links.new(nz.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
@@ -205,8 +208,8 @@ def body_toon(name, color):
 STUDIO = SHOT in ('front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
     MATS = {
-        'body': body_real('body', srgb('#3b3c40')),
-        'shell': satin('shell', srgb('#3b3c40')),
+        'body': body_real('body', srgb('#2c2d31')),
+        'shell': satin('shell', srgb('#2c2d31')),
         'alu': bump_tex(principled('alu', srgb('#18181b'), metal=1.0, rough=0.5), 'noise', 4000, 0.04),
         'grille': grille('grille', srgb('#060607'), srgb('#000000')),
         'rubber': principled('rubber', srgb('#0a0a0b'), rough=0.8),
@@ -360,13 +363,12 @@ def holes_bm(depth=0.0032, seg=16):
     bm = bmesh.new(); r = HOLE_D / 2
     def add(m):
         bmesh.ops.create_cone(bm, cap_ends=True, segments=seg, radius1=r, radius2=r, depth=depth, matrix=m)
-    for iu in range(-(NU // 2), NU // 2 + 1):
-        for iv in range(-(NV // 2), NV // 2 + 1):
-            u, z = iu * PU, MID + iv * PV
+    for u in cols(PU, OU, NU):
+        for cv in cols(PV, OV, NV):
+            z = MID + cv
             for sx in (-1, 1):
                 add(Matrix.Translation((sx * W / 2, u, z)) @ Matrix.Rotation(math.pi / 2, 4, 'Y'))
-            cu, cv = u, iv * PV
-            if cu * cu + cv * cv > 0.0072 ** 2 and (cu - BTN_X) ** 2 + cv * cv > 0.0082 ** 2:
+            if u * u + cv * cv > 0.0072 ** 2 and (u - BTN_X) ** 2 + cv * cv > 0.0082 ** 2:
                 add(Matrix.Translation((u, W / 2, z)) @ Matrix.Rotation(math.pi / 2, 4, 'X'))
     return bm
 
@@ -383,7 +385,7 @@ def cut(ob, bm, loc, mat):
 def build_base(with_time=False, time='06:14'):
     """Solid graphite block: speakers behind dot grilles on the sides and back, time + LED at the front, USB-C and the
     Bluetooth button at the back, haptic + magnetic top for the bracelet, thin rubber disc ringed by the light strip."""
-    body = rbox('body', W, W, H, 0.0012, 0.0006, 'body', (0, 0, PL), sp=4, se=2)
+    body = rbox('body', W, W, H, EDGE_P, EDGE_T, 'body', (0, 0, PL), sp=4, se=2)
     cut(body, stadium_bm(0.0084, 0.0026, 0.012), (0, W / 2, MID), 'rubber')  # USB-C receptacle
     cut(body, cutter_bm([(BTN_X, 0, 0.0057)], 0.002), (0, W / 2, MID), 'rubber')
     if MODE == 'real': cut(body, holes_bm(), (0, 0, 0), 'cavity')
@@ -580,6 +582,7 @@ def real():
     colour_management('AgX')
     if STUDIO:
         studio(SHOT)
+        if PLASTIC: scene.view_settings.exposure = -2.6  # matte plastic takes far more of the studio light than metal
     else:
         build_base(with_time=(SHOT == 'dawn'))
         MATS['wood'] = wood()
@@ -595,7 +598,7 @@ def real():
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
-    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-preview" if PREVIEW else ""}.png')
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-plastic" if PLASTIC else ""}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
 # ---------------------------------------------------------------------------------------------------------------
