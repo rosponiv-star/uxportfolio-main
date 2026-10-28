@@ -1003,6 +1003,13 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-28 · LOCAL (31)** · Weavy v3 refused again (free runs used up); owner chose to go back to **Blender** with the v3
+  fixes. Bracelet v8: the strip runs ≈7 mm past the loop (`OV` 0.24) and makes a **soft visible U fold** (r 1.1 mm),
+  the tail comes back over the strip under the loop's outer bar and settles onto the strip (loop opening widened);
+  fabric shader rewritten towards the Weavy look: noise-warped twill threads, melange clouds between two blues
+  (#4a80c8 / #7aa8de), rare pale flecks, fibre fuzz, darker corded edges. Pod next to the loop (wrist side visible),
+  flat charging foot = pod's lower edge: unchanged from v7. Renders + schema drawing refreshed.
+
 - **2026-10-28 · LOCAL (11–30, consolidated: earlier log writes silently failed)** · **AuraWake objects, current state.**
   *Alarm (final, owner-approved step by step):* solid block 12 × 12 × 4.5 cm, **matte satin graphite plastic** with a
   micro-dot grain (`plastic` in argv), near-sharp edges (1.2 mm plan, 0.6 mm edge); front = time in 5×7 dots behind

@@ -228,13 +228,12 @@ def fabric(name, color):
     return m
 
 def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.00042):
-    """Woven strap, thread by thread: a 2/1 twill (diagonal), warp threads graphite, weft threads melange light grey,
-    each thread rounded in the bump, fibre fuzz, the two edges woven in orange. Coordinates: u along the strap
-    (angle x R), v across it (z)."""
-    m = principled(name, dark, rough=0.9); nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    """Woven melange strap: a 2/1 twill whose threads wander slightly (noise-warped grid), each thread rounded in the
+    bump, colour in soft clouds between two blues, a few near-white weft flecks, fibre fuzz, darker corded edges."""
+    m = principled(name, dark, rough=0.92); nt = m.node_tree; b = nt.nodes['Principled BSDF']
     for k in ('Sheen Weight', 'Sheen'):
-        if k in b.inputs: b.inputs[k].default_value = 0.45; break
-    if 'Sheen Roughness' in b.inputs: b.inputs['Sheen Roughness'].default_value = 0.35
+        if k in b.inputs: b.inputs[k].default_value = 0.6; break
+    if 'Sheen Roughness' in b.inputs: b.inputs['Sheen Roughness'].default_value = 0.4
     tc = nt.nodes.new('ShaderNodeTexCoord'); P = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], P.inputs[0])
     def op(o, a, c=None):
         n = nt.nodes.new('ShaderNodeMath'); n.operation = o
@@ -243,38 +242,38 @@ def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.0004
             if isinstance(x, (int, float)): n.inputs[i].default_value = x
             else: nt.links.new(x, n.inputs[i])
         return n.outputs[0]
-    u = op('MULTIPLY', op('ARCTAN2', P.outputs[1], P.outputs[0]), R)
-    v = P.outputs[2]
+    def noise(scale, detail=3):
+        n = nt.nodes.new('ShaderNodeTexNoise'); n.inputs['Scale'].default_value = scale; n.inputs['Detail'].default_value = detail
+        nt.links.new(tc.outputs['Object'], n.inputs['Vector']); return n
+    warp = noise(1400); wc = nt.nodes.new('ShaderNodeSeparateColor'); nt.links.new(warp.outputs['Color'], wc.inputs[0])
+    u = op('ADD', op('MULTIPLY', op('ARCTAN2', P.outputs[1], P.outputs[0]), R), op('MULTIPLY', op('SUBTRACT', wc.outputs[0], 0.5), p * 0.7))
+    v = op('ADD', P.outputs[2], op('MULTIPLY', op('SUBTRACT', wc.outputs[1], 0.5), p * 0.7))
     fu, fv = op('DIVIDE', u, p), op('DIVIDE', v, p)
     iu, iv = op('FLOOR', fu), op('FLOOR', fv)
-    sgn = op('SUBTRACT', op('MULTIPLY', op('FLOORED_MODULO', op('FLOOR', op('DIVIDE', iu, 6.0)), 2.0), 2.0), 1.0)
-    tw = op('FLOORED_MODULO', op('SUBTRACT', iu, iv), 3.0)   # plain 2/1 twill, fine diagonal (owner refs)
-    weft = op('LESS_THAN', tw, 0.5)                       # weft on top in one cell of three, shifted each row: twill
-    ru = op('SINE', op('MULTIPLY', op('FRACT', fu), math.pi))   # thread section, rounded
-    rv = op('SINE', op('MULTIPLY', op('FRACT', fv), math.pi))
+    weft = op('LESS_THAN', op('FLOORED_MODULO', op('SUBTRACT', iu, iv), 3.0), 0.5)
+    ru = op('SINE', op('MULTIPLY', op('FRACT', fu), math.pi)); rv = op('SINE', op('MULTIPLY', op('FRACT', fv), math.pi))
     height = op('ADD', op('MULTIPLY', weft, rv), op('MULTIPLY', op('SUBTRACT', 1.0, weft), ru))
-    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 9000.0; nz.inputs['Detail'].default_value = 6
-    nt.links.new(tc.outputs['Object'], nz.inputs['Vector'])
-    h2 = op('ADD', op('POWER', height, 0.6), op('MULTIPLY', nz.outputs['Fac'], 0.25))
-    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.85; bp.inputs['Distance'].default_value = 0.00025
-    nt.links.new(h2, bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
-    # colour: melange weft (light grey with fibre variation) over graphite warp; orange threads on both edges
-    mel = nt.nodes.new('ShaderNodeMix'); mel.data_type = 'RGBA'; mel.inputs[6].default_value = light
-    mel.inputs[6].default_value = tuple(0.5 * a + 0.5 * b for a, b in zip(dark[:3], light[:3])) + (1,)
-    mel.inputs[7].default_value = light
+    fuzz = noise(14000, 8)
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.75; bp.inputs['Distance'].default_value = 0.0003
+    nt.links.new(op('ADD', op('POWER', height, 0.7), op('MULTIPLY', fuzz.outputs['Fac'], 0.45)), bp.inputs['Height'])
+    nt.links.new(bp.outputs[0], b.inputs['Normal'])
+    # colour: clouds between the two blues, per-thread variation, rare white flecks on weft threads
+    cloud = noise(700, 4)
     cell = nt.nodes.new('ShaderNodeCombineXYZ'); nt.links.new(iu, cell.inputs[0]); nt.links.new(iv, cell.inputs[1])
-    vn = nt.nodes.new('ShaderNodeTexWhiteNoise'); vn.noise_dimensions = '3D'; nt.links.new(cell.outputs[0], vn.inputs['Vector'])
-    nt.links.new(op('GREATER_THAN', op('ADD', op('MULTIPLY', vn.outputs['Value'], 0.8), op('MULTIPLY', nz.outputs['Fac'], 0.2)), 0.62), mel.inputs['Factor'])
-    col_ = nt.nodes.new('ShaderNodeMix'); col_.data_type = 'RGBA'; col_.inputs[6].default_value = dark
-    nt.links.new(weft, col_.inputs['Factor']); nt.links.new(mel.outputs[2], col_.inputs[7])
-    edge_m = op('MAXIMUM', op('LESS_THAN', v, lift + 0.0015), op('GREATER_THAN', v, lift + h - 0.0015))
+    wn = nt.nodes.new('ShaderNodeTexWhiteNoise'); wn.noise_dimensions = '3D'; nt.links.new(cell.outputs[0], wn.inputs['Vector'])
+    base = nt.nodes.new('ShaderNodeMix'); base.data_type = 'RGBA'; base.inputs[6].default_value = dark; base.inputs[7].default_value = light
+    nt.links.new(op('ADD', op('MULTIPLY', cloud.outputs['Fac'], 0.75), op('MULTIPLY', wn.outputs['Value'], 0.35)), base.inputs['Factor'])
+    fleck = nt.nodes.new('ShaderNodeMix'); fleck.data_type = 'RGBA'; fleck.inputs[7].default_value = srgb('#c8dbf3')
+    nt.links.new(base.outputs[2], fleck.inputs[6])
+    nt.links.new(op('MULTIPLY', weft, op('GREATER_THAN', wn.outputs['Value'], 0.9)), fleck.inputs['Factor'])
+    edge_m = op('MAXIMUM', op('LESS_THAN', P.outputs[2], lift + 0.0014), op('GREATER_THAN', P.outputs[2], lift + h - 0.0014))
     fin = nt.nodes.new('ShaderNodeMix'); fin.data_type = 'RGBA'; fin.inputs[7].default_value = edge
-    nt.links.new(col_.outputs[2], fin.inputs[6]); nt.links.new(edge_m, fin.inputs['Factor'])
-    shade_ = nt.nodes.new('ShaderNodeMix'); shade_.data_type = 'RGBA'; shade_.blend_type = 'MULTIPLY'; shade_.inputs['Factor'].default_value = 1.0
-    nt.links.new(fin.outputs[2], shade_.inputs[6])
-    sh = nt.nodes.new('ShaderNodeCombineColor'); g = op('ADD', 0.7, op('MULTIPLY', height, 0.3))
-    for k in range(3): nt.links.new(g, sh.inputs[k])
-    nt.links.new(sh.outputs[0], shade_.inputs[7]); nt.links.new(shade_.outputs[2], b.inputs['Base Color'])
+    nt.links.new(fleck.outputs[2], fin.inputs[6]); nt.links.new(op('MULTIPLY', edge_m, 0.8), fin.inputs['Factor'])
+    sh = nt.nodes.new('ShaderNodeMix'); sh.data_type = 'RGBA'; sh.blend_type = 'MULTIPLY'; sh.inputs['Factor'].default_value = 1.0
+    nt.links.new(fin.outputs[2], sh.inputs[6])
+    g = op('ADD', 0.72, op('MULTIPLY', height, 0.28)); cc = nt.nodes.new('ShaderNodeCombineColor')
+    for k in range(3): nt.links.new(g, cc.inputs[k])
+    nt.links.new(cc.outputs[0], sh.inputs[7]); nt.links.new(sh.outputs[2], b.inputs['Base Color'])
     return m
 
 TABLE = SHOT == 'table'
@@ -295,7 +294,7 @@ if MODE == 'real':
         'dots': emit('dots', srgb('#ffd9a0'), 7.0),
         'band': principled('band', srgb('#2a2b2f'), rough=0.62),
         'fabric': fabric('fabric', srgb('#1c1d20')),
-        'loop': loop_fabric('loop', srgb('#3f7cc6'), srgb('#b3cfee'), srgb('#2f66ad')),
+        'loop': loop_fabric('loop', srgb('#4a80c8'), srgb('#7aa8de'), srgb('#3f74bb')),
         'lens': principled('lens', srgb('#050506'), rough=0.06, coat=0.0),
         'steel': bump_tex(principled('steel', srgb('#1c1d20'), metal=1.0, rough=0.36), 'noise', 9000, 0.04),
         'modalu': bump_tex(principled('modalu', srgb('#4a4b50'), metal=1.0, rough=0.34), 'noise', 9000, 0.05),
@@ -529,7 +528,7 @@ def strap_e(th):
 
 POD_T, POD_LEN = 0.0016, 0.034                      # sensor pod: slim graphite plate on the inner side
 BAR_T, BAR_W = 0.0011, 0.0040                       # steel loop: a flat metal ribbon
-OV = 0.07                                           # the strip runs this far past the loop before folding
+OV = 0.24                                           # the strip runs this far past the loop before folding (≈7 mm)
 
 def strap_n(th):
     """Outward unit normal of the oval at angle th."""
@@ -553,14 +552,15 @@ def strap_path():
         pts.append(strap_e(th) + strap_n(th) * off)
     thF = LOOP_TH - OV; P0 = strap_e(thF) + strap_n(thF) * t; No = strap_n(thF)
     Tm = (strap_e(thF - 1e-3) - strap_e(thF + 1e-3)).normalized()       # direction of travel (decreasing angle)
-    r = t / 2                                             # tight fold: the tail lies right on the strip, under the loop's outer bar
+    r = 0.0011                                            # soft U fold; the tail comes back over the strip, under the loop's outer bar
     for k in range(1, 16):
         ph = math.pi * k / 16
-        pts.append(P0 + No * (r - r * math.cos(ph)) + Tm * (r * 1.1) * math.sin(ph))
+        pts.append(P0 + No * (r - r * math.cos(ph)) + Tm * (r * 1.25) * math.sin(ph))
     m = 160
     for k in range(m + 1):
         th = thF + (OV + math.radians(150)) * k / m
-        pts.append(strap_e(th) + strap_n(th) * (arrive_off(th) + 2 * r))
+        k = max(0.0, 1 - (th - thF) / (OV + 0.35)); k = k * k * (3 - 2 * k)       # the tail settles onto the strip past the loop
+        pts.append(strap_e(th) + strap_n(th) * (arrive_off(th) + t + (2 * r - t) * k))
     return pts
 
 def build_strip():
@@ -603,7 +603,7 @@ def build_loop():
     inside the strip's start, so only the outer bar and the two arms show."""
     t, h, z0 = STRAP_T, STRAP_H, STRAP_LIFT
     c2 = strap_e(LOOP_TH); N2 = strap_n(LOOP_TH); T2 = Vector((-N2.y, N2.x))
-    n_in, n_out = 0.0, 2.5 * t + 0.0004 + BAR_T / 2
+    n_in, n_out = 0.0, 1.5 * t + 2 * 0.0011 + 0.0006 + BAR_T / 2
     z_lo, z_hi = z0 - 0.0003 - BAR_T / 2, z0 + h + 0.0003 + BAR_T / 2
     rc = 0.0014; path = []
     corners = [(n_out - rc, z_hi - rc, 0), (n_in + rc, z_hi - rc, 90), (n_in + rc, z_lo + rc, 180), (n_out - rc, z_lo + rc, 270)]
