@@ -148,6 +148,10 @@ def grid(L, n, d=HOLE_D):
 PU, OU, NU = grid(W - 2 * EDGE_P, 29)   # small holes, wide gaps (owner ref): gap ≈ 2.66 mm
 PV, OV, NV = grid(H - 2 * EDGE_T, 10)   # gap ≈ 2.60 mm
 def cols(p, o, n): return [-(n - 1) / 2 * p + i * p for i in range(n)]
+R_TOP, R_BOT = 0.0004, 0.0009   # hole radius, top row → bottom row (owner: graded, small at the top)
+SPAN_V = (NV - 1) / 2 * PV
+def hole_r(cv): return R_BOT + (R_TOP - R_BOT) * (cv + SPAN_V) / (2 * SPAN_V)
+BTN_CLEAR = 0.0085  # clears the button's gap plus the 2 + 2 holes beside it
 BTN_X = -9 * PU            # Bluetooth button on a hole column, right of the inlet seen from behind (world -X)
 
 def speaker_mask(nt):
@@ -171,11 +175,12 @@ def speaker_mask(nt):
     iu, iv = op('ROUND', op('DIVIDE', op('SUBTRACT', u, OU), PU)), op('ROUND', op('DIVIDE', op('SUBTRACT', v, OV), PV))
     cu, cv = op('ADD', op('MULTIPLY', iu, PU), OU), op('ADD', op('MULTIPLY', iv, PV), OV)
     fu, fv = op('SUBTRACT', u, cu), op('SUBTRACT', v, cv)
-    hole = op('LESS_THAN', op('ADD', op('MULTIPLY', fu, fu), op('MULTIPLY', fv, fv)), (HOLE_D / 2) ** 2)
+    rr = op('ADD', R_BOT, op('MULTIPLY', op('DIVIDE', op('ADD', cv, SPAN_V), 2 * SPAN_V), R_TOP - R_BOT))
+    hole = op('LESS_THAN', op('ADD', op('MULTIPLY', fu, fu), op('MULTIPLY', fv, fv)), op('MULTIPLY', rr, rr))
     region = op('MULTIPLY', op('LESS_THAN', op('ABSOLUTE', cu), (NU - 1) / 2 * PU + 1e-5), op('LESS_THAN', op('ABSOLUTE', cv), (NV - 1) / 2 * PV + 1e-5))
     def away(cx, rr):  # whole holes only: distance from the hole centre
         return op('GREATER_THAN', op('ADD', op('POWER', op('SUBTRACT', cu, cx), 2.0), op('POWER', cv, 2.0)), rr * rr)
-    back = op('MULTIPLY', isB, op('MULTIPLY', away(0.0, 0.0066), away(BTN_X, 0.0078)))
+    back = op('MULTIPLY', isB, op('MULTIPLY', away(0.0, 0.0066), away(BTN_X, BTN_CLEAR)))
     return op('MULTIPLY', op('MULTIPLY', hole, region), op('MAXIMUM', isX, back))
 
 def satin(name, color):
@@ -206,7 +211,7 @@ def body_toon(name, color):
     return m
 
 TABLE = SHOT == 'table'
-STUDIO = SHOT in ('table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
+STUDIO = SHOT in ('persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
     MATS = {
         'body': body_real('body', srgb('#2c2d31')),
@@ -221,7 +226,8 @@ if MODE == 'real':
                      emit('led_under', srgb(NIGHT if SHOT == 'night' else DAWN), 90.0 if SHOT == 'night' else 160.0 if SHOT == 'lit' else 70.0),
         'led_front': emit('led_front', srgb('#ffffff'), 3.0 if STUDIO else 0.0),
         'dots': emit('dots', srgb('#ffd9a0'), 7.0),
-        'band': bump_tex(principled('band', srgb('#08080a'), rough=0.78), 'wave', 260, 0.25),
+        'band': principled('band', srgb('#2a2b2f'), rough=0.62),
+        'modalu': bump_tex(principled('modalu', srgb('#2c2d31'), metal=1.0, rough=0.38), 'noise', 9000, 0.05),
         'cable': bump_tex(principled('cable', srgb('#0e0e10'), rough=0.8), 'wave', 420, 0.5),
         'plug': principled('plug', srgb('#0a0a0b'), rough=0.6),
     }
@@ -360,17 +366,18 @@ def stadium_bm(w, h, depth, seg=16):
     return bm
 
 def holes_bm(depth=0.0032, seg=16):
-    """Every speaker hole as its own cylinder (no overlaps): sides along X, back along Y, the inlet and button gaps left out."""
-    bm = bmesh.new(); r = HOLE_D / 2
-    def add(m):
+    """Every speaker hole as its own cylinder (no overlaps), graded top → bottom: sides along X, back along Y, the inlet
+    and button gaps left out."""
+    bm = bmesh.new()
+    def add(m, r):
         bmesh.ops.create_cone(bm, cap_ends=True, segments=seg, radius1=r, radius2=r, depth=depth, matrix=m)
     for u in cols(PU, OU, NU):
         for cv in cols(PV, OV, NV):
-            z = MID + cv
+            z, r = MID + cv, hole_r(cv)
             for sx in (-1, 1):
-                add(Matrix.Translation((sx * W / 2, u, z)) @ Matrix.Rotation(math.pi / 2, 4, 'Y'))
-            if u * u + cv * cv > 0.0066 ** 2 and (u - BTN_X) ** 2 + cv * cv > 0.0078 ** 2:
-                add(Matrix.Translation((u, W / 2, z)) @ Matrix.Rotation(math.pi / 2, 4, 'X'))
+                add(Matrix.Translation((sx * W / 2, u, z)) @ Matrix.Rotation(math.pi / 2, 4, 'Y'), r)
+            if u * u + cv * cv > 0.0066 ** 2 and (u - BTN_X) ** 2 + cv * cv > BTN_CLEAR ** 2:
+                add(Matrix.Translation((u, W / 2, z)) @ Matrix.Rotation(math.pi / 2, 4, 'X'), r)
     return bm
 
 def cut(ob, bm, loc, mat):
@@ -429,13 +436,35 @@ def build_bracelet_open():
     pod = rbox('pod', 0.0198, 0.036, 0.0024, 0.006, 0.0011, 'band', (0, 0, TOP + t - 0.0004), sp=12, se=3)
     return group('bracelet', [band, pod])
 
-def build_bracelet():
-    """Closed band standing, as in the owner's reference (technical drawing)."""
-    R = 0.03; pts = []
-    for k in range(12):
-        a = 2 * math.pi * k / 12; pts.append((0, R * 0.82 * math.cos(a), R * 1.12 * math.sin(a) + R * 1.12 + 0.0017))
-    band = sweep('band', pts, 'band', cyclic=True)
-    return group('bracelet', [band])
+def frame(name, sx, sy, sz, bar, mat, loc):
+    """Rectangular ring around the strap (buckle, keeper)."""
+    x, y, z = loc
+    return [rbox(f'{name}{i}', w, d, sz, 0.0, 0.0004, mat, (x + dx, y + dy, z), sp=1, se=2) for i, (w, d, dx, dy) in enumerate((
+        (sx, bar, 0, -(sy - bar) / 2), (sx, bar, 0, (sy - bar) / 2), (bar, sy, -(sx - bar) / 2, 0), (bar, sy, (sx - bar) / 2, 0)))]
+
+def build_bracelet(z0=0.0):
+    """Closed strap standing on its aluminium module: the module's back lies on the magnetic, charging top."""
+    t, ry, rz, mh = 0.0034, 0.031, 0.033, 0.0062
+    cz = z0 + mh + rz + t / 2
+    pts = [(0, ry * math.cos(2 * math.pi * k / 16), cz + rz * math.sin(2 * math.pi * k / 16)) for k in range(16)]
+    parts = [sweep('band', pts, 'band', cyclic=True),
+             rbox('module', 0.0215, 0.044, mh, 0.0045, 0.0012, 'modalu', (0, 0, z0), sp=12, se=3)]
+    def on_arc(name, objs, a, lift=0.0):
+        """Parent objects built at the origin (z = outward) to a point on the loop's outer surface at angle a."""
+        a = math.radians(a); phi = math.atan2(-rz * math.cos(a), ry * math.sin(a))
+        n = Vector((0, -math.sin(phi), math.cos(phi)))
+        p = Vector((0, (ry + t / 2) * math.cos(a), cz + (rz + t / 2) * math.sin(a))) + n * lift
+        e = bpy.data.objects.new(name, None); col.objects.link(e); e.location = p; e.rotation_euler = (phi, 0, 0)
+        for o in objs: o.parent = e
+        return e
+    # tail: a second layer of strap over the top arc, through the keeper and into the buckle
+    tail = [(0, (ry + t) * math.cos(math.radians(a)), cz + (rz + t) * math.sin(math.radians(a))) for a in range(58, 106, 4)]
+    parts.append(sweep('tail', tail, 'band'))
+    parts.append(on_arc('buckle', frame('bk', 0.0235, 0.0095, 0.0042, 0.0016, 'modalu', (0, 0, -0.0016)), 106))
+    parts.append(on_arc('keeper', frame('kp', 0.0232, 0.0055, 0.0072, 0.0013, 'band', (0, 0, -0.0018)), 66))
+    for k, a in enumerate((76, 84, 92)):
+        parts.append(on_arc(f'hole{k}', [rbox(f'h{k}', 0.0058, 0.0032, 0.0005, 0.0011, 0.0, 'cavity', (0, 0, 0), sp=6)], a, lift=t * 1.5))
+    return group('bracelet', parts)
 
 def build_cable():
     """USB-C power adapter (EU pins) and braided USB-C cable."""
@@ -555,12 +584,13 @@ def studio(view):
         build_cable(); fw, tgt, pos = 0.34, (0.115, 0, 0.016), (0.115, -1, 0.016)
     elif view == 'band':
         build_bracelet(); fw, tgt, pos = 0.17, (0, 0, 0.035), (0.6, -0.9, 0.35)
-    elif view in ('persp', 'lit', 'persp_back'):
+    elif view in ('persp', 'lit', 'persp_back', 'persp_band'):
         build_base(with_time=(view == 'lit')); fw, tgt = W / 0.55, (0, 0, TOP * 0.42)
+        if view == 'persp_band': build_bracelet(TOP).rotation_euler = (0, 0, math.radians(-50)); fw, tgt = W / 0.42, (0, 0, TOP + 0.012)
         pos = (-0.62, 0.95, 0.24) if view == 'persp_back' else (0.62, -0.95, 0.24)
     else:
         build_base()
-        if view == 'top': build_bracelet_open().rotation_euler = (0, 0, math.pi / 2)
+        if view == 'top': build_bracelet(TOP)
         if view in ('front', 'back'):
             fw = W / 0.62; tgt = (0, 0, TOP * 0.5); pos = (0, -1 if view == 'front' else 1, TOP * 0.42)
         else:
@@ -576,7 +606,7 @@ def studio(view):
     area('left', (-0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('right', (0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('cam', tuple(Vector(cam.location) * 0.9 + Vector((0, 0, 0.3))), tgt, 1.2, 25)
-    if view in ('persp', 'lit', 'band', 'persp_back'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 40)
+    if view in ('persp', 'lit', 'band', 'persp_back', 'persp_band'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 40)
     if view in ('persp', 'lit'):
         area('topback', (-0.1, 0.9, 0.9), (0, 0, 0.03), 1.6, 45)
         area('sidestrip', (1.0, 0.45, 0.25), (0, 0, 0.02), 0.5, 30)
