@@ -332,7 +332,8 @@ def strip_mat(state):
     return m
 
 if MODE == 'real' and SHOT == 'led':
-    MATS['led_front'] = emit('led_front', srgb(LIGHT_COL[STATE]), 9.0) if STATE in LIGHT_COL else principled('led_front', srgb('#0b0b0c'), rough=0.08)
+    LED_SAT = {'white': '#fff6ea', 'night': '#5f6dff', 'dawn': '#ffa938'}   # saturated: the state must read at a glance
+    MATS['led_front'] = emit('led_front', srgb(LED_SAT[STATE]), 1.4 if STATE != 'white' else 6.0) if STATE in LED_SAT else principled('led_front', srgb('#0b0b0c'), rough=0.08)
 if MODE == 'real' and SHOT == 'strip':
     MATS['led_under'] = strip_mat(STATE)
     MATS['led_front'] = principled('led_front', srgb('#0b0b0c'), rough=0.08)   # only the strip speaks
