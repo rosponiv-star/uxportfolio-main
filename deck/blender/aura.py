@@ -227,11 +227,14 @@ def fabric(name, color):
     nt.links.new(weave, bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
     return m
 
-def loop_fabric(name, base, edge):
-    """Ribbed woven strap: ribs across the width, a fine knit, the two edges in the accent colour."""
-    m = principled(name, base, rough=0.88); nt = m.node_tree; b = nt.nodes['Principled BSDF']
+def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0018, p=0.00042):
+    """Woven strap, thread by thread: a 2/1 twill (diagonal), warp threads graphite, weft threads melange light grey,
+    each thread rounded in the bump, fibre fuzz, the two edges woven in orange. Coordinates: u along the strap
+    (angle x R), v across it (z)."""
+    m = principled(name, dark, rough=0.9); nt = m.node_tree; b = nt.nodes['Principled BSDF']
     for k in ('Sheen Weight', 'Sheen'):
-        if k in b.inputs: b.inputs[k].default_value = 0.3; break
+        if k in b.inputs: b.inputs[k].default_value = 0.45; break
+    if 'Sheen Roughness' in b.inputs: b.inputs['Sheen Roughness'].default_value = 0.35
     tc = nt.nodes.new('ShaderNodeTexCoord'); P = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], P.inputs[0])
     def op(o, a, c=None):
         n = nt.nodes.new('ShaderNodeMath'); n.operation = o
@@ -240,18 +243,40 @@ def loop_fabric(name, base, edge):
             if isinstance(x, (int, float)): n.inputs[i].default_value = x
             else: nt.links.new(x, n.inputs[i])
         return n.outputs[0]
-    z = P.outputs[2]
-    edge_m = op('MAXIMUM', op('LESS_THAN', z, 0.0031), op('GREATER_THAN', z, 0.0202))
-    mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'; mix.inputs[6].default_value = base; mix.inputs[7].default_value = edge
-    nt.links.new(edge_m, mix.inputs['Factor']); nt.links.new(mix.outputs[2], b.inputs['Base Color'])
-    ribs = op('ABSOLUTE', op('SINE', op('MULTIPLY', op('ARCTAN2', P.outputs[1], P.outputs[0]), 62.0)))
-    knit = op('MULTIPLY', op('SINE', op('MULTIPLY', z, 9000.0)), 0.04)
-    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.7; bp.inputs['Distance'].default_value = 0.0005
-    nt.links.new(op('ADD', op('POWER', ribs, 0.5), knit), bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
+    u = op('MULTIPLY', op('ARCTAN2', P.outputs[1], P.outputs[0]), R)
+    v = P.outputs[2]
+    fu, fv = op('DIVIDE', u, p), op('DIVIDE', v, p)
+    iu, iv = op('FLOOR', fu), op('FLOOR', fv)
+    tw = op('FLOORED_MODULO', op('SUBTRACT', iu, iv), 3.0)
+    weft = op('LESS_THAN', tw, 0.5)                       # weft on top in one cell of three, shifted each row: twill
+    ru = op('SINE', op('MULTIPLY', op('FRACT', fu), math.pi))   # thread section, rounded
+    rv = op('SINE', op('MULTIPLY', op('FRACT', fv), math.pi))
+    height = op('ADD', op('MULTIPLY', weft, rv), op('MULTIPLY', op('SUBTRACT', 1.0, weft), ru))
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 9000.0; nz.inputs['Detail'].default_value = 6
+    nt.links.new(tc.outputs['Object'], nz.inputs['Vector'])
+    h2 = op('ADD', op('POWER', height, 0.6), op('MULTIPLY', nz.outputs['Fac'], 0.25))
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.85; bp.inputs['Distance'].default_value = 0.00025
+    nt.links.new(h2, bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
+    # colour: melange weft (light grey with fibre variation) over graphite warp; orange threads on both edges
+    mel = nt.nodes.new('ShaderNodeMix'); mel.data_type = 'RGBA'; mel.inputs[6].default_value = light
+    mel.inputs[7].default_value = tuple(c * 0.55 for c in light[:3]) + (1,)
+    cell = nt.nodes.new('ShaderNodeCombineXYZ'); nt.links.new(iu, cell.inputs[0]); nt.links.new(iv, cell.inputs[1])
+    vn = nt.nodes.new('ShaderNodeTexWhiteNoise'); vn.noise_dimensions = '3D'; nt.links.new(cell.outputs[0], vn.inputs['Vector'])
+    nt.links.new(op('ADD', op('MULTIPLY', vn.outputs['Value'], 0.7), op('MULTIPLY', nz.outputs['Fac'], 0.3)), mel.inputs['Factor'])
+    col_ = nt.nodes.new('ShaderNodeMix'); col_.data_type = 'RGBA'; col_.inputs[6].default_value = dark
+    nt.links.new(op('MULTIPLY', weft, 0.85), col_.inputs['Factor']); nt.links.new(mel.outputs[2], col_.inputs[7])
+    edge_m = op('MAXIMUM', op('LESS_THAN', v, lift + 0.0015), op('GREATER_THAN', v, lift + h - 0.0015))
+    fin = nt.nodes.new('ShaderNodeMix'); fin.data_type = 'RGBA'; fin.inputs[7].default_value = edge
+    nt.links.new(col_.outputs[2], fin.inputs[6]); nt.links.new(edge_m, fin.inputs['Factor'])
+    shade_ = nt.nodes.new('ShaderNodeMix'); shade_.data_type = 'RGBA'; shade_.blend_type = 'MULTIPLY'; shade_.inputs['Factor'].default_value = 1.0
+    nt.links.new(fin.outputs[2], shade_.inputs[6])
+    sh = nt.nodes.new('ShaderNodeCombineColor'); g = op('ADD', 0.7, op('MULTIPLY', height, 0.3))
+    for k in range(3): nt.links.new(g, sh.inputs[k])
+    nt.links.new(sh.outputs[0], shade_.inputs[7]); nt.links.new(shade_.outputs[2], b.inputs['Base Color'])
     return m
 
 TABLE = SHOT == 'table'
-STUDIO = SHOT in ('persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
+STUDIO = SHOT in ('foot', 'persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
     MATS = {
         'body': body_real('body', srgb('#2c2d31')),
@@ -268,7 +293,7 @@ if MODE == 'real':
         'dots': emit('dots', srgb('#ffd9a0'), 7.0),
         'band': principled('band', srgb('#2a2b2f'), rough=0.62),
         'fabric': fabric('fabric', srgb('#1c1d20')),
-        'loop': loop_fabric('loop', srgb('#26272b'), srgb('#e2622a')),
+        'loop': loop_fabric('loop', srgb('#2a2b2f'), srgb('#76746f'), srgb('#d9592a')),
         'modalu': bump_tex(principled('modalu', srgb('#2c2d31'), metal=1.0, rough=0.38), 'noise', 9000, 0.05),
         'cable': bump_tex(principled('cable', srgb('#0e0e10'), rough=0.8), 'wave', 420, 0.5),
         'plug': principled('plug', srgb('#0a0a0b'), rough=0.6),
@@ -509,17 +534,29 @@ def strap_ring(name, R, h, t, z, flat=None, arc=None, n=240, cr=0.0009):
         for ring in (rings[0], rings[-1]): bm.faces.new(ring if ring is rings[-1] else list(reversed(ring)))
     return link(name, bm, 'loop')
 
-def build_bracelet(z0=0.0, R=0.031, h=0.020, t=0.0026, lift=0.0015):
-    """Woven loop strap (owner refs: Sport Loop, graphite with orange edges), closed, lying on its edge as a ring. The
-    sensor pod hides inside the strap and protrudes 1.5 mm below its edge: that small flat face is the magnetic,
-    charging contact on the alarm's top. The strap flattens against the pod; graphite aluminium loop + tail opposite."""
-    ap, D = math.radians(-60), R * 0.84
-    parts = [strap_ring('strap', R, h, t, lift, flat=(ap, D))]
+def foot_bm(R, t, a0, a1, hgt, flare, spread=0.045, n=48):
+    """Charging foot under the strap's lower edge: flush with the inside (nothing touches the wrist), widening slightly
+    outward and along the strap as it goes down, to a flat contact face."""
+    bm = bmesh.new(); rings = []
+    for i in range(n + 1):
+        k = i / n; at = a0 + (a1 - a0) * k; ab = a0 - spread + (a1 - a0 + 2 * spread) * k
+        P = lambda a, r, z: bm.verts.new((r * math.cos(a), r * math.sin(a), z))
+        rings.append([P(at, R - t, hgt), P(at, R, hgt), P(ab, R + flare, 0.0), P(ab, R - t, 0.0)])
+    for i in range(n):
+        A, B = rings[i], rings[i + 1]
+        for q in range(4): bm.faces.new((A[q], A[(q + 1) % 4], B[(q + 1) % 4], B[q]))
+    bm.faces.new(list(reversed(rings[0]))); bm.faces.new(rings[-1])
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    return bm
+
+def build_bracelet(z0=0.0, R=0.031, h=0.020, t=0.0034, lift=0.0018):
+    """Woven loop strap (owner refs: Sport Loop), graphite melange with orange edges, closed, resting on its edge. The
+    sensor pod is woven into the strap (no bump inside); only its charging foot shows, under the lower edge."""
+    ap = math.radians(-60)
+    parts = [strap_ring('strap', R, h, t, lift)]
     ad = ap + math.pi
-    parts.append(strap_ring('tail', R + t, h, t, lift, arc=(ad - 0.05, ad + 1.25)))
-    pod = rbox('pod', 0.0056, 0.031, h + lift - 0.0004, 0.0018, 0.0008, 'modalu', (0, 0, 0), sp=6, se=2)
-    pod.location = ((D - t - 0.0029) * math.cos(ap), (D - t - 0.0029) * math.sin(ap), 0); pod.rotation_euler = (0, 0, ap)
-    parts.append(pod)
+    parts.append(strap_ring('tail', R + t, h, t * 0.8, lift, arc=(ad - 0.05, ad + 1.25)))
+    parts.append(link('foot', foot_bm(R, t, ap - 0.36, ap + 0.36, lift, 0.0007), 'modalu'))
     lp = frame('dring', 0.0074 + 2 * t, h + 0.0034, 0.0032, 0.0014, 'modalu', (0, 0, 0))
     e = bpy.data.objects.new('dring', None); col.objects.link(e)
     e.location = ((R + t / 2) * math.cos(ad), (R + t / 2) * math.sin(ad), lift + h / 2); e.rotation_euler = (math.pi / 2, 0, ad + math.pi / 2)
@@ -644,6 +681,9 @@ def studio(view):
     lens = 135
     if view == 'cable':
         build_cable(); fw, tgt, pos = 0.34, (0.115, 0, 0.016), (0.115, -1, 0.016)
+    elif view == 'foot':
+        build_bracelet(); a = math.radians(-60); fw = 0.045
+        tgt = (0.031 * math.cos(a), 0.031 * math.sin(a), 0.004); pos = (0.031 * math.cos(a) * 3.2, 0.031 * math.sin(a) * 3.2, 0.03)
     elif view == 'band':
         build_bracelet(); fw, tgt, pos = 0.13, (0, 0, 0.011), (0.6, -0.9, 0.55)
     elif view in ('persp', 'lit', 'persp_back', 'persp_band'):
@@ -668,7 +708,7 @@ def studio(view):
     area('left', (-0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('right', (0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('cam', tuple(Vector(cam.location) * 0.9 + Vector((0, 0, 0.3))), tgt, 1.2, 25)
-    if view in ('persp', 'lit', 'band', 'persp_back', 'persp_band'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 40)
+    if view in ('persp', 'lit', 'band', 'persp_back', 'persp_band', 'foot'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 40)
     if view in ('persp', 'lit'):
         area('topback', (-0.1, 0.9, 0.9), (0, 0, 0.03), 1.6, 45)
         area('sidestrip', (1.0, 0.45, 0.25), (0, 0, 0.02), 0.5, 30)
