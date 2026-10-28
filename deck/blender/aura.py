@@ -554,7 +554,7 @@ def studio(view):
     if view == 'cable':
         build_cable(); fw, tgt, pos = 0.34, (0.115, 0, 0.016), (0.115, -1, 0.016)
     elif view == 'band':
-        build_bracelet(); fw, tgt, pos = 0.12, (0, 0, 0.035), (0.6, -0.9, 0.35)
+        build_bracelet(); fw, tgt, pos = 0.17, (0, 0, 0.035), (0.6, -0.9, 0.35)
     elif view in ('persp', 'lit', 'persp_back'):
         build_base(with_time=(view == 'lit')); fw, tgt = W / 0.55, (0, 0, TOP * 0.42)
         pos = (-0.62, 0.95, 0.24) if view == 'persp_back' else (0.62, -0.95, 0.24)
@@ -566,6 +566,12 @@ def studio(view):
         else:
             fw = (W / 0.80) * 16 / 9; tgt = (0, 0, TOP / 2); pos = (0, 0.0001, 1 if view == 'top' else -1)
     d = fw * lens / 36; v = Vector(pos) - Vector(tgt); v.normalize(); cam = look(tuple(Vector(tgt) + v * d), tgt, lens)
+    if PLASTIC:  # floating views with the table shot's light: dim world, soft key top-left, faint fill
+        world(srgb('#f2f2f0'), 0.25); soft_light()
+        # the table's bounce, without the table: soft light from below the front, invisible to the camera
+        area('fill2', (0.4, -0.7, 0.35), tgt, 1.5, 14).visible_camera = False
+        area('bounce', (0.1, -0.5, -0.45), tgt, 2.0, 30).visible_camera = False
+        return
     area('key', (0, -0.5, 1.2), (0, 0, 0.02), 1.6, 110)
     area('left', (-0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('right', (0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
@@ -576,6 +582,10 @@ def studio(view):
         area('sidestrip', (1.0, 0.45, 0.25), (0, 0, 0.02), 0.5, 30)
     if view == 'persp_back': area('backkey', (0.2, 0.9, 0.6), (0, 0, 0.02), 1.4, 120)
     if view in ('back', 'bottom'): area('cam2', tuple(Vector(cam.location) * 0.9), tgt, 1.2, 40)
+
+def soft_light():
+    area('key', (-0.45, 0.3, 0.8), (0, 0, 0), 0.6, 75)
+    area('fill', (0.8, -0.6, 0.5), (0, 0, 0), 1.5, 6)
 
 def table_scene():
     build_base()
@@ -592,8 +602,7 @@ def table_scene():
     lp = nt.nodes.new('ShaderNodeLightPath'); mx = nt.nodes.new('ShaderNodeMixShader'); out = nt.nodes['World Output']
     nt.links.new(lp.outputs['Is Camera Ray'], mx.inputs[0]); nt.links.new(bg.outputs[0], mx.inputs[1]); nt.links.new(sky.outputs[0], mx.inputs[2])
     nt.links.new(mx.outputs[0], out.inputs[0])
-    area('key', (-0.45, 0.3, 0.8), (0, 0, 0), 0.6, 75)
-    area('fill', (0.8, -0.6, 0.5), (0, 0, 0), 1.5, 6)
+    soft_light()
     look((0.36, -0.45, 0.40), (0.0, 0.04, 0.0), 55, 8.0)
     scene.view_settings.exposure = -0.8
 
@@ -605,7 +614,7 @@ def real():
         table_scene()
     elif STUDIO:
         studio(SHOT)
-        if PLASTIC: scene.view_settings.exposure = -2.6  # matte plastic takes far more of the studio light than metal
+        if PLASTIC: scene.view_settings.exposure = -0.8
     else:
         build_base(with_time=(SHOT == 'dawn'))
         MATS['wood'] = wood()
