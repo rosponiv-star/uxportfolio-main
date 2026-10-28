@@ -278,7 +278,7 @@ def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.0004
     return m
 
 TABLE = SHOT == 'table'
-STUDIO = SHOT in ('pod_side', 'foot', 'persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
+STUDIO = SHOT in ('pod_in', 'pod_side', 'foot', 'persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
     MATS = {
         'body': body_real('body', srgb('#2c2d31')),
@@ -295,16 +295,17 @@ if MODE == 'real':
         'dots': emit('dots', srgb('#ffd9a0'), 7.0),
         'band': principled('band', srgb('#2a2b2f'), rough=0.62),
         'fabric': fabric('fabric', srgb('#1c1d20')),
-        'loop': loop_fabric('loop', srgb('#3f7cc6'), srgb('#b3cfee'), srgb('#3f7cc6')),
+        'loop': loop_fabric('loop', srgb('#3f7cc6'), srgb('#b3cfee'), srgb('#2f66ad')),
+        'lens': principled('lens', srgb('#050506'), rough=0.06, coat=0.0),
         'steel': bump_tex(principled('steel', srgb('#1c1d20'), metal=1.0, rough=0.36), 'noise', 9000, 0.04),
-        'modalu': bump_tex(principled('modalu', srgb('#2c2d31'), metal=1.0, rough=0.38), 'noise', 9000, 0.05),
+        'modalu': bump_tex(principled('modalu', srgb('#4a4b50'), metal=1.0, rough=0.34), 'noise', 9000, 0.05),
         'cable': bump_tex(principled('cable', srgb('#0e0e10'), rough=0.8), 'wave', 420, 0.5),
         'plug': principled('plug', srgb('#0a0a0b'), rough=0.6),
     }
 else:
     T = {'alu': 0.86, 'grille': 0.42, 'rubber': 0.3, 'print': 0.4, 'pin': 0.75, 'band': 0.5, 'cable': 0.25, 'dots': 0.28,
          'led_front': 0.25, 'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98,
-         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3}
+         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3}
     MATS = {k: toon(k, grey(v)) for k, v in T.items()}
     MATS['body'] = body_toon('body', grey(0.86))
     MATS['shell'] = toon('shell', grey(0.86))
@@ -517,7 +518,7 @@ def frame(name, sx, sy, sz, bar, mat, loc):
 # its tail runs back on the outside over the pod, closing with hook-and-loop. The pod sits in the pocket between the
 # two layers, right next to the loop; its lower end leaves the strip as the flat charging foot.
 STRAP_A, STRAP_B, STRAP_XF = 0.033, 0.027, 0.0225   # oval half-axes (y, x) and the straight side where the pod is
-STRAP_T, STRAP_H, STRAP_LIFT = 0.0014, 0.019, 0.0016
+STRAP_T, STRAP_H, STRAP_LIFT = 0.0012, 0.019, 0.0016
 LOOP_TH = math.radians(42)                          # steel loop: just past the straight side
 POD_HALF = math.radians(33.5)                       # the straight side = the pod (≈37 mm)
 AP = math.radians(-30)                              # where the pod faces once the bracelet is turned for the views
@@ -526,77 +527,112 @@ def strap_e(th):
     """Centre line of the inner layer: an oval, clipped straight on +x (the pod side)."""
     return Vector((min(STRAP_B * math.cos(th), STRAP_XF), STRAP_A * math.sin(th)))
 
-def pod_th(z):
-    """Pod thickness: a wedge, thick at the bottom (charging end) and thin at the top."""
-    zn = (z - STRAP_LIFT) / STRAP_H
-    return 0.0017 * (1 - zn) + 0.0005 * zn
+POD_T, POD_LEN = 0.0016, 0.034                      # sensor pod: slim graphite plate on the inner side
+BAR_T, BAR_W = 0.0011, 0.0040                       # steel loop: a flat metal ribbon
+OV = 0.07                                           # the strip runs this far past the loop before folding
+
+def strap_n(th):
+    """Outward unit normal of the oval at angle th."""
+    a, b = strap_e(th - 1e-3), strap_e(th + 1e-3); T = (b - a).normalized(); N = Vector((T.y, -T.x))
+    return N if N.dot(strap_e(th)) >= 0 else -N
+
+def arrive_off(th):
+    """The returning strip rides over the strip's own start as it nears the loop (offset 0 → t)."""
+    t = STRAP_T; d = th - LOOP_TH
+    if d <= 0: return t
+    k = max(0.0, 1 - d / 0.45); return t * k * k * (3 - 2 * k)
 
 def strap_path():
-    t = STRAP_T; pts = []                     # (point, layer) layer 0 = inner, 1 = tail over the pod
-    n = 360
-    for k in range(n + 1):                    # inner layer: from the loop all the way round and back through it
-        th = LOOP_TH - 0.02 + (2 * math.pi + 0.07) * k / n; pts.append((strap_e(th), 0, th))
-    thF = LOOP_TH + 0.05; P0 = strap_e(thF)
-    T = (strap_e(thF + 1e-3) - strap_e(thF - 1e-3)).normalized(); N = Vector((T.y, -T.x))
-    if N.dot(P0) < 0: N = -N
-    for k in range(1, 12):                    # the fold, just past the loop
-        ph = math.pi * k / 12; pts.append((P0 + N * (t / 2) - N * (t / 2) * math.cos(ph) + T * (t * 0.9) * math.sin(ph), 2, thF))
-    m = 120
-    for k in range(m + 1):                    # tail: back along the outside, over the pod
-        th = thF - math.radians(118) * k / m; pts.append((strap_e(th), 1, th))
+    """(point, angle) along the strip centre line: start at the loop (its inner bar wrapped inside), past the pod, once
+    round the wrist, back over its own start, through the loop, a fold over the loop's outer bar, and the tail running
+    back on the outside: the hook-and-loop closure sits on the side opposite the sensors."""
+    t = STRAP_T; pts = []; n = 420
+    for k in range(n + 1):
+        th = LOOP_TH + 0.065 - (2 * math.pi + OV + 0.065) * k / n   # starts past the inner bar, which it wraps
+        off = arrive_off(th + 2 * math.pi) if k > n * 0.5 else 0.0
+        pts.append(strap_e(th) + strap_n(th) * off)
+    thF = LOOP_TH - OV; P0 = strap_e(thF) + strap_n(thF) * t; No = strap_n(thF)
+    Tm = (strap_e(thF - 1e-3) - strap_e(thF + 1e-3)).normalized()       # direction of travel (decreasing angle)
+    r = t / 2                                             # tight fold: the tail lies right on the strip, under the loop's outer bar
+    for k in range(1, 16):
+        ph = math.pi * k / 16
+        pts.append(P0 + No * (r - r * math.cos(ph)) + Tm * (r * 1.1) * math.sin(ph))
+    m = 160
+    for k in range(m + 1):
+        th = thF + (OV + math.radians(150)) * k / m
+        pts.append(strap_e(th) + strap_n(th) * (arrive_off(th) + 2 * r))
     return pts
 
 def build_strip():
+    """The strip as one swept solid; its section has a flat body and corded (piped) edges."""
     t, h, z0 = STRAP_T, STRAP_H, STRAP_LIFT
+    rp = 0.00085; phi0 = math.acos(min(1.0, (t / 2) / rp))
+    prof = []                                             # (offset across the thickness, z)
+    for k in range(10):                                    # top cord
+        a = -phi0 + (math.pi + 2 * phi0) * k / 9; prof.append((rp * math.cos(a), z0 + h - rp + rp * math.sin(a)))
+    for k in range(10):                                    # bottom cord
+        a = math.pi - phi0 + (math.pi + 2 * phi0) * k / 9; prof.append((rp * math.cos(a), z0 + rp + rp * math.sin(a)))
     path = strap_path(); bm = bmesh.new(); secs = []
-    for i, (p, layer, th) in enumerate(path):
-        a = path[max(i - 1, 0)][0]; b = path[min(i + 1, len(path) - 1)][0]
-        T = (b - a).normalized(); N = Vector((T.y, -T.x))          # continuous along the path: orients the section
-        No = N if N.dot(p) >= 0 else -N                              # outward: for the tail's offsets
-        sec = []
-        for k in range(16):                   # rolled edges: half-round top and bottom
-            q = math.pi * k / 7 if k < 8 else math.pi + math.pi * (k - 8) / 7
-            zc = z0 + h - t / 2 if k < 8 else z0 + t / 2
-            z = zc + (t / 2) * math.sin(q) * (1 if k < 8 else 1)
-            off = (t / 2) * math.cos(q); extra = 0.0
-            if layer == 1:
-                extra = t
-                if abs(th) < POD_HALF:                 # tail over the pod: lifted by the pod's wedge
-                    w = 0.5 * (1 + math.cos(math.pi * th / POD_HALF))
-                    extra += pod_th(z) * min(1.0, w * 2.2)
-            v = p + N * off + No * extra; sec.append(bm.verts.new((v.x, v.y, z)))
-        secs.append(sec)
+    for i, pnt in enumerate(path):
+        a = path[max(i - 1, 0)]; b = path[min(i + 1, len(path) - 1)]
+        T = (b - a).normalized(); N = Vector((T.y, -T.x))
+        secs.append([bm.verts.new((pnt.x + N.x * o, pnt.y + N.y * o, z)) for o, z in prof])
+    k = len(prof)
     for i in range(len(secs) - 1):
         A, B = secs[i], secs[i + 1]
-        for k in range(16): bm.faces.new((A[k], A[(k + 1) % 16], B[(k + 1) % 16], B[k]))
+        for q in range(k): bm.faces.new((A[q], A[(q + 1) % k], B[(q + 1) % k], B[q]))
     bm.faces.new(list(reversed(secs[0]))); bm.faces.new(secs[-1])
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     return link('strip', bm, 'loop')
 
-def build_pod_foot():
-    """The pod's charging end: under the strip's lower edge, between the two layers, flaring slightly to a flat face."""
-    t = STRAP_T; y0 = STRAP_A * math.sin(POD_HALF) * 0.92
-    x_in, th_b = STRAP_XF + t / 2, pod_th(STRAP_LIFT)
-    bm = bmesh.new()
-    top = [(x_in, -y0, STRAP_LIFT), (x_in + th_b, -y0, STRAP_LIFT), (x_in + th_b, y0, STRAP_LIFT), (x_in, y0, STRAP_LIFT)]
-    bot = [(x_in, -y0 - 0.001, 0), (x_in + th_b + 0.0006, -y0 - 0.001, 0), (x_in + th_b + 0.0006, y0 + 0.001, 0), (x_in, y0 + 0.001, 0)]
-    vt = [bm.verts.new(v) for v in top]; vb = [bm.verts.new(v) for v in bot]
-    bm.faces.new(vt); bm.faces.new(list(reversed(vb)))
-    for k in range(4): bm.faces.new((vt[k], vb[k], vb[(k + 1) % 4], vt[(k + 1) % 4]))
+def build_pod():
+    """Slim graphite pod on the inner side of the straight stretch, next to the loop: soft-cornered, a dark sensor
+    window on the wrist face; its lower edge leaves the strip and is the flat charging face."""
+    t = STRAP_T; x_out = STRAP_XF - t / 2
+    hgt = STRAP_LIFT + STRAP_H - 0.0012
+    pod = rbox('pod', POD_LEN, hgt, POD_T, 0.0042, 0.0007, 'modalu', sp=10, se=4)
+    pod.rotation_euler = (math.pi / 2, 0, math.pi / 2)
+    pod.location = (x_out - POD_T, 0.0005, hgt / 2)
+    lens = rbox('lens', 0.011, 0.0065, 0.0003, 0.0028, 0.0001, 'lens', sp=8, se=1)
+    lens.rotation_euler = (math.pi / 2, 0, -math.pi / 2)
+    lens.location = (x_out - POD_T - 0.00002, 0.0005, STRAP_LIFT + STRAP_H * 0.5)
+    return [pod, lens]
+
+def build_loop():
+    """Steel loop as a flat metal ribbon bent into a soft rectangle around the strip layers; its inner bar is wrapped
+    inside the strip's start, so only the outer bar and the two arms show."""
+    t, h, z0 = STRAP_T, STRAP_H, STRAP_LIFT
+    c2 = strap_e(LOOP_TH); N2 = strap_n(LOOP_TH); T2 = Vector((-N2.y, N2.x))
+    n_in, n_out = 0.0, 2.5 * t + 0.0004 + BAR_T / 2
+    z_lo, z_hi = z0 - 0.0003 - BAR_T / 2, z0 + h + 0.0003 + BAR_T / 2
+    rc = 0.0014; path = []
+    corners = [(n_out - rc, z_hi - rc, 0), (n_in + rc, z_hi - rc, 90), (n_in + rc, z_lo + rc, 180), (n_out - rc, z_lo + rc, 270)]
+    for cx, cz, a0 in corners:
+        for k in range(9):
+            a = math.radians(a0 + 90 * k / 8); path.append((cx + rc * math.cos(a), cz + rc * math.sin(a)))
+    sec = []; cr = 0.00035
+    for qx, qy, a0 in ((BAR_W / 2 - cr, BAR_T / 2 - cr, 0), (-BAR_W / 2 + cr, BAR_T / 2 - cr, 90), (-BAR_W / 2 + cr, -BAR_T / 2 + cr, 180), (BAR_W / 2 - cr, -BAR_T / 2 + cr, 270)):
+        for k in range(4):
+            a = math.radians(a0 + 90 * k / 3); sec.append((qx + cr * math.cos(a), qy + cr * math.sin(a)))
+    bm = bmesh.new(); rings = []; L = len(path)
+    for i, (nn, zz) in enumerate(path):
+        a = path[(i - 1) % L]; b = path[(i + 1) % L]
+        dn, dz = b[0] - a[0], b[1] - a[1]; ln = math.hypot(dn, dz); dn, dz = dn / ln, dz / ln
+        pn, pz = -dz, dn                                      # in-plane normal of the ribbon's path
+        ring = []
+        for sw, sq in sec:
+            v2 = c2 + N2 * (nn + pn * sq) + T2 * sw
+            ring.append(bm.verts.new((v2.x, v2.y, zz + pz * sq)))
+        rings.append(ring)
+    k = len(sec)
+    for i in range(L):
+        A, B = rings[i], rings[(i + 1) % L]
+        for q in range(k): bm.faces.new((A[q], A[(q + 1) % k], B[(q + 1) % k], B[q]))
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    return link('foot', bm, 'steel', smooth=False)
+    return link('steelloop', bm, 'steel')
 
 def build_bracelet(z0=0.0):
-    t, h = STRAP_T, STRAP_H
-    parts = [build_strip(), build_pod_foot()]
-    p = strap_e(LOOP_TH); T = (strap_e(LOOP_TH + 1e-3) - strap_e(LOOP_TH - 1e-3)).normalized(); N = Vector((T.y, -T.x))
-    if N.dot(p) < 0: N = -N
-    bar = 0.0015; c = p + N * (t / 2)
-    lp = frame('loopbar', 2 * t + 0.0009 + 2 * bar, h + 0.0012 + 2 * bar, 0.0024, bar, 'steel', (0, 0, -0.0012))
-    e = bpy.data.objects.new('steelloop', None); col.objects.link(e)
-    e.location = (c.x, c.y, STRAP_LIFT + h / 2); e.rotation_euler = (math.pi / 2, 0, math.atan2(N.y, N.x))
-    for o in lp: o.parent = e
-    parts.append(e)
+    parts = [build_strip(), build_loop()] + build_pod()
     g = group('bracelet', parts); g.location.z = z0; g.rotation_euler = (0, 0, AP)
     return g
 
@@ -719,6 +755,10 @@ def studio(view):
     elif view == 'foot':
         build_bracelet(); a = AP; fw = 0.055
         tgt = (0.024 * math.cos(a), 0.024 * math.sin(a), 0.006); pos = (0.024 * math.cos(a) * 4.2, 0.024 * math.sin(a) * 4.2, 0.035)
+    elif view == 'pod_in':
+        build_bracelet(); a = AP; fw = 0.06
+        c = Vector((0.02 * math.cos(a), 0.02 * math.sin(a), 0.011))
+        tgt = tuple(c); pos = tuple(c - Vector((math.cos(a), math.sin(a), 0)) * 0.16 + Vector((0, 0, 0.09)))
     elif view == 'pod_side':
         build_bracelet(); a = AP; fw = 0.06
         c = Vector((0.024 * math.cos(a), 0.024 * math.sin(a), 0.011)); tg = Vector((-math.sin(a), math.cos(a), 0))
@@ -747,7 +787,7 @@ def studio(view):
     area('left', (-0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('right', (0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('cam', tuple(Vector(cam.location) * 0.9 + Vector((0, 0, 0.3))), tgt, 1.2, 25)
-    if view in ('persp', 'lit', 'band', 'persp_back', 'persp_band', 'foot', 'pod_side'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 40)
+    if view in ('persp', 'lit', 'band', 'persp_back', 'persp_band', 'foot', 'pod_side', 'pod_in'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 40)
     if view in ('persp', 'lit'):
         area('topback', (-0.1, 0.9, 0.9), (0, 0, 0.03), 1.6, 45)
         area('sidestrip', (1.0, 0.45, 0.25), (0, 0, 0.02), 0.5, 30)
