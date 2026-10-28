@@ -227,7 +227,7 @@ def fabric(name, color):
     nt.links.new(weave, bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
     return m
 
-def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.0006):
+def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.00042):
     """Woven strap, thread by thread: a 2/1 twill (diagonal), warp threads graphite, weft threads melange light grey,
     each thread rounded in the bump, fibre fuzz, the two edges woven in orange. Coordinates: u along the strap
     (angle x R), v across it (z)."""
@@ -248,7 +248,7 @@ def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.0006
     fu, fv = op('DIVIDE', u, p), op('DIVIDE', v, p)
     iu, iv = op('FLOOR', fu), op('FLOOR', fv)
     sgn = op('SUBTRACT', op('MULTIPLY', op('FLOORED_MODULO', op('FLOOR', op('DIVIDE', iu, 6.0)), 2.0), 2.0), 1.0)
-    tw = op('FLOORED_MODULO', op('ADD', iu, op('MULTIPLY', sgn, iv)), 3.0)   # herringbone twill
+    tw = op('FLOORED_MODULO', op('SUBTRACT', iu, iv), 3.0)   # plain 2/1 twill, fine diagonal (owner refs)
     weft = op('LESS_THAN', tw, 0.5)                       # weft on top in one cell of three, shifted each row: twill
     ru = op('SINE', op('MULTIPLY', op('FRACT', fu), math.pi))   # thread section, rounded
     rv = op('SINE', op('MULTIPLY', op('FRACT', fv), math.pi))
@@ -509,75 +509,95 @@ def build_bracelet_open():
 def frame(name, sx, sy, sz, bar, mat, loc):
     """Rectangular ring around the strap (buckle, keeper)."""
     x, y, z = loc
-    return [rbox(f'{name}{i}', w, d, sz, 0.0, 0.0004, mat, (x + dx, y + dy, z), sp=1, se=2) for i, (w, d, dx, dy) in enumerate((
+    return [rbox(f'{name}{i}', w, d, sz, min(w, d) * 0.45, sz * 0.4, mat, (x + dx, y + dy, z), sp=4, se=3) for i, (w, d, dx, dy) in enumerate((
         (sx, bar, 0, -(sy - bar) / 2), (sx, bar, 0, (sy - bar) / 2), (bar, sy, -(sx - bar) / 2, 0), (bar, sy, (sx - bar) / 2, 0)))]
 
-def bulge_fn(ac, hw, amount):
-    """Outward swelling of the fabric over the sensor pod (cosine window around angle ac)."""
-    def b(a):
-        d = math.atan2(math.sin(a - ac), math.cos(a - ac))
-        return amount * 0.5 * (1 + math.cos(math.pi * d / hw)) if abs(d) < hw else 0.0
-    return b
+# Bracelet (owner refs: Sport Loop, blue and orange/grey). One continuous woven strip, lying on its edge:
+# fixed to the steel loop, round the wrist (an oval, straight where the pod is), back through the loop, folded, and
+# its tail runs back on the outside over the pod, closing with hook-and-loop. The pod sits in the pocket between the
+# two layers, right next to the loop; its lower end leaves the strip as the flat charging foot.
+STRAP_A, STRAP_B, STRAP_XF = 0.033, 0.027, 0.0225   # oval half-axes (y, x) and the straight side where the pod is
+STRAP_T, STRAP_H, STRAP_LIFT = 0.0014, 0.019, 0.0016
+LOOP_TH = math.radians(42)                          # steel loop: just past the straight side
+POD_HALF = math.radians(33.5)                       # the straight side = the pod (≈37 mm)
+AP = math.radians(-30)                              # where the pod faces once the bracelet is turned for the views
 
-def strap_band(name, R, h, t, z, mat, bulge=None, arc=None, n=360, nz=12, cr=0.0008):
-    """Woven strap with its axis vertical (lying on its edge). Inner face (wrist side) stays a clean cylinder; over the
-    pod the outer face swells, most at the bottom edge and fading to nothing at the top edge (a wedge)."""
-    bm = bmesh.new(); rings = []
-    a0, a1 = arc if arc else (0.0, 2 * math.pi)
-    m = n if not arc else max(12, int(n * abs(a1 - a0) / (2 * math.pi)))
-    for i in range(m + (1 if arc else 0)):
-        a = a0 + (a1 - a0) * i / m; b = bulge(a) if bulge else 0.0
-        prof = [(R - t, z + cr), (R - t, z + h - cr), (R - t + cr, z + h), (R - cr, z + h)]
-        for k in range(nz + 1):
-            zz = z + h - cr - (h - 2 * cr) * k / nz; zn = (zz - z) / h
-            prof.append((R + b * (1 - zn) ** 1.3, zz))
-        prof += [(R + b - cr, z), (R - t + cr, z)]
-        rings.append([bm.verts.new((r * math.cos(a), r * math.sin(a), zz)) for r, zz in prof])
-    k = len(rings[0])
-    for i in range(len(rings) - (1 if arc else 0)):
-        A, B = rings[i], rings[(i + 1) % len(rings)]
-        for q in range(k): bm.faces.new((A[q], A[(q + 1) % k], B[(q + 1) % k], B[q]))
-    if arc:
-        bm.faces.new(list(reversed(rings[0]))); bm.faces.new(rings[-1])
+def strap_e(th):
+    """Centre line of the inner layer: an oval, clipped straight on +x (the pod side)."""
+    return Vector((min(STRAP_B * math.cos(th), STRAP_XF), STRAP_A * math.sin(th)))
+
+def pod_th(z):
+    """Pod thickness: a wedge, thick at the bottom (charging end) and thin at the top."""
+    zn = (z - STRAP_LIFT) / STRAP_H
+    return 0.0017 * (1 - zn) + 0.0005 * zn
+
+def strap_path():
+    t = STRAP_T; pts = []                     # (point, layer) layer 0 = inner, 1 = tail over the pod
+    n = 360
+    for k in range(n + 1):                    # inner layer: from the loop all the way round and back through it
+        th = LOOP_TH - 0.02 + (2 * math.pi + 0.07) * k / n; pts.append((strap_e(th), 0, th))
+    thF = LOOP_TH + 0.05; P0 = strap_e(thF)
+    T = (strap_e(thF + 1e-3) - strap_e(thF - 1e-3)).normalized(); N = Vector((T.y, -T.x))
+    if N.dot(P0) < 0: N = -N
+    for k in range(1, 12):                    # the fold, just past the loop
+        ph = math.pi * k / 12; pts.append((P0 + N * (t / 2) - N * (t / 2) * math.cos(ph) + T * (t * 0.9) * math.sin(ph), 2, thF))
+    m = 120
+    for k in range(m + 1):                    # tail: back along the outside, over the pod
+        th = thF - math.radians(118) * k / m; pts.append((strap_e(th), 1, th))
+    return pts
+
+def build_strip():
+    t, h, z0 = STRAP_T, STRAP_H, STRAP_LIFT
+    path = strap_path(); bm = bmesh.new(); secs = []
+    for i, (p, layer, th) in enumerate(path):
+        a = path[max(i - 1, 0)][0]; b = path[min(i + 1, len(path) - 1)][0]
+        T = (b - a).normalized(); N = Vector((T.y, -T.x))          # continuous along the path: orients the section
+        No = N if N.dot(p) >= 0 else -N                              # outward: for the tail's offsets
+        sec = []
+        for k in range(16):                   # rolled edges: half-round top and bottom
+            q = math.pi * k / 7 if k < 8 else math.pi + math.pi * (k - 8) / 7
+            zc = z0 + h - t / 2 if k < 8 else z0 + t / 2
+            z = zc + (t / 2) * math.sin(q) * (1 if k < 8 else 1)
+            off = (t / 2) * math.cos(q); extra = 0.0
+            if layer == 1:
+                extra = t
+                if abs(th) < POD_HALF:                 # tail over the pod: lifted by the pod's wedge
+                    w = 0.5 * (1 + math.cos(math.pi * th / POD_HALF))
+                    extra += pod_th(z) * min(1.0, w * 2.2)
+            v = p + N * off + No * extra; sec.append(bm.verts.new((v.x, v.y, z)))
+        secs.append(sec)
+    for i in range(len(secs) - 1):
+        A, B = secs[i], secs[i + 1]
+        for k in range(16): bm.faces.new((A[k], A[(k + 1) % 16], B[(k + 1) % 16], B[k]))
+    bm.faces.new(list(reversed(secs[0]))); bm.faces.new(secs[-1])
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    return link(name, bm, mat)
+    return link('strip', bm, 'loop')
 
-def foot_bm(R, t, a0, a1, hgt, flare, bulge, spread=0.03, n=64):
-    """Charging foot = the pod's lower end, out of the strap's lower edge: flush with the inside, as thick as the
-    fabric swelling at the bottom, widening slightly outward and along the strap to a flat contact face."""
-    bm = bmesh.new(); rings = []
-    for i in range(n + 1):
-        k = i / n; at = a0 + (a1 - a0) * k; ab = a0 - spread + (a1 - a0 + 2 * spread) * k
-        P = lambda a, r, z: bm.verts.new((r * math.cos(a), r * math.sin(a), z))
-        rings.append([P(at, R - t, hgt), P(at, R + bulge(at), hgt), P(ab, R + bulge(at) + flare, 0.0), P(ab, R - t, 0.0)])
-    for i in range(n):
-        A, B = rings[i], rings[i + 1]
-        for q in range(4): bm.faces.new((A[q], A[(q + 1) % 4], B[(q + 1) % 4], B[q]))
-    bm.faces.new(list(reversed(rings[0]))); bm.faces.new(rings[-1])
+def build_pod_foot():
+    """The pod's charging end: under the strip's lower edge, between the two layers, flaring slightly to a flat face."""
+    t = STRAP_T; y0 = STRAP_A * math.sin(POD_HALF) * 0.92
+    x_in, th_b = STRAP_XF + t / 2, pod_th(STRAP_LIFT)
+    bm = bmesh.new()
+    top = [(x_in, -y0, STRAP_LIFT), (x_in + th_b, -y0, STRAP_LIFT), (x_in + th_b, y0, STRAP_LIFT), (x_in, y0, STRAP_LIFT)]
+    bot = [(x_in, -y0 - 0.001, 0), (x_in + th_b + 0.0006, -y0 - 0.001, 0), (x_in + th_b + 0.0006, y0 + 0.001, 0), (x_in, y0 + 0.001, 0)]
+    vt = [bm.verts.new(v) for v in top]; vb = [bm.verts.new(v) for v in bot]
+    bm.faces.new(vt); bm.faces.new(list(reversed(vb)))
+    for k in range(4): bm.faces.new((vt[k], vb[k], vb[(k + 1) % 4], vt[(k + 1) % 4]))
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    return bm
+    return link('foot', bm, 'steel', smooth=False)
 
-AP = math.radians(20)   # sensor pod angle (back right); the steel loop sits opposite (front left)
-
-def build_bracelet(z0=0.0, R=0.031, h=0.020, t=0.0024, lift=0.0016):
-    """Sport-loop strap (owner ref): one woven band, fixed to a simple black satin steel loop, round the wrist, through
-    the loop, folded back and closed with hook-and-loop on the outside. The sensor pod is a wedge inside the weave,
-    opposite the loop: thick at the bottom, where it leaves the strap as the flat charging foot, thin at the top; the
-    fabric swells outward over it, the wrist side stays smooth."""
-    ad = AP + math.pi; tt = t * 0.9
-    bul = bulge_fn(AP, 0.42, 0.0026)
-    parts = [strap_band('strap', R, h, t, lift, 'loop', bulge=bul),
-             strap_band('tail', R + tt, h, tt, lift, 'loop', arc=(ad + 0.05, ad - 1.15))]
-    parts.append(link('foot', foot_bm(R, t, AP - 0.24, AP + 0.24, lift, 0.0006, bul), 'steel'))
-    # steel loop: plane = radial x vertical, around both layers, just past the fold
-    inner, outer = R - t - 0.0005, R + tt + 0.0005; bar = 0.0013
-    lp = frame('loopbar', (outer - inner) + 2 * bar, h + 0.0012 + 2 * bar, 0.0026, bar, 'steel', (0, 0, -0.0013))
+def build_bracelet(z0=0.0):
+    t, h = STRAP_T, STRAP_H
+    parts = [build_strip(), build_pod_foot()]
+    p = strap_e(LOOP_TH); T = (strap_e(LOOP_TH + 1e-3) - strap_e(LOOP_TH - 1e-3)).normalized(); N = Vector((T.y, -T.x))
+    if N.dot(p) < 0: N = -N
+    bar = 0.0015; c = p + N * (t / 2)
+    lp = frame('loopbar', 2 * t + 0.0009 + 2 * bar, h + 0.0012 + 2 * bar, 0.0024, bar, 'steel', (0, 0, -0.0012))
     e = bpy.data.objects.new('steelloop', None); col.objects.link(e)
-    rc, a = (inner + outer) / 2, ad + 0.06
-    e.location = (rc * math.cos(a), rc * math.sin(a), lift + h / 2); e.rotation_euler = (math.pi / 2, 0, a)
+    e.location = (c.x, c.y, STRAP_LIFT + h / 2); e.rotation_euler = (math.pi / 2, 0, math.atan2(N.y, N.x))
     for o in lp: o.parent = e
     parts.append(e)
-    g = group('bracelet', parts); g.location.z = z0
+    g = group('bracelet', parts); g.location.z = z0; g.rotation_euler = (0, 0, AP)
     return g
 
 def build_cable():
@@ -697,11 +717,11 @@ def studio(view):
     if view == 'cable':
         build_cable(); fw, tgt, pos = 0.34, (0.115, 0, 0.016), (0.115, -1, 0.016)
     elif view == 'foot':
-        build_bracelet(); a = AP; fw = 0.05
-        tgt = (0.031 * math.cos(a), 0.031 * math.sin(a), 0.006); pos = (0.031 * math.cos(a) * 3.2, 0.031 * math.sin(a) * 3.2, 0.03)
+        build_bracelet(); a = AP; fw = 0.055
+        tgt = (0.024 * math.cos(a), 0.024 * math.sin(a), 0.006); pos = (0.024 * math.cos(a) * 4.2, 0.024 * math.sin(a) * 4.2, 0.035)
     elif view == 'pod_side':
         build_bracelet(); a = AP; fw = 0.06
-        c = Vector((0.031 * math.cos(a), 0.031 * math.sin(a), 0.011)); tg = Vector((-math.sin(a), math.cos(a), 0))
+        c = Vector((0.024 * math.cos(a), 0.024 * math.sin(a), 0.011)); tg = Vector((-math.sin(a), math.cos(a), 0))
         tgt = tuple(c); pos = tuple(c + tg * 0.2 + Vector((math.cos(a), math.sin(a), 0)) * 0.012)
     elif view == 'band':
         build_bracelet(); fw, tgt, pos = 0.13, (0, 0, 0.011), (0.6, -0.9, 0.55)
