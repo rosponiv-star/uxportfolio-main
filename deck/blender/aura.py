@@ -800,7 +800,7 @@ def studio(view):
         cyl('usb', 0.0021, 0.5, 'cable', (0, W / 2 + 0.016 + 0.25, MID), axis='Y', seg=48)
         fw = (W / 0.80) * 16 / 9; tgt = (0, 0, TOP / 2); pos = (0, 0.0001, 1)
     elif view == 'led':
-        build_base(); fw = 0.032; tgt = (0.036, -W / 2, MID); pos = (0.036 + 0.06, -W / 2 - 0.2, MID + 0.05)
+        build_base(); fw = 0.11; tgt = (0.03, -W / 2 + 0.01, MID); pos = (0.03 + 0.55, -W / 2 - 1.0, MID + 0.32)   # 3/4 on the LED: the alarm still reads
     elif view == 'strip':
         build_base(); fw = W / 0.5; tgt = (0, 0, 0.004); pos = (0.55, -0.75, -0.17)
     elif view in ('persp', 'lit', 'persp_back', 'persp_band'):
