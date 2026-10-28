@@ -137,7 +137,7 @@ def bump_tex(m, kind, scale, strength, dist=0.0002, vec=None):
     nt.links.new(t.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
     return m
 
-HOLE_D = 0.0022
+HOLE_D = 0.0013
 EDGE_P, EDGE_T = 0.0012, 0.0006   # corner and top/bottom edge radii: the grid sits on the flat part of each face
 
 def grid(L, n, d=HOLE_D):
@@ -145,10 +145,10 @@ def grid(L, n, d=HOLE_D):
     g = (L - n * d) / (n + 1)
     return d + g, (0.0 if n % 2 else (d + g) / 2), n
 
-PU, OU, NU = grid(W - 2 * EDGE_P, 35)   # gap ≈ 1.13 mm
-PV, OV, NV = grid(H - 2 * EDGE_T, 12)   # gap ≈ 1.17 mm (as close as whole holes allow)
+PU, OU, NU = grid(W - 2 * EDGE_P, 29)   # small holes, wide gaps (owner ref): gap ≈ 2.66 mm
+PV, OV, NV = grid(H - 2 * EDGE_T, 10)   # gap ≈ 2.60 mm
 def cols(p, o, n): return [-(n - 1) / 2 * p + i * p for i in range(n)]
-BTN_X = -11 * PU           # Bluetooth button on a hole column, right of the inlet seen from behind (world -X)
+BTN_X = -9 * PU            # Bluetooth button on a hole column, right of the inlet seen from behind (world -X)
 
 def speaker_mask(nt):
     """Speaker holes on the sides and the back; around the inlet and the button whole holes are left out, so both sit
@@ -175,7 +175,7 @@ def speaker_mask(nt):
     region = op('MULTIPLY', op('LESS_THAN', op('ABSOLUTE', cu), (NU - 1) / 2 * PU + 1e-5), op('LESS_THAN', op('ABSOLUTE', cv), (NV - 1) / 2 * PV + 1e-5))
     def away(cx, rr):  # whole holes only: distance from the hole centre
         return op('GREATER_THAN', op('ADD', op('POWER', op('SUBTRACT', cu, cx), 2.0), op('POWER', cv, 2.0)), rr * rr)
-    back = op('MULTIPLY', isB, op('MULTIPLY', away(0.0, 0.0072), away(BTN_X, 0.0082)))
+    back = op('MULTIPLY', isB, op('MULTIPLY', away(0.0, 0.0066), away(BTN_X, 0.0078)))
     return op('MULTIPLY', op('MULTIPLY', hole, region), op('MAXIMUM', isX, back))
 
 def satin(name, color):
@@ -205,7 +205,8 @@ def body_toon(name, color):
     nt.links.new(src, mix.inputs[6]); nt.links.new(mk, mix.inputs['Factor']); nt.links.new(mix.outputs[2], e.inputs['Color'])
     return m
 
-STUDIO = SHOT in ('front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
+TABLE = SHOT == 'table'
+STUDIO = SHOT in ('table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
     MATS = {
         'body': body_real('body', srgb('#2c2d31')),
@@ -368,7 +369,7 @@ def holes_bm(depth=0.0032, seg=16):
             z = MID + cv
             for sx in (-1, 1):
                 add(Matrix.Translation((sx * W / 2, u, z)) @ Matrix.Rotation(math.pi / 2, 4, 'Y'))
-            if u * u + cv * cv > 0.0072 ** 2 and (u - BTN_X) ** 2 + cv * cv > 0.0082 ** 2:
+            if u * u + cv * cv > 0.0066 ** 2 and (u - BTN_X) ** 2 + cv * cv > 0.0078 ** 2:
                 add(Matrix.Translation((u, W / 2, z)) @ Matrix.Rotation(math.pi / 2, 4, 'X'))
     return bm
 
@@ -576,11 +577,33 @@ def studio(view):
     if view == 'persp_back': area('backkey', (0.2, 0.9, 0.6), (0, 0, 0.02), 1.4, 120)
     if view in ('back', 'bottom'): area('cam2', tuple(Vector(cam.location) * 0.9), tgt, 1.2, 40)
 
+def table_scene():
+    build_base()
+    boot = rbox('boot', 0.011, 0.016, 0.0062, 0.0025, 0.0008, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=8, se=2)
+    curve('usb', [(0, W / 2 + 0.015, MID), (0, W / 2 + 0.045, MID - 0.004), (0.015, W / 2 + 0.075, 0.003),
+                  (0.05, W / 2 + 0.16, 0.0028), (0.03, W / 2 + 0.32, 0.0028)], 0.0021, 'cable')
+    MATS['table'] = principled('table', srgb('#cfcfcc'), rough=0.85)
+    bm = rbox_bm(1.4, 1.4, 0.04, 0.0, 0.002, sp=1, se=2)
+    t = link('table', bm, 'table', (0.33, -0.5, -0.04)); t.rotation_euler = (0, 0, math.radians(-22))
+    # world: dim for lighting, white where the camera sees it past the table edge
+    w = bpy.data.worlds.new('w'); w.use_nodes = True; scene.world = w; nt = w.node_tree
+    bg = nt.nodes['Background']; bg.inputs[0].default_value = srgb('#f2f2f0'); bg.inputs[1].default_value = 0.25
+    sky = nt.nodes.new('ShaderNodeBackground'); sky.inputs[0].default_value = srgb('#f6f6f4'); sky.inputs[1].default_value = 2.0
+    lp = nt.nodes.new('ShaderNodeLightPath'); mx = nt.nodes.new('ShaderNodeMixShader'); out = nt.nodes['World Output']
+    nt.links.new(lp.outputs['Is Camera Ray'], mx.inputs[0]); nt.links.new(bg.outputs[0], mx.inputs[1]); nt.links.new(sky.outputs[0], mx.inputs[2])
+    nt.links.new(mx.outputs[0], out.inputs[0])
+    area('key', (-0.45, 0.3, 0.8), (0, 0, 0), 0.6, 75)
+    area('fill', (0.8, -0.6, 0.5), (0, 0, 0), 1.5, 6)
+    look((0.36, -0.45, 0.40), (0.0, 0.04, 0.0), 55, 8.0)
+    scene.view_settings.exposure = -0.8
+
 def real():
     res = (1200, 675) if PREVIEW else (2400, 1350)
     cycles(64 if PREVIEW else 384, res)
     colour_management('AgX')
-    if STUDIO:
+    if TABLE:
+        table_scene()
+    elif STUDIO:
         studio(SHOT)
         if PLASTIC: scene.view_settings.exposure = -2.6  # matte plastic takes far more of the studio light than metal
     else:
