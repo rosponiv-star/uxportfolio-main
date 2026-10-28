@@ -179,10 +179,10 @@ def speaker_mask(nt):
     return op('MULTIPLY', op('MULTIPLY', hole, region), op('MAXIMUM', isX, back))
 
 def satin(name, color):
-    m = principled(name, color, metal=0.0 if PLASTIC else 1.0, rough=0.7 if PLASTIC else 0.38); nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    m = principled(name, color, metal=0.0 if PLASTIC else 1.0, rough=0.8 if PLASTIC else 0.38); nt = m.node_tree; b = nt.nodes['Principled BSDF']
     tc = nt.nodes.new('ShaderNodeTexCoord'); mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1, 1, 1)
-    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 9000.0; nz.inputs['Detail'].default_value = 2
-    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.05; bp.inputs['Distance'].default_value = 0.0001
+    nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 6500.0 if PLASTIC else 9000.0; nz.inputs['Detail'].default_value = 2
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.3 if PLASTIC else 0.05; bp.inputs['Distance'].default_value = 0.0001
     nt.links.new(tc.outputs['Object'], mp.inputs['Vector']); nt.links.new(mp.outputs['Vector'], nz.inputs['Vector'])
     nt.links.new(nz.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
     return m
