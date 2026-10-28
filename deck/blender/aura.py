@@ -136,9 +136,20 @@ def bump_tex(m, kind, scale, strength, dist=0.0002, vec=None):
     nt.links.new(t.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
     return m
 
-BTN_X = -0.036  # Bluetooth button: right of the inlet, seen from behind (world -X)
+HOLE_D = 0.0022
 
-def speaker_mask(nt, pitch=0.0032, r=0.00108, margin=0.0016):
+def grid(L, d, g0=0.001):
+    """Odd number of holes so one sits on the centre line; the gap between holes = the gap to the face edge."""
+    n = int((L - g0) / (d + g0)); n -= (n % 2 == 0)
+    return n, d + (L - n * d) / (n + 1)
+
+NU, PU = grid(W, HOLE_D)   # 37 holes across a face
+NV, PV = grid(H, HOLE_D)   # 13 rows
+BTN_X = -11 * PU           # Bluetooth button on a hole position, right of the inlet seen from behind (world -X)
+
+def speaker_mask(nt):
+    """Speaker holes on the sides and the back; around the inlet and the button whole holes are left out, so both sit
+    centred in the gap."""
     tc = nt.nodes.new('ShaderNodeTexCoord'); g = nt.nodes.new('ShaderNodeNewGeometry')
     P = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], P.inputs[0])
     Nn = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(g.outputs['Normal'], Nn.inputs[0])
@@ -154,14 +165,14 @@ def speaker_mask(nt, pitch=0.0032, r=0.00108, margin=0.0016):
     isB = op('GREATER_THAN', Nn.outputs[1], 0.5)
     u = op('ADD', op('MULTIPLY', isX, y), op('MULTIPLY', isB, x))
     v = op('SUBTRACT', z, MID)
-    fu = op('SUBTRACT', op('DIVIDE', u, pitch), op('ROUND', op('DIVIDE', u, pitch)))
-    fv = op('SUBTRACT', op('DIVIDE', v, pitch), op('ROUND', op('DIVIDE', v, pitch)))
-    hole = op('LESS_THAN', op('ADD', op('MULTIPLY', fu, fu), op('MULTIPLY', fv, fv)), (r / pitch) ** 2)
-    region = op('MULTIPLY', op('LESS_THAN', op('ABSOLUTE', u), W / 2 - margin), op('LESS_THAN', op('ABSOLUTE', v), H / 2 - margin))
-    def away(cx, rr):
-        d = op('ADD', op('POWER', op('SUBTRACT', x, cx), 2.0), op('POWER', v, 2.0))
-        return op('GREATER_THAN', d, rr * rr)
-    back = op('MULTIPLY', isB, op('MULTIPLY', away(0.0, 0.0085), away(BTN_X, 0.0085)))
+    iu, iv = op('ROUND', op('DIVIDE', u, PU)), op('ROUND', op('DIVIDE', v, PV))
+    fu, fv = op('SUBTRACT', u, op('MULTIPLY', iu, PU)), op('SUBTRACT', v, op('MULTIPLY', iv, PV))
+    hole = op('LESS_THAN', op('ADD', op('MULTIPLY', fu, fu), op('MULTIPLY', fv, fv)), (HOLE_D / 2) ** 2)
+    region = op('MULTIPLY', op('LESS_THAN', op('ABSOLUTE', iu), (NU - 1) / 2 + 0.5), op('LESS_THAN', op('ABSOLUTE', iv), (NV - 1) / 2 + 0.5))
+    cu, cv = op('MULTIPLY', iu, PU), op('MULTIPLY', iv, PV)
+    def away(cx, rr):  # whole holes only: distance from the hole centre
+        return op('GREATER_THAN', op('ADD', op('POWER', op('SUBTRACT', cu, cx), 2.0), op('POWER', cv, 2.0)), rr * rr)
+    back = op('MULTIPLY', isB, op('MULTIPLY', away(0.0, 0.0072), away(BTN_X, 0.0082)))
     return op('MULTIPLY', op('MULTIPLY', hole, region), op('MAXIMUM', isX, back))
 
 def satin(name, color):
@@ -200,7 +211,7 @@ if MODE == 'real':
         'rubber': principled('rubber', srgb('#0a0a0b'), rough=0.8),
         'print': principled('print', srgb('#7a7a7e'), rough=0.6),
         'pin': principled('pin', srgb('#c8c8cc'), metal=1.0, rough=0.25),
-        'led_under': principled('led_under', srgb('#8e8e92'), rough=0.35) if STUDIO and SHOT != 'lit' else
+        'led_under': principled('led_under', srgb('#141416'), rough=0.6) if STUDIO and SHOT != 'lit' else
                      emit('led_under', srgb(NIGHT if SHOT == 'night' else DAWN), 90.0 if SHOT == 'night' else 160.0 if SHOT == 'lit' else 70.0),
         'led_front': emit('led_front', srgb('#ffffff'), 3.0 if STUDIO else 0.0),
         'dots': emit('dots', srgb('#ffd9a0'), 7.0),
@@ -329,6 +340,19 @@ def cutter_bm(shapes, depth):
         bmesh.ops.create_cone(bm, cap_ends=True, segments=64, radius1=r, radius2=r, depth=depth, matrix=m)
     return bm
 
+def stadium_bm(w, h, depth, seg=16):
+    """One clean manifold prism with a stadium section in the XZ plane (USB-C opening), along Y."""
+    r = h / 2; pts = []
+    for cx, a0 in ((w / 2 - r, -90), (-(w / 2 - r), 90)):
+        for k in range(seg + 1):
+            a = math.radians(a0 + 180 * k / seg); pts.append((cx + r * math.cos(a), r * math.sin(a)))
+    bm = bmesh.new(); vs = [bm.verts.new((x, -depth / 2, z)) for x, z in pts]
+    f = bm.faces.new(vs)
+    ext = bmesh.ops.extrude_face_region(bm, geom=[f])
+    bmesh.ops.translate(bm, vec=(0, depth, 0), verts=[v for v in ext['geom'] if isinstance(v, bmesh.types.BMVert)])
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    return bm
+
 def cut(ob, bm, loc, mat):
     me = bpy.data.meshes.new('c'); bm.to_mesh(me); bm.free(); me.materials.append(M(mat))
     c = bpy.data.objects.new('c', me); col.objects.link(c); c.location = loc
@@ -343,13 +367,13 @@ def build_base(with_time=False, time='06:14'):
     """Solid graphite block: speakers behind dot grilles on the sides and back, time + LED at the front, USB-C and the
     Bluetooth button at the back, haptic + magnetic top for the bracelet, thin rubber disc ringed by the light strip."""
     body = rbox('body', W, W, H, 0.0012, 0.0006, 'body', (0, 0, PL), sp=4, se=2)
-    for dx in (-0.0029, -0.00145, 0.0, 0.00145, 0.0029): cut(body, cutter_bm([(dx, 0, 0.00128)], 0.012), (0, W / 2, MID), 'rubber')
+    cut(body, stadium_bm(0.0084, 0.0026, 0.012), (0, W / 2, MID), 'rubber')  # USB-C receptacle
     cut(body, cutter_bm([(BTN_X, 0, 0.0057)], 0.002), (0, W / 2, MID), 'rubber')
     wn = body.modifiers.new('wn', 'WEIGHTED_NORMAL'); wn.keep_sharp = True; wn.mode = 'FACE_AREA'
     btn = cyl('button', 0.0049, 0.002, 'shell', (BTN_X, W / 2 - 0.0008, MID), axis='Y')
     tongue = rbox('tongue', 0.0066, 0.004, 0.0007, 0.0003, 0.0, 'print', (0, W / 2 - 0.0035, MID - 0.00035), sp=4)
     disc = cyl('disc', 0.034, PL, 'rubber', (0, 0, PL / 2), seg=128)
-    ring = cyl('ring', 0.0365, 0.0007, 'led_under', (0, 0, PL * 0.55), seg=128)
+    ring = cyl('ring', 0.0343, PL * 0.5, 'led_under', (0, 0, PL / 2), seg=128)
     dot = cyl('led_front', 0.00085, 0.0003, 'led_front', (0.036, -W / 2 - 0.00002, MID), axis='Y', seg=24)
     obs = [body, btn, tongue, disc, ring, dot]
     if with_time: obs.append(time_dots(time, MID))
