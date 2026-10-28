@@ -1003,6 +1003,30 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-28 · LOCAL (11–30, consolidated: earlier log writes silently failed)** · **AuraWake objects, current state.**
+  *Alarm (final, owner-approved step by step):* solid block 12 × 12 × 4.5 cm, **matte satin graphite plastic** with a
+  micro-dot grain (`plastic` in argv), near-sharp edges (1.2 mm plan, 0.6 mm edge); front = time in 5×7 dots behind
+  micro-perforations (left of centre, only when awake) + LED on the right; back = **USB-C** centred (low-power device)
+  + Bluetooth button (no power button) at −9 pitches, both centred in gaps of whole holes; **speaker holes = real
+  geometry** (`holes_bm`, one EXACT boolean; never union overlapping cylinders in one cutter) on sides and back, 29 × 10,
+  **graded top → bottom** (r 0.4 → 0.9 mm), equal gaps to the edges; underneath a thin rubber disc ringed by the light
+  strip. Light rig for floating renders = the table shot's (`soft_light()` + two camera-invisible bounce lights).
+  Renders in `deck/assets/aurawake/`: render-persp, persp_back, front, back, top, lit, table (on a light table),
+  cable (old adapter, parked for room renders). Schema slide 22: isometric plan, hairline group outlines (Bedroom ·
+  Thread / Matter; With you), horizontal labels with paper halo, keys 1–4 on the base + Underneath + Back.
+  *Bracelet (still open):* owner wants a woven **Sport-Loop** strap (light-blue melange, refs: orange/grey 24/29/31,
+  blue 26/27/30, green 23, white module 22, all in the session image folders): one continuous strip, flat black satin
+  steel ribbon loop (inner bar hidden in the fabric), strap passes through the loop and **folds visibly over its outer
+  bar**, tail closes with hook-and-loop on the side **opposite the sensors**; **sensor pod right next to the loop,
+  hidden from the outside, visible from the wrist side** (flat face + sensor window), its lower edge a thin flat
+  **charging foot** under the strap. Blender attempts v1–v7 (`build_strip`, `build_loop`, `build_pod`) never reached
+  the owner's realism bar. **Weavy (Figma MCP) → Nano Banana Pro**: v1 `bracelet-weavy-v1.jpg` (great fabric, pod as a
+  clamp housing), v2 `bracelet-weavy-v2.jpg` (pod set in the fabric, visible inside; still: pod opposite the loop, foot
+  = L tab, no visible fold). **v3 blocked: the account used its 2 free Weave model runs.** Upload trick: call
+  `weave_upload_asset`, then POST the file to submitUrl with `Authorization: Bearer <token>` (the picker widget never
+  hands assets back). Next: owner chooses Weavy upgrade or another generator for v3, then the room/table render with
+  alarm + bracelet, then place renders in the PDF slides.
+
 - **2026-10-27 · LOCAL (10)** · AuraWake base **redesigned on the owner's Mac mini refs**: 11 × 11 × 4.4 cm, matte black
   bead-blasted aluminium, tapered black speaker-grille plinth (slits on sides + radial ring underneath, foot disc with
   "AuraWake"), thin continuous light strip between body and plinth, front LED right at mid height, time 5×7 dots behind
