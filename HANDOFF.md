@@ -1003,6 +1003,14 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-10-28 · LOCAL (32)** · **Full alarm render set** (no bracelet; floating on white, table-shot light, matte
+  plastic) in `deck/assets/aurawake/views/`: front, back, left, right, top, bottom, persp, persp_back, lit (06:14 + LED +
+  amber strip), top_cable (USB-C cable straight out of the back, cut by the frame), **front LED zoom** led-off /
+  led-white / led-night (indigo #7a86e8) / led-dawn (amber #f2c074), **light strip** (low view from below) strip-off /
+  strip-white / strip-night / strip-dawn / strip-charging (left half lit). States via argv `state=…` (`STATE`,
+  `LIGHT_COL`, `strip_mat`); output names `aurawake-<shot>-<state>-plastic.png`. Batch with `xargs -P 7 -L 1` over a
+  jobs list. Not placed in the PDF yet.
+
 - **2026-10-28 · LOCAL (31)** · Weavy v3 refused again (free runs used up); owner chose to go back to **Blender** with the v3
   fixes. Bracelet v8: the strip runs ≈7 mm past the loop (`OV` 0.24) and makes a **soft visible U fold** (r 1.1 mm),
   the tail comes back over the strip under the loop's outer bar and settles onto the strip (loop opening widened);

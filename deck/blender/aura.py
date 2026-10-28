@@ -13,6 +13,7 @@ argv = sys.argv[sys.argv.index('--') + 1:]
 MODE, OUT = argv[0], os.path.abspath(argv[1])
 SHOT = argv[2] if len(argv) > 2 else ''
 PREVIEW = 'preview' in argv
+STATE = next((a.split('=', 1)[1] for a in argv if a.startswith('state=')), '')   # light state for 'led' / 'strip'
 PLASTIC = 'plastic' in argv
 os.makedirs(OUT, exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -277,7 +278,7 @@ def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.0004
     return m
 
 TABLE = SHOT == 'table'
-STUDIO = SHOT in ('pod_in', 'pod_side', 'foot', 'persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
+STUDIO = SHOT in ('left', 'right', 'top_cable', 'led', 'strip', 'pod_in', 'pod_side', 'foot', 'persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
     MATS = {
         'body': body_real('body', srgb('#2c2d31')),
@@ -309,6 +310,32 @@ else:
     MATS['body'] = body_toon('body', grey(0.86))
     MATS['shell'] = toon('shell', grey(0.86))
     MATS['led_under'] = toon('led_under', srgb(DAWN))
+
+LIGHT_COL = {'white': '#fff2df', 'night': NIGHT, 'dawn': DAWN}
+
+def strip_mat(state):
+    """Light strip around the rubber disc. off = dark; white / night / dawn = lit; charging = lit on one half only
+    (the bracelet charging: the line fills from one side)."""
+    if state not in LIGHT_COL and state != 'charging':
+        return principled('led_under', srgb('#141416'), rough=0.6)
+    col = 'white' if state == 'charging' else state
+    m = emit('led_under', srgb(LIGHT_COL[col]), 70.0 if state != 'white' else 45.0)
+    if state == 'charging':
+        nt = m.node_tree; e = next(n for n in nt.nodes if n.type == 'EMISSION'); out = nt.nodes['Material Output']
+        off = nt.nodes.new('ShaderNodeBsdfPrincipled'); off.inputs['Base Color'].default_value = srgb('#141416')
+        mx = nt.nodes.new('ShaderNodeMixShader'); tc = nt.nodes.new('ShaderNodeTexCoord'); sp = nt.nodes.new('ShaderNodeSeparateXYZ')
+        nt.links.new(tc.outputs['Object'], sp.inputs[0])
+        a = nt.nodes.new('ShaderNodeMath'); a.operation = 'ARCTAN2'; nt.links.new(sp.outputs[1], a.inputs[0]); nt.links.new(sp.outputs[0], a.inputs[1])
+        lt = nt.nodes.new('ShaderNodeMath'); lt.operation = 'LESS_THAN'; lt.inputs[1].default_value = 0.0; nt.links.new(sp.outputs[0], lt.inputs[0])  # the left half is lit
+        nt.links.new(lt.outputs[0], mx.inputs[0]); nt.links.new(e.outputs[0], mx.inputs[1]); nt.links.new(off.outputs[0], mx.inputs[2])
+        nt.links.new(mx.outputs[0], out.inputs[0])
+    return m
+
+if MODE == 'real' and SHOT == 'led':
+    MATS['led_front'] = emit('led_front', srgb(LIGHT_COL[STATE]), 9.0) if STATE in LIGHT_COL else principled('led_front', srgb('#0b0b0c'), rough=0.08)
+if MODE == 'real' and SHOT == 'strip':
+    MATS['led_under'] = strip_mat(STATE)
+    MATS['led_front'] = principled('led_front', srgb('#0b0b0c'), rough=0.08)   # only the strip speaks
 
 def M(name):
     return MATS.get(name) or MATS.setdefault(name, principled(name, grey(0.5)))
@@ -765,13 +792,23 @@ def studio(view):
         tgt = tuple(c); pos = tuple(c + tg * 0.2 + Vector((math.cos(a), math.sin(a), 0)) * 0.012)
     elif view == 'band':
         build_bracelet(); fw, tgt, pos = 0.13, (0, 0, 0.011), (0.6, -0.9, 0.55)
+    elif view in ('left', 'right'):
+        build_base(); fw = W / 0.62; tgt = (0, 0, TOP * 0.5); pos = (-1 if view == 'left' else 1, 0, TOP * 0.42)
+    elif view == 'top_cable':
+        build_base()
+        rbox('boot', 0.011, 0.016, 0.0062, 0.0025, 0.0008, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=8, se=2)
+        cyl('usb', 0.0021, 0.5, 'cable', (0, W / 2 + 0.016 + 0.25, MID), axis='Y', seg=48)
+        fw = (W / 0.80) * 16 / 9; tgt = (0, 0, TOP / 2); pos = (0, 0.0001, 1)
+    elif view == 'led':
+        build_base(); fw = 0.032; tgt = (0.036, -W / 2, MID); pos = (0.036 + 0.06, -W / 2 - 0.2, MID + 0.05)
+    elif view == 'strip':
+        build_base(); fw = W / 0.5; tgt = (0, 0, 0.004); pos = (0.55, -0.75, -0.17)
     elif view in ('persp', 'lit', 'persp_back', 'persp_band'):
         build_base(with_time=(view == 'lit')); fw, tgt = W / 0.55, (0, 0, TOP * 0.42)
         if view == 'persp_band': build_bracelet(TOP); fw, tgt = W / 0.52, (0, 0, TOP * 0.75)
         pos = (-0.62, 0.95, 0.24) if view == 'persp_back' else (0.62, -0.95, 0.24)
     else:
         build_base()
-        if view == 'top': build_bracelet(TOP)
         if view in ('front', 'back'):
             fw = W / 0.62; tgt = (0, 0, TOP * 0.5); pos = (0, -1 if view == 'front' else 1, TOP * 0.42)
         else:
@@ -841,7 +878,7 @@ def real():
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
-    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-plastic" if PLASTIC else ""}{"-preview" if PREVIEW else ""}.png')
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-plastic" if PLASTIC else ""}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
 # ---------------------------------------------------------------------------------------------------------------
