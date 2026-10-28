@@ -186,6 +186,7 @@ def satin(name, color):
 
 def body_real(name, color):
     m = satin(name, color)
+    return m
     nt = m.node_tree; b = nt.nodes['Principled BSDF']; mk = speaker_mask(nt)
     mix = nt.nodes.new('ShaderNodeMix'); mix.data_type = 'RGBA'
     mix.inputs[6].default_value = color; mix.inputs[7].default_value = (0.005, 0.005, 0.006, 1)
@@ -209,6 +210,7 @@ if MODE == 'real':
         'alu': bump_tex(principled('alu', srgb('#18181b'), metal=1.0, rough=0.5), 'noise', 4000, 0.04),
         'grille': grille('grille', srgb('#060607'), srgb('#000000')),
         'rubber': principled('rubber', srgb('#0a0a0b'), rough=0.8),
+        'cavity': principled('cavity', srgb('#050506'), rough=0.9),
         'print': principled('print', srgb('#7a7a7e'), rough=0.6),
         'pin': principled('pin', srgb('#c8c8cc'), metal=1.0, rough=0.25),
         'led_under': principled('led_under', srgb('#141416'), rough=0.6) if STUDIO and SHOT != 'lit' else
@@ -353,6 +355,21 @@ def stadium_bm(w, h, depth, seg=16):
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     return bm
 
+def holes_bm(depth=0.0032, seg=16):
+    """Every speaker hole as its own cylinder (no overlaps): sides along X, back along Y, the inlet and button gaps left out."""
+    bm = bmesh.new(); r = HOLE_D / 2
+    def add(m):
+        bmesh.ops.create_cone(bm, cap_ends=True, segments=seg, radius1=r, radius2=r, depth=depth, matrix=m)
+    for iu in range(-(NU // 2), NU // 2 + 1):
+        for iv in range(-(NV // 2), NV // 2 + 1):
+            u, z = iu * PU, MID + iv * PV
+            for sx in (-1, 1):
+                add(Matrix.Translation((sx * W / 2, u, z)) @ Matrix.Rotation(math.pi / 2, 4, 'Y'))
+            cu, cv = u, iv * PV
+            if cu * cu + cv * cv > 0.0072 ** 2 and (cu - BTN_X) ** 2 + cv * cv > 0.0082 ** 2:
+                add(Matrix.Translation((u, W / 2, z)) @ Matrix.Rotation(math.pi / 2, 4, 'X'))
+    return bm
+
 def cut(ob, bm, loc, mat):
     me = bpy.data.meshes.new('c'); bm.to_mesh(me); bm.free(); me.materials.append(M(mat))
     c = bpy.data.objects.new('c', me); col.objects.link(c); c.location = loc
@@ -369,6 +386,7 @@ def build_base(with_time=False, time='06:14'):
     body = rbox('body', W, W, H, 0.0012, 0.0006, 'body', (0, 0, PL), sp=4, se=2)
     cut(body, stadium_bm(0.0084, 0.0026, 0.012), (0, W / 2, MID), 'rubber')  # USB-C receptacle
     cut(body, cutter_bm([(BTN_X, 0, 0.0057)], 0.002), (0, W / 2, MID), 'rubber')
+    if MODE == 'real': cut(body, holes_bm(), (0, 0, 0), 'cavity')
     wn = body.modifiers.new('wn', 'WEIGHTED_NORMAL'); wn.keep_sharp = True; wn.mode = 'FACE_AREA'
     btn = cyl('button', 0.0049, 0.002, 'shell', (BTN_X, W / 2 - 0.0008, MID), axis='Y')
     tongue = rbox('tongue', 0.0066, 0.004, 0.0007, 0.0003, 0.0, 'print', (0, W / 2 - 0.0035, MID - 0.00035), sp=4)
@@ -528,7 +546,7 @@ def colour_management(view):
 
 def studio(view):
     scene.render.film_transparent = True
-    world(srgb('#9a9aa0'), 0.12)
+    world(srgb('#9a9aa0'), 0.1)
     lens = 135
     if view == 'cable':
         build_cable(); fw, tgt, pos = 0.34, (0.115, 0, 0.016), (0.115, -1, 0.016)
@@ -549,7 +567,10 @@ def studio(view):
     area('left', (-0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('right', (0.9, -0.5, 0.15), (0, 0, 0.02), 0.6, 35)
     area('cam', tuple(Vector(cam.location) * 0.9 + Vector((0, 0, 0.3))), tgt, 1.2, 25)
-    if view in ('persp', 'lit', 'band', 'persp_back'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 90)
+    if view in ('persp', 'lit', 'band', 'persp_back'): area('front', tuple(Vector(cam.location) * 0.8 + Vector((-0.3, 0, 0.2))), tgt, 1.4, 40)
+    if view in ('persp', 'lit'):
+        area('topback', (-0.1, 0.9, 0.9), (0, 0, 0.03), 1.6, 45)
+        area('sidestrip', (1.0, 0.45, 0.25), (0, 0, 0.02), 0.5, 30)
     if view == 'persp_back': area('backkey', (0.2, 0.9, 0.6), (0, 0, 0.02), 1.4, 120)
     if view in ('back', 'bottom'): area('cam2', tuple(Vector(cam.location) * 0.9), tgt, 1.2, 40)
 
