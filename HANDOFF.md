@@ -1048,6 +1048,13 @@ When a CLOUD session hits something that needs the local environment, it must:
 - **2026-10-29 · LOCAL (45)** · Final renders saved for the owner in `Media/05-AuraWake/OfficialMedia/Renders/`
   (git-ignored): 21 views + the dawn scene as `AuraWake-<view>.jpg` on white, and `Transparent/` PNGs. Next: the
   "One night" swimlane (spec §6, slide p05-night) is the next schema to redo.
+- **2026-10-29 · LOCAL (46)** · "One night" swimlane redone (p05-night): time to scale in four stretches with the
+  gaps cut (21:24–23:06, 03:00–03:45, 05:54–06:38, 07:04–07:34; `//` marks), 8 lanes with the iso drawings as icons,
+  events = dot + label (start-aligned; `end` where two events are 2 min apart), areas 0–100% per stretch, tags always
+  above the areas, smart-window band + amber 06:14 wake-up line, caption "by 06:30 at the latest". Values follow the
+  spec (lamp 40→15→0, dawn 0→28→80 %, shutters 9→29 % then open at 06:26, Rain 20 %, Birds stopped by the palm,
+  Vanilla until 22:50, Lemon until 06:36). Owner was given a table of 16 possible schemas; proposed keep: System, One
+  night, Gestures + light language, Fail-safe + adaptive card, wake-up scenario.
 
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus

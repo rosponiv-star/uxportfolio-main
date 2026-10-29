@@ -433,7 +433,7 @@
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1">One night</p>
     <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Every change is a ramp, never a jump. The wake-up comes at the first light sleep.</p>
-    <svg class="lanes" style="grid-column: 1 / -1; align-self: end" viewBox="0 0 1728 640" role="img" aria-label="One night with AuraWake, 21:30 to 07:10" data-night></svg>
+    <svg class="lanes" style="grid-column: 1 / -1; align-self: end" viewBox="0 0 1728 610" role="img" aria-label="One night with AuraWake, 21:30 to 07:10" data-night></svg>
   </div>
 </section>
 
@@ -552,18 +552,22 @@
   .map .l.d { stroke-dasharray: 8 6; }
   .map .l.w { stroke: var(--ink); stroke-width: 2.5; }
   .map .lt { font-size: 18px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; fill: var(--ink-3); }
-  .lanes text { font-size: 20px; fill: var(--ink-2); }
+  .lanes text { font-size: 19px; fill: var(--ink-2); }
   .lanes .ax { font-size: 18px; font-weight: 500; letter-spacing: 0.06em; fill: var(--ink-3); text-anchor: middle; }
   .lanes .ln { font-size: 22px; font-weight: 500; fill: var(--ink); }
-  .lanes .ev { text-anchor: middle; }
+  .lanes .ev { fill: var(--ink-2); }
+  .lanes .dot { fill: var(--ink); }
+  .lanes .wake { stroke: #c98f2a; stroke-width: 2; }
+  .lanes .ax-w { fill: #9a6a12; }
+  .lanes .cut { font-size: 18px; fill: var(--ink-4); text-anchor: middle; letter-spacing: -0.1em; }
   .lanes .tag { font-size: 18px; fill: var(--ink-3); }
   .lanes .hr { stroke: var(--rule); }
   .lanes .vr { stroke: var(--rule); stroke-dasharray: 2 6; }
   .lanes .win { fill: color-mix(in srgb, var(--dawn) 16%, transparent); }
-  .lanes .win-t { font-size: 18px; font-weight: 500; letter-spacing: 0.06em; fill: #9a6a12; text-anchor: middle; }
+  .lanes .win-t { font-size: 18px; fill: #9a6a12; }
   .lanes .a-light { fill: color-mix(in srgb, var(--dawn) 70%, transparent); stroke: #c98f2a; stroke-width: 1.5; }
   .lanes .a-grey { fill: rgb(17 17 17 / 0.08); stroke: var(--ink-3); stroke-width: 1.5; }
-  .lanes .a-night { fill: color-mix(in srgb, var(--night) 30%, transparent); stroke: var(--night); stroke-width: 1.5; }
+  .lanes .a-nightc { fill: color-mix(in srgb, var(--night) 30%, transparent); stroke: var(--night); stroke-width: 1.5; }
   .lanes .dot { fill: var(--ink); }
   .iso { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .iso .pf-top { stroke: rgb(17 17 17 / .35); stroke-width: 1.2; }
@@ -732,41 +736,67 @@
     iso.innerHTML = g;
   }
 
-  // AuraWake · one night (spec §6, routine Work: bed 22:30, wake 06:30, window 06:00–06:30). Columns = moments,
-  // equally spaced (time not to scale). Areas = 0–100% per channel; events = short lines of text.
+  // AuraWake · one night (spec §6, routine Work: bed 22:30, wake 06:30, window 06:00–06:30). Time runs to scale in
+  // four stretches (evening, the 03:12 waking, the smart window, 07:10) with the long gaps cut out; areas = 0–100%
+  // per channel, events = a dot and a short line of text. Labels never sit on a curve (owner, 2026-10-29).
   const night = document.querySelector('[data-night]');
   if (night) {
-    const T = ['21:30', '22:00', '22:30', '03:12', '06:00', '06:14', '06:16', '06:26', '07:10'];
-    const L = 200, CW = (1728 - L) / T.length, X = (i) => L + (i + 0.5) * CW, TOP = 48, LH = 72;
+    const m = (t) => { const [h, mm] = t.split(':').map(Number); return (h < 12 ? h + 24 : h) * 60 + mm; };
+    const L = 180, GAP = 24, SEG = [['21:24', '23:06', 510], ['03:00', '03:45', 160], ['05:54', '06:38', 662], ['07:04', '07:34', 144]]
+      .map(([a, b, w]) => [m(a), m(b), w]);
+    let x0 = L; const S = SEG.map(([a, b, w]) => { const s = { a, b, w, x: x0 }; x0 += w + GAP; return s; });
+    const seg = (t) => S.find((s) => t >= s.a && t <= s.b);
+    const X = (t) => { const s = seg(m(t)); return s.x + ((m(t) - s.a) / (s.b - s.a)) * s.w; };
+    const TOP = 44, LH = 66, AH = 30;
     const lanes = [
-      ['You', 'ev', { 1: 'Takes the bracelet', 2: 'Goes to bed', 3: 'Wakes up briefly', 6: 'Palm on the base', 7: 'Gets up', 8: 'Bracelet back on the base' }],
-      ['Bracelet', 'ev', { 0: 'On the base, charged', 2: 'Senses lying down', 3: 'Senses waking', 5: 'Light sleep', 6: 'One tap: confirmed', 7: 'Steps, upright' }],
-      ['Base', 'ev', { 1: 'One violet breath', 3: 'Shows the time, 8 s', 4: 'Opens the window', 5: 'Wake-up moment', 6: 'One amber pulse', 8: 'Day starts, sync' }],
-      ['Lamp', 'a-light', [[0.8, 0], [0.82, 40], [2, 15], [2.35, 0], [4, 0], [5, 30], [5.5, 80], [8.5, 80]], { 1: '40%', 2: '15%', 5: 'Dawn', 6.6: '80% · 5000 K' }],
-      ['Shutters', 'a-grey', [[0.8, 0], [4, 0], [5, 20], [6, 36], [7, 100], [8.5, 100]], { 1: 'Close in 2 min', 7: 'Open' }],
-      ['Sound', 'a-night', [[0.8, 0], [0.82, 20], [2.5, 20], [2.9, 0], [5, 0], [5.6, 40], [6, 0]], { 1.6: 'Rain', 5.3: 'Birds' }],
-      ['Scent', 'a-grey', [[0.8, 0], [0.82, 50], [2.9, 50], [2.92, 0], [5, 0], [5.02, 50], [6, 50], [6.02, 0]], { 1.6: 'Vanilla', 5.3: 'Lemon' }],
-      ['Phone', 'ev', { 0: 'Alerts only if needed', 1: 'Live Activity: wind-down', 7: 'How did you sleep?' }],
+      ['You', null, 'ev', [['22:00', 'Takes the bracelet'], ['22:30', 'Goes to bed'], ['03:12', 'Wakes up briefly'], ['06:16', 'Palm on the base'], ['06:26', 'Gets up'], ['07:10', 'Bracelet back', 'start', 9]]],
+      ['Bracelet', 'bracelet', 'ev', [['21:30', 'On the base, charged'], ['22:00', 'Connects'], ['22:30', 'Senses lying down'], ['03:12', 'Senses waking'], ['06:14', 'Light sleep', 'end'], ['06:16', 'One tap: confirmed'], ['06:26', 'Steps, upright']]],
+      ['Base', 'base', 'ev', [['22:00', 'One violet breath'], ['03:12', 'Time on for 8 s'], ['06:00', 'Opens the window', 'start', 10], ['06:14', 'Wake-up moment', 'end', 8], ['06:16', 'One amber pulse'], ['07:10', 'Syncs the night', 'start', 9]]],
+      ['Lamp', 'lamp', 'light', [['21:24', 0], ['22:00', 0], ['22:00', 40], ['22:30', 15], ['22:40', 0], ['03:11', 0], ['03:12', 8], ['03:14', 8], ['03:15', 0], ['06:00', 0], ['06:14', 28], ['06:16', 80], ['07:34', 80]],
+        [['22:00', '2200 K · 40%'], ['22:30', '15%'], ['03:12', '1%, optional'], ['06:00', 'Dawn · 1800 K'], ['06:16', '80% · 5000 K']]],
+      ['Shutters', 'shutters', 'grey', [['21:24', 100], ['22:00', 100], ['22:02', 0], ['06:00', 0], ['06:14', 9], ['06:16', 29], ['06:26', 29], ['06:28', 100], ['07:34', 100]],
+        [['22:02', 'Close in 2 min'], ['06:00', 'Open slowly'], ['06:28', 'Fully open']]],
+      ['Sound', null, 'nightc', [['21:24', 0], ['22:00', 0], ['22:00', 20], ['22:40', 20], ['23:00', 0], ['06:14', 0], ['06:16', 40], ['06:16', 0], ['07:34', 0]],
+        [['22:00', 'Rain · 20%'], ['06:16', 'Birds, stopped by the palm']]],
+      ['Scent', 'diffuser', 'grey', [['21:24', 0], ['22:00', 0], ['22:00', 30], ['22:50', 30], ['22:50', 0], ['06:14', 0], ['06:14', 40], ['06:36', 40], ['06:36', 0], ['07:34', 0]],
+        [['22:00', 'Vanilla'], ['06:14', 'Lemon']]],
+      ['Phone', 'phone', 'ev', [['21:30', 'Alerts only if needed'], ['22:00', 'Live Activity: wind-down'], ['06:26', 'How did you sleep?']]],
     ];
+    const B = TOP + lanes.length * LH;
     const wrap = (s, n = 15) => s.split(' ').reduce((a, w) => ((a.at(-1) + ' ' + w).trim().length <= n ? (a[a.length - 1] = (a.at(-1) + ' ' + w).trim()) : a.push(w), a), ['']);
-    let g = `<rect class="win" x="${X(3.5)}" y="${TOP - 8}" width="${X(7.1) - X(3.5)}" height="${lanes.length * LH + 8}" />`;
-    g += `<text class="win-t" x="${(X(3.5) + X(7.1)) / 2}" y="${TOP + lanes.length * LH + 28}">SMART WINDOW 06:00 – 06:30</text>`;
-    g += T.map((t, i) => `<text class="ax" x="${X(i)}" y="24">${t}</text><line class="vr" x1="${X(i)}" x2="${X(i)}" y1="${TOP}" y2="${TOP + lanes.length * LH}" />`).join('');
-    lanes.forEach(([name, kind, data, tags], k) => {
-      const y = TOP + k * LH;
-      g += `<line class="hr" x1="0" x2="1728" y1="${y}" y2="${y}" /><text class="ln" x="0" y="${y + LH / 2 + 8}">${name}</text>`;
+    // smart window, wake-up moment, axis, cut marks
+    let g = `<rect class="win" x="${X('06:00')}" y="${TOP}" width="${X('06:30') - X('06:00')}" height="${B - TOP}" />`;
+    ['21:30', '22:00', '22:30', '23:00', '03:12', '06:00', '07:10'].forEach((t) => (g += `<text class="ax" x="${X(t)}" y="22">${t}</text><line class="vr" x1="${X(t)}" x2="${X(t)}" y1="${TOP}" y2="${B}" />`));
+    g += `<text class="ax ax-w" x="${X('06:14') - 6}" y="22" style="text-anchor:end">06:14</text><text class="ax" x="${X('06:16') + 6}" y="22" style="text-anchor:start">06:16</text>`;
+    g += `<text class="ax" x="${X('06:26') - 6}" y="22" style="text-anchor:end">06:26</text><text class="ax" x="${X('06:30') + 6}" y="22" style="text-anchor:start">06:30</text>`;
+    ['06:26', '06:30'].forEach((t) => (g += `<line class="vr" x1="${X(t)}" x2="${X(t)}" y1="${TOP}" y2="${B}" />`));
+    g += `<line class="vr" x1="${X('06:16')}" x2="${X('06:16')}" y1="${TOP}" y2="${B}" /><line class="wake" x1="${X('06:14')}" x2="${X('06:14')}" y1="${TOP - 10}" y2="${B}" />`;
+    S.slice(1).forEach((s) => (g += `<text class="cut" x="${s.x - GAP / 2}" y="22">//</text>`));
+    g += `<text class="win-t" x="${X('06:00')}" y="${B + 30}">Smart window 06:00 – 06:30 · wakes you at the first light sleep, by 06:30 at the latest</text>`;
+    lanes.forEach(([name, icon, kind, data, tags], k) => {
+      const y = TOP + k * LH, cy = y + LH / 2;
+      S.forEach((s) => (g += `<line class="hr" x1="${s === S[0] ? 0 : s.x}" x2="${s.x + s.w}" y1="${y}" y2="${y}" />`));
+      g += `<text class="ln" x="0" y="${cy + 8}">${name}</text>`;
+      if (icon) g += `<image href="assets/aurawake/iso-${icon}.png" x="${L - 70}" y="${cy - 26}" width="52" height="52" />`;
       if (kind === 'ev') {
-        Object.entries(data).forEach(([i, s]) => {
-          const ls = wrap(s), y0 = y + LH / 2 - (ls.length - 1) * 12 + 7;
-          g += `<text class="ev" x="${X(+i)}" y="${y0}">${ls.map((l, j) => `<tspan x="${X(+i)}" dy="${j ? 24 : 0}">${l}</tspan>`).join('')}</text>`;
+        data.forEach(([t, s, al = 'start', n]) => {
+          const ls = wrap(s, n), x = X(t), anchor = al, tx = anchor === 'end' ? x - 12 : x + 12;
+          const y0 = cy + 7 - (ls.length - 1) * 11;
+          g += `<circle class="dot" cx="${x}" cy="${cy}" r="4" /><text class="ev" text-anchor="${anchor}" x="${tx}" y="${y0}">${ls.map((l, j) => `<tspan x="${tx}" dy="${j ? 22 : 0}">${l}</tspan>`).join('')}</text>`;
         });
       } else {
-        const base = y + LH - 10, h = LH - 22, P = (v) => base - (v / 100) * h;
-        g += `<path class="${kind}" d="M${X(data[0][0])} ${base} ${data.map(([i, v]) => `L${X(i)} ${P(v)}`).join(' ')} L${X(data.at(-1)[0])} ${base} Z" />`;
-        Object.entries(tags).forEach(([i, s]) => (g += `<text class="tag" x="${X(+i) + 8}" y="${y + 22}">${s}</text>`));
+        const base = y + LH - 8, P = (v) => base - (v / 100) * AH;
+        S.forEach((s) => {   // one closed area per stretch, values interpolated at its edges
+          const v = (t) => { const i = data.findIndex(([tt]) => m(tt) > t); if (i === -1) return data.at(-1)[1]; if (i === 0) return data[0][1];
+            const [ta, va] = data[i - 1], [tb, vb] = data[i]; return va + (vb - va) * (t - m(ta)) / (m(tb) - m(ta)); };
+          const pts = [[s.a, v(s.a)], ...data.filter(([t]) => m(t) > s.a && m(t) < s.b).map(([t, val]) => [m(t), val]), [s.b, v(s.b)]];
+          const px = (t) => s.x + ((t - s.a) / (s.b - s.a)) * s.w;
+          g += `<path class="a-${kind}" d="M${px(s.a)} ${base} ${pts.map(([t, val]) => `L${px(t)} ${P(val)}`).join(' ')} L${px(s.b)} ${base} Z" />`;
+        });
+        tags.forEach(([t, s]) => (g += `<text class="tag" x="${X(t) + 6}" y="${y + 18}">${s}</text>`));
       }
     });
-    g += `<line class="hr" x1="0" x2="1728" y1="${TOP + lanes.length * LH}" y2="${TOP + lanes.length * LH}" />`;
+    S.forEach((s) => (g += `<line class="hr" x1="${s === S[0] ? 0 : s.x}" x2="${s.x + s.w}" y1="${B}" y2="${B}" />`));
     night.innerHTML = g;
   }
 
