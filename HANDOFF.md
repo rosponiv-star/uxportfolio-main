@@ -1069,6 +1069,19 @@ When a CLOUD session hits something that needs the local environment, it must:
   elliptic capsules (fingers wider than thick, f 0.8; metacarpals flatter), tapered per joint, a thumb–index web,
   thenar/hypothenar pads, a single oval wrist/forearm, finer remesh (0.5 mm) and stronger smoothing; nails as thin
   plates bent to the fingertip's curve (`nail` tone 0.95). Same poses and framing, so the slide overlays are unchanged.
+- **2026-10-29 · LOCAL (49)** · AuraWake interaction revised with the owner (worked out in the side session "Portfolio
+  UX design 6 pdf", confirmed here): **no snooze** (the room wakes with you at the first light sleep; if still lying
+  down at 06:30 a ladder: 06:30 brighter + one tap a minute, 06:35 clear sound + 3 rising pulses, 06:40 real alarm on
+  base + AlarmKit until you are up; only getting up, the bracelet back on the base or the phone stops it); **palm** =
+  the time for 8 s, then the next wake-up "☀ 06:30" or "OFF" (never moves the wake-up; held 3 s in the evening =
+  tomorrow off); **two lights, two moments** (front LED = day status only; line underneath = evening/night: violet
+  breath = alarm on, white = tomorrow off, white beat = OFF/ON, amber beat = morning palm); the time matrix also
+  writes the charge ("86%"). Spec (Design/AuraWake/… Interaction Design Spec.md) patched: §1 principle 8, §2.2,
+  §2.3, §4.1–4.3, §5, §6 + new §6.1 ladder, §7.3, §7.4, §10, plus the status proposal in §2.3/§4.2/app screens
+  (backup of the old spec in this session's scratchpad). Deck: system keys rewritten (one line each), One night
+  06:16 rows (lamp keeps rising to 80% by 06:20, shutters 60%, Birds lowered to 15% until 06:26) + ladder caption,
+  gestures copy (02 "Palm on the base"; g2 base shows 06:16, g3 shows 86%, g3 glow removed: charging is the front
+  LED), p05-light rebuilt in three columns: Front LED · by day, Light line · evening and night, Still in bed at 06:30.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's
