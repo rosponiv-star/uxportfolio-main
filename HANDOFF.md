@@ -1034,6 +1034,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   free areas at the same 8.5 mm radius, laser-etched marks 2 mm tall at the same height, "5V ⎓ 3A" over the USB-C
   and the Bluetooth rune over the button; underneath = name/model, input, radio IDs, serial, CE/UKCA/WEEE marks
   below the rubber disc (FCC/IC numbers are placeholders). Waiting for the owner's OK before modelling it.
+- **2026-10-29 · LOCAL (41)** · Back marks modelled (owner: back only, nothing underneath): aura.py `back_marks()`,
+  laser-etched matte grey (`mark` #5e5f64), Bahnschrift. Power-plug icon over the USB-C and Bluetooth rune over the
+  button, both 2.2 mm on ONE line (set by the button recess + 1.4 mm); "5V ⎓ 3A" 1.3 mm cap height, 1.6 mm under the
+  port. Free areas round port and button are now equal circles, r 11 mm (BTN_CLEAR = PORT_CLEAR). New `ports` view
+  (3/4 close-up). Re-rendered views/back, persp_back, ports, render-back, render-persp_back, iso-base_under.
 
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
