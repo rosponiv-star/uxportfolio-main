@@ -1029,6 +1029,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   speaker column, rows centred on MID; 25 × 7 dots, centre on column −5; 5×7 font with a plain 0; lit dot 0.72 mm
   behind ~0.1 mm laser micro-holes (invisible when off). Re-rendered views/lit.jpg, new views/time.jpg (3/4 close-up),
   iso-base.png; schema key 2 points at the digits' left end.
+- **2026-10-29 · LOCAL (40)** · Renders with the time redone with the fine matrix: render-lit.jpg (= views/lit.jpg),
+  render-dawn.jpg (dawn scene, plastic). Proposal sketch (deck/out/back-sketch.png, not in the deck): back = both
+  free areas at the same 8.5 mm radius, laser-etched marks 2 mm tall at the same height, "5V ⎓ 3A" over the USB-C
+  and the Bluetooth rune over the button; underneath = name/model, input, radio IDs, serial, CE/UKCA/WEEE marks
+  below the rubber disc (FCC/IC numbers are placeholders). Waiting for the owner's OK before modelling it.
 
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
