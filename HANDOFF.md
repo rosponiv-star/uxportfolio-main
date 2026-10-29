@@ -1095,6 +1095,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   base. Otherwise (day, or a night waking it missed) a short palm touch shows it for 8 s. Spec §2.3 points 2–3, §6 rows,
   §7.4 updated. Deck: One night gains a "Time" lane (bars 22:00–22:40, 03:12–03:22, 06:00–07:10; tag "Tap: 8 s"),
   viewBox 706; base 03:12 event dropped, You 06:16 "Awake, still in bed"; keys 01/02 and gestures 02/03 copy updated.
+- **2026-10-29 · LOCAL (52)** · Time rule carried through every schema: gesture 01 now shows 22:00 on the base (you
+  are awake once you take the bracelet; dot font gains '2'), app-slide fail-safes rewritten (flat bracelet = fast dawn
+  + real alarm at 06:30, stopped by the bracelet on the base; "You don't get up" = the 06:30/06:35/06:40 ladder).
+  Glow under the base tightened (owner: "più delineata, meno dispersiva"): I = 1 inside r 0.06 m, then
+  exp(−(r−0.06)/0.017), out to R 0.13 m.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's

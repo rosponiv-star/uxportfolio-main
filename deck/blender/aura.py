@@ -455,6 +455,7 @@ FONT = {'0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
         '3': ['11111', '00010', '00100', '00010', '00001', '10001', '01110'],
         '4': ['00010', '00110', '01010', '10010', '11111', '00010', '00010'],
         '6': ['00110', '01000', '10000', '11110', '10001', '10001', '01110'],
+        '2': ['01110', '10001', '00001', '00010', '00100', '01000', '11111'],
         '8': ['01110', '10001', '10001', '01110', '10001', '10001', '01110'],
         '%': ['11000', '11001', '00010', '00100', '01000', '10011', '00011'],   # the charge, written for 8 s
         ':': ['0', '0', '1', '0', '1', '0', '0']}
@@ -954,7 +955,7 @@ PINCH_R = basis((-0.906, 0.0, -0.423), (0.0, -1.0, 0.0))   # from the right like
 
 def build_gesture(n):
     """01 take the bracelet off the base, 02 palm on the base (bracelet on the wrist), 03 put it back."""
-    base = build_base(with_time=n > 1, time={2: '06:16', 3: '86%'}.get(n, ''))   # palm: the time; bracelet back: its charge
+    base = build_base(with_time=True, time={1: '22:00', 2: '06:16', 3: '86%'}[n])   # awake: the time is on; bracelet back: its charge
     if n == 2:
         R = basis((-1, 0, 0), (0, -1, 0)); wrist = Vector((0.062, 0.006, TOP + 0.015))
         hand, tips = build_hand(POSES['flat'] | {'index': (6, 34, 18), 'middle': (5, 38, 20), 'ring': (6, 36, 18), 'little': (8, 30, 14)}, R, wrist)

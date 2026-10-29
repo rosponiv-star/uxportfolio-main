@@ -473,11 +473,11 @@
       <p class="label i3" style="margin-bottom: 16px">What if…</p>
       <dl class="rows whatif">
         <div><dt class="small m">Wi-Fi drops</dt><dd class="small i2">Nothing changes: base, bracelet and room talk locally.</dd></div>
-        <div><dt class="small m">The bracelet runs flat</dt><dd class="small i2">Fixed-time wake-up at 06:30, with the full ramp.</dd></div>
+        <div><dt class="small m">The bracelet runs flat</dt><dd class="small i2">A fast dawn, then a real alarm at 06:30; the bracelet on the base stops it.</dd></div>
         <div><dt class="small m">The power goes out</dt><dd class="small i2">A backup battery plays the sound; the phone rings too.</dd></div>
         <div><dt class="small m">The lamp is offline</dt><dd class="small i2">The ramp goes on with the other channels; the app says so in the morning.</dd></div>
         <div><dt class="small m">A partner is asleep</dt><dd class="small i2">Haptics first, slower light; sound only after the window.</dd></div>
-        <div><dt class="small m">You don’t get up</dt><dd class="small i2">+5 min louder; +10 min the phone alarm rings.</dd></div>
+        <div><dt class="small m">You don’t get up</dt><dd class="small i2">06:30 brighter, 06:35 clear sound, 06:40 a real alarm on base and phone.</dd></div>
       </dl>
     </div>
   </div>
@@ -826,9 +826,9 @@
     const ROOM = [, ['#17171d', 'Dark room', '#cfcdc6'], ['#f5ecdc', 'Dawn light', '#8a6a3a'], ['none', 'Daylight', '#6b6b66']][n];
     // the light line is a round LED ring (r 34 mm) under the base: its light leaks out under the edges and falls off with
     // the distance from the ring, so the glow on the nightstand is round (an ellipse in iso), brightest at mid-edges
-    const R = 0.17, col = ['', '#8f9aff', '#f2b65a'][n], stops = [];
+    const R = 0.13, col = ['', '#8f9aff', '#f2b65a'][n], stops = [];
     for (let r = 0; r <= R + 1e-9; r += R / 24) {
-      const I = r < 0.034 ? 1 : 1 / (1 + ((r - 0.034) / 0.02) ** 2);
+      const I = r < 0.06 ? 1 : Math.exp(-(r - 0.06) / 0.017);   // full under the edges, a short soft fall-off
       stops.push(`<stop offset="${(r / R).toFixed(3)}" stop-color="${col}" stop-opacity="${(I * (r > R * 0.9 ? (R - r) / (R * 0.1) : 1)).toFixed(3)}" />`);
     }
     let g = `<defs><radialGradient id="gr${n}">${stops.join('')}</radialGradient></defs>`;
