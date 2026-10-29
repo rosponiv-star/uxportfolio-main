@@ -929,7 +929,8 @@ def studio(view):
         build_base(); fw = W / 0.62; tgt = (0, 0, TOP * 0.5); pos = (-1 if view == 'left' else 1, 0, TOP * 0.42)
     elif view == 'top_cable':
         build_base()
-        rbox('boot', 0.011, 0.016, 0.0062, EDGE_P, EDGE_T, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=8, se=2)   # corners like the alarm's
+        boot = rbox('boot', 0.011, 0.016, 0.0062, 0.0005, 0.0003, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=4, se=2)   # nearly sharp corners (owner)
+        wn = boot.modifiers.new('wn', 'WEIGHTED_NORMAL'); wn.keep_sharp = True; wn.mode = 'FACE_AREA'   # flat faces, no diagonal shading
         cyl('usb', 0.0021, 0.5, 'cable', (0, W / 2 + 0.016 + 0.25, MID), axis='Y', seg=48)
         fw = 0.32; tgt = (0, 0.026, TOP / 2); pos = (0, 0.0261, 1)   # a stretch of braided cable shows before the frame cuts it
     elif view == 'time':
@@ -974,7 +975,7 @@ def soft_light():
 
 def table_scene():
     build_base()
-    boot = rbox('boot', 0.011, 0.016, 0.0062, EDGE_P, EDGE_T, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=8, se=2)   # corners like the alarm's
+    boot = rbox('boot', 0.011, 0.016, 0.0062, 0.0005, 0.0003, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=4, se=2)   # nearly sharp corners (owner)
     curve('usb', [(0, W / 2 + 0.015, MID), (0, W / 2 + 0.045, MID - 0.004), (0.015, W / 2 + 0.075, 0.003),
                   (0.05, W / 2 + 0.16, 0.0028), (0.03, W / 2 + 0.32, 0.0028)], 0.0021, 'cable')
     MATS['table'] = principled('table', srgb('#cfcfcc'), rough=0.85)
