@@ -1126,6 +1126,16 @@ When a CLOUD session hits something that needs the local environment, it must:
   bigger back marks with a charging bolt, smaller button gap, finer satin + a touch darker) are sketched in
   deck/out/base-sketch.png and deck/out/satin-preview-labeled.jpg, awaiting approval; aura.py takes `col=` and
   `grain=` for the preview (defaults unchanged).
+- **2026-10-29 · LOCAL (56)** · Base changes approved by the owner and modelled: three gold pogo pins on top (row
+  parallel to the front, centred, 20 mm from the front edge, 4 mm pitch, Ø 1.5 mm domes in dark 2.2 mm rings,
+  `charge_pins()`); back marks 2.8 mm tall, light matte #8a8b90, the plug replaced by a charging bolt whose stroke thins
+  from the tail into a big arrowhead; button recess 5.4 mm (gap 0.5 mm, was 0.8); plastic satin grain 0.25 (was 0.30);
+  body #292a2e (was #2c2d31). Spec: Qi → pins everywhere, new §8.1 on the pins (catalogue parts, magnets, seal,
+  unpowered until the bracelet is recognised, +/ID/− pinout, 2-pin and Qi alternatives, no raised oval: owner keeps
+  bare flush pins). All 21 views + the dawn scene re-rendered and exported with `node out/_export.mjs` (deck assets
+  views/ + render-*, and Media/…/Renders + Transparent/); iso-base, base_under and g1–g4 redrawn. Note: views
+  led-dawn and strip-charging show states the revised spec no longer has (front LED is day-only; charging is the
+  front LED, not the line).
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's

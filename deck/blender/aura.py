@@ -18,8 +18,8 @@ PLASTIC = 'plastic' in argv
 GRIDT = 'grid' in argv          # time option 4: a 3×5 dot font on the speaker grille's own grid (pitch, graded dot size)
 SEGS = 'seg' in argv            # time option 1: continuous segments under a thin dead-front window
 COARSE = 'coarse' in argv
-BODY_HEX = next((a.split('=', 1)[1] for a in argv if a.startswith('col=')), '#2c2d31')   # graphite body
-GRAIN = float(next((a.split('=', 1)[1] for a in argv if a.startswith('grain=')), '0.3'))  # satin bump on plastic
+BODY_HEX = next((a.split('=', 1)[1] for a in argv if a.startswith('col=')), '#292a2e')   # graphite body (owner, 2026-10-29: a touch darker)
+GRAIN = float(next((a.split('=', 1)[1] for a in argv if a.startswith('grain=')), '0.25'))  # satin bump on plastic (0.30 → 0.25: a little finer)
 FINE = not (COARSE or SEGS or GRIDT)   # the time (owner, 2026-10-29): fine dot matrix behind ~0.1 mm laser micro-holes
 os.makedirs(OUT, exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -158,6 +158,7 @@ def cols(p, o, n): return [-(n - 1) / 2 * p + i * p for i in range(n)]
 R_TOP, R_BOT = 0.0004, 0.0009   # hole radius, top row → bottom row (owner: graded, small at the top)
 SPAN_V = (NV - 1) / 2 * PV
 def hole_r(cv): return R_BOT + (R_TOP - R_BOT) * (cv + SPAN_V) / (2 * SPAN_V)
+BTN_R, BTN_HOLE = 0.0049, 0.0054   # button and its recess: a 0.5 mm gap (owner, 2026-10-29; was 0.8)
 BTN_CLEAR = PORT_CLEAR = 0.011   # two equal free circles round the USB-C and the button: room for the marks on one line
 BTN_X = -9 * PU            # Bluetooth button on a hole column, right of the inlet seen from behind (world -X)
 
@@ -328,7 +329,8 @@ if MODE == 'real':
         'rubber': principled('rubber', srgb('#0a0a0b'), rough=0.8),
         'cavity': principled('cavity', srgb('#050506'), rough=0.9),
         'print': principled('print', srgb('#7a7a7e'), rough=0.6),
-        'mark': principled('mark', srgb('#5e5f64'), rough=0.75),   # laser etching: a lighter, matte grey on the graphite
+        'mark': principled('mark', srgb('#8a8b90'), rough=0.8),    # laser etching: a light, matte grey on the graphite (owner, 2026-10-29)
+        'gold': principled('gold', srgb('#d9b25e'), metal=1.0, rough=0.28),
         'pin': principled('pin', srgb('#c8c8cc'), metal=1.0, rough=0.25),
         'led_under': principled('led_under', srgb('#141416'), rough=0.6) if STUDIO and SHOT != 'lit' else
                      emit('led_under', srgb(NIGHT if SHOT == 'night' else DAWN), 90.0 if SHOT == 'night' else 160.0 if SHOT == 'lit' else 70.0),
@@ -346,7 +348,7 @@ if MODE == 'real':
 else:
     T = {'alu': 0.86, 'grille': 0.42, 'rubber': 0.3, 'print': 0.4, 'pin': 0.75, 'band': 0.5, 'cable': 0.25, 'dots': 0.28,
          'led_front': 0.25, 'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98,
-         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3, 'mark': 0.45, 'skin': 0.985}
+         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3, 'mark': 0.62, 'skin': 0.985, 'gold': 0.7}
     MATS = {k: toon(k, grey(v)) for k, v in T.items()}
     MATS['body'] = body_toon('body', grey(0.86))
     MATS['shell'] = toon('shell', grey(0.86))
@@ -588,8 +590,8 @@ MARK_FONT = 'C:/Windows/Fonts/bahnschrift.ttf'   # DIN-like: the usual face for 
 
 def back_marks():
     """Laser-etched marks on the back (owner, 2026-10-29), drawn in the face plane as seen from behind (sx to the
-    viewer's right, sz up): a power-plug icon over the USB-C with its rating under it, the Bluetooth rune over the
-    button. Both icons 2.2 mm tall on one line, 1.4 mm over the button's recess; the rating 1.3 mm cap height, 1.6 mm
+    viewer's right, sz up): a charging bolt over the USB-C with its rating under it, the Bluetooth rune over the
+    button. Both icons 2.8 mm tall on one line, 1.4 mm over the button's recess; the rating 1.3 mm cap height, 1.6 mm
     under the port."""
     y = W / 2 + 0.00003; bm = bmesh.new(); t = 0.00022
     P = lambda sx, sz: Vector((-sx, y, MID + sz))
@@ -606,14 +608,28 @@ def back_marks():
         for cx, cz, q in ((a1 - r, b1 - r, 0), (a0 + r, b1 - r, 90), (a0 + r, b0 + r, 180), (a1 - r, b0 + r, 270)):
             pts += [(cx + r * math.cos(math.radians(q + 90 * k / n)), cz + r * math.sin(math.radians(q + 90 * k / n))) for k in range(n + 1)]
         poly(pts)
-    u = 0.0011; zc = 0.0057 + 0.0014 + u        # icon half-height; one line for both icons, set by the button's recess (r 5.7 mm)
-    # power plug over the USB-C: two prongs, a rounded body, the cord
-    stroke([(-0.33 * u, zc + 0.35 * u), (-0.33 * u, zc + u)]); stroke([(0.33 * u, zc + 0.35 * u), (0.33 * u, zc + u)])
-    rrect(-0.62 * u, zc - 0.35 * u, 0.62 * u, zc + 0.35 * u, 0.22 * u)
-    stroke([(0, zc - 0.35 * u), (0, zc - u)])
+    u = 0.0014; zc = BTN_HOLE + 0.0014 + u        # icon half-height (2.8 mm icons); one line for both, set by the button's recess
+    # charging bolt over the USB-C: a zigzag whose stroke thins from the tail to a big arrowhead
+    C = [(0.30, 1.0), (-0.24, -0.02), (0.24, 0.10), (-0.16, -0.60)]
+    C = [(a * u, zc + b * u) for a, b in C]; L = [0.0]
+    for (a0, b0), (a1, b1) in zip(C, C[1:]): L.append(L[-1] + math.hypot(a1 - a0, b1 - b0))
+    wid = lambda d: (0.36 + (0.13 - 0.36) * d / L[-1]) * u
+    def nrm(i):
+        ns = []
+        for j in (i - 1, i):
+            if 0 <= j < len(C) - 1:
+                (a0, b0), (a1, b1) = C[j], C[j + 1]; d = math.hypot(a1 - a0, b1 - b0); ns.append((-(b1 - b0) / d, (a1 - a0) / d))
+        nx, nz = sum(n[0] for n in ns), sum(n[1] for n in ns); k = math.hypot(nx, nz)
+        cosh = max(0.35, (nx * ns[0][0] + nz * ns[0][1]) / k)
+        return nx / k / cosh, nz / k / cosh               # mitre: keeps the stroke width at the corners
+    side = [(C[i][0] + nrm(i)[0] * wid(L[i]) / 2, C[i][1] + nrm(i)[1] * wid(L[i]) / 2, C[i][0] - nrm(i)[0] * wid(L[i]) / 2, C[i][1] - nrm(i)[1] * wid(L[i]) / 2) for i in range(len(C))]
+    for p0, p1 in zip(side, side[1:]): poly([(p0[0], p0[1]), (p1[0], p1[1]), (p1[2], p1[3]), (p0[2], p0[3])])
+    (a0, b0), (a1, b1) = C[-2], C[-1]; d = math.hypot(a1 - a0, b1 - b0); dx, dz = (a1 - a0) / d, (b1 - b0) / d
+    hl, hw = 0.55 * u, 0.42 * u                          # the arrowhead
+    poly([(a1 + dx * hl, b1 + dz * hl), (a1 - dz * hw, b1 + dx * hw), (a1 + dz * hw, b1 - dx * hw)])
     # Bluetooth rune over the button
     bx = -BTN_X; h = 2 * u
-    stroke([(bx + a * h, zc + b * h) for a, b in ((-0.27, 0.25), (0.27, -0.25), (0, -0.5), (0, 0.5), (0.27, 0.25), (-0.27, -0.25))])
+    stroke([(bx + a * h, zc + b * h) for a, b in ((-0.27, 0.25), (0.27, -0.25), (0, -0.5), (0, 0.5), (0.27, 0.25), (-0.27, -0.25))], 0.00026)
     # DC symbol between "5V" and "3A" under the USB-C
     zr = -(0.0013 + 0.0016 + 0.00065); sw = 0.0013   # the rating: same gap under the port
     stroke([(-sw / 2, zr + 0.00022), (sw / 2, zr + 0.00022)], 0.00016)
@@ -627,20 +643,32 @@ def back_marks():
         cu.materials.append(M('mark')); obs.append(ob)
     return obs
 
+def charge_pins():
+    """Three gold spring pins for the bracelet (owner, 2026-10-29): one row parallel to the front, centred left-right,
+    20 mm from the front edge, 4 mm pitch; each a 1.5 mm dome 0.2 mm proud in a dark 2.2 mm insulating ring."""
+    obs = []
+    for i in (-1, 0, 1):
+        x, y = i * 0.004, -W / 2 + 0.020
+        obs.append(cyl(f'pin_ring{i}', 0.0011, 0.0001, 'rubber', (x, y, TOP + 0.00002), seg=32))
+        bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=32, v_segments=16, radius=0.00075)
+        for v in bm.verts: v.co.z = max(v.co.z, 0.0) * 0.27
+        obs.append(link(f'pin{i}', bm, 'gold', (x, y, TOP)))
+    return obs
+
 def build_base(with_time=False, time='06:30'):
     """Solid graphite block: speakers behind dot grilles on the sides and back, time + LED at the front, USB-C and the
     Bluetooth button at the back, haptic + magnetic top for the bracelet, thin rubber disc ringed by the light strip."""
     body = rbox('body', W, W, H, EDGE_P, EDGE_T, 'body', (0, 0, PL), sp=4, se=2)
     cut(body, stadium_bm(0.0084, 0.0026, 0.012), (0, W / 2, MID), 'rubber')  # USB-C receptacle
-    cut(body, cutter_bm([(BTN_X, 0, 0.0057)], 0.002), (0, W / 2, MID), 'rubber')
+    cut(body, cutter_bm([(BTN_X, 0, BTN_HOLE)], 0.002), (0, W / 2, MID), 'rubber')
     if MODE == 'real': cut(body, holes_bm(), (0, 0, 0), 'cavity')
     wn = body.modifiers.new('wn', 'WEIGHTED_NORMAL'); wn.keep_sharp = True; wn.mode = 'FACE_AREA'
-    btn = cyl('button', 0.0049, 0.002, 'shell', (BTN_X, W / 2 - 0.0008, MID), axis='Y')
+    btn = cyl('button', BTN_R, 0.002, 'shell', (BTN_X, W / 2 - 0.0008, MID), axis='Y')
     tongue = rbox('tongue', 0.0066, 0.004, 0.0007, 0.0003, 0.0, 'print', (0, W / 2 - 0.0035, MID - 0.00035), sp=4)
     disc = cyl('disc', 0.034, PL, 'rubber', (0, 0, PL / 2), seg=128)
     ring = cyl('ring', 0.0343, PL * 0.5, 'led_under', (0, 0, PL / 2), seg=128)
     dot = cyl('led_front', 0.00085, 0.0003, 'led_front', (0.036, -W / 2 - 0.00002, MID), axis='Y', seg=24)
-    obs = [body, btn, tongue, disc, ring, dot] + back_marks()
+    obs = [body, btn, tongue, disc, ring, dot] + back_marks() + charge_pins()
     if with_time: obs.append(time_dots(time, MID))
     return group('base', obs)
 
