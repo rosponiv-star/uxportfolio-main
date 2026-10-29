@@ -1014,6 +1014,10 @@ When a CLOUD session hits something that needs the local environment, it must:
   drawing `iso-base_under.png` ("Seen from below", aura.py `line … base_under`, camera ISO_UNDER; `line <out> <name>`
   now renders one drawing and merges anchors) carries keys 5 Underneath and 6 Back. Base label moved above the base,
   legend to the bottom-left, shutters drawn at 0.9 so the lamp line clears them.
+- **2026-10-29 · LOCAL (36)** · Time display options discussed (sketch: current coarse dots / 1 continuous segments
+  under a thin dead-front / 2 fine dots / 3 OLED). Owner asked to render option 2: aura.py flag `fine` (5×7 font
+  with a plain 0, 1.2 mm pitch, 0.36 mm dot) and a new `time` view (3/4 close-up on the time). Not chosen yet; the
+  default renders are unchanged.
 
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus

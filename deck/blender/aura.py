@@ -15,6 +15,7 @@ SHOT = argv[2] if len(argv) > 2 else ''
 PREVIEW = 'preview' in argv
 STATE = next((a.split('=', 1)[1] for a in argv if a.startswith('state=')), '')   # light state for 'led' / 'strip'
 PLASTIC = 'plastic' in argv
+FINE = 'fine' in argv          # time option 2: fine dot matrix, laser micro-holes ~0.1 mm, 1.2 mm pitch
 os.makedirs(OUT, exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)
 scene = bpy.context.scene
@@ -278,7 +279,7 @@ def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.0004
     return m
 
 TABLE = SHOT == 'table'
-STUDIO = SHOT in ('left', 'right', 'top_cable', 'led', 'strip', 'pod_in', 'pod_side', 'foot', 'persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
+STUDIO = SHOT in ('time', 'left', 'right', 'top_cable', 'led', 'strip', 'pod_in', 'pod_side', 'foot', 'persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
     MATS = {
         'body': body_real('body', srgb('#2c2d31')),
@@ -418,11 +419,15 @@ FONT = {'0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
         '6': ['00110', '01000', '10000', '11110', '10001', '10001', '01110'],
         ':': ['0', '0', '1', '0', '1', '0', '0']}
 
+FONT_FINE = dict(FONT, **{'0': ['01110', '10001', '10001', '10001', '10001', '10001', '01110']})
+
 def time_dots(text, zc, pitch=0.0017, r=0.0005, xo=-0.006):
+    if FINE: pitch, r = 0.0012, 0.00036
+    font = FONT_FINE if FINE else FONT
     cols = []
     for i, ch in enumerate(text):
         if i: cols.append(None)
-        g = FONT[ch]
+        g = font[ch]
         for c in range(len(g[0])): cols.append([g[row][c] == '1' for row in range(7)])
     x0 = xo - (len(cols) - 1) * pitch / 2
     bm = bmesh.new()
@@ -800,6 +805,8 @@ def studio(view):
         rbox('boot', 0.011, 0.016, 0.0062, 0.0025, 0.0008, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=8, se=2)
         cyl('usb', 0.0021, 0.5, 'cable', (0, W / 2 + 0.016 + 0.25, MID), axis='Y', seg=48)
         fw = (W / 0.80) * 16 / 9; tgt = (0, 0, TOP / 2); pos = (0, 0.0001, 1)
+    elif view == 'time':
+        build_base(with_time=True); fw = 0.11; tgt = (-0.004, -W / 2 + 0.01, MID); pos = (-0.004 + 0.55, -W / 2 - 1.0, MID + 0.32)   # 3/4 on the time
     elif view == 'led':
         build_base(); fw = 0.11; tgt = (0.03, -W / 2 + 0.01, MID); pos = (0.03 + 0.55, -W / 2 - 1.0, MID + 0.32)   # 3/4 on the LED: the alarm still reads
     elif view == 'strip':
@@ -879,7 +886,7 @@ def real():
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
-    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-plastic" if PLASTIC else ""}{"-preview" if PREVIEW else ""}.png')
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-plastic" if PLASTIC else ""}{"-fine" if FINE else ""}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
 # ---------------------------------------------------------------------------------------------------------------
