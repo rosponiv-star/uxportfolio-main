@@ -1024,6 +1024,11 @@ When a CLOUD session hits something that needs the local environment, it must:
 - **2026-10-29 · LOCAL (38)** · Time option on the speaker grid (owner): aura.py flag `grid` = 3×5 dot font placed on the
   grille's own grid (PU × PV, columns −11…5, rows +1.5…−2.5 PV), each dot the graded hole size of its row. Front has
   no holes yet: off, the time holes alone would show; proposed a full front grid so the digits hide among them.
+- **2026-10-29 · LOCAL (39)** · TIME CHOSEN (owner): option 2, fine dot matrix, now the default in aura.py (`coarse`,
+  `seg`, `grid` flags keep the others). One square lattice of pitch PU/3 (1.32 mm): every third column falls on a
+  speaker column, rows centred on MID; 25 × 7 dots, centre on column −5; 5×7 font with a plain 0; lit dot 0.72 mm
+  behind ~0.1 mm laser micro-holes (invisible when off). Re-rendered views/lit.jpg, new views/time.jpg (3/4 close-up),
+  iso-base.png; schema key 2 points at the digits' left end.
 
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus

@@ -17,7 +17,8 @@ STATE = next((a.split('=', 1)[1] for a in argv if a.startswith('state=')), '')  
 PLASTIC = 'plastic' in argv
 GRIDT = 'grid' in argv          # time option 4: a 3×5 dot font on the speaker grille's own grid (pitch, graded dot size)
 SEGS = 'seg' in argv            # time option 1: continuous segments under a thin dead-front window
-FINE = 'fine' in argv          # time option 2: fine dot matrix, laser micro-holes ~0.1 mm, 1.2 mm pitch
+COARSE = 'coarse' in argv
+FINE = not (COARSE or SEGS or GRIDT)   # the time (owner, 2026-10-29): fine dot matrix behind ~0.1 mm laser micro-holes
 os.makedirs(OUT, exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)
 scene = bpy.context.scene
@@ -470,7 +471,7 @@ def time_grid(text, c0=-11, row0=1.5):
 def time_dots(text, zc, pitch=0.0017, r=0.0005, xo=-0.006):
     if SEGS: return time_segs(text, zc)
     if GRIDT: return time_grid(text)
-    if FINE: pitch, r = 0.0012, 0.00036
+    if FINE: pitch, r, xo = PU / 3, 0.00036, -5 * PU / 3   # one square lattice: every third column on a speaker column, centred on MID
     font = FONT_FINE if FINE else FONT
     cols = []
     for i, ch in enumerate(text):
@@ -934,7 +935,7 @@ def real():
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
-    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-plastic" if PLASTIC else ""}{"-fine" if FINE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-plastic" if PLASTIC else ""}{"-coarse" if COARSE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
 # ---------------------------------------------------------------------------------------------------------------
