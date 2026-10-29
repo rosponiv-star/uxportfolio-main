@@ -1039,6 +1039,10 @@ When a CLOUD session hits something that needs the local environment, it must:
   button, both 2.2 mm on ONE line (set by the button recess + 1.4 mm); "5V ⎓ 3A" 1.3 mm cap height, 1.6 mm under the
   port. Free areas round port and button are now equal circles, r 11 mm (BTN_CLEAR = PORT_CLEAR). New `ports` view
   (3/4 close-up). Re-rendered views/back, persp_back, ports, render-back, render-persp_back, iso-base_under.
+- **2026-10-29 · LOCAL (42)** · Cable is braided textile (aura.py `braid()`: 2/2 diamond braid at ±45°, graphite,
+  low sheen); top_cable view reframed (fw 0.32, target +26 mm) so a stretch of cable shows before the frame cuts it.
+  ALL 21 views re-rendered with the current model (fine time, back marks, braid) into assets/aurawake/views/, and
+  render-front/back/persp/persp_back/lit/top refreshed. Review sheet: deck/out/aurawake-all-views.jpg.
 
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus

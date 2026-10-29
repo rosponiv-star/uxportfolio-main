@@ -232,6 +232,40 @@ def fabric(name, color):
     nt.links.new(weave, bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
     return m
 
+def braid(name, dark, R=0.0021, w=0.00085):
+    """Braided textile cable (owner, 2026-10-29): a 2/2 diamond braid of flat strands at ±45° round the cord (object
+    axis Y), each strand rounded in the bump, fine fibres along it, a slight tone change from strand to strand."""
+    m = principled(name, dark, rough=0.78); nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    for k in ('Sheen Weight', 'Sheen'):
+        if k in b.inputs: b.inputs[k].default_value = 0.2; break
+    tc = nt.nodes.new('ShaderNodeTexCoord'); P = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], P.inputs[0])
+    def op(o, a, c=None):
+        n = nt.nodes.new('ShaderNodeMath'); n.operation = o
+        for i, x in enumerate((a, c)):
+            if x is None: continue
+            if isinstance(x, (int, float)): n.inputs[i].default_value = x
+            else: nt.links.new(x, n.inputs[i])
+        return n.outputs[0]
+    arc = op('MULTIPLY', op('ARCTAN2', P.outputs[2], P.outputs[0]), R)          # distance round the cord
+    fu, fv = op('DIVIDE', op('ADD', P.outputs[1], arc), w), op('DIVIDE', op('SUBTRACT', P.outputs[1], arc), w)
+    iu, iv = op('FLOOR', fu), op('FLOOR', fv)
+    top = op('LESS_THAN', op('FLOORED_MODULO', op('ADD', op('FLOOR', op('DIVIDE', iu, 2.0)), op('FLOOR', op('DIVIDE', iv, 2.0))), 2.0), 0.5)
+    ru = op('SINE', op('MULTIPLY', op('FRACT', fv), math.pi)); rv = op('SINE', op('MULTIPLY', op('FRACT', fu), math.pi))
+    height = op('ADD', op('MULTIPLY', top, ru), op('MULTIPLY', op('SUBTRACT', 1.0, top), rv))
+    fib = nt.nodes.new('ShaderNodeTexWave'); fib.wave_type = 'BANDS'; fib.inputs['Scale'].default_value = 9000
+    fib.inputs['Distortion'].default_value = 2.0; nt.links.new(tc.outputs['Object'], fib.inputs['Vector'])
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.8; bp.inputs['Distance'].default_value = 0.00025
+    nt.links.new(op('ADD', op('POWER', height, 0.6), op('MULTIPLY', fib.outputs['Fac'], 0.12)), bp.inputs['Height'])
+    nt.links.new(bp.outputs[0], b.inputs['Normal'])
+    cell = nt.nodes.new('ShaderNodeCombineXYZ'); nt.links.new(iu, cell.inputs[0]); nt.links.new(iv, cell.inputs[1])
+    wn = nt.nodes.new('ShaderNodeTexWhiteNoise'); wn.noise_dimensions = '3D'; nt.links.new(cell.outputs[0], wn.inputs['Vector'])
+    g = op('ADD', 0.62, op('ADD', op('MULTIPLY', height, 0.3), op('MULTIPLY', wn.outputs['Value'], 0.12)))
+    cc = nt.nodes.new('ShaderNodeCombineColor')
+    for k in range(3): nt.links.new(g, cc.inputs[k])
+    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+    mx.inputs[6].default_value = dark; nt.links.new(cc.outputs[0], mx.inputs[7]); nt.links.new(mx.outputs[2], b.inputs['Base Color'])
+    return m
+
 def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.00042):
     """Woven melange strap: a 2/1 twill whose threads wander slightly (noise-warped grid), each thread rounded in the
     bump, colour in soft clouds between two blues, a few near-white weft flecks, fibre fuzz, darker corded edges."""
@@ -304,7 +338,7 @@ if MODE == 'real':
         'lens': principled('lens', srgb('#050506'), rough=0.06, coat=0.0),
         'steel': bump_tex(principled('steel', srgb('#1c1d20'), metal=1.0, rough=0.36), 'noise', 9000, 0.04),
         'modalu': bump_tex(principled('modalu', srgb('#4a4b50'), metal=1.0, rough=0.34), 'noise', 9000, 0.05),
-        'cable': bump_tex(principled('cable', srgb('#0e0e10'), rough=0.8), 'wave', 420, 0.5),
+        'cable': braid('cable', srgb('#1a1b1e')),
         'plug': principled('plug', srgb('#0a0a0b'), rough=0.6),
     }
 else:
@@ -897,7 +931,7 @@ def studio(view):
         build_base()
         rbox('boot', 0.011, 0.016, 0.0062, 0.0025, 0.0008, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=8, se=2)
         cyl('usb', 0.0021, 0.5, 'cable', (0, W / 2 + 0.016 + 0.25, MID), axis='Y', seg=48)
-        fw = (W / 0.80) * 16 / 9; tgt = (0, 0, TOP / 2); pos = (0, 0.0001, 1)
+        fw = 0.32; tgt = (0, 0.026, TOP / 2); pos = (0, 0.0261, 1)   # a stretch of braided cable shows before the frame cuts it
     elif view == 'time':
         build_base(with_time=True); fw = 0.11; tgt = (-0.004, -W / 2 + 0.01, MID); pos = (-0.004 + 0.55, -W / 2 - 1.0, MID + 0.32)   # 3/4 on the time
     elif view == 'ports':
