@@ -1089,6 +1089,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   blend), 02 on dawn light (#f5ecdc, glow in multiply), 03 on paper; each figure labelled Dark room / Dawn light /
   Daylight. Light slide: the light-line column sits on the night ground (white states finally read as white), the
   ladder on dawn light, the front LED on paper.
+- **2026-10-29 · LOCAL (51)** · Time rule (owner): the time matrix is ON by itself whenever you are expected to be
+  awake, no touch needed: evening from taking the bracelet until the bracelet senses sleep; at night as soon as it
+  senses you awake, for as long as you are awake; the whole wake window from 06:00 until the bracelet goes back on the
+  base. Otherwise (day, or a night waking it missed) a short palm touch shows it for 8 s. Spec §2.3 points 2–3, §6 rows,
+  §7.4 updated. Deck: One night gains a "Time" lane (bars 22:00–22:40, 03:12–03:22, 06:00–07:10; tag "Tap: 8 s"),
+  viewBox 706; base 03:12 event dropped, You 06:16 "Awake, still in bed"; keys 01/02 and gestures 02/03 copy updated.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's

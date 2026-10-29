@@ -433,7 +433,7 @@
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1">One night</p>
     <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Every change is a ramp, never a jump. The wake-up comes at the first light sleep.</p>
-    <svg class="lanes" style="grid-column: 1 / -1; align-self: end" viewBox="0 0 1728 640" role="img" aria-label="One night with AuraWake, 21:30 to 07:10" data-night></svg>
+    <svg class="lanes" style="grid-column: 1 / -1; align-self: end" viewBox="0 0 1728 706" role="img" aria-label="One night with AuraWake, 21:30 to 07:10" data-night></svg>
   </div>
 </section>
 
@@ -444,8 +444,8 @@
     <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Three gestures replace the menus.</p>
     <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid">
       <div class="gest"><svg class="gfig" viewBox="0 40 560 480" role="img" aria-label="A hand lifting the bracelet off the base" data-gest="1"></svg><span class="label kick"><span class="n">01</span>Evening</span><p class="body m">Take the bracelet</p><p class="small i2">Lifting it off the base means “I’m going to bed”. One breath under the base: violet, tomorrow’s wake-up is on; white, it is off.</p></div>
-      <div class="gest"><svg class="gfig" viewBox="0 40 560 480" role="img" aria-label="A palm resting on top of the base" data-gest="2"></svg><span class="label kick"><span class="n">02</span>Morning</span><p class="body m">Palm on the base</p><p class="small i2">The time for 8 s, then ☀ 06:30 or OFF. In the morning it softens the sound but never moves the wake-up. Held 3 s in the evening: tomorrow off.</p></div>
-      <div class="gest"><svg class="gfig" viewBox="0 40 560 480" role="img" aria-label="A hand putting the bracelet back on the base" data-gest="3"></svg><span class="label kick"><span class="n">03</span>Day</span><p class="body m">Put it back</p><p class="small i2">Back on the base means “I’m up”: everything stops, even the alarm. The night syncs and the time shows the charge.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 40 560 480" role="img" aria-label="A palm resting on top of the base" data-gest="2"></svg><span class="label kick"><span class="n">02</span>Morning</span><p class="body m">Palm on the base</p><p class="small i2">The time is already on: the palm softens the sound but never moves the wake-up. Held 3 s in the evening: tomorrow off.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 40 560 480" role="img" aria-label="A hand putting the bracelet back on the base" data-gest="3"></svg><span class="label kick"><span class="n">03</span>Day</span><p class="body m">Put it back</p><p class="small i2">Back on the base means “I’m up”: everything stops, even the alarm. The night syncs, the time shows the charge, then goes off.</p></div>
     </div>
   </div>
 </section>
@@ -572,6 +572,7 @@
   .lanes .win-t { font-size: 18px; fill: #9a6a12; }
   .lanes .a-light { fill: color-mix(in srgb, var(--dawn) 70%, transparent); stroke: #c98f2a; stroke-width: 1.5; }
   .lanes .a-grey { fill: rgb(17 17 17 / 0.08); stroke: var(--ink-3); stroke-width: 1.5; }
+  .lanes .a-time { fill: rgb(17 17 17 / .08); stroke: var(--ink); stroke-width: 1.5; }
   .lanes .a-nightc { fill: color-mix(in srgb, var(--night) 30%, transparent); stroke: var(--night); stroke-width: 1.5; }
   .lanes .dot { fill: var(--ink); }
   .iso { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -729,8 +730,8 @@
     // TE-style keys: every leader leaves its face square to it and runs the same length past the drawing's edge
     const D = { up: [0, -1], down: [0, 1], left: [-C, -S], right: [C, -S] };
     const KEYS = [
-      ['Top surface', 'Charges the bracelet; a palm shows the time', bp(0.045, 0.03, TOP), bp(0.015, W / 2, TOP), 'up'],
-      ['Time', 'Micro-perforated: the time, next wake-up, charge', bp(-0.0224, -W / 2, MID), bp(-W / 2, -W / 2, MID), 'left'],
+      ['Top surface', 'Charges the bracelet; by day a tap shows the time', bp(0.045, 0.03, TOP), bp(0.015, W / 2, TOP), 'up'],
+      ['Time', 'On whenever you are awake; also the charge', bp(-0.0224, -W / 2, MID), bp(-W / 2, -W / 2, MID), 'left'],
       ['Front LED', 'Daytime status only, off in the dark', bp(0.036, -W / 2, MID), bp(0.036, -W / 2, PL), 'down'],
       ['Speakers', 'Dot grilles on the sides and the back', bp(W / 2, 0.012, MID + 0.006), bp(W / 2, W / 2, MID + 0.006), 'right'],
       ['Underneath', 'Rubber disc ringed by the evening and night light', up('under'), up('under_exit'), 'down'],
@@ -761,9 +762,11 @@
     const X = (t) => { const s = seg(m(t)); return s.x + ((m(t) - s.a) / (s.b - s.a)) * s.w; };
     const TOP = 44, LH = 66, AH = 30;
     const lanes = [
-      ['You', null, 'ev', [['22:00', 'Takes the bracelet'], ['22:30', 'Goes to bed'], ['03:12', 'Wakes up briefly'], ['06:16', 'Awake, palm: the time'], ['06:26', 'Gets up'], ['07:10', 'Bracelet back', 'start', 9]]],
+      ['You', null, 'ev', [['22:00', 'Takes the bracelet'], ['22:30', 'Goes to bed'], ['03:12', 'Wakes up briefly'], ['06:16', 'Awake, still in bed'], ['06:26', 'Gets up'], ['07:10', 'Bracelet back', 'start', 9]]],
       ['Bracelet', 'bracelet', 'ev', [['21:30', 'On the base, charged'], ['22:00', 'Connects'], ['22:30', 'Senses lying down'], ['03:12', 'Senses waking'], ['06:14', 'Light sleep', 'end'], ['06:16', 'Senses awake, lying'], ['06:26', 'Steps, upright']]],
-      ['Base', 'base', 'ev', [['22:00', 'One violet breath'], ['03:12', 'Time on for 8 s'], ['06:00', 'Opens the window', 'start', 10], ['06:14', 'Wake-up moment', 'end', 8], ['06:16', 'Time, amber beat'], ['07:10', 'Syncs the night', 'start', 9]]],
+      ['Base', 'base', 'ev', [['22:00', 'One violet breath'], ['06:00', 'Opens the window', 'start', 10], ['06:14', 'Wake-up moment', 'end', 8], ['06:16', 'Amber beat'], ['07:10', 'Syncs the night', 'start', 9]]],
+      ['Time', null, 'time', [['21:24', 0], ['22:00', 0], ['22:00', 100], ['22:40', 100], ['22:40', 0], ['03:11', 0], ['03:12', 100], ['03:22', 100], ['03:22', 0], ['06:00', 0], ['06:00', 100], ['07:10', 100], ['07:10', 0], ['07:34', 0]],
+        [['22:00', 'On while you are awake'], ['03:12', 'On while awake'], ['06:00', 'On for the whole window'], ['07:10', 'Tap: 8 s']]],
       ['Lamp', 'lamp', 'light', [['21:24', 0], ['22:00', 0], ['22:00', 40], ['22:30', 15], ['22:40', 0], ['03:11', 0], ['03:12', 8], ['03:14', 8], ['03:15', 0], ['06:00', 0], ['06:14', 28], ['06:20', 80], ['07:34', 80]],
         [['22:00', '2200 K · 40%'], ['22:30', '15%'], ['03:12', '1%, optional'], ['06:00', 'Dawn · 1800 K'], ['06:20', '80% · 5000 K']]],
       ['Shutters', 'shutters', 'grey', [['21:24', 100], ['22:00', 100], ['22:02', 0], ['06:00', 0], ['06:14', 9], ['06:19', 60], ['06:26', 60], ['06:28', 100], ['07:34', 100]],
