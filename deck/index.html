@@ -424,7 +424,7 @@
     <p class="label kick" style="grid-column: 1 / -1">System</p>
     <p class="h2" style="grid-column: 1 / 6; margin-top: 24px; position: relative; z-index: 1">It doesn’t ring: it changes the room.</p>
     <ol class="keys" style="grid-column: 1 / 6; grid-row: 3; align-self: start; margin-top: 48px; position: relative; z-index: 1" data-keys></ol>
-    <svg class="iso" viewBox="0 0 1728 840" role="img" aria-label="AuraWake system: phone, bracelet, base, lamp, shutters, diffuser, cloud" data-iso></svg>
+    <svg class="iso" viewBox="0 0 1728 840" role="img" aria-label="AuraWake system: phone, bracelet, base, lamp, shutters, diffuser" data-iso></svg>
   </div>
 </section>
 
@@ -650,21 +650,22 @@
 
   // AuraWake · system as an isometric plan (owner refs: isometric interface architecture + TE / Walkman drawings).
   // Objects = Blender technical drawings (deck/blender/aura.py → deck/assets/aurawake, anchors.json = where each
-  // object touches the ground). Platforms coloured by protocol; flows run along the iso axes.
+  // object touches the ground). Everything is laid out in floor coordinates (u, v) along the iso axes, so every flow
+  // runs on the axes, parallel to its neighbours at an even spacing, and nothing crosses (owner, 2026-10-29).
   const iso = document.querySelector('[data-iso]');
   if (iso) {
     const C = 0.866, S = 0.5, A = 'assets/aurawake/';
-    const AN = {"base":{"size":400,"ground":[200.0,239.2],"points":{"top":[257.5,164.5],"time":[96.6,234.8],"led":[165.5,279.6],"grille":[303.4,229.9]}},"bracelet":{"size":240,"ground":[119.3,145.0],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}}};
-    const N = { // [cx, cy, name, role] = where the object touches the ground
-      phone: [800, 650, 'Phone', 'Plans and explains'],
-      bracelet: [550, 780, 'Bracelet', 'Senses sleep'],
-      base: [1010, 360, 'Base', 'Runs every ramp'],
-      lamp: [1590, 455, 'Lamp', 'Dusk and dawn'],
-      shutters: [1382, 575, 'Shutters', 'Daylight'],
-      diffuser: [1174, 695, 'Diffuser', 'Scent'],
-    };
-    const mU = (x, y) => `matrix(${C},${S},${-C},${S},${x},${y})`;
+    const AN = {"base":{"size":400,"ground":[200.0,239.2],"points":{"top":[257.5,164.5],"time":[96.6,234.8],"led":[165.5,279.6],"grille":[303.4,229.9]}},"bracelet":{"size":240,"ground":[119.3,145.0],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}},"base_under":{"size":300,"ground":[150,179.4],"points":{"under":[150,179.4],"back":[214.7,112.7],"under_exit":[150,251.3],"back_exit":[214.7,86]}}};
     const toUV = ([x, y]) => [(x / C + y / S) / 2, (x / C - y / S) / 2], toXY = ([u, v]) => [(u + v) * C, (u - v) * S];
+    const N = { // [u, v, name, role] = where the object touches the floor
+      base: [955, 223, 'Base', 'Runs every ramp'],
+      phone: [1260, -230, 'Phone', 'Plans and explains'],
+      bracelet: [1104, -380, 'Bracelet', 'Senses sleep'],
+      lamp: [1373, 463, 'Lamp', 'Dusk and dawn'],
+      shutters: [1373, 223, 'Shutters', 'Daylight'],
+      diffuser: [1373, -17, 'Diffuser', 'Scent'],
+    };
+    const xy = (id) => toXY(N[id]);
     const rounded = (P, r) => P.map((p, i) => {
       const a = P[(i + P.length - 1) % P.length], b = P[(i + 1) % P.length];
       const f = (q, t) => [p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t];
@@ -673,47 +674,61 @@
       return `${i ? 'L' : 'M'}${p1} Q${p} ${p2}`;
     }).join(' ') + ' Z';
     let g = '';
-    // groups: one hairline outline around related objects, drawn on the floor plane
-    const G = [[['lamp', 'shutters', 'diffuser'], 'Bedroom · Thread / Matter', 'grp-room', [112, 100]], [['phone', 'bracelet'], 'With you', 'grp-you', [100, 92]]];
-    G.forEach(([ids, name, cls, [mu, mv]]) => {
-      const uv = ids.map((id) => toUV(N[id]));
+    // groups: one hairline outline around related objects, drawn on the floor plane; the name sits at one corner
+    const G = [[['lamp', 'shutters', 'diffuser'], 'Bedroom · Thread / Matter', 'grp-room', [112, 100], 'top'],
+      [['phone', 'bracelet'], 'With you', 'grp-you', [80, 80], 'top']];
+    G.forEach(([ids, name, cls, [mu, mv], at]) => {
+      const uv = ids.map((id) => N[id]);
       const u0 = Math.min(...uv.map((p) => p[0])) - mu, u1 = Math.max(...uv.map((p) => p[0])) + mu;
       const v0 = Math.min(...uv.map((p) => p[1])) - mv, v1 = Math.max(...uv.map((p) => p[1])) + mv;
       const P = [[u0, v0], [u0, v1], [u1, v1], [u1, v0]].map(toXY);
       g += `<path class="grp ${cls}" d="${rounded(P, 28)}" />`;
-      const tp = P.reduce((a, b) => (b[1] < a[1] ? b : a));
-      g += `<text class="gn ${cls}" x="${tp[0]}" y="${tp[1] - 16}" text-anchor="middle">${name}</text>`;
+      if (at === 'top') { const [x, y] = toXY([u0, v1]); g += `<text class="gn ${cls}" x="${x}" y="${y - 16}" text-anchor="middle">${name}</text>`; }
+      else { const [x, y] = toXY([u0, v0]); g += `<text class="gn ${cls}" x="${x - 20}" y="${y + 6}" text-anchor="end">${name}</text>`; }
     });
-    // flows along the iso axes: [from, to, kind, u-first?]
-    [['phone', 'base', 'wifi', false, -40], ['bracelet', 'base', 'ble', false, 40], ['base', 'lamp', 'thread', false],
-     ['base', 'shutters', 'thread', false], ['base', 'diffuser', 'thread', true]].forEach(([a, b, k, uf, sh = 0]) => {
-      const [x1, y1] = N[a], x2 = N[b][0] + sh * C, y2 = N[b][1] + sh * S, dx = x2 - x1, dy = y2 - y1;
-      const t = (dx / C + dy / S) / 2, kk = (dx / C - dy / S) / 2;
-      const [mx, my] = uf ? [x1 + t * C, y1 + t * S] : [x1 + kk * C, y1 - kk * S];
-      g += `<path class="fl fl-${k}" d="M${x1} ${y1} L${mx} ${my} L${x2} ${y2}" />`;
+    // flows: polylines on the floor, from under the base to each object. All five leave the right face 20 apart; the
+    // top one turns up to the lamp, the middle one runs straight to the shutters, the other three turn down one after
+    // the other, 20 apart, so no line ever crosses another.
+    [[[[955, 243], [1100, 243], [1100, 463], [1373, 463]], 'thread'],
+     [[[955, 223], [1373, 223]], 'thread'],
+     [[[955, 203], [1144, 203], [1144, -17], [1373, -17]], 'thread'],
+     [[[955, 183], [1124, 183], [1124, -230], [1260, -230]], 'wifi'],
+     [[[955, 163], [1104, 163], [1104, -380]], 'ble']].forEach(([P, k]) => {
+      g += `<path class="fl fl-${k}" d="M${P.map((p) => toXY(p).join(' ')).join(' L')}" />`;
     });
-    // objects (back to front), each with its name and role on the floor, in front of it
-    Object.entries(N).sort((p, q) => p[1][1] - q[1][1]).forEach(([id, [cx, cy, name, role]]) => {
-      const o = AN[id];
-      if (o) g += `<image href="${A}iso-${id}.png" x="${cx - o.ground[0]}" y="${cy - o.ground[1]}" width="${o.size}" height="${o.size}" />`;
-      const ly = cy + (o ? o.size - o.ground[1] : 0) + 26;
+    // objects (back to front), each with its name and role on the floor, in front of it; the base's sits above it
+    const K = 1660, [bx, by] = xy('base');                 // base drawing: px per metre, floor point
+    const W = 0.12, PL = 0.0022, TOP = 0.045, MID = 0.0236;
+    const bp = (x, y, z) => [bx + K * C * (x + y), by + K * (S * (x - y) - z)];
+    Object.keys(N).sort((p, q) => xy(p)[1] - xy(q)[1]).forEach((id) => {
+      const [cx, cy] = xy(id), [, , name, role] = N[id], o = AN[id], f = id === 'shutters' ? 0.9 : 1;  // shutters a touch smaller: the lamp line clears them
+      g += `<image href="${A}iso-${id}.png" x="${cx - o.ground[0] * f}" y="${cy - o.ground[1] * f}" width="${o.size * f}" height="${o.size * f}" />`;
+      const ly = id === 'base' ? bp(-W / 2, W / 2, TOP)[1] - 44 : cy + (o.size - o.ground[1]) * f + 26;
       g += `<text class="nm" x="${cx}" y="${ly}" text-anchor="middle">${name}</text><text class="rl" x="${cx}" y="${ly + 24}" text-anchor="middle">${role}</text>`;
     });
-    // TE-style keys: a numbered dot on each visible part of the base; the list (incl. the back) under the title
-    const [bx, by] = [N.base[0] - AN.base.ground[0], N.base[1] - AN.base.ground[1]], P = AN.base.points;
-    const KEYS = [['top', 'Top surface', 'Haptic and magnetic: the bracelet charges here; palm for 2 s, ten more minutes', 1, -1],
-      ['time', 'Time', 'Behind micro-perforations, only when you are awake', -1, -1], ['led', 'Front LED', 'The only light at the front', 1, 1],
-      ['grille', 'Speakers', 'Dot grilles on the sides and the back', 1, -1], [null, 'Underneath', 'A thin rubber disc ringed by the light strip'],
-      [null, 'Back', 'USB-C power and the Bluetooth pairing button']];
-    KEYS.forEach(([k, , , ox, oy], i) => {
-      if (!k) return;
-      const [px, py] = [bx + P[k][0], by + P[k][1]], [qx, qy] = [px + ox * 96, py + oy * 96];
-      g += `<linearGradient id="kf${i}" gradientUnits="userSpaceOnUse" x1="${qx}" y1="${qy}" x2="${px}" y2="${py}"><stop offset="0" stop-color="#111" stop-opacity="1" /><stop offset="1" stop-color="#111" stop-opacity="0.08" /></linearGradient><circle cx="${px}" cy="${py}" r="3" fill="var(--ink)" fill-opacity=".5" /><path d="M${px} ${py} L${qx - ox * 12} ${qy - oy * 12}" stroke="url(#kf${i})" stroke-width="1.2" /><circle cx="${qx}" cy="${qy}" r="16" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2" /><text class="cn" x="${qx}" y="${qy + 6}" text-anchor="middle" style="letter-spacing:0">${i + 1}</text>`;
+    // the base seen from below and behind: back, side and underneath, for keys 5 and 6
+    const U = AN.base_under, [ux, uy] = [1480 - U.ground[0], 120 - U.ground[1]], up = (k) => [ux + U.points[k][0], uy + U.points[k][1]];
+    g += `<image href="${A}iso-base_under.png" x="${ux}" y="${uy}" width="${U.size}" height="${U.size}" />`;
+    g += `<text class="rl" x="${ux + 4}" y="${uy + 140}" text-anchor="end">Seen from below</text>`;
+    // TE-style keys: every leader leaves its face square to it and runs the same length past the drawing's edge
+    const D = { up: [0, -1], down: [0, 1], left: [-C, -S], right: [C, -S] };
+    const KEYS = [
+      ['Top surface', 'Haptic and magnetic: the bracelet charges here; palm for 2 s, ten more minutes', bp(0.045, 0.03, TOP), bp(0.015, W / 2, TOP), 'up'],
+      ['Time', 'Behind micro-perforations, only when you are awake', bp(-0.028, -W / 2, MID + 0.003), bp(-W / 2, -W / 2, MID + 0.003), 'left'],
+      ['Front LED', 'The only light at the front', bp(0.036, -W / 2, MID), bp(0.036, -W / 2, PL), 'down'],
+      ['Speakers', 'Dot grilles on the sides and the back', bp(W / 2, 0.012, MID + 0.006), bp(W / 2, W / 2, MID + 0.006), 'right'],
+      ['Underneath', 'A thin rubber disc ringed by the light strip', up('under'), up('under_exit'), 'down'],
+      ['Back', 'USB-C power and the Bluetooth pairing button', up('back'), up('back_exit'), 'up'],
+    ];
+    const L = 40, R = 16;
+    KEYS.forEach(([, , [px, py], [ex, ey], d], i) => {
+      const [dx, dy] = D[d], [qx, qy] = [ex + dx * (L + R), ey + dy * (L + R)];
+      g += `<circle cx="${px}" cy="${py}" r="3" fill="var(--ink)" /><path d="M${px} ${py} L${qx - dx * R} ${qy - dy * R}" stroke="var(--ink)" stroke-width="1.2" /><circle cx="${qx}" cy="${qy}" r="${R}" fill="var(--paper)" stroke="var(--ink)" stroke-width="1.2" /><text class="cn" x="${qx}" y="${qy + 6}" text-anchor="middle" style="letter-spacing:0">${i + 1}</text>`;
     });
     const keys = document.querySelector('[data-keys]');
-    if (keys) keys.innerHTML = KEYS.map(([, t, s], i) => `<li><span class="label kick"><span class="n">0${i + 1}</span></span><span class="small"><span class="m">${t}</span><span class="i3"> · ${s}</span></span></li>`).join('');
+    if (keys) keys.innerHTML = KEYS.map(([t, s], i) => `<li><span class="label kick"><span class="n">0${i + 1}</span></span><span class="small"><span class="m">${t}</span><span class="i3"> · ${s}</span></span></li>`).join('');
     const LG = [['wifi', 'Wi-Fi, local'], ['ble', 'BLE 5'], ['thread', 'Thread / Matter']];
-    LG.forEach(([k, t], i) => (g += `<path class="fl fl-${k}" d="M${1300 + (i % 2) * 230} ${-30 + Math.floor(i / 2) * 36} h40" /><text class="lg" x="${1352 + (i % 2) * 230}" y="${-24 + Math.floor(i / 2) * 36}">${t}</text>`));
+    LG.forEach(([k, t], i) => (g += `<path class="fl fl-${k}" d="M0 ${800 + i * 36} h40" /><text class="lg" x="52" y="${806 + i * 36}">${t}</text>`));
     iso.innerHTML = g;
   }
 

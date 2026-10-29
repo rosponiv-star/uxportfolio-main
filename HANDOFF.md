@@ -1006,6 +1006,14 @@ When a CLOUD session hits something that needs the local environment, it must:
 - **2026-10-28 · LOCAL (34)** · LED states final (owner: no glow, colours clearly distinct): crisp dot, `LED_SAT` white
   #fff6ea (emission 4), night #4d5cff and dawn #ff9a1f (emission 1.8). Glow post-process dropped for these
   (`glow.mjs` kept, unused).
+- **2026-10-29 · LOCAL (35)** · System schema (p05-system) re-laid out (owner: no overlapping lines, each line
+  symmetric to its neighbours; six keys but only four dots). Layout now in floor coordinates (u, v) on the iso axes:
+  all five flows leave the base's right face 20 apart, the top one turns up to the lamp, the middle runs straight to
+  the shutters, the other three turn down one after another 20 apart (diffuser, phone, bracelet): no crossings. Keys:
+  every leader leaves its face square to it, same 40 px past the edge (1 up, 2 up-left, 3 down, 4 up-right). New
+  drawing `iso-base_under.png` ("Seen from below", aura.py `line … base_under`, camera ISO_UNDER; `line <out> <name>`
+  now renders one drawing and merges anchors) carries keys 5 Underneath and 6 Back. Base label moved above the base,
+  legend to the bottom-left, shutters drawn at 0.9 so the lamp line clears them.
 
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus

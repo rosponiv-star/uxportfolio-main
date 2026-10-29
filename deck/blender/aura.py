@@ -885,6 +885,7 @@ def real():
 # ---------------------------------------------------------------------------------------------------------------
 # Technical drawings: true isometric ortho camera, flat fills, Freestyle lines (outline heavier than inner lines).
 ISO = (math.radians(54.7356), 0.0, math.radians(45))
+ISO_UNDER = (math.radians(180 - 54.7356), 0.0, math.radians(135))   # from below, behind: back, right side and underneath
 SS = 2.5  # render scale over the size shown on the slide
 
 def freestyle(px_inner, px_outline):
@@ -906,9 +907,7 @@ def line():
     colour_management('Standard')
     world((1, 1, 1, 1), 0.0)
     cd = bpy.data.cameras.new('iso'); cd.type = 'ORTHO'
-    cam = bpy.data.objects.new('iso', cd); col.objects.link(cam); cam.rotation_euler = ISO; scene.camera = cam
-    bpy.context.view_layer.update()
-    R = cam.matrix_world.to_3x3(); right, up, back = R.col[0], R.col[1], R.col[2]
+    cam = bpy.data.objects.new('iso', cd); col.objects.link(cam); scene.camera = cam
 
     # (group builder, size shown on the slide in px, named points for callouts)
     items = {
@@ -920,9 +919,14 @@ def line():
         'lamp': (build_bulb, 170, {}),
         'shutters': (build_shutters, 300, {}),
         'diffuser': (build_diffuser, 200, {'caps': (0.016, 0.004, 0.074)}),
+        'base_under': (build_base, 300, {'under': (0.0, 0.0, 0.0), 'back': (0.0, W / 2, MID), 'under_exit': (-W / 2, -W / 2, PL), 'back_exit': (0.0, W / 2, TOP)}, ISO_UNDER),
     }
-    anchors = {}
-    for name, (fn, size, pts) in items.items():
+    if SHOT: items = {SHOT: items[SHOT]}                 # one drawing only: merged into the existing anchors
+    path = os.path.join(OUT, 'anchors.json')
+    anchors = json.load(open(path)) if SHOT and os.path.exists(path) else {}
+    for name, (fn, size, pts, *rot) in items.items():
+        cam.rotation_euler = rot[0] if rot else ISO; bpy.context.view_layer.update()
+        R = cam.matrix_world.to_3x3(); right, up, back = R.col[0], R.col[1], R.col[2]
         for o in list(col.objects):
             if o.type != 'CAMERA': bpy.data.objects.remove(o, do_unlink=True)
         g = fn(); bpy.context.view_layer.update()
@@ -940,6 +944,6 @@ def line():
         anchors[name] = {'size': size, 'ground': proj((0, 0, 0)), 'points': {k: proj(p) for k, p in pts.items()}}
         scene.render.filepath = os.path.join(OUT, f'iso-{name}.png')
         bpy.ops.render.render(write_still=True)
-    with open(os.path.join(OUT, 'anchors.json'), 'w') as f: json.dump(anchors, f, indent=1)
+    with open(path, 'w') as f: json.dump(anchors, f, indent=1)
 
 real() if MODE == 'real' else line()
