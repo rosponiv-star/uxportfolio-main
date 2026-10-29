@@ -1082,6 +1082,13 @@ When a CLOUD session hits something that needs the local environment, it must:
   06:16 rows (lamp keeps rising to 80% by 06:20, shutters 60%, Birds lowered to 15% until 06:26) + ladder caption,
   gestures copy (02 "Palm on the base"; g2 base shows 06:16, g3 shows 86%, g3 glow removed: charging is the front
   LED), p05-light rebuilt in three columns: Front LED · by day, Light line · evening and night, Still in bed at 06:30.
+- **2026-10-29 · LOCAL (50)** · Light under the base made physical (owner: "il led è un anello rotondo"): the glow is a
+  radial gradient centred on the base, from the ring (r 34 mm) outwards, I = 1/(1+((r−0.034)/0.02)²) up to r 0.17 m,
+  drawn as the iso ellipse (rx 1.2247·R·k, ry 0.7071·R·k): brightest at mid-edges, dimmer at the corners. Dark vs
+  light shown in the schemas: gesture 01 on a night ground (#17171d, drawing inverted to white lines, glow in screen
+  blend), 02 on dawn light (#f5ecdc, glow in multiply), 03 on paper; each figure labelled Dark room / Dawn light /
+  Daylight. Light slide: the light-line column sits on the night ground (white states finally read as white), the
+  ladder on dawn light, the front LED on paper.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's

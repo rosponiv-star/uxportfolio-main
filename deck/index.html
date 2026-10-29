@@ -597,9 +597,13 @@
   .gest { grid-column: span 4; display: grid; gap: 10px; align-content: end; }
   .gest .label { margin-top: 8px; }
   .gfig { width: 100%; height: auto; display: block; overflow: hidden; border: 1px solid var(--rule); }
+  .gfig .room { font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
   .gfig .arw { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
   .wcol { grid-column: span 4; }
   .waves { grid-template-columns: minmax(0, 1fr); }
+  .waves--dark .cell { background: #17171d; border-color: #2c2c35; }
+  .waves--dark .m { color: #f3f1ea; } .waves--dark .i3 { color: #a9a7a0; }
+  .waves--dawn .cell { background: #f5ecdc; }
   .waves .cell { padding: 14px 20px; gap: 6px; }
   .waves svg { width: 100%; height: 30px; display: block; overflow: visible; }
   .whatif > div { display: grid; grid-template-columns: 220px 1fr; column-gap: var(--g); align-items: baseline; padding-block: 16px; }
@@ -815,16 +819,25 @@
   document.querySelectorAll('[data-gest]').forEach((svg) => {
     const n = +svg.dataset.gest, C = 0.866, S = 0.5, k = 1866.7, [gx, gy] = [252.0, 390.6], TOP = 0.045;
     const P = (x, y, z = 0) => [gx + k * C * (x + y), gy + k * (S * (x - y) - z)].map((v) => v.toFixed(1)).join(' ');
-    const h = 0.074, col = ['', 'var(--night)', 'var(--dawn)', '#e6d6b6'][n];
-    const glow = [[-h, -h], [h, -h], [h, h], [-h, h]];
-    let g = `<defs><filter id="gb${n}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="13" /></filter></defs>`;
-    if (n < 3) g += `<path d="M${glow.map(([x, y]) => P(x, y)).join(' L')} Z" fill="${col}" opacity="${[0, 0.5, 0.6][n]}" filter="url(#gb${n})" />`;
-    g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560" />`;
+    // the room: 01 dark (the drawing turns negative), 02 dawn light, 03 daylight
+    const ROOM = [, ['#17171d', 'Dark room', '#cfcdc6'], ['#f5ecdc', 'Dawn light', '#8a6a3a'], ['none', 'Daylight', '#6b6b66']][n];
+    // the light line is a round LED ring (r 34 mm) under the base: its light leaks out under the edges and falls off with
+    // the distance from the ring, so the glow on the nightstand is round (an ellipse in iso), brightest at mid-edges
+    const R = 0.17, col = ['', '#8f9aff', '#f2b65a'][n], stops = [];
+    for (let r = 0; r <= R + 1e-9; r += R / 24) {
+      const I = r < 0.034 ? 1 : 1 / (1 + ((r - 0.034) / 0.02) ** 2);
+      stops.push(`<stop offset="${(r / R).toFixed(3)}" stop-color="${col}" stop-opacity="${(I * (r > R * 0.9 ? (R - r) / (R * 0.1) : 1)).toFixed(3)}" />`);
+    }
+    let g = `<defs><radialGradient id="gr${n}">${stops.join('')}</radialGradient></defs>`;
+    g += `<rect x="0" y="40" width="560" height="480" fill="${ROOM[0]}" />`;
+    if (n < 3) g += `<ellipse cx="${gx}" cy="${gy}" rx="${(R * k * 1.2247).toFixed(1)}" ry="${(R * k * 0.7071).toFixed(1)}" fill="url(#gr${n})" style="mix-blend-mode: ${n === 1 ? 'screen' : 'multiply'}" />`;
+    g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560"${n === 1 ? ' style="filter: invert(0.92) hue-rotate(180deg)"' : ''} />`;
+    g += `<text class="room" x="20" y="70" fill="${ROOM[2]}">${ROOM[1]}</text>`;
     const arrow = (z0, z1, x = -0.05, y = -0.035) => {        // a vertical arrow beside the bracelet, chevron at z1
       const d = z1 > z0 ? 1 : -1, tip = P(x, y, z1).split(' ').map(Number);
       return `<path class="arw" d="M${P(x, y, z0)} L${P(x, y, z1)} M${tip[0] - 7} ${tip[1] + 7 * d} L${tip[0]} ${tip[1]} L${tip[0] + 7} ${tip[1] + 7 * d}" />`;
     };
-    if (n === 1) g += arrow(TOP + 0.016, TOP + 0.068);
+    if (n === 1) g += arrow(TOP + 0.016, TOP + 0.068).replace('class="arw"', 'class="arw" style="stroke: #e9e7e1"');
     if (n === 3) g += arrow(TOP + 0.05, TOP + 0.006);
     svg.innerHTML = g;
   });
@@ -836,23 +849,26 @@
     const BREATH = 'M0 40 C40 40 50 4 100 4 C150 4 160 40 200 40 H240', BEAT = 'M0 40 H100 L108 4 H124 L132 40 H240';
     const STAIR = 'M0 40 H60 V28 H120 V16 H180 V4 H240';
     const step = (i) => ln(STAIR, 'rgb(17 17 17 / .14)') + ln(`M${60 * (i + 1)} ${40 - 12 * (i + 1)} H${60 * (i + 2)}`, i === 2 ? 'var(--ink)' : '#c98f2a');
+    // night rows on a dark ground: the white states finally read as white
+    const NIGHT = [
+      ['Wind-down, alarm on', 'One violet breath, 8 s, as you take the bracelet', ln(BREATH, '#8f9aff')],
+      ['Wind-down, tomorrow off', 'The same breath, in white', ln(BREATH, '#efece4')],
+      ['Tomorrow off or on', 'One white beat; the time shows OFF or ☀ 06:30', ln(BEAT, '#efece4')],
+      ['Palm in the morning', 'One amber beat; the sound lowers, the light goes on', ln(BEAT, '#f2b65a')]
+    ];
     const COLS = [
       ['Front LED · by day', 'A direct point, read from the door. Off in the dark.', [
         ['Needs attention', 'A steady white dot', `<line x1="0" x2="240" y1="22" y2="22" stroke="rgb(17 17 17 / .12)" stroke-width="1.5"/><circle cx="120" cy="22" r="7" fill="${grey}"/>`],
         ['Pairing', 'A continuous violet breath', ln('M0 40 C25 40 25 4 50 4 C75 4 75 40 100 40 C125 40 125 4 150 4 C175 4 175 40 200 40 C220 40 225 22 240 14', 'var(--night)')],
         ['Updating', 'A slow, shallow pulse', ln('M0 40 C30 40 30 24 60 24 C90 24 90 40 120 40 C150 40 150 24 180 24 C210 24 210 40 240 40', grey)],
         ['Bracelet charging', 'Dim white, off when full; the time shows 86%', ln('M0 40 H16 V28 H176 V40 H240', grey)]]],
-      ['Light line · evening and night', 'Indirect, on the nightstand. Off by day.', [
-        ['Wind-down, alarm on', 'One violet breath, 8 s, as you take the bracelet', ln(BREATH, 'var(--night)')],
-        ['Wind-down, tomorrow off', 'The same breath, in white', ln(BREATH, grey)],
-        ['Tomorrow off or on', 'One white beat; the time shows OFF or ☀ 06:30', ln(BEAT, grey)],
-        ['Palm in the morning', 'One amber beat; the sound lowers, the light goes on', ln(BEAT, 'var(--dawn)')]]],
+      ['Light line · evening and night', 'Indirect, on the nightstand. Off by day.', NIGHT, 'dark'],
       ['Still in bed at 06:30', 'No snooze: only getting up stops it, or the phone.', [
         ['06:30 · Brighter', 'Light 100%, 5000 K; one soft tap a minute', step(0)],
         ['06:35 · Clear sound', 'Three rising pulses on the bracelet', step(1)],
-        ['06:40 · Real alarm', 'On the base and the phone, until you are up', step(2)]]],
+        ['06:40 · Real alarm', 'On the base and the phone, until you are up', step(2)]], 'dawn'],
     ];
-    waves.innerHTML = COLS.map(([h, sub, rows]) => `<div class="wcol"><p class="label kick" style="margin-bottom: 6px">${h}</p><p class="small i3" style="margin-bottom: 14px">${sub}</p><ol class="cells waves">${rows.map(([t, s, svg]) => `<li class="cell"><svg viewBox="0 0 240 44" preserveAspectRatio="xMinYMid meet">${svg}</svg><p class="small"><span class="m">${t}</span><br /><span class="i3">${s}</span></p></li>`).join('')}</ol></div>`).join('');
+    waves.innerHTML = COLS.map(([h, sub, rows, room = '']) => `<div class="wcol"><p class="label kick" style="margin-bottom: 6px">${h}</p><p class="small i3" style="margin-bottom: 14px">${sub}</p><ol class="cells waves waves--${room}">${rows.map(([t, s, svg]) => `<li class="cell"><svg viewBox="0 0 240 44" preserveAspectRatio="xMinYMid meet">${svg}</svg><p class="small"><span class="m">${t}</span><br /><span class="i3">${s}</span></p></li>`).join('')}</ol></div>`).join('');
   }
 
   const q = new URLSearchParams(location.search);
