@@ -1021,6 +1021,9 @@ When a CLOUD session hits something that needs the local environment, it must:
 - **2026-10-29 · LOCAL (37)** · Time option 1 rendered too: aura.py flag `seg` = seven-segment digits as thin strokes
   with 45° cut ends (12.5 × 6.2 mm digits, 0.8 mm stroke), lit through a thin dead-front window in the shell. Default
   time is now 06:30 (matches the schema). Still to choose between `fine` and `seg`.
+- **2026-10-29 · LOCAL (38)** · Time option on the speaker grid (owner): aura.py flag `grid` = 3×5 dot font placed on the
+  grille's own grid (PU × PV, columns −11…5, rows +1.5…−2.5 PV), each dot the graded hole size of its row. Front has
+  no holes yet: off, the time holes alone would show; proposed a full front grid so the digits hide among them.
 
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus

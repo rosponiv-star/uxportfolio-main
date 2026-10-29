@@ -15,6 +15,7 @@ SHOT = argv[2] if len(argv) > 2 else ''
 PREVIEW = 'preview' in argv
 STATE = next((a.split('=', 1)[1] for a in argv if a.startswith('state=')), '')   # light state for 'led' / 'strip'
 PLASTIC = 'plastic' in argv
+GRIDT = 'grid' in argv          # time option 4: a 3×5 dot font on the speaker grille's own grid (pitch, graded dot size)
 SEGS = 'seg' in argv            # time option 1: continuous segments under a thin dead-front window
 FINE = 'fine' in argv          # time option 2: fine dot matrix, laser micro-holes ~0.1 mm, 1.2 mm pitch
 os.makedirs(OUT, exist_ok=True)
@@ -446,8 +447,29 @@ def time_segs(text, zc, h=0.0125, w=0.0062, t=0.0008, gap=0.0003, sp=0.0027, col
         x += cw + sp
     return link('time', bm, 'dots', smooth=False)
 
+FONT3 = {'0': ['111', '101', '101', '101', '111'], '1': ['010', '110', '010', '010', '111'], '3': ['111', '001', '111', '001', '111'],
+         '4': ['101', '101', '111', '001', '001'], '6': ['111', '100', '111', '101', '111'], ':': ['0', '1', '0', '1', '0']}
+
+def time_grid(text, c0=-11, row0=1.5):
+    """The time drawn with the speaker holes' own grid: same column pitch, same rows, same graded dot size."""
+    cols_ = []
+    for i, ch in enumerate(text):
+        if i: cols_.append(None)
+        g = FONT3[ch]
+        for c in range(len(g[0])): cols_.append([g[r][c] == '1' for r in range(5)])
+    bm = bmesh.new()
+    for ci, c in enumerate(cols_):
+        if c is None: continue
+        for r, on in enumerate(c):
+            if not on: continue
+            cv = (row0 - r) * PV
+            m = Matrix.Translation(((c0 + ci) * PU, -W / 2 - 0.00005, MID + cv)) @ Matrix.Rotation(math.pi / 2, 4, 'X')
+            bmesh.ops.create_cone(bm, cap_ends=True, segments=16, radius1=hole_r(cv), radius2=hole_r(cv), depth=0.0003, matrix=m)
+    return link('time', bm, 'dots', smooth=False)
+
 def time_dots(text, zc, pitch=0.0017, r=0.0005, xo=-0.006):
     if SEGS: return time_segs(text, zc)
+    if GRIDT: return time_grid(text)
     if FINE: pitch, r = 0.0012, 0.00036
     font = FONT_FINE if FINE else FONT
     cols = []
@@ -912,7 +934,7 @@ def real():
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
-    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-plastic" if PLASTIC else ""}{"-fine" if FINE else ""}{"-seg" if SEGS else ""}{"-preview" if PREVIEW else ""}.png')
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-plastic" if PLASTIC else ""}{"-fine" if FINE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
 # ---------------------------------------------------------------------------------------------------------------
