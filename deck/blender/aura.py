@@ -15,6 +15,7 @@ SHOT = argv[2] if len(argv) > 2 else ''
 PREVIEW = 'preview' in argv
 STATE = next((a.split('=', 1)[1] for a in argv if a.startswith('state=')), '')   # light state for 'led' / 'strip'
 PLASTIC = 'plastic' in argv
+SEGS = 'seg' in argv            # time option 1: continuous segments under a thin dead-front window
 FINE = 'fine' in argv          # time option 2: fine dot matrix, laser micro-holes ~0.1 mm, 1.2 mm pitch
 os.makedirs(OUT, exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -421,7 +422,32 @@ FONT = {'0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
 
 FONT_FINE = dict(FONT, **{'0': ['01110', '10001', '10001', '10001', '10001', '10001', '01110']})
 
+SEG7 = {'0': 'abcdef', '1': 'bc', '3': 'abcdg', '4': 'bcfg', '6': 'acdefg'}
+
+def time_segs(text, zc, h=0.0125, w=0.0062, t=0.0008, gap=0.0003, sp=0.0027, colon=0.0042, xo=-0.006):
+    """Seven-segment digits drawn as thin strokes with 45° cut ends (Braun / TE), lit through the thin shell."""
+    widths = [colon if ch == ':' else w for ch in text]
+    x = xo - (sum(widths) + sp * (len(text) - 1)) / 2; bm = bmesh.new(); y0 = -W / 2 - 0.00005
+    def poly(pts):
+        vs = [bm.verts.new((px, y0, pz)) for px, pz in pts]; bm.faces.new(vs)
+    def hz(x0, x1, z): poly([(x0, z), (x0 + t / 2, z + t / 2), (x1 - t / 2, z + t / 2), (x1, z), (x1 - t / 2, z - t / 2), (x0 + t / 2, z - t / 2)])
+    def vt(xx, z0, z1): poly([(xx, z0), (xx + t / 2, z0 + t / 2), (xx + t / 2, z1 - t / 2), (xx, z1), (xx - t / 2, z1 - t / 2), (xx - t / 2, z0 + t / 2)])
+    for ch, cw in zip(text, widths):
+        if ch == ':':
+            for dz in (-h * 0.2, h * 0.2):
+                c = x + cw / 2; r = t * 0.55
+                poly([(c + r * math.cos(a * math.pi / 8), zc + dz + r * math.sin(a * math.pi / 8)) for a in range(16)])
+        else:
+            top, mid, bot = zc + h / 2, zc, zc - h / 2
+            P = {'a': lambda: hz(x + gap, x + cw - gap, top), 'g': lambda: hz(x + gap, x + cw - gap, mid), 'd': lambda: hz(x + gap, x + cw - gap, bot),
+                 'f': lambda: vt(x, mid + gap, top - gap), 'b': lambda: vt(x + cw, mid + gap, top - gap),
+                 'e': lambda: vt(x, bot + gap, mid - gap), 'c': lambda: vt(x + cw, bot + gap, mid - gap)}
+            for k in SEG7[ch]: P[k]()
+        x += cw + sp
+    return link('time', bm, 'dots', smooth=False)
+
 def time_dots(text, zc, pitch=0.0017, r=0.0005, xo=-0.006):
+    if SEGS: return time_segs(text, zc)
     if FINE: pitch, r = 0.0012, 0.00036
     font = FONT_FINE if FINE else FONT
     cols = []
@@ -493,7 +519,7 @@ def cut(ob, bm, loc, mat):
     ob.modifiers.remove(mod); old = ob.data; ob.data = new; bpy.data.meshes.remove(old); bpy.data.objects.remove(c)
     shade(ob)
 
-def build_base(with_time=False, time='06:14'):
+def build_base(with_time=False, time='06:30'):
     """Solid graphite block: speakers behind dot grilles on the sides and back, time + LED at the front, USB-C and the
     Bluetooth button at the back, haptic + magnetic top for the bracelet, thin rubber disc ringed by the light strip."""
     body = rbox('body', W, W, H, EDGE_P, EDGE_T, 'body', (0, 0, PL), sp=4, se=2)
@@ -886,7 +912,7 @@ def real():
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
-    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-plastic" if PLASTIC else ""}{"-fine" if FINE else ""}{"-preview" if PREVIEW else ""}.png')
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-plastic" if PLASTIC else ""}{"-fine" if FINE else ""}{"-seg" if SEGS else ""}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
 # ---------------------------------------------------------------------------------------------------------------
