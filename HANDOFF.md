@@ -1117,6 +1117,15 @@ When a CLOUD session hits something that needs the local environment, it must:
   nearest bone (the mask modifier renumbers vertices, so groups can't be used) and writes `deck/blender/hands/
   palm.obj`, `pinch.obj` + `hands.json` (tips) in the hand frame. aura.py loads them (subdivision 2) in place of the
   capsule hand; the resting palm sits on the top via `palm_z`. All four gesture drawings re-rendered.
+- **2026-10-29 · LOCAL (55)** · Gestures refined (owner): palm gestures redone with a relaxed flat hand (MPFB palm pose
+  4–9°/12–18°/6–9°) laid along the drawing's cross diagonal so it is seen side-on, heel of the palm on the right
+  corner; 02 resting (held 3 s, with a 3-second ring), 03 renamed "Palm tap", the hand 18 mm above the top with an
+  arrow down. The worn bracelet is closed to the wrist (scaled to the MPFB wrist section + 2.2 mm, `wrist_fit`).
+  Light under the base = a soft blurred glow of the footprint (blur 11). Front LED shown only where the spec has it:
+  04 Day, dim white while the bracelet charges, with a label. Base changes asked by the owner (charging pins on top,
+  bigger back marks with a charging bolt, smaller button gap, finer satin + a touch darker) are sketched in
+  deck/out/base-sketch.png and deck/out/satin-preview-labeled.jpg, awaiting approval; aura.py takes `col=` and
+  `grain=` for the preview (defaults unchanged).
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's

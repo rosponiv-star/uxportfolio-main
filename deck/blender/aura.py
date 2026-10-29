@@ -18,6 +18,8 @@ PLASTIC = 'plastic' in argv
 GRIDT = 'grid' in argv          # time option 4: a 3×5 dot font on the speaker grille's own grid (pitch, graded dot size)
 SEGS = 'seg' in argv            # time option 1: continuous segments under a thin dead-front window
 COARSE = 'coarse' in argv
+BODY_HEX = next((a.split('=', 1)[1] for a in argv if a.startswith('col=')), '#2c2d31')   # graphite body
+GRAIN = float(next((a.split('=', 1)[1] for a in argv if a.startswith('grain=')), '0.3'))  # satin bump on plastic
 FINE = not (COARSE or SEGS or GRIDT)   # the time (owner, 2026-10-29): fine dot matrix behind ~0.1 mm laser micro-holes
 os.makedirs(OUT, exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)
@@ -192,7 +194,7 @@ def satin(name, color):
     m = principled(name, color, metal=0.0 if PLASTIC else 1.0, rough=0.8 if PLASTIC else 0.38); nt = m.node_tree; b = nt.nodes['Principled BSDF']
     tc = nt.nodes.new('ShaderNodeTexCoord'); mp = nt.nodes.new('ShaderNodeMapping'); mp.inputs['Scale'].default_value = (1, 1, 1)
     nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 6500.0 if PLASTIC else 9000.0; nz.inputs['Detail'].default_value = 2
-    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.3 if PLASTIC else 0.05; bp.inputs['Distance'].default_value = 0.0001
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = GRAIN if PLASTIC else 0.05; bp.inputs['Distance'].default_value = 0.0001
     nt.links.new(tc.outputs['Object'], mp.inputs['Vector']); nt.links.new(mp.outputs['Vector'], nz.inputs['Vector'])
     nt.links.new(nz.outputs['Fac'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
     return m
@@ -319,8 +321,8 @@ TABLE = SHOT == 'table'
 STUDIO = SHOT in ('ports', 'time', 'left', 'right', 'top_cable', 'led', 'strip', 'pod_in', 'pod_side', 'foot', 'persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
     MATS = {
-        'body': body_real('body', srgb('#2c2d31')),
-        'shell': satin('shell', srgb('#2c2d31')),
+        'body': body_real('body', srgb(BODY_HEX)),
+        'shell': satin('shell', srgb(BODY_HEX)),
         'alu': bump_tex(principled('alu', srgb('#18181b'), metal=1.0, rough=0.5), 'noise', 4000, 0.04),
         'grille': grille('grille', srgb('#060607'), srgb('#000000')),
         'rubber': principled('rubber', srgb('#0a0a0b'), rough=0.8),
@@ -887,6 +889,12 @@ def build_hand(pose, R, t, name='hand'):
     me.polygons.foreach_set('use_smooth', [True] * len(me.polygons))
     return [ob], {k: W @ Vector(HAND_TIPS[pose][k]) for k in ('index', 'thumb')}
 
+def wrist_fit(pose):
+    """Centre (y, z) and half-width / half-thickness of the wrist just behind the joint, in the hand frame."""
+    vs, _ = hand_mesh(pose); sl = [(y, z) for x, y, z in vs if -0.03 < x < -0.008]
+    ys, zs = [y for y, _ in sl], [z for _, z in sl]
+    return (max(ys) + min(ys)) / 2, (max(zs) + min(zs)) / 2, (max(ys) - min(ys)) / 2, (max(zs) - min(zs)) / 2
+
 def palm_z(pose):
     """Lowest point of the palm (local z), so a resting hand can sit on a surface."""
     vs, _ = hand_mesh(pose)
@@ -907,11 +915,17 @@ PINCH_R = basis((-0.906, 0.0, -0.423), (0.0, -1.0, 0.0))   # from the right like
 def build_gesture(n):
     """01 take the bracelet off the base, 02 palm on the base (bracelet on the wrist), 03 put it back, 04 palm held 3 s."""
     base = build_base(with_time=True, time={1: '22:00', 2: '06:16', 3: '86%', 4: 'OFF'}[n])   # awake: the time is on; bracelet back: its charge
-    if n in (2, 4):                                  # 04: the same palm, held 3 s in the evening: tomorrow off
-        R = basis((-1, 0, 0), (0, -1, 0)); wrist = Vector((0.062, 0.006, TOP - palm_z('palm') + 0.0005))
+    if n in (2, 4):            # 02 a short tap in the morning, the hand just above the top; 04 the palm held 3 s (evening)
+        F = Vector((-1, -1, 0)).normalized()          # along the diagonal that runs across the drawing: seen side-on
+        R = basis(F, Vector((0, 0, 1)).cross(F))                                       # thumb to the left of the fingers
+        lift = 0.018 if n == 2 else 0.0
+        wrist = Vector((0.058, 0.058, TOP - palm_z('palm') + 0.0005 + lift))     # the heel of the palm on the right corner
         hand, tips = build_hand('palm', R, wrist)
-        br = build_bracelet(); br.rotation_euler = (0, math.pi / 2, 0)          # ring round the wrist, the pod underneath
-        br.location = wrist + Vector((0.002, 0, 0))
+        yc, zc, hw, ht = wrist_fit('palm')
+        br = build_bracelet()                                                          # worn: the strap closed to the wrist
+        br.scale = ((ht + 0.0022) / STRAP_B, (hw + 0.0022) / STRAP_A, 1)
+        br.matrix_world = (Matrix.Translation(wrist + R @ Vector((-0.004, yc, zc))) @ Matrix.Rotation(math.atan2(-F.y, -F.x), 4, 'Z')
+                           @ Matrix.Rotation(math.pi / 2, 4, 'Y') @ Matrix.Diagonal(br.scale.to_4d()))   # ring round the wrist, pod underneath
         return group('gesture', [base, br] + hand)
     z0 = TOP + (0.042 if n == 1 else 0.010)
     br = build_bracelet(z0)
