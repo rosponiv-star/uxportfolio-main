@@ -1108,6 +1108,15 @@ When a CLOUD session hits something that needs the local environment, it must:
   no hard outline; a 10 px rim along the footprint (half-side 60.5 mm), blurred 5 px, screen on dark / multiply at
   dawn, so the base hides its inner half and the light just leaks from under the edges. Spec principle 3 and §10
   updated to four gestures. Next: hands from MPFB2 (anatomical, CC0 base mesh), pending the owner's OK to download.
+- **2026-10-29 · LOCAL (54)** · Gesture hands are now anatomical (owner chose option 1): MPFB2 v2.0.18
+  (extensions.blender.org, add-on-mpfb-v2.0.18.zip, 43.8 MB, sha256 c075b3e9…, GPL code, CC0 base mesh; installed
+  with `blender --command extension install-file -r user_default -e <zip>`; no asset pack needed). New
+  `deck/blender/hand_mpfb.py` makes the human with the default rig, finds each finger bone's flex axis by itself,
+  straightens the elbow, curls the fingers (palm = draped over the back edge; pinch = index curled, thumb solved by
+  coordinate descent to 0.1 mm from its target opposite the index pad), cuts hand + forearm + lower upper arm by
+  nearest bone (the mask modifier renumbers vertices, so groups can't be used) and writes `deck/blender/hands/
+  palm.obj`, `pinch.obj` + `hands.json` (tips) in the hand frame. aura.py loads them (subdivision 2) in place of the
+  capsule hand; the resting palm sits on the top via `palm_z`. All four gesture drawings re-rendered.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's
