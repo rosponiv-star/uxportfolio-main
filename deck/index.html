@@ -440,16 +440,24 @@
 <section class="slide" id="p05-gestures" data-page>
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
-    <p class="label kick" style="grid-column: 1 / -1">Gestures and signals</p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Three gestures replace the menus. At night, darkness means all is well.</p>
-    <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid; row-gap: 40px">
-      <div class="gest"><div class="ph-box small" style="aspect-ratio: 2 / 1">Illustration · lifting the bracelet</div><span class="label kick"><span class="n">01</span>Evening</span><p class="body m">Take the bracelet</p><p class="small i2">Lifting it off the base means “I’m going to bed”: the wind-down starts.</p></div>
-      <div class="gest"><div class="ph-box small" style="aspect-ratio: 2 / 1">Illustration · palm on the base</div><span class="label kick"><span class="n">02</span>Morning</span><p class="body m">Palm on the base, 2 seconds</p><p class="small i2">The only night gesture, eyes closed: ten more minutes, twice at most.</p></div>
-      <div class="gest"><div class="ph-box small" style="aspect-ratio: 2 / 1">Illustration · bracelet back on the base</div><span class="label kick"><span class="n">03</span>Day</span><p class="body m">Put it back</p><p class="small i2">Back on the base means “I’m up”: everything stops and the night syncs.</p></div>
-      <div style="grid-column: 1 / -1">
-        <p class="label i3" style="margin-bottom: 16px">The light line on the base</p>
-        <ol class="cells waves" data-waves></ol>
-      </div>
+    <p class="label kick" style="grid-column: 1 / -1">Gestures</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Three gestures replace the menus.</p>
+    <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid">
+      <div class="gest"><svg class="gfig" viewBox="0 40 560 480" role="img" aria-label="A hand lifting the bracelet off the base" data-gest="1"></svg><span class="label kick"><span class="n">01</span>Evening</span><p class="body m">Take the bracelet</p><p class="small i2">Lifting it off the base means “I’m going to bed”: the wind-down starts with one violet breath.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 40 560 480" role="img" aria-label="A palm resting on top of the base" data-gest="2"></svg><span class="label kick"><span class="n">02</span>Morning</span><p class="body m">Palm on the base, 2 seconds</p><p class="small i2">The only night gesture, eyes closed: ten more minutes, twice at most. One amber pulse says yes.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 40 560 480" role="img" aria-label="A hand putting the bracelet back on the base" data-gest="3"></svg><span class="label kick"><span class="n">03</span>Day</span><p class="body m">Put it back</p><p class="small i2">Back on the base means “I’m up”: everything stops, the night syncs and the line fills as it charges.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="p05-light" data-page>
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1">Light language</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">At night, darkness means all is well. The base lights up only when something changes.</p>
+    <div style="grid-column: 1 / -1; align-self: end">
+      <p class="label i3" style="margin-bottom: 16px">The light line on the base</p>
+      <ol class="cells waves" data-waves></ol>
     </div>
   </div>
 </section>
@@ -591,6 +599,8 @@
   .keys li:last-child { border-bottom: 1px solid var(--rule); }
   .gest { grid-column: span 4; display: grid; gap: 10px; align-content: end; }
   .gest .label { margin-top: 8px; }
+  .gfig { width: 100%; height: auto; display: block; overflow: hidden; border: 1px solid var(--rule); }
+  .gfig .arw { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
   .waves { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .waves .cell { padding: 20px 24px; gap: 10px; }
   .waves svg { width: 100%; height: 44px; display: block; overflow: visible; }
@@ -799,6 +809,25 @@
     S.forEach((s) => (g += `<line class="hr" x1="${s === S[0] ? 0 : s.x}" x2="${s.x + s.w}" y1="${B}" y2="${B}" />`));
     night.innerHTML = g;
   }
+
+  // AuraWake · three gestures (spec §2.3): Blender line drawings (aura.py line gN, one scale, the base in the same place),
+  // with the one coloured detail each gesture produces: the light line washing the nightstand (§4.2).
+  document.querySelectorAll('[data-gest]').forEach((svg) => {
+    const n = +svg.dataset.gest, C = 0.866, S = 0.5, k = 1866.7, [gx, gy] = [252.0, 390.6], TOP = 0.045;
+    const P = (x, y, z = 0) => [gx + k * C * (x + y), gy + k * (S * (x - y) - z)].map((v) => v.toFixed(1)).join(' ');
+    const h = 0.074, col = ['', 'var(--night)', 'var(--dawn)', '#e6d6b6'][n];
+    const glow = n === 3 ? [[-h, -h], [0.004, -h], [0.004, h], [-h, h]] : [[-h, -h], [h, -h], [h, h], [-h, h]];
+    let g = `<defs><filter id="gb${n}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="13" /></filter></defs>`;
+    g += `<path d="M${glow.map(([x, y]) => P(x, y)).join(' L')} Z" fill="${col}" opacity="${[0, 0.5, 0.6, 1][n]}" filter="url(#gb${n})" />`;
+    g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560" />`;
+    const arrow = (z0, z1, x = -0.05, y = -0.035) => {        // a vertical arrow beside the bracelet, chevron at z1
+      const d = z1 > z0 ? 1 : -1, tip = P(x, y, z1).split(' ').map(Number);
+      return `<path class="arw" d="M${P(x, y, z0)} L${P(x, y, z1)} M${tip[0] - 7} ${tip[1] + 7 * d} L${tip[0]} ${tip[1]} L${tip[0] + 7} ${tip[1] + 7 * d}" />`;
+    };
+    if (n === 1) g += arrow(TOP + 0.016, TOP + 0.068);
+    if (n === 3) g += arrow(TOP + 0.05, TOP + 0.006);
+    svg.innerHTML = g;
+  });
 
   // AuraWake · the light line on the base (spec §4.2): each state drawn as its waveform over time.
   const waves = document.querySelector('[data-waves]');

@@ -344,7 +344,7 @@ if MODE == 'real':
 else:
     T = {'alu': 0.86, 'grille': 0.42, 'rubber': 0.3, 'print': 0.4, 'pin': 0.75, 'band': 0.5, 'cable': 0.25, 'dots': 0.28,
          'led_front': 0.25, 'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98,
-         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3, 'mark': 0.45}
+         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3, 'mark': 0.45, 'skin': 0.985}
     MATS = {k: toon(k, grey(v)) for k, v in T.items()}
     MATS['body'] = body_toon('body', grey(0.86))
     MATS['shell'] = toon('shell', grey(0.86))
@@ -856,6 +856,92 @@ def build_diffuser():
     cable = curve('dif_cable', [(0, 0.034, 0.012), (0, 0.06, 0.012), (0.02, 0.09, 0.0016), (0.06, 0.12, 0.0016)], 0.0018, 'cable')
     return group('diffuser', [body, pl, mist, cable] + caps + slots)
 
+
+# ---------------------------------------------------------------------------------------------------------------
+# A mannequin hand for the gesture drawings (owner, 2026-10-29: "mano a linea"): capsules for bones, fused by a voxel
+# remesh and smoothed, so the drawing shows only its outline, like an instruction manual. Local frame: X along the
+# fingers, Y towards the thumb, Z the back of the hand; the wrist is at the origin, the forearm runs to -X.
+FINGERS = {   # knuckle (x, y), spread (deg), phalanx lengths, radii
+    'index': ((0.093, 0.028), 7, (0.042, 0.025, 0.020), (0.0090, 0.0083, 0.0076)),
+    'middle': ((0.097, 0.008), 1, (0.046, 0.028, 0.021), (0.0093, 0.0086, 0.0078)),
+    'ring': ((0.093, -0.012), -5, (0.043, 0.027, 0.020), (0.0088, 0.0081, 0.0074)),
+    'little': ((0.084, -0.030), -12, (0.034, 0.021, 0.018), (0.0078, 0.0072, 0.0066)),
+}
+THUMB = ((0.018, 0.024, -0.006), (0.042, 0.032, 0.027), (0.0125, 0.0105, 0.0095))
+POSES = {
+    'flat': {'index': (2, 6, 4), 'middle': (1, 6, 4), 'ring': (2, 6, 4), 'little': (4, 8, 5),
+             'thumb': [(38, 12), (30, 14), (24, 14)]},
+    'pinch': {'index': (35, 65, 35), 'middle': (65, 75, 40), 'ring': (70, 80, 40), 'little': (75, 80, 40),
+              'thumb': [(30, 35), (5, 45), (-20, 45)]},
+}
+
+def dirv(yaw, pitch):
+    a, b = math.radians(yaw), math.radians(pitch)
+    return Vector((math.cos(a) * math.cos(b), math.sin(a) * math.cos(b), -math.sin(b)))
+
+def hand_bones(pose):
+    P = POSES[pose] if isinstance(pose, str) else pose; bones = []; tips = {}
+    for k, ((kx, ky), sp, ls, rs) in FINGERS.items():
+        knuckle = Vector((kx, ky, -0.001))
+        bones.append((Vector((0.015, ky * 0.5, 0)), knuckle - Vector((0.004, 0, 0)), 0.0125 if k != 'little' else 0.0112, 0.0118))
+        p, pitch, r = knuckle, 0.0, rs + (rs[2] * 0.9,)
+        for i, (L, fl) in enumerate(zip(ls, P[k])):
+            pitch += fl; q = p + dirv(sp, pitch) * L; bones.append((p, q, r[i], r[i + 1])); p = q
+        tips[k] = p
+    p, ls, rs = Vector(THUMB[0]), THUMB[1], THUMB[2] + (THUMB[2][2] * 0.9,)
+    for i, (L, (yaw, pitch)) in enumerate(zip(ls, P['thumb'])):
+        q = p + dirv(yaw, pitch) * L; bones.append((p, q, rs[i], rs[i + 1])); p = q
+    tips['thumb'] = p
+    bones += [(Vector((0.03, 0.016, -0.002)), Vector((0.05, 0.02, -0.002)), 0.0135, 0.0115),     # thenar
+              (Vector((0.03, -0.022, -0.003)), Vector((0.07, -0.026, -0.002)), 0.013, 0.011)]   # hypothenar
+    for y in (-0.011, 0.011):
+        bones.append((Vector((0.012, y * 0.8, 0)), Vector((-0.26, y * 1.1, 0)), 0.019, 0.023))  # wrist, forearm
+    return bones, tips
+
+def build_hand(pose, R, t, name='hand'):
+    """R: 3×3 world basis of the hand (columns = local X, Y, Z); t: world position of the wrist."""
+    bones, tips = hand_bones(pose)
+    bm = bmesh.new()
+    for p0, p1, r0, r1 in bones:
+        d = p1 - p0; L = d.length
+        rot = d.normalized().to_track_quat('Z', 'Y').to_matrix().to_4x4()
+        bmesh.ops.create_cone(bm, cap_ends=True, segments=32, radius1=r0, radius2=r1, depth=L, matrix=Matrix.Translation((p0 + p1) / 2) @ rot)
+        for c, r in ((p0, r0), (p1, r1)):
+            bmesh.ops.create_uvsphere(bm, u_segments=32, v_segments=16, radius=r, matrix=Matrix.Translation(c))
+    ob = link(name, bm, 'skin', smooth=False)
+    ob.matrix_world = Matrix.Translation(t) @ R.to_4x4()
+    rm = ob.modifiers.new('fuse', 'REMESH'); rm.mode = 'VOXEL'; rm.voxel_size = 0.0007
+    sm = ob.modifiers.new('soft', 'SMOOTH'); sm.factor = 0.8; sm.iterations = 12
+    ob.data.polygons.foreach_set('use_smooth', [True] * len(ob.data.polygons))
+    return ob, {k: Matrix.Translation(t) @ R.to_4x4() @ v for k, v in tips.items()}
+
+def basis(x, y):
+    x = Vector(x).normalized(); y = (Vector(y) - x * x.dot(Vector(y))).normalized(); z = x.cross(y)
+    return Matrix((x, y, z)).transposed()
+
+def pinch_hand(target, R):
+    """Hand placed so that the pad between thumb and index tip lands on target."""
+    _, tips = hand_bones('pinch')
+    m = (tips['index'] + tips['thumb']) / 2
+    return build_hand('pinch', R, Vector(target) - R @ m)
+
+GRIP = (0.0277, 0.0030)          # the bracelet's pod side, turned to face +X by AP: where the fingers pinch it
+PINCH_R = basis((-0.906, 0.0, -0.423), (0.0, -1.0, 0.0))   # from the right like the palm, index inside the band, thumb outside
+
+def build_gesture(n):
+    """01 take the bracelet off the base, 02 palm on the base (bracelet on the wrist), 03 put it back."""
+    base = build_base(with_time=False)
+    if n == 2:
+        R = basis((-1, 0, 0), (0, -1, 0)); wrist = Vector((0.062, 0.006, TOP + 0.015))
+        hand, tips = build_hand(POSES['flat'] | {'index': (6, 34, 18), 'middle': (5, 38, 20), 'ring': (6, 36, 18), 'little': (8, 30, 14)}, R, wrist)
+        br = build_bracelet(); br.rotation_euler = (0, math.pi / 2, 0)          # ring round the wrist, the pod underneath
+        br.location = wrist + Vector((0.002, 0, 0))
+        return group('gesture', [base, br, hand])
+    z0 = TOP + (0.042 if n == 1 else 0.010)
+    br = build_bracelet(z0)
+    hand, tips = pinch_hand((GRIP[0], GRIP[1], z0 + STRAP_LIFT + STRAP_H - 0.004), PINCH_R)
+    return group('gesture', [base, br, hand])
+
 # ---------------------------------------------------------------------------------------------------------------
 def cycles(samples, res):
     scene.render.engine = 'CYCLES'
@@ -1056,6 +1142,9 @@ def line():
         'lamp': (build_bulb, 170, {}),
         'shutters': (build_shutters, 300, {}),
         'diffuser': (build_diffuser, 200, {'caps': (0.016, 0.004, 0.074)}),
+        'g1': (lambda: build_gesture(1), 560, {'top': (0, 0, TOP)}),
+        'g2': (lambda: build_gesture(2), 560, {'top': (0, 0, TOP)}),
+        'g3': (lambda: build_gesture(3), 560, {'top': (0, 0, TOP)}),
         'base_under': (build_base, 300, {'under': (0.0, 0.0, 0.0), 'back': (0.0, W / 2, MID), 'under_exit': (-W / 2, -W / 2, PL), 'back_exit': (0.0, W / 2, TOP)}, ISO_UNDER),
     }
     if SHOT: items = {SHOT: items[SHOT]}                 # one drawing only: merged into the existing anchors
@@ -1067,10 +1156,14 @@ def line():
         for o in list(col.objects):
             if o.type != 'CAMERA': bpy.data.objects.remove(o, do_unlink=True)
         g = fn(); bpy.context.view_layer.update()
-        cs = [o.matrix_world @ Vector(c) for o in g.children_recursive if o.type == 'MESH' or o.name.startswith('band') for c in o.bound_box]
+        fit = [o for o in g.children_recursive if (o.type == 'MESH' or o.name.startswith('band')) and not o.name.startswith('hand')]
+        if name.startswith('g'): fit = [o for o in fit if o.name == 'body']     # gestures: the base sits in the same place in all three
+        cs = [o.matrix_world @ Vector(c) for o in fit for c in o.bound_box]
         xs = [c.dot(right) for c in cs]; ys = [c.dot(up) for c in cs]
-        span = max(max(xs) - min(xs), max(ys) - min(ys)) * 1.16
+        span = max(max(xs) - min(xs), max(ys) - min(ys)) * (1.16 if not name.startswith('g') else 1.0)
+        if name.startswith('g'): span = 0.30                    # gestures: one scale for all three, the hand runs off the frame
         cx, cy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
+        if name.startswith('g'): cx, cy = cx + 0.015, cy + 0.04           # room for the hand above and to the right
         cam.location = right * cx + up * cy + back * 2.0
         cd.ortho_scale = span; cd.clip_end = 10
         px = round(size * SS); scene.render.resolution_x = scene.render.resolution_y = px
@@ -1078,7 +1171,7 @@ def line():
         bpy.context.view_layer.update()
         def proj(p):
             v = world_to_camera_view(scene, cam, Vector(p)); return [round(v.x * size, 1), round((1 - v.y) * size, 1)]
-        anchors[name] = {'size': size, 'ground': proj((0, 0, 0)), 'points': {k: proj(p) for k, p in pts.items()}}
+        anchors[name] = {'size': size, 'k': round(size / span, 1), 'ground': proj((0, 0, 0)), 'points': {k: proj(p) for k, p in pts.items()}}
         scene.render.filepath = os.path.join(OUT, f'iso-{name}.png')
         bpy.ops.render.render(write_still=True)
     with open(path, 'w') as f: json.dump(anchors, f, indent=1)

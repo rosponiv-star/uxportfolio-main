@@ -1056,6 +1056,15 @@ When a CLOUD session hits something that needs the local environment, it must:
   Vanilla until 22:50, Lemon until 06:36). Owner was given a table of 16 possible schemas; proposed keep: System, One
   night, Gestures + light language, Fail-safe + adaptive card, wake-up scenario.
 
+- **2026-10-29 · LOCAL (47)** · Schema 3 "Three gestures" (p05-gestures), owner choices: line hand, isometric view,
+  light language on its own slide (new `p05-light`, which holds the waveform row as a draft for schema 4). aura.py
+  gains a mannequin hand (`build_hand`: capsule bones fused by a voxel remesh + smooth, so Freestyle draws only the
+  outline; poses `flat` and `pinch`) and `line gN` drawings: 01 pinch lifting the bracelet, 02 palm on the base with
+  the bracelet on the wrist (pod underneath), 03 pinch putting it back. All three: one scale (span 0.30 m), framed on
+  the base body only, so the base sits in the same place and the arm runs off the right edge; anchors carry `k` px/m.
+  Slide: three hairline boxes (viewBox cropped 0 40 560 480), one coloured detail each from §4.2, drawn in SVG under
+  the PNG as a blurred floor glow (violet breath, amber pulse, warm white half = charging fills from the left),
+  arrows up/down beside the bracelet. Headline "Three gestures replace the menus." PDF now 26 pages.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's
