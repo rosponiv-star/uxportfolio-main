@@ -344,7 +344,7 @@ if MODE == 'real':
 else:
     T = {'alu': 0.86, 'grille': 0.42, 'rubber': 0.3, 'print': 0.4, 'pin': 0.75, 'band': 0.5, 'cable': 0.25, 'dots': 0.28,
          'led_front': 0.25, 'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98,
-         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3, 'mark': 0.45, 'skin': 0.985}
+         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3, 'mark': 0.45, 'skin': 0.985, 'nail': 0.95}
     MATS = {k: toon(k, grey(v)) for k, v in T.items()}
     MATS['body'] = body_toon('body', grey(0.86))
     MATS['shell'] = toon('shell', grey(0.86))
@@ -861,13 +861,14 @@ def build_diffuser():
 # A mannequin hand for the gesture drawings (owner, 2026-10-29: "mano a linea"): capsules for bones, fused by a voxel
 # remesh and smoothed, so the drawing shows only its outline, like an instruction manual. Local frame: X along the
 # fingers, Y towards the thumb, Z the back of the hand; the wrist is at the origin, the forearm runs to -X.
-FINGERS = {   # knuckle (x, y), spread (deg), phalanx lengths, radii
-    'index': ((0.093, 0.028), 7, (0.042, 0.025, 0.020), (0.0090, 0.0083, 0.0076)),
-    'middle': ((0.097, 0.008), 1, (0.046, 0.028, 0.021), (0.0093, 0.0086, 0.0078)),
-    'ring': ((0.093, -0.012), -5, (0.043, 0.027, 0.020), (0.0088, 0.0081, 0.0074)),
-    'little': ((0.084, -0.030), -12, (0.034, 0.021, 0.018), (0.0078, 0.0072, 0.0066)),
+FINGERS = {   # knuckle (x, y), spread (deg), phalanx lengths, half-widths at knuckle, joints and tip
+    'index': ((0.093, 0.027), 6, (0.042, 0.025, 0.021), (0.0098, 0.0088, 0.0080, 0.0068)),
+    'middle': ((0.097, 0.007), 1, (0.046, 0.028, 0.022), (0.0100, 0.0091, 0.0082, 0.0070)),
+    'ring': ((0.093, -0.012), -5, (0.043, 0.027, 0.021), (0.0094, 0.0085, 0.0077, 0.0066)),
+    'little': ((0.084, -0.029), -11, (0.034, 0.021, 0.019), (0.0083, 0.0075, 0.0069, 0.0059)),
 }
-THUMB = ((0.018, 0.024, -0.006), (0.042, 0.032, 0.027), (0.0125, 0.0105, 0.0095))
+THUMB = ((0.018, 0.024, -0.006), (0.042, 0.032, 0.028), (0.0130, 0.0108, 0.0098, 0.0084))
+FLAT_F = 0.8                     # fingers are wider than they are thick
 POSES = {
     'flat': {'index': (2, 6, 4), 'middle': (1, 6, 4), 'ring': (2, 6, 4), 'little': (4, 8, 5),
              'thumb': [(38, 12), (30, 14), (24, 14)]},
@@ -880,40 +881,61 @@ def dirv(yaw, pitch):
     return Vector((math.cos(a) * math.cos(b), math.sin(a) * math.cos(b), -math.sin(b)))
 
 def hand_bones(pose):
-    P = POSES[pose] if isinstance(pose, str) else pose; bones = []; tips = {}
+    """Bones as (p0, p1, r0, r1, up, f): an elliptic capsule, half-width r, half-thickness r·f along up (the nail side).
+    Nails as (centre, along, up, length, width) on the distal phalanges."""
+    P = POSES[pose] if isinstance(pose, str) else pose; bones = []; tips = {}; nails = []
+    Z = Vector((0, 0, 1))
     for k, ((kx, ky), sp, ls, rs) in FINGERS.items():
         knuckle = Vector((kx, ky, -0.001))
-        bones.append((Vector((0.015, ky * 0.5, 0)), knuckle - Vector((0.004, 0, 0)), 0.0125 if k != 'little' else 0.0112, 0.0118))
-        p, pitch, r = knuckle, 0.0, rs + (rs[2] * 0.9,)
+        bones.append((Vector((0.012, ky * 0.55, -0.001)), knuckle - Vector((0.006, 0, 0)), rs[0] * 1.25, rs[0] * 1.15, Z, 0.62))
+        p, pitch = knuckle, 0.0
         for i, (L, fl) in enumerate(zip(ls, P[k])):
-            pitch += fl; q = p + dirv(sp, pitch) * L; bones.append((p, q, r[i], r[i + 1])); p = q
+            pitch += fl; d = dirv(sp, pitch); q = p + d * L
+            up = dirv(sp, pitch - 90)
+            bones.append((p, q, rs[i], rs[i + 1], up, FLAT_F))
+            if i == 2: nails.append((p + d * (L * 0.6), d, up, L * 0.62, rs[2] + 0.6 * (rs[3] - rs[2]), FLAT_F))
+            p = q
         tips[k] = p
-    p, ls, rs = Vector(THUMB[0]), THUMB[1], THUMB[2] + (THUMB[2][2] * 0.9,)
+    p, ls, rs = Vector(THUMB[0]), THUMB[1], THUMB[2]
     for i, (L, (yaw, pitch)) in enumerate(zip(ls, P['thumb'])):
-        q = p + dirv(yaw, pitch) * L; bones.append((p, q, rs[i], rs[i + 1])); p = q
+        d = dirv(yaw, pitch); q = p + d * L
+        hint = Vector((-0.35, 0.75, 0.55)); up = (hint - d * d.dot(hint)).normalized()   # the thumb nail faces outwards
+        bones.append((p, q, rs[i], rs[i + 1], up, 0.86))
+        if i == 2: nails.append((p + d * (L * 0.6), d, up, L * 0.6, rs[2] + 0.6 * (rs[3] - rs[2]), 0.86))
+        p = q
     tips['thumb'] = p
-    bones += [(Vector((0.03, 0.016, -0.002)), Vector((0.05, 0.02, -0.002)), 0.0135, 0.0115),     # thenar
-              (Vector((0.03, -0.022, -0.003)), Vector((0.07, -0.026, -0.002)), 0.013, 0.011)]   # hypothenar
-    for y in (-0.011, 0.011):
-        bones.append((Vector((0.012, y * 0.8, 0)), Vector((-0.26, y * 1.1, 0)), 0.019, 0.023))  # wrist, forearm
-    return bones, tips
+    th1 = Vector(THUMB[0]) + dirv(*P['thumb'][0]) * THUMB[1][0] * 0.75
+    bones += [(Vector((0.028, 0.014, -0.004)), Vector((0.05, 0.02, -0.004)), 0.014, 0.012, Z, 0.85),          # thenar
+              (Vector((0.03, -0.022, -0.003)), Vector((0.072, -0.026, -0.002)), 0.0135, 0.011, Z, 0.8),      # hypothenar
+              (th1, Vector((0.084, 0.026, -0.003)), 0.0065, 0.0055, Z, 0.55),                               # web to the index
+              (Vector((0.012, 0, -0.001)), Vector((-0.26, 0, 0.002)), 0.027, 0.033, Z, 0.7)]                 # wrist, forearm
+    return bones, tips, nails
 
 def build_hand(pose, R, t, name='hand'):
     """R: 3×3 world basis of the hand (columns = local X, Y, Z); t: world position of the wrist."""
-    bones, tips = hand_bones(pose)
+    bones, tips, nails = hand_bones(pose)
     bm = bmesh.new()
-    for p0, p1, r0, r1 in bones:
-        d = p1 - p0; L = d.length
-        rot = d.normalized().to_track_quat('Z', 'Y').to_matrix().to_4x4()
-        bmesh.ops.create_cone(bm, cap_ends=True, segments=32, radius1=r0, radius2=r1, depth=L, matrix=Matrix.Translation((p0 + p1) / 2) @ rot)
+    for p0, p1, r0, r1, up, f in bones:
+        d = (p1 - p0); L = d.length; d = d / L
+        u = (up - d * d.dot(up)).normalized(); x = u.cross(d)
+        B = Matrix((x, u * f, d)).transposed().to_4x4()          # columns: side, up (flattened), along
+        bmesh.ops.create_cone(bm, cap_ends=True, segments=40, radius1=r0, radius2=r1, depth=L, matrix=Matrix.Translation((p0 + p1) / 2) @ B)
         for c, r in ((p0, r0), (p1, r1)):
-            bmesh.ops.create_uvsphere(bm, u_segments=32, v_segments=16, radius=r, matrix=Matrix.Translation(c))
+            bmesh.ops.create_uvsphere(bm, u_segments=40, v_segments=20, radius=r, matrix=Matrix.Translation(c) @ B)
     ob = link(name, bm, 'skin', smooth=False)
-    ob.matrix_world = Matrix.Translation(t) @ R.to_4x4()
-    rm = ob.modifiers.new('fuse', 'REMESH'); rm.mode = 'VOXEL'; rm.voxel_size = 0.0007
-    sm = ob.modifiers.new('soft', 'SMOOTH'); sm.factor = 0.8; sm.iterations = 12
+    W = Matrix.Translation(t) @ R.to_4x4(); ob.matrix_world = W
+    rm = ob.modifiers.new('fuse', 'REMESH'); rm.mode = 'VOXEL'; rm.voxel_size = 0.0005
+    sm = ob.modifiers.new('soft', 'SMOOTH'); sm.factor = 0.9; sm.iterations = 22
     ob.data.polygons.foreach_set('use_smooth', [True] * len(ob.data.polygons))
-    return ob, {k: Matrix.Translation(t) @ R.to_4x4() @ v for k, v in tips.items()}
+    obs = [ob]
+    for i, (c, d, up, L, r, f) in enumerate(nails):          # nails: thin plates bent to the fingertip's curve
+        u = (up - d * d.dot(up)).normalized(); x = u.cross(d); w = r * 1.4
+        nb = rbox_bm(w, L, 0.0006, min(w, L) * 0.42, 0.0002, sp=8, se=2)
+        for v in nb.verts: v.co.z -= v.co.x ** 2 / (2 * r / f)
+        nb.transform(Matrix((x, d, u)).transposed().to_4x4())
+        nb.transform(Matrix.Translation(c + u * (r * f - 0.00055)))
+        nob = link(f'{name}_nail{i}', nb, 'nail'); nob.matrix_world = W; obs.append(nob)
+    return obs, {k: W @ v for k, v in tips.items()}
 
 def basis(x, y):
     x = Vector(x).normalized(); y = (Vector(y) - x * x.dot(Vector(y))).normalized(); z = x.cross(y)
@@ -921,7 +943,7 @@ def basis(x, y):
 
 def pinch_hand(target, R):
     """Hand placed so that the pad between thumb and index tip lands on target."""
-    _, tips = hand_bones('pinch')
+    _, tips, _ = hand_bones('pinch')
     m = (tips['index'] + tips['thumb']) / 2
     return build_hand('pinch', R, Vector(target) - R @ m)
 
@@ -936,11 +958,11 @@ def build_gesture(n):
         hand, tips = build_hand(POSES['flat'] | {'index': (6, 34, 18), 'middle': (5, 38, 20), 'ring': (6, 36, 18), 'little': (8, 30, 14)}, R, wrist)
         br = build_bracelet(); br.rotation_euler = (0, math.pi / 2, 0)          # ring round the wrist, the pod underneath
         br.location = wrist + Vector((0.002, 0, 0))
-        return group('gesture', [base, br, hand])
+        return group('gesture', [base, br] + hand)
     z0 = TOP + (0.042 if n == 1 else 0.010)
     br = build_bracelet(z0)
     hand, tips = pinch_hand((GRIP[0], GRIP[1], z0 + STRAP_LIFT + STRAP_H - 0.004), PINCH_R)
-    return group('gesture', [base, br, hand])
+    return group('gesture', [base, br] + hand)
 
 # ---------------------------------------------------------------------------------------------------------------
 def cycles(samples, res):
