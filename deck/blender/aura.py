@@ -955,7 +955,14 @@ def build_gesture(n):
         br.matrix_world = (Matrix.Translation(wrist + R @ Vector((-0.004, yc, zc))) @ Matrix.Rotation(math.atan2(-F.y, -F.x), 4, 'Z')
                            @ Matrix.Rotation(math.pi / 2, 4, 'Y') @ Matrix.Diagonal(br.scale.to_4d()))   # ring round the wrist, pod underneath
         return group('gesture', [base, br] + hand)
-    z0 = TOP + (0.055 if n == 1 else 0.012)
+    if n == 3:                 # put back: the bracelet docked, its flat sensor edge on the row of pins; the hand lets go
+        br = build_bracelet(TOP); br.rotation_euler = (0, 0, -math.pi / 2)          # the pod's long side along the pins
+        pod = Vector((STRAP_XF - POD_T, 0.0005, 0))
+        br.location = Vector((0, -W / 2 + 0.020, TOP)) - Matrix.Rotation(-math.pi / 2, 3, 'Z') @ pod
+        F = Vector((1, 1, 0)).normalized()
+        hand, tips = build_hand('palm', basis(F, Vector((0, 0, 1)).cross(F)), Vector((-0.07, -0.07, TOP + 0.05 - palm_z('palm'))))
+        return group('gesture', [base, br] + hand)
+    z0 = TOP + 0.055
     br = build_bracelet(z0); br.rotation_euler.z += math.radians(225)
     gp = TURN @ Vector((GRIP[0], GRIP[1], 0))
     pin = Vector((gp.x, gp.y, z0 + STRAP_LIFT + STRAP_H - 0.004))
@@ -965,6 +972,18 @@ def build_gesture(n):
     bpy.context.view_layer.update()
     M = Matrix.Translation(pin) @ Matrix.Rotation(math.radians(25), 4, Vector((-1, -1, 0)).normalized()) @ Matrix.Translation(-pin)
     for o in [br] + hand: o.matrix_world = M @ o.matrix_world
+    # held the other way round (thumb inside the band, index outside): the ring hangs on the viewer's side of the hand
+    bpy.context.view_layer.update()
+    br.matrix_world = Matrix.Translation(pin) @ Matrix.Rotation(math.pi, 4, 'Z') @ Matrix.Translation(-pin) @ br.matrix_world
+    # held by one side, the stiff band tips a little: it comes out from under the hand
+    bpy.context.view_layer.update()
+    ti, tt = M @ tips['index'], M @ tips['thumb']
+    ax = (tt - ti).normalized().cross(Vector((0, 0, 1))).normalized()
+    c0 = br.matrix_world.translation.copy()
+    for sg in (1, -1):
+        T = Matrix.Translation(pin) @ Matrix.Rotation(sg * math.radians(30), 4, ax) @ Matrix.Translation(-pin)
+        if (T @ c0).z < c0.z: break
+    br.matrix_world = T @ br.matrix_world
     return group('gesture', [base, br] + hand)
 
 # ---------------------------------------------------------------------------------------------------------------

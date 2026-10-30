@@ -848,7 +848,7 @@
       return `<path class="arw" style="stroke: ${fg === '#cfcdc6' ? '#e9e7e1' : 'var(--ink)'}" d="M${P(x, y, z0)} L${P(x, y, z1)} M${tip[0] - 7} ${tip[1] + 7 * d} L${tip[0]} ${tip[1]} L${tip[0] + 7} ${tip[1] + 7 * d}" />`;
     };
     if (n === 1) g += arrow(TOP + 0.03, TOP + 0.085);
-    if (n === 3) g += arrow(TOP + 0.07, TOP + 0.025);
+    if (n === 3) g += arrow(TOP + 0.085, TOP + 0.125);                                 // docked: the hand lets go
     if (n === 2) g += arrow(TOP + 0.125, TOP + 0.088, 0.012, 0.012);                       // a short tap, from above
     if (n === 4) {                                                                     // held: a 3-second ring
       const [cx, cy] = P(0.012, 0.012, TOP + 0.095).split(' ').map(Number), r = 15, a = 2 * Math.PI * 0.75;

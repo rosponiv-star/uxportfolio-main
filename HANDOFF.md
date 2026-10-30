@@ -1158,6 +1158,10 @@ When a CLOUD session hits something that needs the local environment, it must:
   the top so the time stays readable; pinches (01, 04) turned 225° (`TURN`), lighter pinch (other fingers relaxed),
   rolled 25° about the arm so thumb and index on the band face the viewer; 01 lifts the bracelet 55 mm. Framing
   offset now −12 mm (ground 302.4, 390.6); arrows moved right of the bracelet; room labels bottom right.
+- **2026-10-30 · LOCAL (60)** · Bracelet easier to see, still realistic (owner): in 01 it is held thumb-inside,
+  index-outside (bracelet turned 180° about the pinch), so the ring hangs on the viewer's side of the hand, and tips 30°
+  as a stiff band held by one side. 04 now shows the bracelet docked: standing on the top with the pod's flat sensor
+  edge on the row of pins (rotation −90°, pod centre on (0, −40 mm)); the open hand lifts away (arrow up).
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's
