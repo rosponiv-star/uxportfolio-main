@@ -375,7 +375,7 @@ def strip_mat(state):
     return m
 
 if MODE == 'real' and SHOT == 'led':
-    LED_SAT = {'white': '#fff6ea', 'night': '#4d5cff', 'dawn': '#ff9a1f'}   # saturated: the state must read at a glance
+    LED_SAT = {'white': '#fff6ea', 'night': '#4d5cff', 'dawn': '#ff9a1f', 'green': '#34d27a', 'red': '#ff3a2a'}   # spec §4.1   # saturated: the state must read at a glance
     MATS['led_front'] = emit('led_front', srgb(LED_SAT[STATE]), 1.8 if STATE != 'white' else 4.0) if STATE in LED_SAT else principled('led_front', srgb('#0b0b0c'), rough=0.08)
 if MODE == 'real' and SHOT == 'strip':
     MATS['led_under'] = strip_mat(STATE)

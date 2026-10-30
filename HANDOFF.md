@@ -1136,6 +1136,17 @@ When a CLOUD session hits something that needs the local environment, it must:
   views/ + render-*, and Media/…/Renders + Transparent/); iso-base, base_under and g1–g4 redrawn. Note: views
   led-dawn and strip-charging show states the revised spec no longer has (front LED is day-only; charging is the
   front LED, not the line).
+- **2026-10-30 · LOCAL (57)** · Interaction revised with the owner: the bracelet has NO haptics (sensors only; the
+  ladder is light + sound, partner mode dropped); status colours redesigned from scratch, one colour per moment
+  (spec §4.1): front LED by day = green 5 s "all set", red slow pulse "act" (never at night), violet breath 30 min
+  before bed, white neutral (pairing, update, charging); ring underneath evening→morning = violet dimming with the room
+  during wind-down, off at night, amber rising with the dawn, one white beat to confirm. New morning switch: palm held
+  5 s in the window = today off, the matrix counts "OFF 5 … OFF 1" then "OFF", the room goes back to night, AlarmKit
+  cancelled. Spec principle 1, §2.2, §2.3, §4.1–4.3, §6.1, §7.2–7.4 updated. Deck: system keys 03/05, One night base
+  lane (21:30 violet bed soon, 22:00 ring dims, 07:10 green), gestures 01/02/04 copy (04 shows 5 s of green), app
+  slide row "You forgot tomorrow off", p05-light rebuilt (Front LED · by day / Ring · evening to morning / ladder).
+  Renders: led-green and led-red added (LED_SAT), led-dawn and strip-charging retired (git rm in views; moved to
+  Media/…/Renders/Superate).
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's

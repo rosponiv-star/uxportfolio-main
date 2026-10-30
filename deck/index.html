@@ -443,8 +443,8 @@
     <p class="label kick" style="grid-column: 1 / -1">Gestures</p>
     <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Four gestures replace the menus.</p>
     <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid; row-gap: 32px">
-      <div class="gest"><svg class="gfig" viewBox="0 55 560 430" role="img" aria-label="A hand lifting the bracelet off the base in a dark room" data-gest="1"></svg><span class="label kick"><span class="n">01</span>Evening</span><p class="body m">Take the bracelet</p><p class="small i2">Means “I’m going to bed”: the wind-down starts. The breath under the base is violet if tomorrow’s wake-up is on, white if off.</p></div>
-      <div class="gest"><svg class="gfig" viewBox="0 55 560 430" role="img" aria-label="A palm held on the base, which shows OFF" data-gest="4"></svg><span class="label kick"><span class="n">02</span>Evening</span><p class="body m">Palm held 3 seconds</p><p class="small i2">Before you fall asleep: tomorrow off, or back on. The base shows OFF or ☀ 06:30 with one white beat. Ignored once you sleep.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 55 560 430" role="img" aria-label="A hand lifting the bracelet off the base in a dark room" data-gest="1"></svg><span class="label kick"><span class="n">01</span>Evening</span><p class="body m">Take the bracelet</p><p class="small i2">Means “I’m going to bed”: the wind-down starts, and the violet ring under the base dims with the room.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 55 560 430" role="img" aria-label="A palm held on the base, which shows OFF" data-gest="4"></svg><span class="label kick"><span class="n">02</span>Evening</span><p class="body m">Palm held 3 seconds</p><p class="small i2">Before you fall asleep: tomorrow off, or back on (OFF or ☀ 06:30). Forgot? In the morning hold it 5 s: today off.</p></div>
       <div class="gest"><svg class="gfig" viewBox="0 55 560 430" role="img" aria-label="A palm tapping the base in the morning" data-gest="2"></svg><span class="label kick"><span class="n">03</span>Morning</span><p class="body m">Palm tap</p><p class="small i2">The time is already on: the palm softens the sound but never moves the wake-up. By day, a touch shows the time for 8 s.</p></div>
       <div class="gest"><svg class="gfig" viewBox="0 55 560 430" role="img" aria-label="A hand putting the bracelet back on the base" data-gest="3"></svg><span class="label kick"><span class="n">04</span>Day</span><p class="body m">Put it back</p><p class="small i2">Means “I’m up”: everything stops, even the alarm. The night syncs; the time shows the charge, then goes off.</p></div>
       <div class="gest gest--text"><span class="label kick"><span class="n">05</span>Morning</span><p class="small"><span class="m">Get up</span><span class="i2"> · Getting up does the rest: it is the only way to end the wake-up. The bracelet senses steps and an upright posture; there is no snooze.</span></p></div>
@@ -457,7 +457,7 @@
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1">Light language</p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">The front light speaks by day, the line underneath by night.</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">One colour for each moment: the front speaks by day, the ring by night.</p>
     <div style="grid-column: 1 / -1; align-self: start; margin-top: 56px; display: grid; grid-template-columns: subgrid" data-waves></div>
   </div>
 </section>
@@ -479,7 +479,7 @@
         <div><dt class="small m">The bracelet runs flat</dt><dd class="small i2">A fast dawn, then a real alarm at 06:30; the bracelet on the base stops it.</dd></div>
         <div><dt class="small m">The power goes out</dt><dd class="small i2">A backup battery plays the sound; the phone rings too.</dd></div>
         <div><dt class="small m">The lamp is offline</dt><dd class="small i2">The ramp goes on with the other channels; the app says so in the morning.</dd></div>
-        <div><dt class="small m">A partner is asleep</dt><dd class="small i2">Haptics first, slower light; sound only after the window.</dd></div>
+        <div><dt class="small m">You forgot tomorrow off</dt><dd class="small i2">In the window, hold the palm 5 s: the room goes back to night.</dd></div>
         <div><dt class="small m">You don’t get up</dt><dd class="small i2">06:30 brighter, 06:35 clear sound, 06:40 a real alarm on base and phone.</dd></div>
       </dl>
     </div>
@@ -737,9 +737,9 @@
     const KEYS = [
       ['Top surface', 'Charges the bracelet; by day a tap shows the time', bp(0.045, 0.03, TOP), bp(0.015, W / 2, TOP), 'up'],
       ['Time', 'On whenever you are awake; also the charge', bp(-0.0224, -W / 2, MID), bp(-W / 2, -W / 2, MID), 'left'],
-      ['Front LED', 'Daytime status only, off in the dark', bp(0.036, -W / 2, MID), bp(0.036, -W / 2, PL), 'down'],
+      ['Front LED', 'By day: green all set, red act, violet bedtime', bp(0.036, -W / 2, MID), bp(0.036, -W / 2, PL), 'down'],
       ['Speakers', 'Dot grilles on the sides and the back', bp(W / 2, 0.012, MID + 0.006), bp(W / 2, W / 2, MID + 0.006), 'right'],
-      ['Underneath', 'Rubber disc ringed by the evening and night light', up('under'), up('under_exit'), 'down'],
+      ['Underneath', 'Light ring: violet at night, amber at dawn', up('under'), up('under_exit'), 'down'],
       ['Back', 'USB-C power and the Bluetooth pairing button', up('back'), up('back_exit'), 'up'],
     ];
     const L = 40, R = 16;
@@ -769,7 +769,7 @@
     const lanes = [
       ['You', null, 'ev', [['22:00', 'Takes the bracelet'], ['22:30', 'Goes to bed'], ['03:12', 'Wakes up briefly'], ['06:16', 'Awake, still in bed'], ['06:26', 'Gets up'], ['07:10', 'Bracelet back', 'start', 9]]],
       ['Bracelet', 'bracelet', 'ev', [['21:30', 'On the base, charged'], ['22:00', 'Connects'], ['22:30', 'Senses lying down'], ['03:12', 'Senses waking'], ['06:14', 'Light sleep', 'end'], ['06:16', 'Senses awake, lying'], ['06:26', 'Steps, upright']]],
-      ['Base', 'base', 'ev', [['22:00', 'One violet breath'], ['06:00', 'Opens the window', 'start', 10], ['06:14', 'Wake-up moment', 'end', 8], ['06:16', 'Amber beat'], ['07:10', 'Syncs the night', 'start', 9]]],
+      ['Base', 'base', 'ev', [['21:30', 'Violet: bed soon', 'start', 10], ['22:00', 'Ring dims', 'start', 10], ['06:00', 'Opens the window', 'start', 10], ['06:14', 'Wake-up moment', 'end', 8], ['06:16', 'Amber beat'], ['07:10', 'Green: all set', 'start', 9]]],
       ['Time', null, 'time', [['21:24', 0], ['22:00', 0], ['22:00', 100], ['22:40', 100], ['22:40', 0], ['03:11', 0], ['03:12', 100], ['03:22', 100], ['03:22', 0], ['06:00', 0], ['06:00', 100], ['07:10', 100], ['07:10', 0], ['07:34', 0]],
         [['22:00', 'On while you are awake'], ['03:12', 'On while awake'], ['06:00', 'On for the whole window'], ['07:10', 'Tap: 8 s']]],
       ['Lamp', 'lamp', 'light', [['21:24', 0], ['22:00', 0], ['22:00', 40], ['22:30', 15], ['22:40', 0], ['03:11', 0], ['03:12', 8], ['03:14', 8], ['03:15', 0], ['06:00', 0], ['06:14', 28], ['06:20', 80], ['07:34', 80]],
@@ -853,10 +853,10 @@
       g += `<path d="M${cx} ${cy - r} A${r} ${r} 0 1 1 ${(cx + r * Math.sin(a)).toFixed(1)} ${(cy - r * Math.cos(a)).toFixed(1)}" fill="none" stroke="#e9e7e1" stroke-width="2" stroke-linecap="round" />`;
       g += `<text class="room" x="${cx + r + 10}" y="${cy + 4}" fill="#e9e7e1">3 s</text>`;
     }
-    if (n === 3) {                                                                     // by day the front LED speaks: dim white while it charges
+    if (n === 3) {                                                                     // by day the front LED speaks: 5 s of green, all set for tonight
       const [lx, ly] = P(0.036, -0.06, 0.0236).split(' ').map(Number);
-      g += `<circle cx="${lx}" cy="${ly}" r="9" fill="#ffffff" opacity=".9" filter="url(#gb${n})" /><circle cx="${lx}" cy="${ly}" r="3.2" fill="#ffffff" stroke="#8a8a84" stroke-width="1" />`;
-      g += `<path d="M${lx - 5} ${ly + 5} L${lx - 30} ${ly + 30} H${lx - 46}" fill="none" stroke="#6b6b66" stroke-width="1" /><text class="room" x="${lx - 52}" y="${ly + 34}" fill="#6b6b66" text-anchor="end" style="text-anchor: end">Front LED · charging</text>`;
+      g += `<circle cx="${lx}" cy="${ly}" r="10" fill="#6cc48f" opacity=".7" filter="url(#gb${n})" /><circle cx="${lx}" cy="${ly}" r="3.2" fill="#6cc48f" />`;
+      g += `<path d="M${lx - 5} ${ly + 5} L${lx - 30} ${ly + 30} H${lx - 46}" fill="none" stroke="#6b6b66" stroke-width="1" /><text class="room" x="${lx - 52}" y="${ly + 34}" fill="#6b6b66" text-anchor="end" style="text-anchor: end">Green · all set</text>`;
     }
     svg.innerHTML = g;
   });
@@ -868,23 +868,24 @@
     const BREATH = 'M0 40 C40 40 50 4 100 4 C150 4 160 40 200 40 H240', BEAT = 'M0 40 H100 L108 4 H124 L132 40 H240';
     const STAIR = 'M0 40 H60 V28 H120 V16 H180 V4 H240';
     const step = (i) => ln(STAIR, 'rgb(17 17 17 / .14)') + ln(`M${60 * (i + 1)} ${40 - 12 * (i + 1)} H${60 * (i + 2)}`, i === 2 ? 'var(--ink)' : '#c98f2a');
-    // night rows on a dark ground: the white states finally read as white
+    // spec §4.1 (owner, 2026-10-29): one colour per moment of the day; the ring's rows sit on a night ground
+    const G = '#6cc48f', RED = '#e0604f', WH = '#efece4';
     const NIGHT = [
-      ['Wind-down, alarm on', 'One violet breath, 8 s, as you take the bracelet', ln(BREATH, '#8f9aff')],
-      ['Wind-down, tomorrow off', 'The same breath, in white', ln(BREATH, '#efece4')],
-      ['Tomorrow off or on', 'One white beat; the time shows OFF or ☀ 06:30', ln(BEAT, '#efece4')],
-      ['Palm in the morning', 'One amber beat; the sound lowers, the light goes on', ln(BEAT, '#f2b65a')]
+      ['Wind-down', 'Violet as you take the bracelet, dimming with the room', ln('M0 4 C70 4 130 18 200 40 H240', '#8f9aff')],
+      ['Night', 'Off: darkness means all is well', `<line x1="0" x2="240" y1="40" y2="40" stroke="#4a4a55" stroke-width="3" />`],
+      ['Dawn', 'Amber, rising with the lamp; one beat at a palm tap', ln('M0 40 C90 40 150 22 240 4', '#f2b65a')],
+      ['Confirmed', 'One white beat: tomorrow off or on, today off', ln(BEAT, WH)],
     ];
     const COLS = [
       ['Front LED · by day', 'A direct point, read from the door. Off in the dark.', [
-        ['Needs attention', 'A steady white dot', `<line x1="0" x2="240" y1="22" y2="22" stroke="rgb(17 17 17 / .12)" stroke-width="1.5"/><circle cx="120" cy="22" r="7" fill="${grey}"/>`],
-        ['Pairing', 'A continuous violet breath', ln('M0 40 C25 40 25 4 50 4 C75 4 75 40 100 40 C125 40 125 4 150 4 C175 4 175 40 200 40 C220 40 225 22 240 14', 'var(--night)')],
-        ['Updating', 'A slow, shallow pulse', ln('M0 40 C30 40 30 24 60 24 C90 24 90 40 120 40 C150 40 150 24 180 24 C210 24 210 40 240 40', grey)],
-        ['Bracelet charging', 'Dim white, off when full; the time shows 86%', ln('M0 40 H16 V28 H176 V40 H240', grey)]]],
-      ['Light line · evening and night', 'Indirect, on the nightstand. Off by day.', NIGHT, 'dark'],
+        ['All set', 'Green for 5 s: tonight and tomorrow are ready', ln('M0 40 H50 V8 H170 V40 H240', G)],
+        ['Act', 'Red, slow pulse, until it is solved in the app', ln('M0 40 C15 40 15 8 30 8 C45 8 45 40 60 40 C75 40 75 8 90 8 C105 8 105 40 120 40 C135 40 135 8 150 8 C165 8 165 40 180 40 C195 40 195 8 210 8 C225 8 225 40 240 40', RED)],
+        ['Bedtime', 'Violet breath, 30 min before bed: take the bracelet', ln(BREATH, 'var(--night)')],
+        ['Info', 'White: pairing, updating, charging', ln('M0 40 H16 V28 H176 V40 H240', grey)]]],
+      ['Ring underneath · evening to morning', 'Indirect, on the nightstand. Off by day.', NIGHT, 'dark'],
       ['Still in bed at 06:30', 'No snooze: only getting up stops it, or the phone.', [
-        ['06:30 · Brighter', 'Light 100%, 5000 K; one soft tap a minute', step(0)],
-        ['06:35 · Clear sound', 'Three rising pulses on the bracelet', step(1)],
+        ['06:30 · Brighter', 'Light 100%, 5000 K; the sound a little more present', step(0)],
+        ['06:35 · Clear sound', 'Clear sound, medium volume', step(1)],
         ['06:40 · Real alarm', 'On the base and the phone, until you are up', step(2)]], 'dawn'],
     ];
     waves.innerHTML = COLS.map(([h, sub, rows, room = '']) => `<div class="wcol"><p class="label kick" style="margin-bottom: 6px">${h}</p><p class="small i3" style="margin-bottom: 14px">${sub}</p><ol class="cells waves waves--${room}">${rows.map(([t, s, svg]) => `<li class="cell"><svg viewBox="0 0 240 44" preserveAspectRatio="xMinYMid meet">${svg}</svg><p class="small"><span class="m">${t}</span><br /><span class="i3">${s}</span></p></li>`).join('')}</ol></div>`).join('');
