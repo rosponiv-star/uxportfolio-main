@@ -486,7 +486,7 @@
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1">App and safety</p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">The phone sets the plan. If anything fails, you still wake up.</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">The phone sets the plan. Whatever fails, you still wake up.</p>
     <div class="shots" style="grid-column: 1 / 7; align-self: end; align-items: start; grid-template-columns: repeat(3, minmax(0, 1fr))">
       <figure><div class="ph-box phone small" style="height: 440px">Screen</div><figcaption><span class="label kick"><span class="n">21:40</span></span><span class="small"><span class="m">Evening</span><br /><span class="i3">Next wake-up and bedtime</span></span></figcaption></figure>
       <figure><div class="ph-box phone small" style="height: 440px">Screen</div><figcaption><span class="label kick"><span class="n">03:12</span></span><span class="small"><span class="m">Night</span><br /><span class="i3">Dimmed, nothing to do</span></span></figcaption></figure>
@@ -494,14 +494,7 @@
     </div>
     <div style="grid-column: 8 / 13; align-self: end">
       <p class="label i3" style="margin-bottom: 16px">What if…</p>
-      <dl class="rows whatif">
-        <div><dt class="small m">Wi-Fi drops</dt><dd class="small i2">Nothing changes: base, bracelet and room talk locally.</dd></div>
-        <div><dt class="small m">The bracelet runs flat</dt><dd class="small i2">A fast dawn, then a real alarm at 06:30; the bracelet on the base stops it.</dd></div>
-        <div><dt class="small m">The power goes out</dt><dd class="small i2">A backup battery plays the sound; the phone rings too.</dd></div>
-        <div><dt class="small m">The lamp is offline</dt><dd class="small i2">The ramp goes on with the other channels; the app says so in the morning.</dd></div>
-        <div><dt class="small m">You forgot tomorrow off</dt><dd class="small i2">In the window, hold the palm 5 s: the room goes back to night.</dd></div>
-        <div><dt class="small m">You don’t get up</dt><dd class="small i2">06:30 brighter, 06:35 clear sound, 06:40 a real alarm on base and phone.</dd></div>
-      </dl>
+      <svg class="fsafe" viewBox="0 0 700 600" role="img" aria-label="Whatever fails, you still wake up" data-failsafe></svg>
     </div>
   </div>
 </section>
@@ -631,6 +624,10 @@
   .blocks .bus { font-size: 12px; font-weight: 500; letter-spacing: .06em; fill: #6b6b66; text-transform: uppercase; }
   .ptab { display: grid; grid-template-columns: 1fr auto; column-gap: 16px; row-gap: 10px; align-items: baseline; }
   .ptab > * { padding-top: 10px; border-top: 1px solid var(--rule); }
+  .fsafe { width: 100%; height: auto; display: block; overflow: visible; }
+  .fsafe .t1 { font-size: 21px; font-weight: 500; fill: var(--ink); }
+  .fsafe .t2 { font-size: 17px; fill: #6b6b66; }
+  .fsafe .end { font-size: 21px; font-weight: 500; fill: #9a6a12; }
   .gest { grid-column: span 3; display: grid; gap: 10px; align-content: start; }
   .gest--text { grid-column: span 6; gap: 6px; padding-top: 16px; border-top: 1px solid var(--rule); }
   .gest--text .label { margin-top: 0; }
@@ -965,6 +962,25 @@
       <span>USB-C supply</span><span class="m">15 W</span>
       <span>Power cut: 3.7 Wh cell</span><span class="m">≈ 9 h + alarm</span></div></div>
       <div><p class="label kick" style="margin-bottom: 10px">To prove on a prototype</p><p class="small i2">Chamber and port tuning; heat in a closed shell (1–3 W); radio range inside the shell, antennas kept clear of the magnets and the cell; touch through 2 mm of plastic; CE (RED), FCC and UN 38.3 for the cell.</p></div>`;
+  }
+
+  // AuraWake · fail-safe (spec §1 principle 7, §7.3–7.4): every failure row joins one amber line, the wake-up.
+  const fsv = document.querySelector('[data-failsafe]');
+  if (fsv) {
+    const F = [['phone', 'Wi-Fi drops', 'Base, bracelet and room talk locally'], ['base', 'The power goes out', 'The backup cell keeps time and sound; the phone rings too'],
+      ['bracelet', 'The bracelet runs flat', 'A fast dawn, then a real alarm at 06:30'], ['bracelet', 'The bracelet is not worn', 'A real alarm at 06:30'],
+      ['lamp', 'The lamp is offline', 'The ramp goes on with sound, shutters, scent'], ['base', 'You stay in bed', 'Brighter at 06:30, clear sound 06:35, alarm 06:40']];
+    const RH = 82, X = 650; let g = '';
+    F.forEach(([ic, a, b], i) => {
+      const y = i * RH;
+      g += `<image href="assets/aurawake/iso-${ic}.png" x="0" y="${y}" width="58" height="58" /><circle cx="52" cy="${y + 8}" r="6" fill="#e0604f" />`;
+      g += `<text class="t1" x="78" y="${y + 24}">${a}</text><text class="t2" x="78" y="${y + 50}">${b}</text>`;
+      g += `<path d="M${X - 40} ${y + 29} H${X}" stroke="#c98f2a" stroke-width="2" fill="none" />`;
+    });
+    const yb = F.length * RH;
+    g += `<path d="M${X} 29 V${yb + 10}" stroke="#c98f2a" stroke-width="2" fill="none" /><path d="M${X - 8} ${yb + 2} L${X} ${yb + 12} L${X + 8} ${yb + 2}" stroke="#c98f2a" stroke-width="2" fill="none" />`;
+    g += `<text class="end" x="${X}" y="${yb + 50}" text-anchor="end" style="text-anchor: end">You still wake up</text>`;
+    fsv.innerHTML = g;
   }
 
   // AuraWake · the light line on the base (spec §4.2): each state drawn as its waveform over time.

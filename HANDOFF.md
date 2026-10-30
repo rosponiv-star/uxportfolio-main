@@ -1194,6 +1194,10 @@ When a CLOUD session hits something that needs the local environment, it must:
   drawing, 16 numbered parts with codes) and p05-blocks (block diagram with buses, power budget 0.4 / 3.5 / 12 W of
   15 W, 9 h on the cell, what a prototype must still prove). Spec §8.2 holds the full BOM, fit, power, assembly.
   PDF now 28 pages. Next: schema 6 (fail-safe flow on the app slide), then scenarios 10–12 (bedroom renders).
+- **2026-10-30 · LOCAL (68)** · Schema 6, fail-safe: the "What if…" list on the app slide became a flow: six rows
+  (Wi-Fi, power cut, flat bracelet, bracelet not worn, lamp offline, still in bed), each with its iso drawing and a red
+  dot, what the system does, and an amber line joining every row into "You still wake up". Headline "The phone sets
+  the plan. Whatever fails, you still wake up."
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's
