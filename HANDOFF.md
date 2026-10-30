@@ -1198,6 +1198,13 @@ When a CLOUD session hits something that needs the local environment, it must:
   (Wi-Fi, power cut, flat bracelet, bracelet not worn, lamp offline, still in bed), each with its iso drawing and a red
   dot, what the system does, and an amber line joining every row into "You still wake up". Headline "The phone sets
   the plan. Whatever fails, you still wake up."
+- **2026-10-30 · LOCAL (69)** · Scenarios 10–12 as one slide, p05-scenes ("In the room", after One night): five
+  portrait renders 1080 × 1350 from one fixed camera, only the light changing (22:00 take the bracelet, 22:40 asleep,
+  03:12 the time on, 06:14 dawn, 06:16 palm). New `deck/blender/bedroom.py` (exec'd by aura.py; shots room1–room5):
+  light-oak nightstand with the base, the diffuser and a small table lamp (the smart bulb), linen bed to the left,
+  window with a roller shutter behind, sky planes per hour, faint moonlight at night, ring emission 900 so the glow
+  shows on the nightstand, MPFB arm in 1 and 5. Assets assets/aurawake/room1–5.jpg, copies in Media as
+  AuraWake-scene-room1–5.jpg. PDF 29 pages.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's

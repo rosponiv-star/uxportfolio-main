@@ -1161,12 +1161,17 @@ def table_scene():
     look((0.36, -0.45, 0.40), (0.0, 0.04, 0.0), 55, 8.0)
     scene.view_settings.exposure = -0.8
 
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bedroom.py'), encoding='utf-8').read())   # scenario frames
+
 def real():
     res = (1200, 675) if PREVIEW else (2400, 1350)
+    if SHOT.startswith('room'): res = (540, 675) if PREVIEW else (1080, 1350)   # portrait frames for the strip
     cycles(64 if PREVIEW else 384, res)
     colour_management('AgX')
     if TABLE:
         table_scene()
+    elif SHOT.startswith('room'):
+        bedroom_scene(FRAME)
     elif STUDIO:
         studio(SHOT)
         if PLASTIC: scene.view_settings.exposure = -0.8

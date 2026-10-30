@@ -437,6 +437,21 @@
   </div>
 </section>
 
+<section class="slide" id="p05-scenes" data-page>
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1">In the room</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">The same nightstand, one night: only the light changes.</p>
+    <div class="scenes" style="grid-column: 1 / -1; align-self: end">
+      <figure class="scene"><img src="assets/aurawake/room1.jpg" alt="Evening: You take the bracelet: the ring glows violet, the lamp dims, the shutters close." /><figcaption><span class="label kick"><span class="n">22:00</span>Evening</span><p class="small i2">You take the bracelet: the ring glows violet, the lamp dims, the shutters close.</p></figcaption></figure>
+      <figure class="scene"><img src="assets/aurawake/room2.jpg" alt="Asleep: Nothing is lit. Darkness means all is well." /><figcaption><span class="label kick"><span class="n">22:40</span>Asleep</span><p class="small i2">Nothing is lit. Darkness means all is well.</p></figcaption></figure>
+      <figure class="scene"><img src="assets/aurawake/room3.jpg" alt="Awake for a moment: The time appears, dim and warm, while you are awake." /><figcaption><span class="label kick"><span class="n">03:12</span>Awake for a moment</span><p class="small i2">The time appears, dim and warm, while you are awake.</p></figcaption></figure>
+      <figure class="scene"><img src="assets/aurawake/room4.jpg" alt="Light sleep: Dawn on the lamp, the shutters open, the ring turns amber." /><figcaption><span class="label kick"><span class="n">06:14</span>Light sleep</span><p class="small i2">Dawn on the lamp, the shutters open, the ring turns amber.</p></figcaption></figure>
+      <figure class="scene"><img src="assets/aurawake/room5.jpg" alt="Awake in bed: A palm on the base softens the sound; the light keeps rising." /><figcaption><span class="label kick"><span class="n">06:16</span>Awake in bed</span><p class="small i2">A palm on the base softens the sound; the light keeps rising.</p></figcaption></figure>
+    </div>
+  </div>
+</section>
+
 <section class="slide" id="p05-gestures" data-page>
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
@@ -628,6 +643,10 @@
   .fsafe .t1 { font-size: 21px; font-weight: 500; fill: var(--ink); }
   .fsafe .t2 { font-size: 17px; fill: #6b6b66; }
   .fsafe .end { font-size: 21px; font-weight: 500; fill: #9a6a12; }
+  .scenes { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: 16px; }
+  .scene { display: grid; gap: 12px; margin: 0; align-content: start; }
+  .scenes { align-items: start; }
+  .scene img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
   .gest { grid-column: span 3; display: grid; gap: 10px; align-content: start; }
   .gest--text { grid-column: span 6; gap: 6px; padding-top: 16px; border-top: 1px solid var(--rule); }
   .gest--text .label { margin-top: 0; }
