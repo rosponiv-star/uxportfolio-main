@@ -833,6 +833,10 @@
     const sq = (h) => `M${[[-h, -h], [h, -h], [h, h], [-h, h]].map(([x, y]) => P(x, y)).join(' L')} Z`;
     let g = `<defs><filter id="gb${n}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="11" /></filter></defs>`;
     g += `<rect x="0" y="45" width="560" height="450" fill="${bg}" />`;
+    if (!col) {                                                                         // daylight: a soft shadow under the base
+      g += `<defs><radialGradient id="sh${n}"><stop offset="0.5" stop-color="#000" stop-opacity=".12" /><stop offset="1" stop-color="#000" stop-opacity="0" /></radialGradient></defs>`;
+      g += `<ellipse cx="${gx}" cy="${gy}" rx="${(0.1 * k * 1.2247).toFixed(1)}" ry="${(0.1 * k * 0.7071).toFixed(1)}" fill="url(#sh${n})" />`;
+    }
     if (col) {
       const blend = room === 'dark' ? 'screen' : 'multiply';
       // the ring is round, so is its glow (owner, 2026-10-30): an ellipse on the floor, full under the base and fading
@@ -841,7 +845,7 @@
       g += `<defs><radialGradient id="rg${n}"><stop offset="0" stop-color="${col}" stop-opacity="${peak}" /><stop offset="0.55" stop-color="${col}" stop-opacity="${peak}" /><stop offset="0.78" stop-color="${col}" stop-opacity="${peak * 0.35}" /><stop offset="1" stop-color="${col}" stop-opacity="0" /></radialGradient></defs>`;
       g += `<ellipse cx="${gx}" cy="${gy}" rx="${(R * k * 1.2247).toFixed(1)}" ry="${(R * k * 0.7071).toFixed(1)}" fill="url(#rg${n})" style="mix-blend-mode: ${blend}" />`;
     }
-    g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560"${room === 'dark' ? ' style="filter: invert(0.92) hue-rotate(180deg)"' : ''} />`;
+    g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560"${room === 'dark' ? ' style="filter: brightness(0.5)"' : ''} />`;
     g += `<text class="room" x="545" y="484" fill="${fg}" text-anchor="end" style="text-anchor: end">${name}</text>`;   // bottom right: the arm comes from the top left
     const arrow = (z0, z1, x = 0.062, y = 0.0) => {          // a vertical arrow right of the bracelet, clear of the arm, chevron at z1
       const d = z1 > z0 ? 1 : -1, tip = P(x, y, z1).split(' ').map(Number);
@@ -859,7 +863,6 @@
     if (n === 3) {                                                                     // by day the front LED speaks: 5 s of green, all set for tonight
       const [lx, ly] = P(0.036, -0.06, 0.0236).split(' ').map(Number);
       g += `<circle cx="${lx}" cy="${ly}" r="10" fill="#6cc48f" opacity=".7" filter="url(#gb${n})" /><circle cx="${lx}" cy="${ly}" r="3.2" fill="#6cc48f" />`;
-      g += `<path d="M${lx - 5} ${ly + 5} L${lx - 30} ${ly + 30} H${lx - 46}" fill="none" stroke="#6b6b66" stroke-width="1" /><text class="room" x="${lx - 52}" y="${ly + 34}" fill="#6b6b66" text-anchor="end" style="text-anchor: end">Green · all set</text>`;
     }
     svg.innerHTML = g;
   });

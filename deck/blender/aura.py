@@ -353,6 +353,7 @@ else:
     MATS['body'] = body_toon('body', grey(0.86))
     MATS['shell'] = toon('shell', grey(0.86))
     MATS['led_under'] = toon('led_under', srgb(DAWN))
+    MATS['skin'] = toon('skin', srgb('#f7ebe2'))         # a light warm skin: the hands read as hands, not as objects
 
 LIGHT_COL = {'white': '#fff2df', 'night': NIGHT, 'dawn': DAWN}
 
@@ -1251,7 +1252,7 @@ def line():
         cam.location = right * cx + up * cy + back * 2.0
         cd.ortho_scale = span; cd.clip_end = 10
         px = round(size * SS); scene.render.resolution_x = scene.render.resolution_y = px
-        freestyle(2.6, 5.2)
+        freestyle(2.6, 6.2 if name.startswith('g') else 5.2)   # gestures: a firmer outline
         bpy.context.view_layer.update()
         def proj(p):
             v = world_to_camera_view(scene, cam, Vector(p)); return [round(v.x * size, 1), round((1 - v.y) * size, 1)]
