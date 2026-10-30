@@ -1256,6 +1256,19 @@ When a CLOUD session hits something that needs the local environment, it must:
   line drawing (points from out/xreal/explode-real.json). Every schema is now also saved on its own, without slide
   text, in Media/05-AuraWake/Schemi/ by `node deck/export_schemas.mjs`; the render export moved to the tracked
   `deck/export_renders.mjs`. New §0.B.1 says where each schema lives and exactly how to change it.
+- **2026-10-30 · LOCAL (71)** · Exploded base rebuilt as a real teardown (owner: "pensala come un oggetto reale
+  smontato"): internals.py rewritten. Acoustics chosen by the owner: two 36 mm drivers firing left/right + a passive
+  radiator behind the back grille, the whole sealed inside (~300 cm³) as their box; the radiator is 48 × 34 mm, not
+  the 40 × 60 asked for, because only 52 mm are free right of the centred USB-C. Chassis = three acoustic baffles with
+  foam gaskets, brass inserts, ribs, cable clips; sealed USB-C (USB4125) and button (KSC). Main board 64 × 88 + a 48 × 12
+  tab for USB-C and button, populated: ~330 placed 0402/0603 passives round every IC and in the free area (Scatter),
+  silkscreen outlines and designators, test points, ENIG mounting holes, printed module antennas, routed copper
+  traces + vias as a generated texture (pcb_traces) under the black mask; real connectors (JST SH/PH, FPC ZIF).
+  Cables drawn between the exploded groups (red/black driver and cell leads, 3-wire pins and ring, display FPC, touch
+  flex down past the board edge). Shell: 3 pin holes, LED, light-sensor and mic holes (booleans in real mode, dark
+  discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
+  radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
+  deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
 - **2026-10-30 · LOCAL (71)** · JustCook (02) filled in the PDF: 12 slides after its cover (overview, context, research
   with the real fridge photos, insights with a translated interview quote, framing with the two archetypes and three
   principles, the six reframing cycles, a two-lane service diagram, course prototype vs final design, solution, the
