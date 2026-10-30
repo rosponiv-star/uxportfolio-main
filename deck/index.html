@@ -603,8 +603,8 @@
   .gest--text .label { margin-top: 0; }
   .gest .label { margin-top: 8px; }
   .gfig { width: 100%; height: auto; display: block; overflow: hidden; border: 1px solid var(--rule); }
-  .gfig .room { font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
-  .gfig .arw { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .gfig .room { font-size: 15px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+  .gfig .arw { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
   .wcol { grid-column: span 4; }
   .waves { grid-template-columns: minmax(0, 1fr); }
   .waves--dark .cell { background: #17171d; border-color: #2c2c35; }
@@ -833,15 +833,11 @@
     const sq = (h) => `M${[[-h, -h], [h, -h], [h, h], [-h, h]].map(([x, y]) => P(x, y)).join(' L')} Z`;
     let g = `<defs><filter id="gb${n}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="11" /></filter></defs>`;
     g += `<rect x="0" y="45" width="560" height="450" fill="${bg}" />`;
-    if (!col) {                                                                         // daylight: a soft shadow under the base
-      g += `<defs><radialGradient id="sh${n}"><stop offset="0.5" stop-color="#000" stop-opacity=".12" /><stop offset="1" stop-color="#000" stop-opacity="0" /></radialGradient></defs>`;
-      g += `<ellipse cx="${gx}" cy="${gy}" rx="${(0.1 * k * 1.2247).toFixed(1)}" ry="${(0.1 * k * 0.7071).toFixed(1)}" fill="url(#sh${n})" />`;
-    }
     if (col) {
       const blend = room === 'dark' ? 'screen' : 'multiply';
       // the ring is round, so is its glow (owner, 2026-10-30): an ellipse on the floor, full under the base and fading
       // just past its corners, no hard edge
-      const R = 0.105, peak = room === 'dark' ? 0.8 : 0.6;
+      const R = 0.105, peak = room === 'dark' ? 0.5 : 0.38;   // a soft wash, not a spotlight
       g += `<defs><radialGradient id="rg${n}"><stop offset="0" stop-color="${col}" stop-opacity="${peak}" /><stop offset="0.55" stop-color="${col}" stop-opacity="${peak}" /><stop offset="0.78" stop-color="${col}" stop-opacity="${peak * 0.35}" /><stop offset="1" stop-color="${col}" stop-opacity="0" /></radialGradient></defs>`;
       g += `<ellipse cx="${gx}" cy="${gy}" rx="${(R * k * 1.2247).toFixed(1)}" ry="${(R * k * 0.7071).toFixed(1)}" fill="url(#rg${n})" style="mix-blend-mode: ${blend}" />`;
     }
@@ -849,16 +845,16 @@
     g += `<text class="room" x="545" y="484" fill="${fg}" text-anchor="end" style="text-anchor: end">${name}</text>`;   // bottom right: the arm comes from the top left
     const arrow = (z0, z1, x = 0.062, y = 0.0) => {          // a vertical arrow right of the bracelet, clear of the arm, chevron at z1
       const d = z1 > z0 ? 1 : -1, tip = P(x, y, z1).split(' ').map(Number);
-      return `<path class="arw" style="stroke: ${fg === '#cfcdc6' ? '#e9e7e1' : 'var(--ink)'}" d="M${P(x, y, z0)} L${P(x, y, z1)} M${tip[0] - 7} ${tip[1] + 7 * d} L${tip[0]} ${tip[1]} L${tip[0] + 7} ${tip[1] + 7 * d}" />`;
+      return `<path class="arw" style="stroke: ${fg === '#cfcdc6' ? '#e9e7e1' : 'var(--ink)'}" d="M${P(x, y, z0)} L${P(x, y, z1)} M${tip[0] - 11} ${tip[1] + 11 * d} L${tip[0]} ${tip[1]} L${tip[0] + 11} ${tip[1] + 11 * d}" />`;
     };
     if (n === 1) g += arrow(TOP + 0.045, TOP + 0.1);
     if (n === 3) g += arrow(TOP + 0.075, TOP + 0.03);                                  // set down onto the pins
     if (n === 2) g += arrow(TOP + 0.1, TOP + 0.066, 0.012, 0.012);                       // a short tap, from above
     if (n === 4) {                                                                     // held: a 3-second ring
-      const [cx, cy] = P(0.012, 0.012, TOP + 0.085).split(' ').map(Number), r = 15, a = 2 * Math.PI * 0.75;
-      g += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#cfcdc6" stroke-opacity=".3" stroke-width="2" />`;
-      g += `<path d="M${cx} ${cy - r} A${r} ${r} 0 1 1 ${(cx + r * Math.sin(a)).toFixed(1)} ${(cy - r * Math.cos(a)).toFixed(1)}" fill="none" stroke="#e9e7e1" stroke-width="2" stroke-linecap="round" />`;
-      g += `<text class="room" x="${cx + r + 10}" y="${cy + 4}" fill="#e9e7e1">3 s</text>`;
+      const [cx, cy] = P(0.012, 0.012, TOP + 0.085).split(' ').map(Number), r = 22, a = 2 * Math.PI * 0.75;
+      g += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#cfcdc6" stroke-opacity=".3" stroke-width="3" />`;
+      g += `<path d="M${cx} ${cy - r} A${r} ${r} 0 1 1 ${(cx + r * Math.sin(a)).toFixed(1)} ${(cy - r * Math.cos(a)).toFixed(1)}" fill="none" stroke="#e9e7e1" stroke-width="3" stroke-linecap="round" />`;
+      g += `<text class="room" x="${cx + r + 12}" y="${cy + 6}" fill="#e9e7e1" style="font-size: 22px; text-transform: none; letter-spacing: 0">3 s</text>`;
     }
     if (n === 3) {                                                                     // by day the front LED speaks: 5 s of green, all set for tonight
       const [lx, ly] = P(0.036, -0.06, 0.0236).split(' ').map(Number);

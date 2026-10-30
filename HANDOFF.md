@@ -1177,6 +1177,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   gesture drawings (6.2 px at 2.5×), dark rooms dimmed (brightness 0.5) instead of inverted so the same hand and base
   appear in every scene, a soft shadow under the base in daylight, the front-LED label in 04 removed (the green dot
   stays).
+- **2026-10-30 · LOCAL (64)** · Owner: hands back as before (warm skin and firmer outline reverted; dark rooms stay
+  dimmed, not inverted), arrows 3 px with 11 px chevrons, room labels 15 px, the 3 s ring r 22 with a 22 px "3 s", glow
+  softer (peak 0.5 dark / 0.38 dawn), the daylight shadow under the base removed.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's
