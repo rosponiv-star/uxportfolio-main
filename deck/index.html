@@ -443,10 +443,10 @@
     <p class="label kick" style="grid-column: 1 / -1">Gestures</p>
     <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Four gestures replace the menus.</p>
     <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid; row-gap: 32px">
-      <div class="gest"><svg class="gfig" viewBox="0 55 560 430" role="img" aria-label="A hand lifting the bracelet off the base in a dark room" data-gest="1"></svg><span class="label kick"><span class="n">01</span>Evening</span><p class="body m">Take the bracelet</p><p class="small i2">Means “I’m going to bed”: the wind-down starts, and the violet ring under the base dims with the room.</p></div>
-      <div class="gest"><svg class="gfig" viewBox="0 55 560 430" role="img" aria-label="A palm held on the base, which shows OFF" data-gest="4"></svg><span class="label kick"><span class="n">02</span>Evening</span><p class="body m">Palm held 3 seconds</p><p class="small i2">Before you fall asleep: tomorrow off, or back on (OFF or ☀ 06:30). Forgot? In the morning hold it 5 s: today off.</p></div>
-      <div class="gest"><svg class="gfig" viewBox="0 55 560 430" role="img" aria-label="A palm tapping the base in the morning" data-gest="2"></svg><span class="label kick"><span class="n">03</span>Morning</span><p class="body m">Palm tap</p><p class="small i2">The time is already on: the palm softens the sound but never moves the wake-up. By day, a touch shows the time for 8 s.</p></div>
-      <div class="gest"><svg class="gfig" viewBox="0 55 560 430" role="img" aria-label="A hand putting the bracelet back on the base" data-gest="3"></svg><span class="label kick"><span class="n">04</span>Day</span><p class="body m">Put it back</p><p class="small i2">Means “I’m up”: everything stops, even the alarm. The night syncs; the time shows the charge, then goes off.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 45 560 450" role="img" aria-label="A hand lifting the bracelet off the base in a dark room" data-gest="1"></svg><span class="label kick"><span class="n">01</span>Evening</span><p class="body m">Take the bracelet</p><p class="small i2">Means “I’m going to bed”: the wind-down starts, and the violet ring under the base dims with the room.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 45 560 450" role="img" aria-label="A palm held on the base, which shows OFF" data-gest="4"></svg><span class="label kick"><span class="n">02</span>Evening</span><p class="body m">Palm held 3 seconds</p><p class="small i2">Before you fall asleep: tomorrow off, or back on (OFF or ☀ 06:30). Forgot? In the morning hold it 5 s: today off.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 45 560 450" role="img" aria-label="A palm tapping the base in the morning" data-gest="2"></svg><span class="label kick"><span class="n">03</span>Morning</span><p class="body m">Palm tap</p><p class="small i2">The time is already on: the palm softens the sound but never moves the wake-up. By day, a touch shows the time for 8 s.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 45 560 450" role="img" aria-label="A hand putting the bracelet back on the base" data-gest="3"></svg><span class="label kick"><span class="n">04</span>Day</span><p class="body m">Put it back</p><p class="small i2">Means “I’m up”: everything stops, even the alarm. The night syncs; the time shows the charge, then goes off.</p></div>
       <div class="gest gest--text"><span class="label kick"><span class="n">05</span>Morning</span><p class="small"><span class="m">Get up</span><span class="i2"> · Getting up does the rest: it is the only way to end the wake-up. The bracelet senses steps and an upright posture; there is no snooze.</span></p></div>
       <div class="gest gest--text"><span class="label kick"><span class="n">06</span>Setup</span><p class="small"><span class="m">Pairing button</span><span class="i2"> · At the back, beside the USB-C: pairs the base with the phone. Pressed once, never at night.</span></p></div>
     </div>
@@ -828,11 +828,11 @@
   const ROOMS = { dark: ['#17171d', 'Dark room', '#cfcdc6'], dawn: ['#f5ecdc', 'Dawn light', '#8a6a3a'], day: ['none', 'Daylight', '#6b6b66'] };
   document.querySelectorAll('[data-gest]').forEach((svg) => {
     const n = +svg.dataset.gest, [room, col, up] = FIG[n], [bg, name, fg] = ROOMS[room];
-    const C = 0.866, S = 0.5, k = 1866.7, [gx, gy] = [302.4, 390.6], TOP = 0.045;
+    const C = 0.866, S = 0.5, k = 1866.7, [gx, gy] = [280.0, 362.6], TOP = 0.045;
     const P = (x, y, z = 0) => [gx + k * C * (x + y), gy + k * (S * (x - y) - z)].map((v) => v.toFixed(1)).join(' ');
     const sq = (h) => `M${[[-h, -h], [h, -h], [h, h], [-h, h]].map(([x, y]) => P(x, y)).join(' L')} Z`;
     let g = `<defs><filter id="gb${n}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="11" /></filter></defs>`;
-    g += `<rect x="0" y="55" width="560" height="430" fill="${bg}" />`;
+    g += `<rect x="0" y="45" width="560" height="450" fill="${bg}" />`;
     if (col) {
       const blend = room === 'dark' ? 'screen' : 'multiply';
       // the ring is round, so is its glow (owner, 2026-10-30): an ellipse on the floor, full under the base and fading
@@ -842,16 +842,16 @@
       g += `<ellipse cx="${gx}" cy="${gy}" rx="${(R * k * 1.2247).toFixed(1)}" ry="${(R * k * 0.7071).toFixed(1)}" fill="url(#rg${n})" style="mix-blend-mode: ${blend}" />`;
     }
     g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560"${room === 'dark' ? ' style="filter: invert(0.92) hue-rotate(180deg)"' : ''} />`;
-    g += `<text class="room" x="545" y="474" fill="${fg}" text-anchor="end" style="text-anchor: end">${name}</text>`;   // bottom right: the arm comes from the top left
+    g += `<text class="room" x="545" y="484" fill="${fg}" text-anchor="end" style="text-anchor: end">${name}</text>`;   // bottom right: the arm comes from the top left
     const arrow = (z0, z1, x = 0.062, y = 0.0) => {          // a vertical arrow right of the bracelet, clear of the arm, chevron at z1
       const d = z1 > z0 ? 1 : -1, tip = P(x, y, z1).split(' ').map(Number);
       return `<path class="arw" style="stroke: ${fg === '#cfcdc6' ? '#e9e7e1' : 'var(--ink)'}" d="M${P(x, y, z0)} L${P(x, y, z1)} M${tip[0] - 7} ${tip[1] + 7 * d} L${tip[0]} ${tip[1]} L${tip[0] + 7} ${tip[1] + 7 * d}" />`;
     };
-    if (n === 1) g += arrow(TOP + 0.03, TOP + 0.085);
-    if (n === 3) g += arrow(TOP + 0.085, TOP + 0.125);                                 // docked: the hand lets go
-    if (n === 2) g += arrow(TOP + 0.125, TOP + 0.088, 0.012, 0.012);                       // a short tap, from above
+    if (n === 1) g += arrow(TOP + 0.045, TOP + 0.1);
+    if (n === 3) g += arrow(TOP + 0.075, TOP + 0.03);                                  // set down onto the pins
+    if (n === 2) g += arrow(TOP + 0.1, TOP + 0.066, 0.012, 0.012);                       // a short tap, from above
     if (n === 4) {                                                                     // held: a 3-second ring
-      const [cx, cy] = P(0.012, 0.012, TOP + 0.095).split(' ').map(Number), r = 15, a = 2 * Math.PI * 0.75;
+      const [cx, cy] = P(0.012, 0.012, TOP + 0.085).split(' ').map(Number), r = 15, a = 2 * Math.PI * 0.75;
       g += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#cfcdc6" stroke-opacity=".3" stroke-width="2" />`;
       g += `<path d="M${cx} ${cy - r} A${r} ${r} 0 1 1 ${(cx + r * Math.sin(a)).toFixed(1)} ${(cy - r * Math.cos(a)).toFixed(1)}" fill="none" stroke="#e9e7e1" stroke-width="2" stroke-linecap="round" />`;
       g += `<text class="room" x="${cx + r + 10}" y="${cy + 4}" fill="#e9e7e1">3 s</text>`;

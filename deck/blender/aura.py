@@ -937,6 +937,19 @@ def pinch_hand(target, R):
     m = (Vector(HAND_TIPS['pinch']['index']) + Vector(HAND_TIPS['pinch']['thumb'])) / 2
     return build_hand('pinch', R, Vector(target) - R @ m)
 
+def pinch_basis(inward):
+    """The pinch attitude used in 01 (arm from the bed, wrist rolled 25°), yawed so the thumb–index gap crosses a band
+    whose inside lies towards `inward`; of the two ways round, the one whose forearm points most to the bed."""
+    R1 = Matrix.Rotation(math.radians(25), 3, Vector((-1, -1, 0)).normalized()) @ TURN @ PINCH_R
+    g = R1 @ (Vector(HAND_TIPS['pinch']['thumb']) - Vector(HAND_TIPS['pinch']['index']))
+    best = None
+    for want in (inward, -inward):                     # thumb inside, or index inside
+        yaw = math.atan2(want.y, want.x) - math.atan2(g.y, g.x)
+        R = Matrix.Rotation(yaw, 3, 'Z') @ R1; arm = R @ Vector((-1, 0, 0))
+        score = arm.x * -0.707 + arm.y * -0.707
+        if best is None or score > best[0]: best = (score, R)
+    return best[1]
+
 GRIP = (0.0277, 0.0030)          # the bracelet's pod side, turned to face +X by AP: where the fingers pinch it
 PINCH_R = basis((-0.906, 0.0, -0.423), (0.0, -1.0, 0.0))   # index inside the band, thumb outside
 TURN = Matrix.Rotation(math.radians(225), 3, 'Z')            # the whole pinch turned so the arm comes from the bed (front-left)
@@ -955,14 +968,15 @@ def build_gesture(n):
         br.matrix_world = (Matrix.Translation(wrist + R @ Vector((-0.004, yc, zc))) @ Matrix.Rotation(math.atan2(-F.y, -F.x), 4, 'Z')
                            @ Matrix.Rotation(math.pi / 2, 4, 'Y') @ Matrix.Diagonal(br.scale.to_4d()))   # ring round the wrist, pod underneath
         return group('gesture', [base, br] + hand)
-    if n == 3:                 # put back: the bracelet docked, its flat sensor edge on the row of pins; the hand lets go
+    if n == 3:                 # put back: the bracelet docks, its flat sensor edge on the row of pins, still in the hand
         br = build_bracelet(TOP); br.rotation_euler = (0, 0, -math.pi / 2)          # the pod's long side along the pins
         pod = Vector((STRAP_XF - POD_T, 0.0005, 0))
         br.location = Vector((0, -W / 2 + 0.020, TOP)) - Matrix.Rotation(-math.pi / 2, 3, 'Z') @ pod
-        F = Vector((1, 1, 0)).normalized()
-        hand, tips = build_hand('palm', basis(F, Vector((0, 0, 1)).cross(F)), Vector((-0.07, -0.07, TOP + 0.05 - palm_z('palm'))))
+        R = pinch_basis(Vector((0, 1, 0)))                                          # thumb behind the pod, index in front
+        grip = Vector((0, -W / 2 + 0.020 + 0.001, TOP + STRAP_LIFT + STRAP_H - 0.004))
+        hand, tips = pinch_hand(grip, R)
         return group('gesture', [base, br] + hand)
-    z0 = TOP + 0.055
+    z0 = TOP + 0.07
     br = build_bracelet(z0); br.rotation_euler.z += math.radians(225)
     gp = TURN @ Vector((GRIP[0], GRIP[1], 0))
     pin = Vector((gp.x, gp.y, z0 + STRAP_LIFT + STRAP_H - 0.004))
@@ -984,6 +998,15 @@ def build_gesture(n):
         T = Matrix.Translation(pin) @ Matrix.Rotation(sg * math.radians(30), 4, ax) @ Matrix.Translation(-pin)
         if (T @ c0).z < c0.z: break
     br.matrix_world = T @ br.matrix_world
+    # the same gentle reach as in the other gestures: lower the forearm to about 12° above the horizontal
+    bpy.context.view_layer.update()
+    d = (hand[0].matrix_world.to_3x3() @ Vector((-1, 0, 0))).normalized()
+    ax = Vector((d.x, d.y, 0)).normalized().cross(Vector((0, 0, 1)))
+    ang = math.asin(max(-1, min(1, d.z))) - math.radians(12)
+    for sg in (1, -1):
+        P = Matrix.Translation(pin) @ Matrix.Rotation(sg * ang, 4, ax) @ Matrix.Translation(-pin)
+        if (P.to_3x3() @ d).z < d.z: break
+    for o in [br] + hand: o.matrix_world = P @ o.matrix_world
     return group('gesture', [base, br] + hand)
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -1208,7 +1231,7 @@ def line():
         span = max(max(xs) - min(xs), max(ys) - min(ys)) * (1.16 if not name.startswith('g') else 1.0)
         if name.startswith('g'): span = 0.30                    # gestures: one scale for all three, the hand runs off the frame
         cx, cy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
-        if name.startswith('g'): cx, cy = cx - 0.012, cy + 0.04           # room for the hand above and to the left
+        if name.startswith('g'): cy = cy + 0.025                          # the base in the middle, a little room above for the hands
         cam.location = right * cx + up * cy + back * 2.0
         cd.ortho_scale = span; cd.clip_end = 10
         px = round(size * SS); scene.render.resolution_x = scene.render.resolution_y = px
