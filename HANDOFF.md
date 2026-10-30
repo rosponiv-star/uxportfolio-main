@@ -1182,6 +1182,8 @@ When a CLOUD session hits something that needs the local environment, it must:
   softer (peak 0.5 dark / 0.38 dawn), the daylight shadow under the base removed.
 - **2026-10-30 · LOCAL (65)** · Dark-room gestures (01, 02) no longer dimmed or inverted: base and hand keep their light
   colours on the night ground, like in the other scenes (owner: "troppo scuro").
+- **2026-10-30 · LOCAL (66)** · Owner: dark-room gestures back to how they were a few versions ago: the drawing in
+  negative (invert 0.92 + hue-rotate 180°): dark base and hand with light lines, the time lit.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's

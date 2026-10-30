@@ -841,7 +841,7 @@
       g += `<defs><radialGradient id="rg${n}"><stop offset="0" stop-color="${col}" stop-opacity="${peak}" /><stop offset="0.55" stop-color="${col}" stop-opacity="${peak}" /><stop offset="0.78" stop-color="${col}" stop-opacity="${peak * 0.35}" /><stop offset="1" stop-color="${col}" stop-opacity="0" /></radialGradient></defs>`;
       g += `<ellipse cx="${gx}" cy="${gy}" rx="${(R * k * 1.2247).toFixed(1)}" ry="${(R * k * 0.7071).toFixed(1)}" fill="url(#rg${n})" style="mix-blend-mode: ${blend}" />`;
     }
-    g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560" />`;
+    g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560"${room === 'dark' ? ' style="filter: invert(0.92) hue-rotate(180deg)"' : ''} />`;
     g += `<text class="room" x="545" y="484" fill="${fg}" text-anchor="end" style="text-anchor: end">${name}</text>`;   // bottom right: the arm comes from the top left
     const arrow = (z0, z1, x = 0.062, y = 0.0) => {          // a vertical arrow right of the bracelet, clear of the arm, chevron at z1
       const d = z1 > z0 ? 1 : -1, tip = P(x, y, z1).split(' ').map(Number);
