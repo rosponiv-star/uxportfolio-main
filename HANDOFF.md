@@ -231,6 +231,10 @@ git-ignored: rebuild it. The script warns if the PDF exceeds 20 MB. Internal `<a
 stay clickable in the PDF. Contact sheet for review: resize the previews with sharp (640×360 each, 3 per row).
 
 **Next for the PDF (in order)** — see also §9
+0. **Smart Home Hub, to do before filling its slides (owner, 2026-10-30):** (a) wire the 4 test flows in the Figma
+   prototype (`om273DJAb0sL3whUHJE0IO`, page Design 1: intercom courier, babysitter temporary code, arm alarm with a
+   window open, light left on), each with a flow starting point; (b) the owner runs the 5-person usability test in
+   notes/03-smart-home-hub-test.md and sends results, quotes, hand photos and the 2 worst problems.
 1. **Template built (07–17), waiting for the owner's review.** Then fill it with **01 Smart Home Hub** only when he
    says so. Material: only what is in the report (`Media/03-Smart Home Ecosystem/REPORT FINALE PIG.pdf`: sketches,
    Design Space, flows; owner 2026-10-27) + interfaces still undecided (original report MD3 screens vs the Oct 2026
