@@ -1274,6 +1274,17 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-30 · LOCAL (73)** · Smart Home Hub (main project 01) planned for the Polimi PDF; owner approved: the
+  11-slide template with process at the centre (Overview · Context = stakeholder rings · Research = domain map,
+  artifact, sequence/flow and physical models redrawn in deck style WITH small thumbnails of the FigJam originals
+  `A5ZjryKOb1aZCg8eZwzU0b` · Insights = 16 pain points × 6 personas heat-map, 5 tackled highlighted · Framing = HMW,
+  Marco vs Franco, 3 principles · Ideas = design space, "universal remote" discarded · System = who enters and how +
+  temporary-code life cycle · Prototypes = sequence model before/after for the intercom · Solution = 4 screens · key
+  interaction = slide to open · Outcome). Honest research framing: proto-personas from desk research. Interfaces:
+  ONLY the original MD3 screens (Figma `om273DJAb0sL3whUHJE0IO`, page Design 1); the M3 Expressive redesign was a
+  trial, not used. The owner will run a quick 5-person usability test first: protocol in notes/03-smart-home-hub-test.md
+  (4 tasks on the original prototype: intercom courier, babysitter temporary code, arm alarm with a window open,
+  something left on; SEQ, SUS, critical errors). Results feed slides 07 and 09.
 - **2026-10-30 · LOCAL (71)** · JustCook (02) filled in the PDF: 12 slides after its cover (overview, context, research
   with the real fridge photos, insights with a translated interview quote, framing with the two archetypes and three
   principles, the six reframing cycles, a two-lane service diagram, course prototype vs final design, solution, the
