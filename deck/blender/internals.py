@@ -83,6 +83,19 @@ def flex(name, pts, width, mat='kapton'):
     for bp, p in zip(sp.bezier_points, pts): bp.co = p; bp.handle_left_type = bp.handle_right_type = 'AUTO'
     ob = bpy.data.objects.new(name, cu); col.objects.link(ob); cu.materials.append(M(mat)); return ob
 
+def tail_flex(name, x, y, z_top, z_bot, w=0.005, t=0.00012, rb=0.0015):
+    """The electrode's tail: flat, w wide along x, hanging straight down from z_top to z_bot at (x, y), with a
+    rounded 90° bend into the electrode at the top and a short foot onto the spring contact at the bottom."""
+    bm = bmesh.new()
+    add_box(bm, x, y + rb + 0.004, z_top - t, w, 0.008, t)                              # under the electrode, out past its edge
+    for k in range(6):                                                                  # the bend, in 6 steps
+        a0, a1 = math.pi / 2 * k / 6, math.pi / 2 * (k + 1) / 6
+        yy = y + rb - rb * math.sin((a0 + a1) / 2); zz = z_top - rb + rb * math.cos((a0 + a1) / 2)
+        add_box(bm, x, yy, zz - t / 2, w, max(t, rb * (math.sin(a1) - math.sin(a0))) + t, max(t, rb * (math.cos(a0) - math.cos(a1))) + t)
+    add_box(bm, x, y, z_bot + 0.0015, w, t, z_top - rb - z_bot - 0.0015)                 # the straight drop
+    add_box(bm, x, y + 0.00175, z_bot, w, 0.0035, t)                                     # the foot onto the spring
+    return link(name, bm, 'kapton', smooth=False)
+
 def screw(name, x, y, z, r, length, mat='screw', up=True):
     """Pan-head Phillips screw: head on top (up) or below, a cross recess, the thread as a plain shank."""
     s = 1 if up else -1; obs = []
@@ -144,7 +157,7 @@ def passives(prefix, sc, z, seeds, n_fill, rng):
 # the parts
 def shell():
     part('shell', 'Enclosure: top and four walls in one piece', 'PC/ABS, satin, 2.0 mm walls',
-         'grilles left, right and back; 3 pin holes on top; front: micro-holes for the time, LED, light sensor, mic')
+         'grilles left, right and back; 3 pin holes on top; front: only the LED hole, the time window of laser micro-holes (light sensor and mic behind it)')
     outer = rbox('shell', W, W, H, EDGE_P, EDGE_T, 'body', (0, 0, PL), sp=4, se=2)
     if MODE == 'real':                                   # the same openings as the finished base
         cut(outer, stadium_bm(0.0084, 0.0026, 0.012), (0, W / 2, MID), 'rubber')
@@ -153,9 +166,7 @@ def shell():
     cutter = rbox('shell_in', IN, IN, H - WALL + 0.001, 0.001, 0.0, 'body', (0, 0, PL - 0.001), sp=2)
     boolean_diff(outer, cutter); holes_line = []
     for name, x, y, z, r, ax in (('ph0', -0.004, PIN_Y, TOP - 0.001, 0.00095, 'Z'), ('ph1', 0.0, PIN_Y, TOP - 0.001, 0.00095, 'Z'),
-                                 ('ph2', 0.004, PIN_Y, TOP - 0.001, 0.00095, 'Z'), ('led_h', 0.036, -W / 2 + 0.001, MID, 0.00085, 'Y'),
-                                 ('als_h', 0.028, -W / 2 + 0.001, MID + 0.005, 0.0011, 'Y'),
-                                 ('mic_h', 0.028, -W / 2 + 0.001, MID - 0.009, 0.00045, 'Y')):
+                                 ('ph2', 0.004, PIN_Y, TOP - 0.001, 0.00095, 'Z'), ('led_h', 0.036, -W / 2 + 0.001, MID, 0.00085, 'Y')):
         if LINE:                                         # the drawing: a dark disc reads as the hole, no boolean seams
             d = cyl(name, r, 0.0002, 'chip', (x, y, TOP + 0.00005) if ax == 'Z' else (x, -W / 2 - 0.00005, z), axis=ax, seg=32)
             holes_line.append(d)
@@ -173,7 +184,6 @@ def top_inside():
     obs = []
     obs.append(box('kapton_sheet', 0.102, 0.078, 0.00008, 0, 0.012, CEIL - 0.00018, 'kapton'))
     obs.append(box('electrode', 0.100, 0.076, 0.00004, 0, 0.012, CEIL - 0.0001 - 0.00004, 'copper'))
-    obs.append(box('electrode_tail', 0.006, 0.020, 0.00012, 0.026, -0.030, CEIL - 0.0002, 'kapton'))
     obs.append(box('pin_board', 0.024, 0.009, 0.0008, 0, PIN_Y, CEIL - 0.0050, 'pcb'))
     obs.append(box('pin_jst', 0.0058, 0.0035, 0.0029, 0.0085, PIN_Y, CEIL - 0.0050 - 0.0029, 'jst'))
     obs.append(box('gasket', 0.016, 0.005, 0.0012, 0, PIN_Y, CEIL - 0.0012, 'rubber', 0.001))
@@ -190,8 +200,8 @@ def display():
     part('matrix', 'Time display: 0402 warm-white LEDs on a 1.33 mm grid', '351 positions, driver Lumissil IS31FL3741 (I²C)',
          'black cell baffle + diffuser film, bonded behind ~0.1 mm laser micro-holes in a 0.5 mm thinned window of the front wall')
     part('status', 'Front status LED (day): RGB with a light pipe', 'Everlight 99-235 RGB + PC light pipe Ø1.7 mm', '')
-    part('als', 'Ambient light sensor', 'Vishay VEML7700 (I²C)', 'behind a Ø2.2 mm window')
-    part('mic', 'Microphone (snoring, noise; never recorded)', 'Knowles SPH0645LM4H, I²S MEMS', 'own port with acoustic mesh')
+    part('als', 'Ambient light sensor', 'Vishay VEML7700 (I²C)', 'behind the right end of the micro-hole window')
+    part('mic', 'Microphone (snoring, noise; never recorded)', 'Knowles SPH0645LM4H, I²S MEMS', 'behind the micro-hole window, sealed to it by a mesh gasket')
     y = -IN / 2 + 0.0004; obs = []                       # the front face of the stack touches the wall
     pb = y + 0.0042                                      # the board's front face
     obs.append(box('disp_pcb', 0.068, 0.0010, 0.028, -0.002, pb + 0.0005, MID - 0.014, 'pcb'))
@@ -214,9 +224,10 @@ def display():
     obs.append(box('drv', 0.006, 0.0008, 0.006, 0.022, pb - 0.0004, MID - 0.010, 'chip'))
     obs.append(cyl('lightpipe', 0.00085, 0.0040, 'pmma', (0.036, y + 0.0020, MID), axis='Y', seg=24))
     obs.append(box('rgb', 0.0016, 0.0006, 0.0016, 0.036, pb - 0.0003, MID - 0.0008, 'led'))
-    obs.append(box('als_chip', 0.0068, 0.0009, 0.0021, 0.028, pb - 0.00045, MID + 0.005 - 0.001, 'chip'))
-    obs.append(box('mic_chip', 0.0035, 0.0010, 0.0026, 0.028, pb - 0.0005, MID - 0.009 - 0.0013, 'shield'))
-    obs.append(box('mic_mesh', 0.0024, 0.0003, 0.0024, 0.028, y + 0.0003, MID - 0.0102, 'chip'))
+    xs = x0 + gw / 2 + 0.0035                            # right of the matrix, still behind the micro-hole window
+    obs.append(box('als_chip', 0.0068, 0.0009, 0.0021, xs, pb - 0.00045, MID + 0.0008, 'chip'))
+    obs.append(box('mic_chip', 0.0035, 0.0010, 0.0026, xs, pb - 0.0005, MID - 0.0042, 'shield'))
+    obs.append(box('mic_mesh', 0.0040, 0.0020, 0.0032, xs, y + 0.0012, MID - 0.0045, 'foam'))
     obs.append(flex('fpc_disp', [(-0.002, pb + 0.001, MID - 0.013), (-0.002, pb + 0.006, MID - 0.016), (-0.002, -0.046, ZT + 0.0012)], 0.010))
     return obs
 
@@ -426,7 +437,7 @@ def shift(obs, dx=0.0, dy=0.0, dz=0.0):
 
 EXPLODE = {   # group → (dx, dy, dz) in the exploded drawing
     'bottom_disc': (0, 0, -0.140), 'bottom_screws': (0, 0, -0.105), 'bottom_ring': (0, 0, -0.060), 'bottom_plate': (0, 0, 0),
-    'battery': (0, -0.080, 0.030), 'chassis': (0, 0, 0.090), 'drivers': (0.075, 0, 0.090), 'radiator': (0, 0.080, 0.090),
+    'battery': (0, -0.080, 0.030), 'chassis': (0, 0, 0.090), 'drivers': (0.075, 0, 0.090), 'radiator': (0, 0.030, 0.090),
     'board': (0, 0, 0.140), 'board_screws': (0, 0, 0.170), 'display': (0, -0.100, 0.135), 'top': (0, 0, 0.215), 'shell': (0, 0, 0.300),
 }
 
@@ -455,9 +466,7 @@ def build_exploded():
     cab += wires('batt_w', sag(off('battery', (0.0, 0.0385, FLOOR + 0.0045)), off('board', (0.022, 0.0395, ZT + 0.006)), 0.004, (0.02, 0.0)), ['wire_r', 'wire_k'], gap=0.0016, r=0.0006)
     cab += wires('ring_w', sag(off('bottom_ring', (-0.0345, 0.0, FLOOR + 0.0035)), off('board', (-0.026, 0.034, ZT + 0.003)), 0.004, (-0.03, 0.0)), ['wire_w', 'wire_r', 'wire_k'])
     cab += wires('pins_w', sag(off('top', (0.0085, PIN_Y, CEIL - 0.0080)), off('board', (0.0, -0.030, ZT + 0.003)), 0.004, (0.02, 0.0)), ['wire_w', 'wire_r', 'wire_k'])
-    tail = off('top', (0.026, -0.040, CEIL - 0.0002)); spring = off('board', (0.026, -0.024, ZT + 0.0025))
-    edge = (0.040, -0.024, (tail[2] + spring[2]) / 2)                # down past the board's right edge, then in
-    cab.append(flex('touch_flex', [tail, (0.036, tail[1] + 0.004, tail[2] - 0.012), edge, (0.036, spring[1], spring[2] + 0.012), spring], 0.005))
+    cab.append(tail_flex('touch_flex', 0.026, -0.0275, off('top', (0, 0, CEIL - 0.0002))[2], off('board', (0, 0, ZT + 0.0025))[2]))
     d0 = off('display', (-0.002, -IN / 2 + 0.006, MID - 0.014)); d1 = off('board', (-0.002, -0.0425, ZT + 0.0012))
     cab.append(flex('disp_flex', [d0, (d0[0], d0[1] + 0.01, d0[2] - 0.012), (d1[0], d1[1] - 0.02, d1[2] - 0.006), d1], 0.010))
     groups['cables'] = cab

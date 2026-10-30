@@ -244,6 +244,11 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
 3. Real photos for the Selected projects index and, if wanted, the covers (objects, contexts, devices: not only phones).
 4. Closing slide (contact, thank you) — not built yet. Final check: size < 20 MB, file name, links, typos.
 5. Optional: propose a concrete small physical prototype (Arduino/ESP32) tied to one project.
+6. **Critical points in every project (owner, 2026-10-30), to do:** add to each case study, in the PDF and on the
+   site, an honest "what did not work" part: problems found in tests (e.g. the Smart Home Hub usability test, the
+   JustCook pilot), weak decisions, limits of the design and what the owner would change. It must show self-criticism
+   and realism, not a list of excuses: one short block per project (finding → evidence → what changes), placed after
+   the test or in the reflection. Ask the owner for the real findings; never invent them.
 
 #### 0.B.0 JustCook (02, main) — 12 slides after its cover (owner, 2026-10-30)
 
