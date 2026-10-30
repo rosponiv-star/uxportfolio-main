@@ -348,7 +348,7 @@ if MODE == 'real':
 else:
     T = {'alu': 0.86, 'grille': 0.42, 'rubber': 0.3, 'print': 0.4, 'pin': 0.75, 'band': 0.5, 'cable': 0.25, 'dots': 0.28,
          'led_front': 0.25, 'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98,
-         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3, 'mark': 0.62, 'skin': 0.985, 'gold': 0.7}
+         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3, 'mark': 0.62, 'skin': 0.985, 'gold': 0.7, 'pcb': 0.48, 'chip': 0.22, 'shield': 0.84, 'speaker': 0.34, 'cone': 0.66, 'battery': 0.8, 'copper': 0.74, 'pmma': 0.97, 'chassis': 0.92, 'magnet': 0.56, 'screw': 0.5, 'led': 0.98}
     MATS = {k: toon(k, grey(v)) for k, v in T.items()}
     MATS['body'] = body_toon('body', grey(0.86))
     MATS['shell'] = toon('shell', grey(0.86))
@@ -1207,6 +1207,8 @@ def freestyle(px_inner, px_outline):
     lineset('inner', px_inner, silhouette=True, border=True, crease=True, material_boundary=True, contour=True)
     lineset('outline', px_outline, external_contour=True)
 
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'internals.py'), encoding='utf-8').read())   # the inside, for the exploded view
+
 def line():
     scene.render.engine = 'CYCLES'; scene.cycles.samples = 16; scene.cycles.use_denoising = False
     scene.render.film_transparent = True
@@ -1225,6 +1227,7 @@ def line():
         'lamp': (build_bulb, 170, {}),
         'shutters': (build_shutters, 300, {}),
         'diffuser': (build_diffuser, 200, {'caps': (0.016, 0.004, 0.074)}),
+        'explode': (build_exploded, 1000, lambda: EXPLODE_PTS),
         'g1': (lambda: build_gesture(1), 560, {'top': (0, 0, TOP)}),
         'g2': (lambda: build_gesture(2), 560, {'top': (0, 0, TOP)}),
         'g3': (lambda: build_gesture(3), 560, {'top': (0, 0, TOP)}),
@@ -1255,6 +1258,7 @@ def line():
         bpy.context.view_layer.update()
         def proj(p):
             v = world_to_camera_view(scene, cam, Vector(p)); return [round(v.x * size, 1), round((1 - v.y) * size, 1)]
+        if callable(pts): pts = pts()
         anchors[name] = {'size': size, 'k': round(size / span, 1), 'ground': proj((0, 0, 0)), 'points': {k: proj(p) for k, p in pts.items()}}
         scene.render.filepath = os.path.join(OUT, f'iso-{name}.png')
         bpy.ops.render.render(write_still=True)

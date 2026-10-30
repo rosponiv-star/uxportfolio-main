@@ -1184,6 +1184,16 @@ When a CLOUD session hits something that needs the local environment, it must:
   colours on the night ground, like in the other scenes (owner: "troppo scuro").
 - **2026-10-30 · LOCAL (66)** · Owner: dark-room gestures back to how they were a few versions ago: the drawing in
   negative (invert 0.92 + hue-rotate 180°): dark base and hand with light lines, the time lit.
+- **2026-10-30 · LOCAL (67)** · Schema 15, the inside of the base, engineered with catalogue parts at datasheet size
+  (owner: "come se dovessi farla funzionare"): new `deck/blender/internals.py` (exec'd by aura.py; `line explode`)
+  models shell, touch electrode, 3 pogo pins + magnets, main board (ESP32-S3-WROOM-1, ESP32-H2-MINI-1, 2 × MAX98357A,
+  STUSB4500, BQ24074, TPS62133, MAX17048, PCF85063A, TPS2553, USB4105, PTS526), display board (351 × 0402 LEDs,
+  IS31FL3741, baffle, diffuser, RGB + light pipe, VEML7700, SPH0645), chassis with two ported 40 cm³ chambers,
+  2 × 28×40 mm speakers, 1000 mAh cell, bottom plate + 4 M2.5 screws, 24 × WS2812B ring + PMMA guide, TPE disc; fit
+  checked in mm (battery lifted 1.2 mm over the LED ring). Two new slides after the light slide: p05-inside (exploded
+  drawing, 16 numbered parts with codes) and p05-blocks (block diagram with buses, power budget 0.4 / 3.5 / 12 W of
+  15 W, 9 h on the cell, what a prototype must still prove). Spec §8.2 holds the full BOM, fit, power, assembly.
+  PDF now 28 pages. Next: schema 6 (fail-safe flow on the app slide), then scenarios 10–12 (bedroom renders).
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's
