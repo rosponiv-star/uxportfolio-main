@@ -938,16 +938,16 @@ def pinch_hand(target, R):
     return build_hand('pinch', R, Vector(target) - R @ m)
 
 GRIP = (0.0277, 0.0030)          # the bracelet's pod side, turned to face +X by AP: where the fingers pinch it
-PINCH_R = basis((-0.906, 0.0, -0.423), (0.0, -1.0, 0.0))   # from the right like the palm, index inside the band, thumb outside
+PINCH_R = basis((-0.906, 0.0, -0.423), (0.0, -1.0, 0.0))   # index inside the band, thumb outside
+TURN = Matrix.Rotation(math.radians(225), 3, 'Z')            # the whole pinch turned so the arm comes from the bed (front-left)
 
 def build_gesture(n):
     """01 take the bracelet off the base, 02 palm on the base (bracelet on the wrist), 03 put it back, 04 palm held 3 s."""
     base = build_base(with_time=True, time={1: '22:00', 2: '06:16', 3: '86%', 4: 'OFF'}[n])   # awake: the time is on; bracelet back: its charge
     if n in (2, 4):            # 02 a short tap in the morning; 04 the palm held 3 s (evening): the palm flat on the top
-        F = Vector((-1, -1, 0)).normalized()          # along the diagonal that runs across the drawing: seen side-on
+        F = Vector((1, 1, 0)).normalized()            # from the bed, in front and to the left: the arm runs off the left corner
         R = basis(F, Vector((0, 0, 1)).cross(F))                                       # thumb to the left of the fingers
-        c = 0.045 / math.sqrt(2)                       # the palm centred on the top; the knuckles near the far corner
-        wrist = Vector((c - 0.009, c + 0.009, TOP - palm_z('palm') + 0.0004))   # a little back: the front with the time stays clear
+        wrist = Vector((-0.058, -0.058, TOP - palm_z('palm') - 0.0015))   # heel of the palm on the near corner, flat and pressed on the top
         hand, tips = build_hand('palm', R, wrist)
         yc, zc, hw, ht = wrist_fit('palm')
         br = build_bracelet()                                                          # worn: the strap closed to the wrist
@@ -955,9 +955,16 @@ def build_gesture(n):
         br.matrix_world = (Matrix.Translation(wrist + R @ Vector((-0.004, yc, zc))) @ Matrix.Rotation(math.atan2(-F.y, -F.x), 4, 'Z')
                            @ Matrix.Rotation(math.pi / 2, 4, 'Y') @ Matrix.Diagonal(br.scale.to_4d()))   # ring round the wrist, pod underneath
         return group('gesture', [base, br] + hand)
-    z0 = TOP + (0.042 if n == 1 else 0.010)
-    br = build_bracelet(z0)
-    hand, tips = pinch_hand((GRIP[0], GRIP[1], z0 + STRAP_LIFT + STRAP_H - 0.004), PINCH_R)
+    z0 = TOP + (0.055 if n == 1 else 0.012)
+    br = build_bracelet(z0); br.rotation_euler.z += math.radians(225)
+    gp = TURN @ Vector((GRIP[0], GRIP[1], 0))
+    pin = Vector((gp.x, gp.y, z0 + STRAP_LIFT + STRAP_H - 0.004))
+    hand, tips = pinch_hand(pin, TURN @ PINCH_R)
+    # the wrist turns the thumb up towards the viewer, as when you pick something up: hand and bracelet roll together
+    # about the pinch, round the arm's horizontal direction, so the pinch on the band is seen and not the back of the hand
+    bpy.context.view_layer.update()
+    M = Matrix.Translation(pin) @ Matrix.Rotation(math.radians(25), 4, Vector((-1, -1, 0)).normalized()) @ Matrix.Translation(-pin)
+    for o in [br] + hand: o.matrix_world = M @ o.matrix_world
     return group('gesture', [base, br] + hand)
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -1182,7 +1189,7 @@ def line():
         span = max(max(xs) - min(xs), max(ys) - min(ys)) * (1.16 if not name.startswith('g') else 1.0)
         if name.startswith('g'): span = 0.30                    # gestures: one scale for all three, the hand runs off the frame
         cx, cy = (max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2
-        if name.startswith('g'): cx, cy = cx + 0.015, cy + 0.04           # room for the hand above and to the right
+        if name.startswith('g'): cx, cy = cx - 0.012, cy + 0.04           # room for the hand above and to the left
         cam.location = right * cx + up * cy + back * 2.0
         cd.ortho_scale = span; cd.clip_end = 10
         px = round(size * SS); scene.render.resolution_x = scene.render.resolution_y = px

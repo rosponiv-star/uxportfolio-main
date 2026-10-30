@@ -828,7 +828,7 @@
   const ROOMS = { dark: ['#17171d', 'Dark room', '#cfcdc6'], dawn: ['#f5ecdc', 'Dawn light', '#8a6a3a'], day: ['none', 'Daylight', '#6b6b66'] };
   document.querySelectorAll('[data-gest]').forEach((svg) => {
     const n = +svg.dataset.gest, [room, col, up] = FIG[n], [bg, name, fg] = ROOMS[room];
-    const C = 0.866, S = 0.5, k = 1866.7, [gx, gy] = [252.0, 390.6], TOP = 0.045;
+    const C = 0.866, S = 0.5, k = 1866.7, [gx, gy] = [302.4, 390.6], TOP = 0.045;
     const P = (x, y, z = 0) => [gx + k * C * (x + y), gy + k * (S * (x - y) - z)].map((v) => v.toFixed(1)).join(' ');
     const sq = (h) => `M${[[-h, -h], [h, -h], [h, h], [-h, h]].map(([x, y]) => P(x, y)).join(' L')} Z`;
     let g = `<defs><filter id="gb${n}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="11" /></filter></defs>`;
@@ -842,13 +842,13 @@
       g += `<ellipse cx="${gx}" cy="${gy}" rx="${(R * k * 1.2247).toFixed(1)}" ry="${(R * k * 0.7071).toFixed(1)}" fill="url(#rg${n})" style="mix-blend-mode: ${blend}" />`;
     }
     g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560"${room === 'dark' ? ' style="filter: invert(0.92) hue-rotate(180deg)"' : ''} />`;
-    g += `<text class="room" x="20" y="82" fill="${fg}">${name}</text>`;
-    const arrow = (z0, z1, x = -0.05, y = -0.035) => {        // a vertical arrow beside the bracelet, chevron at z1
+    g += `<text class="room" x="545" y="474" fill="${fg}" text-anchor="end" style="text-anchor: end">${name}</text>`;   // bottom right: the arm comes from the top left
+    const arrow = (z0, z1, x = 0.062, y = 0.0) => {          // a vertical arrow right of the bracelet, clear of the arm, chevron at z1
       const d = z1 > z0 ? 1 : -1, tip = P(x, y, z1).split(' ').map(Number);
       return `<path class="arw" style="stroke: ${fg === '#cfcdc6' ? '#e9e7e1' : 'var(--ink)'}" d="M${P(x, y, z0)} L${P(x, y, z1)} M${tip[0] - 7} ${tip[1] + 7 * d} L${tip[0]} ${tip[1]} L${tip[0] + 7} ${tip[1] + 7 * d}" />`;
     };
-    if (n === 1) g += arrow(TOP + 0.016, TOP + 0.068);
-    if (n === 3) g += arrow(TOP + 0.05, TOP + 0.006);
+    if (n === 1) g += arrow(TOP + 0.03, TOP + 0.085);
+    if (n === 3) g += arrow(TOP + 0.07, TOP + 0.025);
     if (n === 2) g += arrow(TOP + 0.125, TOP + 0.088, 0.012, 0.012);                       // a short tap, from above
     if (n === 4) {                                                                     // held: a 3-second ring
       const [cx, cy] = P(0.012, 0.012, TOP + 0.095).split(' ').map(Number), r = 15, a = 2 * Math.PI * 0.75;

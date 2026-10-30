@@ -1152,6 +1152,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   pose MCP 10–14°, PIP 30–36°, DIP 14–18°), thumb solved to lie along the index on the top so the time on the front
   stays clear; 03 Palm tap rests too, the arrow shows the tap. Glow under the base round and soft (owner: "non può
   essere quadrata"): a radial-gradient ellipse on the floor, R 0.105 m, full to 55 %, 35 % at 78 %, 0 at the rim.
+- **2026-10-30 · LOCAL (59)** · Owner: "era meglio prima, più piatta e più vicina; la mano arriva da una posizione
+  realistica, sempre". Every gesture now reaches in from the bed, front-left: palms (02, 03) flat and pressed on the
+  top (MPFB palm pose MCP 4–7°, PIP 12–14°, DIP 6–8°; wrist on the near corner, F = (1, 1)), thumb along the index on
+  the top so the time stays readable; pinches (01, 04) turned 225° (`TURN`), lighter pinch (other fingers relaxed),
+  rolled 25° about the arm so thumb and index on the band face the viewer; 01 lifts the bracelet 55 mm. Framing
+  offset now −12 mm (ground 302.4, 390.6); arrows moved right of the bracelet; room labels bottom right.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's

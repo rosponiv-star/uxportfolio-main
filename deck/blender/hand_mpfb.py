@@ -72,8 +72,8 @@ def solve_thumb(target):
     cost(); return c
 
 POSES = {
-    'palm': {'index': (10, 32, 16), 'middle': (10, 36, 18), 'ring': (12, 34, 16), 'little': (14, 30, 14)},   # resting on the top, fingers folding over its far edge
-    'pinch': {'index': (35, 65, 35), 'middle': (65, 75, 40), 'ring': (70, 80, 40), 'little': (75, 80, 40)},
+    'palm': {'index': (4, 12, 7), 'middle': (4, 14, 8), 'ring': (5, 13, 7), 'little': (7, 12, 6)},   # flat on the top, relaxed
+    'pinch': {'index': (35, 65, 35), 'middle': (35, 45, 22), 'ring': (40, 48, 22), 'little': (45, 48, 22)},   # a light two-finger pinch, the rest relaxed
 }
 KEEP = {'wrist.R', 'lowerarm01.R', 'lowerarm02.R', 'upperarm02.R'}   # past the elbow: the arm always leaves the frame
 KEEP = KEEP | {f'metacarpal{i}.R' for i in range(1, 5)} | set(AX)
