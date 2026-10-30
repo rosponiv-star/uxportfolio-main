@@ -487,13 +487,13 @@
   </div>
 </section>
 
-<section class="slide" id="p05-blocks" data-page>
+<section class="slide" id="p05-inside-real" data-page>
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
-    <p class="label kick" style="grid-column: 1 / -1">Electronics</p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Two radios, one brain, one USB-C charger.</p>
-    <svg class="blocks" style="grid-column: 1 / 9; align-self: end" viewBox="0 0 1120 680" role="img" aria-label="Block diagram of the base electronics" data-blocks></svg>
-    <div style="grid-column: 9 / -1; align-self: end; display: grid; gap: 28px" data-power></div>
+    <p class="label kick" style="grid-column: 1 / 6">Inside, rendered</p>
+    <p class="h2" style="grid-column: 1 / 6; margin-top: 24px">The same parts, as they would come off the line.</p>
+    <p class="small i2" style="grid-column: 1 / 5; grid-row: 3; align-self: end">Numbers as on the previous page. Real sizes from the datasheets: a 64 × 100 mm four-layer board between two 40 cm³ speaker chambers, a 1000 mAh cell under it, all inside 120 × 120 × 45 mm.</p>
+    <svg class="explode" style="grid-column: 6 / -1; grid-row: 1 / 4" viewBox="256 0 1152 1880" role="img" aria-label="AuraWake base, exploded, rendered" data-explode-real></svg>
   </div>
 </section>
 
@@ -629,16 +629,6 @@
   .explode { width: 100%; height: 100%; display: block; }
   .explode .cn { font-size: 15px; font-weight: 500; fill: var(--ink); }
   .parts li { padding-block: 4px; }
-  .blocks { width: 100%; height: auto; display: block; overflow: visible; }
-  .blocks .bx { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; }
-  .blocks .bx-k { fill: color-mix(in srgb, var(--ink) 6%, var(--paper)); }
-  .blocks .t1 { font-size: 17px; font-weight: 500; fill: var(--ink); }
-  .blocks .t2 { font-size: 14px; fill: #6b6b66; }
-  .blocks .ln { fill: none; stroke: var(--ink); stroke-width: 1.2; }
-  .blocks .pw { stroke: #c98f2a; stroke-width: 2; }
-  .blocks .bus { font-size: 12px; font-weight: 500; letter-spacing: .06em; fill: #6b6b66; text-transform: uppercase; }
-  .ptab { display: grid; grid-template-columns: 1fr auto; column-gap: 16px; row-gap: 10px; align-items: baseline; }
-  .ptab > * { padding-top: 10px; border-top: 1px solid var(--rule); }
   .fsafe { width: 100%; height: auto; display: block; overflow: visible; }
   .fsafe .t1 { font-size: 21px; font-weight: 500; fill: var(--ink); }
   .fsafe .t2 { font-size: 17px; fill: #6b6b66; }
@@ -946,41 +936,21 @@
     if (pl) pl.innerHTML = PARTS.map(([, t, c], i) => `<li><span class="label kick"><span class="n">${String(i + 1).padStart(2, '0')}</span></span><span class="small"><span class="m">${t}</span><span class="i3"> · ${c}</span></span></li>`).join('');
   }
 
-  // AuraWake · electronics: block diagram (power in amber), power budget and what a prototype must still prove.
-  const bl = document.querySelector('[data-blocks]');
-  if (bl) {
-    const B = (x, y, w, h, t1, t2 = '', k = '') => `<rect class="bx ${k}" x="${x}" y="${y}" width="${w}" height="${h}" rx="3" /><text class="t1" x="${x + 14}" y="${y + 26}">${t1}</text>${t2 ? `<text class="t2" x="${x + 14}" y="${y + 48}">${t2}</text>` : ''}`;
-    const ln = (d, c = '') => `<path class="ln ${c}" d="${d}" />`;
-    const bus = (x, y, t, a = 'start') => `<text class="bus" x="${x}" y="${y}" text-anchor="${a}" style="text-anchor: ${a}">${t}</text>`;
-    let g = '';
-    // power column: USB-C → PD → power path ⇄ cell → 3.3 V into the brain; the bracelet pins switched off the 5 V path
-    g += B(0, 150, 230, 54, 'USB-C in', '5 V 3 A · STUSB4500 PD') + B(0, 250, 230, 54, 'Power path', 'BQ24074 charger');
-    g += B(0, 350, 230, 54, 'Backup cell', 'Li-ion 1000 mAh · MAX17048') + B(0, 450, 230, 54, '3.3 V rail', 'TPS62133 buck');
-    g += B(0, 580, 230, 54, 'Bracelet pins', 'TPS2553 switch, 300 mA');
-    g += ln('M115 204 V250', 'pw') + ln('M115 304 V350', 'pw') + ln('M115 404 V450', 'pw') + ln('M230 477 H330', 'pw');
-    g += ln('M230 277 H270 V560 H200 V580', 'pw');
-    g += ln('M330 607 H230') + bus(280, 598, 'ID · enable', 'middle');
-    // the brain and the room radio
-    g += B(330, 150, 300, 484, 'ESP32-S3', 'Wi-Fi · BLE · touch · logic', 'bx-k') + B(330, 20, 300, 80, 'ESP32-H2', 'Thread / Matter border router', 'bx-k');
-    g += ln('M480 100 V150') + bus(492, 132, 'UART + SPI');
-    g += B(660, 20, 160, 80, 'Lamp, shutters', 'diffuser · Thread') + ln('M630 60 H660');
-    g += B(850, 20, 270, 80, 'Phone app · bracelet', 'Wi-Fi, local · BLE 5') + ln('M600 150 V120 H985 V100');
-    // peripherals: one straight line each, the bus named on it
-    const P = [['Time matrix', 'IS31FL3741 · 351 LEDs', 'I²C'], ['Light sensor + clock', 'VEML7700 · PCF85063A', 'I²C'], ['Speakers ×2', 'MAX98357A amps', 'I²S'],
-      ['Microphone', 'SPH0645 MEMS', 'I²S'], ['Light ring', '24 × WS2812B', 'Data'], ['Front LED', 'RGB', 'PWM'], ['Palm + button', 'electrode · PTS526', 'Touch · GPIO']];
-    P.forEach(([a, b, c], i) => {
-      const y = 150 + i * 72;
-      g += B(820, y, 300, 54, a, b) + ln(`M630 ${y + 27} H820`) + bus(725, y + 20, c, 'middle');
+  // AuraWake · inside, rendered (aura.py real explode plastic → assets/aurawake/explode-real.jpg; points from
+  // out/xreal/explode-real.json, the same parts and numbers as the line drawing).
+  const exr = document.querySelector('[data-explode-real]');
+  if (exr) {
+    const PT = {"shell": [862.0, 154.6], "pins": [740.5, 554.6], "magnets": [777.5, 580.0], "touch": [1026.6, 492.5], "matrix": [347.2, 1044.0], "status": [483.3, 1143.1], "s3": [780.8, 802.1], "h2": [846.9, 852.7], "usbc": [995.2, 727.3], "btn": [907.6, 667.0], "spk": [1241.8, 1175.4], "chassis": [924.4, 991.2], "batt": [855.1, 1140.7], "plate": [847.5, 1366.8], "ring": [904.6, 1427.4], "disc": [799.1, 1594.2]};
+    const ORDER = [['shell', 'r'], ['touch', 'r'], ['pins', 'l'], ['magnets', 'l'], ['s3', 'l'], ['h2', 'r'], ['usbc', 'r'], ['btn', 'r'],
+      ['matrix', 'l'], ['status', 'l'], ['spk', 'r'], ['chassis', 'r'], ['batt', 'l'], ['plate', 'r'], ['ring', 'r'], ['disc', 'l']];
+    let g = `<image href="assets/aurawake/explode-real.jpg" x="0" y="0" width="1600" height="2000" />`;
+    const L = 70, R = 22;
+    ORDER.forEach(([k, side], i) => {
+      const [px, py] = PT[k], dx = side === 'l' ? -1 : 1, qx = px + dx * (L + R);
+      g += `<circle cx="${px}" cy="${py}" r="5" fill="var(--ink)" /><path d="M${px} ${py} H${qx - dx * R}" stroke="var(--ink)" stroke-width="2" />`;
+      g += `<circle cx="${qx}" cy="${py}" r="${R}" fill="var(--paper)" stroke="var(--ink)" stroke-width="2" /><text x="${qx}" y="${py + 8}" text-anchor="middle" style="text-anchor: middle; font-size: 24px; font-weight: 500; fill: var(--ink)">${i + 1}</text>`;
     });
-    bl.innerHTML = g;
-    const pw = document.querySelector('[data-power]');
-    if (pw) pw.innerHTML = `<div><p class="label kick" style="margin-bottom: 10px">Power, at 5 V</p><div class="ptab small">
-      <span>Night, waiting: radios on, lights off</span><span class="m">≈ 0.4 W</span>
-      <span>Wake-up: sound, ring at 30 %, time on</span><span class="m">≈ 3.5 W</span>
-      <span>Worst case: full volume, ring 100 %, cell and bracelet charging</span><span class="m">≈ 12 W</span>
-      <span>USB-C supply</span><span class="m">15 W</span>
-      <span>Power cut: 3.7 Wh cell</span><span class="m">≈ 9 h + alarm</span></div></div>
-      <div><p class="label kick" style="margin-bottom: 10px">To prove on a prototype</p><p class="small i2">Chamber and port tuning; heat in a closed shell (1–3 W); radio range inside the shell, antennas kept clear of the magnets and the cell; touch through 2 mm of plastic; CE (RED), FCC and UN 38.3 for the cell.</p></div>`;
+    exr.innerHTML = g;
   }
 
   // AuraWake · fail-safe (spec §1 principle 7, §7.3–7.4): every failure row joins one amber line, the wake-up.

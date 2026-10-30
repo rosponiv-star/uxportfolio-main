@@ -20,6 +20,10 @@ def shell():
     part('shell', 'Enclosure: top and four walls in one piece', 'PC/ABS, satin, 2.0 mm walls',
          'side and back speaker grilles, front micro-perforation for the time, USB-C and button openings')
     outer = rbox('shell', W, W, H, EDGE_P, EDGE_T, 'body', (0, 0, PL), sp=4, se=2)
+    if MODE == 'real':                                   # the same openings as the finished base
+        cut(outer, stadium_bm(0.0084, 0.0026, 0.012), (0, W / 2, MID), 'rubber')
+        cut(outer, cutter_bm([(BTN_X, 0, BTN_HOLE)], 0.002), (0, W / 2, MID), 'rubber')
+        cut(outer, holes_bm(), (0, 0, 0), 'cavity')
     cutter = rbox('shell_in', IN, IN, H - WALL + 0.001, 0.001, 0.0, 'body', (0, 0, PL - 0.001), sp=2)
     boolean_diff(outer, cutter)
     return [outer]
@@ -209,3 +213,75 @@ def build_exploded():
     return g
 
 EXPLODE_PTS = {}
+
+# ---------------------------------------------------------------------------------------------------------------
+# Photoreal exploded view (owner, 2026-10-30: "render realistica, super dettagliata, veri componenti"): the same parts
+# as the line drawing, with real materials and the small things a board really carries.
+def real_mats():
+    def p(name, hexc, **kw): MATS[name] = principled(name, srgb(hexc), **kw)
+    p('pcb', '#15181b', rough=0.35, coat=0.6)                    # black solder mask, glossy
+    p('chip', '#1b1c1e', rough=0.45)                              # epoxy mould
+    p('shield', '#c9ccd0', metal=1.0, rough=0.22)                 # tin-plated shield cans, USB-C shell
+    p('speaker', '#202124', rough=0.6)
+    p('cone', '#3a3b3e', rough=0.9)                               # treated paper
+    p('battery', '#c7c9cc', metal=0.9, rough=0.35)                # aluminium-laminate pouch
+    p('copper', '#b87333', metal=1.0, rough=0.3)
+    p('chassis', '#3c3e43', rough=0.55)                           # glass-filled PC, dark grey
+    p('magnet', '#d6d8db', metal=1.0, rough=0.18)                 # nickel-plated NdFeB
+    p('screw', '#2a2b2e', metal=1.0, rough=0.35)                  # black zinc
+    p('led', '#f4e7b8', rough=0.3)                                # LED package with phosphor
+    p('kapton', '#c9822e', rough=0.35, coat=0.4)                  # flex cables
+    p('etch', '#8b8e93', metal=1.0, rough=0.5)                    # laser marking on the cans
+    p('label', '#e9e9e6', rough=0.7)                              # battery label
+    p('silk', '#e6e6e2', rough=0.6)                               # silkscreen
+    g = principled('pmma', srgb('#ffffff'), rough=0.05); b = g.node_tree.nodes['Principled BSDF']
+    b.inputs['Transmission Weight'].default_value = 1.0; b.inputs['IOR'].default_value = 1.49; MATS['pmma'] = g
+
+def real_details():
+    """What a real board carries beyond the parts list: mounting holes, printed antennas, markings, flex cables."""
+    obs = []; zt = PCB_Z + 0.0010
+    for x in (-0.02, 0.02):                                        # plated mounting holes over the bosses
+        for y in (-0.02, 0.02):
+            obs.append(annulus(f'mh{x}{y}', 0.0013, 0.0024, 0.00004, 'gold', zt))
+    for name, x, y, w in (('s3', -0.012, -0.012, 0.018), ('h2', 0.016, -0.016, 0.0132)):
+        d = 0.0255 if name == 's3' else 0.0166
+        ya = y + d / 2 - 0.0035                                    # printed meander antenna at the module's free end
+        top = zt + (0.0024 if name == 's3' else 0.0016)
+        for k in range(7):
+            obs.append(box(f'{name}_ant{k}', 0.0006, 0.004, 0.00003, x - w / 2 + 0.003 + k * 0.0018, ya - 0.002, top, 'gold'))
+        obs.append(box(f'{name}_antb', w - 0.004, 0.0006, 0.00003, x, ya + 0.0018, top, 'gold'))
+        can_top = top + 0.0008
+        obs.append(label('ESP32-S3-WROOM-1' if name == 's3' else 'ESP32-H2-MINI-1', 0.0011 if name == 's3' else 0.0008,
+                         (x, y - (0.0035 if name == 's3' else 0.0025), can_top + 0.00001), (0, 0, 0), 'etch'))
+    obs.append(label('AuraWake  AW1  rev C', 0.0016, (0.0, 0.040, zt + 0.00001), (0, 0, 0), 'silk'))
+    for i in range(14):                                            # decoupling and passives round the radios
+        obs.append(box(f'p{i}', 0.0010, 0.0005, 0.0005, -0.024 + (i % 7) * 0.0045, -0.030 - (i // 7) * 0.003, zt, 'chip'))
+    obs.append(label('Li-ion 3.7 V 1000 mAh  3.7 Wh', 0.0022, (0.0, 0.012, FLOOR + 0.0012 + 0.00501), (0, 0, math.pi / 2), 'chip'))
+    obs.append(box('batt_label', 0.026, 0.040, 0.00002, 0.0, 0.012, FLOOR + 0.0012 + 0.005, 'label'))
+    obs.append(box('fpc_main', 0.008, 0.030, 0.0002, -0.002, -0.032, PCB_Z - 0.0002, 'kapton'))
+    return obs
+
+def real_explode():
+    real_mats()
+    scene.render.film_transparent = True                 # laid on the page colour afterwards: no box round it
+    g = build_exploded()
+    det = real_details()
+    for o in det:                                                  # details ride with the board / battery groups
+        dz = EXPLODE['battery'][2] if o.name.startswith(('batt_label', 't')) and o.location.z < PCB_Z else EXPLODE['board'][2]
+        o.location.z += dz
+    w = bpy.data.worlds.new('w'); w.use_nodes = True; scene.world = w; nt = w.node_tree
+    bg = nt.nodes['Background']; bg.inputs[0].default_value = srgb('#e9e9e6'); bg.inputs[1].default_value = 0.35
+    sky = nt.nodes.new('ShaderNodeBackground'); sky.inputs[0].default_value = srgb('#f2f2f0'); sky.inputs[1].default_value = 1.7
+    lp = nt.nodes.new('ShaderNodeLightPath'); mx = nt.nodes.new('ShaderNodeMixShader'); out = nt.nodes['World Output']
+    nt.links.new(lp.outputs['Is Camera Ray'], mx.inputs[0]); nt.links.new(bg.outputs[0], mx.inputs[1]); nt.links.new(sky.outputs[0], mx.inputs[2])
+    nt.links.new(mx.outputs[0], out.inputs[0])
+    area('key', (-0.6, -0.5, 1.0), (0, 0, 0.1), 1.0, 45)
+    area('fill', (0.9, -0.7, 0.3), (0, 0, 0.1), 1.4, 12)
+    area('rim', (0.2, 0.9, 0.7), (0, 0, 0.1), 0.8, 25)
+    look((0.52, -0.52, 0.66), (0.0, -0.02, 0.108), 60)
+    scene.view_settings.exposure = 0.0
+    bpy.context.view_layer.update()
+    cam = scene.camera; rx, ry = scene.render.resolution_x, scene.render.resolution_y
+    pts = {k: [round(v.x * rx, 1), round((1 - v.y) * ry, 1)] for k, v in
+           ((k, world_to_camera_view(scene, cam, Vector(p))) for k, p in EXPLODE_PTS.items())}
+    with open(os.path.join(OUT, 'explode-real.json'), 'w') as f: json.dump({'size': [rx, ry], 'points': pts}, f, indent=1)

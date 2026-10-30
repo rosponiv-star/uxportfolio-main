@@ -1161,17 +1161,21 @@ def table_scene():
     look((0.36, -0.45, 0.40), (0.0, 0.04, 0.0), 55, 8.0)
     scene.view_settings.exposure = -0.8
 
+exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'internals.py'), encoding='utf-8').read())   # the inside, for the exploded view
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bedroom.py'), encoding='utf-8').read())   # scenario frames
 
 def real():
     res = (1200, 675) if PREVIEW else (2400, 1350)
     if SHOT.startswith('room'): res = (540, 675) if PREVIEW else (1080, 1350)   # portrait frames for the strip
+    if SHOT == 'explode': res = (800, 1000) if PREVIEW else (1600, 2000)        # the exploded base, portrait
     cycles(64 if PREVIEW else 384, res)
     colour_management('AgX')
     if TABLE:
         table_scene()
     elif SHOT.startswith('room'):
         bedroom_scene(FRAME)
+    elif SHOT == 'explode':
+        real_explode()
     elif STUDIO:
         studio(SHOT)
         if PLASTIC: scene.view_settings.exposure = -0.8
@@ -1211,8 +1215,6 @@ def freestyle(px_inner, px_outline):
         st = ls.linestyle; st.color = (0.02, 0.02, 0.02); st.thickness = px; st.caps = 'ROUND'
     lineset('inner', px_inner, silhouette=True, border=True, crease=True, material_boundary=True, contour=True)
     lineset('outline', px_outline, external_contour=True)
-
-exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'internals.py'), encoding='utf-8').read())   # the inside, for the exploded view
 
 def line():
     scene.render.engine = 'CYCLES'; scene.cycles.samples = 16; scene.cycles.use_denoising = False

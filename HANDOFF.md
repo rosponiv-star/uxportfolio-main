@@ -241,6 +241,31 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
 4. Closing slide (contact, thank you) — not built yet. Final check: size < 20 MB, file name, links, typos.
 5. Optional: propose a concrete small physical prototype (Arduino/ESP32) tied to one project.
 
+#### 0.B.1 AuraWake schemas: where each one lives and how to change it (owner, 2026-10-30)
+
+The owner wants every schema saved on its own (no kicker, headline or captions) in
+`Media/05-AuraWake/Schemi/` and wants any later change to be exact. After ANY change to a schema or its
+sources: `node deck/build.mjs` (PDF + previews), then `node deck/export_schemas.mjs` (re-exports the folder; add a
+line to its SHOTS/COPIES lists for every new schema), then the §01 log entry. Interaction facts come from the spec
+`C:\Users\rospo\Documents\ClaudeCode\Design\AuraWake\AuraWake - Interaction Design Spec.md` (Italian); change the spec
+first, then the slides. Blender: `"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b -P
+deck/blender/aura.py -- <mode> <outdir> <shot> [plastic] [preview]` (run from the repo root; `preview` = low res).
+
+| Schema (export name) | Slide id | Made of | To change it |
+|---|---|---|---|
+| 01 System | `p05-system` | iso drawings `line` mode (`iso-base`, `-bracelet`, `-phone`, `-lamp`, `-shutters`, `-diffuser`, `-base_under`) + the `[data-iso]` script in index.html (uv layout `N`, groups `G`, flows, `KEYS`) | objects: edit the builder in aura.py, re-run `line out/blender <name>`, copy the PNG and the new anchors into `AN`; layout/keys: the script |
+| 02 One night | `p05-night` | `[data-night]` script: `SEG` time stretches, `lanes` (events / areas / tags) | edit `lanes` values (they follow spec §6) |
+| 03 Scenes ×5 | `p05-scenes` | `deck/blender/bedroom.py`, `real <out> room1…room5`; `ROOM` table = time, lamp, ring, shutter, sky, exposure per frame; captions in the slide | edit `ROOM`/scene, render, convert the PNG to `assets/aurawake/roomN.jpg` (sharp, flatten #000) |
+| 04 Gestures ×4 | `p05-gestures` | `line <out> g1…g4` (`build_gesture`, hands from `deck/blender/hands/*.obj` made by `hand_mpfb.py` with MPFB2) + the `[data-gest]` script (room ground, ring glow, arrows, 3 s ring, LED) | poses: `POSES` in hand_mpfb.py → run it → re-render g1–g4 → copy to assets; framing: `cy` offset in `line()`; overlays: the script (ground anchor `gx, gy` from anchors.json) |
+| 05 Light language | `p05-light` | `[data-waves]` script: `COLS` (front LED / ring / ladder rows with their waveforms) | edit rows (spec §4.1) |
+| 06 Inside, lines | `p05-inside` | `deck/blender/internals.py` (every part, `BOM`, `EXPLODE` offsets, `EXPLODE_PTS` anchors), `line <out> explode`; numbered list `PARTS` in the `[data-explode]` script | parts: internals.py → re-render → copy `iso-explode.png`, paste new anchors into `PT` |
+| 07 Inside, rendered | `p05-inside-real` | same internals + `real_mats`/`real_details`/`real_explode`, `real <out> explode plastic` (transparent) → `assets/aurawake/explode-real.jpg` (flatten #fdfdfc); points in `out/xreal/explode-real.json` | after a re-render paste the JSON points into the `[data-explode-real]` script |
+| 08 Fail-safe | `p05-app` | `[data-failsafe]` script: rows `F` | edit rows (spec §1 p.7, §7.3–7.4) |
+
+Product renders (21 views + dawn scene): `real out/blender <shot> plastic [state=…]` per line of
+`deck/out/blender/final-jobs.txt`, exported by `node deck/export_renders.mjs` to
+`assets/aurawake/views/` and `Media/05-AuraWake/OfficialMedia/Renders/`.
+
 ### 0.C How to research and read sources
 - **Web:** `WebSearch` (mode "standard" first; "extended" for thin or niche results) and `WebFetch` for a page.
   Official sources: www.polimi.it (programme pages), www.design.polimi.it (School of Design: guides under
@@ -1205,6 +1230,14 @@ When a CLOUD session hits something that needs the local environment, it must:
   window with a roller shutter behind, sky planes per hour, faint moonlight at night, ring emission 900 so the glow
   shows on the nightstand, MPFB arm in 1 and 5. Assets assets/aurawake/room1–5.jpg, copies in Media as
   AuraWake-scene-room1–5.jpg. PDF 29 pages.
+- **2026-10-30 · LOCAL (70)** · Owner: the block-diagram slide is dropped (the power budget and BOM stay in spec
+  §8.2); a photoreal exploded view takes its place (p05-inside-real): `real <out> explode plastic` renders the same
+  internals with real materials (black solder mask, tin-plated cans with etched module names, printed meander
+  antennas, gold mounting holes, epoxy chips, aluminium pouch with its label, paper cones, nickel magnets, amber flex,
+  clear PMMA guide; shell with its real grilles and openings), transparent, laid on the page colour, numbered like the
+  line drawing (points from out/xreal/explode-real.json). Every schema is now also saved on its own, without slide
+  text, in Media/05-AuraWake/Schemi/ by `node deck/export_schemas.mjs`; the render export moved to the tracked
+  `deck/export_renders.mjs`. New §0.B.1 says where each schema lives and exactly how to change it.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's
