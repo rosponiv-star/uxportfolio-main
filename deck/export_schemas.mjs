@@ -12,9 +12,15 @@ import { fileURLToPath, pathToFileURL } from 'url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const MEDIA = path.join(here, '..', 'Media');
 const AW = path.join(MEDIA, '05-AuraWake', 'Schemi'), JC = path.join(MEDIA, '01-JustCook', 'Schemi');
-for (const d of [AW, JC]) fs.mkdirSync(d, { recursive: true });
+const SH = path.join(MEDIA, '03-Smart Home Ecosystem', 'Schemi');
+for (const d of [AW, JC, SH]) fs.mkdirSync(d, { recursive: true });
 
 const SHOTS = [   // [folder, file, selector] — the selector is the schema itself, nothing around it
+  [SH, '01-stakeholder', '#p01-context [data-shh="rings"]'],
+  [SH, '02-mappa-del-dominio', '#p01-research [data-shh="tree"]'],
+  [SH, '03-pain-point-per-persona', '#p01-insights [data-shh="heat"]'],
+  [SH, '04-personas-a-confronto', '#p01-framing .arch'],
+  [SH, '05-sistema-degli-accessi', '#p01-system [data-shh="sys"]'],
   [JC, '01-sistema-app-e-box', '#p02-system [data-jcflow]'],
   [JC, '02-cicli-di-riformulazione', '#p02-ideas ol.cells'],
   [JC, '03-insight', '#p02-insights ol.cells'],

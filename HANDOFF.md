@@ -289,6 +289,12 @@ deck/blender/aura.py -- <mode> <outdir> <shot> [plastic] [preview]` (run from th
 | JustCook 03–05 Insights, archetypes, research numbers | `p02-insights`, `p02-framing`, `p02-research` | slide HTML | edit the cells / rows |
 | JustCook 06–07 Course prototype, final design | `p02-prototypes` | `deck/assets/justcook/course-*.png` (Figma Page 1) and site screens | re-export from Figma, same file names |
 
+**Smart Home Hub (project 01, slides `p01-*`)** — schemas drawn by the `[data-shh]` script in index.html: `rings`
+(stakeholders, context), `tree` (domain map, research), `heat` (16 pain points × 6 personas, `R` rows: id, label,
+persona indexes, tackled flag; insights), `sys` (access system + temporary-code life cycle, system). Images in
+`deck/assets/smarthome/` (original MD3 screens, FigJam thumbnails `fj-*`, sketches cropped from the report pages in
+`Media/03-Smart Home Ecosystem/Report-pagine/`). Exported to `Media/03-Smart Home Ecosystem/Schemi/`.
+
 Product renders (21 views + dawn scene): `real out/blender <shot> plastic [state=…]` per line of
 `deck/out/blender/final-jobs.txt`, exported by `node deck/export_renders.mjs` to
 `assets/aurawake/views/` and `Media/05-AuraWake/OfficialMedia/Renders/`.
@@ -1294,6 +1300,15 @@ When a CLOUD session hits something that needs the local environment, it must:
   trial, not used. The owner will run a quick 5-person usability test first: protocol in notes/03-smart-home-hub-test.md
   (4 tasks on the original prototype: intercom courier, babysitter temporary code, arm alarm with a window open,
   something left on; SEQ, SUS, critical errors). Results feed slides 07 and 09.
+- **2026-10-30 · LOCAL (74)** · Smart Home Hub slides (p01-overview … p01-outcome) filled with real content, per the
+  approved plan: overview facts; context = brief + scope + stakeholder rings; research = redrawn domain map (artifact,
+  sequence/flow, physical models) + 4 FigJam thumbnails; insights = 16×6 pain-point heat map (6 tackled) + 3 themes;
+  framing = HMW, Marco vs Franco, 3 principles; ideas = 3 paper sketches + the PP06 design space, "universal remote"
+  discarded; system = who gets in through which touchpoint + temporary-code life cycle; prototypes = paper → design
+  space → Figma MD3 checked against sequence models; solution = floor plan, intercom, access codes, security (original
+  screens); key interaction = slide to open the gate; outcome = coverage 6/16 direct, 12/16 with flows, "not tested
+  with users yet", three honest "if I started again". All 172 report pages rendered to Media/…/Report-pagine; Figma
+  screens and FigJam boards in Media/…/Figma. The usability test results will replace the "not tested" lines.
 - **2026-10-30 · LOCAL (71)** · JustCook (02) filled in the PDF: 12 slides after its cover (overview, context, research
   with the real fridge photos, insights with a translated interview quote, framing with the two archetypes and three
   principles, the six reframing cycles, a two-lane service diagram, course prototype vs final design, solution, the
