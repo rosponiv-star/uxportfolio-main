@@ -1157,7 +1157,7 @@
   // AuraWake · inside (spec §8.2): the exploded drawing (aura.py line explode, internals.py) with 16 numbered parts.
   const ex = document.querySelector('[data-explode]');
   if (ex) {
-    const PT = {"shell": [499.9, 158.3], "pins": [448.3, 314.6], "magnets": [465.1, 327.3], "touch": [588.3, 281.6], "matrix": [279.8, 543.2], "status": [343.1, 580.0], "s3": [435.0, 433.7], "h2": [478.3, 466.5], "usbc": [569.5, 388.9], "btn": [527.0, 352.6], "spk": [668.2, 600.0], "pr": [716.0, 424.2], "chassis": [542.7, 534.7], "batt": [500.0, 603.7], "plate": [499.9, 717.3], "ring": [531.6, 773.3], "disc": [473.6, 892.3]};
+    const PT = {"shell": [500.5, 158.3], "pins": [449.0, 314.6], "magnets": [465.7, 327.3], "touch": [589.0, 281.6], "matrix": [280.4, 543.2], "status": [343.7, 580.0], "s3": [435.7, 433.7], "h2": [478.9, 466.5], "usbc": [570.2, 388.9], "btn": [527.7, 352.6], "spk": [668.9, 600.0], "pr": [715.4, 425.0], "chassis": [543.3, 534.7], "batt": [397.5, 670.7], "plate": [500.5, 717.3], "ring": [532.2, 773.3], "disc": [474.2, 892.3]};
     const PARTS = [
       ['shell', 'Shell', 'PC/ABS satin, 2 mm; grilles and micro-holes', 'r'],
       ['touch', 'Touch electrode', 'copper on polyimide, read by the ESP32-S3', 'r'],
@@ -1192,7 +1192,7 @@
   // out/xreal/explode-real.json, the same parts and numbers as the line drawing).
   const exr = document.querySelector('[data-explode-real]');
   if (exr) {
-    const PT = {"shell": [830.7, 161.6], "pins": [711.3, 542.2], "magnets": [748.6, 568.8], "touch": [1022.9, 482.8], "matrix": [327.8, 1058.7], "status": [457.6, 1152.0], "s3": [692.0, 818.3], "h2": [780.3, 887.2], "usbc": [966.2, 733.0], "btn": [880.7, 664.5], "spk": [1190.2, 1179.8], "pr": [1232.2, 809.7], "chassis": [916.5, 1033.1], "batt": [825.1, 1149.0], "plate": [823.5, 1373.3], "ring": [880.8, 1445.5], "disc": [776.6, 1622.9]};
+    const PT = {"shell": [830.7, 161.6], "pins": [711.3, 542.2], "magnets": [748.6, 568.8], "touch": [1022.9, 482.8], "matrix": [327.8, 1058.7], "status": [457.6, 1152.0], "s3": [692.0, 818.3], "h2": [780.3, 887.2], "usbc": [966.2, 733.0], "btn": [880.7, 664.5], "spk": [1190.2, 1179.8], "pr": [1230.0, 811.0], "chassis": [916.5, 1033.1], "batt": [618.3, 1293.9], "plate": [823.5, 1373.3], "ring": [880.8, 1445.5], "disc": [776.6, 1622.9]};
     const ORDER = [['shell', 'r'], ['touch', 'r'], ['pins', 'l'], ['magnets', 'l'], ['s3', 'l'], ['h2', 'r'], ['usbc', 'r'], ['btn', 'r'],
       ['matrix', 'l'], ['status', 'l'], ['spk', 'r', 'pr'], ['chassis', 'r'], ['batt', 'l'], ['plate', 'r'], ['ring', 'r'], ['disc', 'l']];
     let g = `<image href="assets/aurawake/explode-real.jpg" x="0" y="0" width="1600" height="2000" />`;

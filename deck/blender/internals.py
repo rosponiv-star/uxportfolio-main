@@ -368,10 +368,10 @@ def battery():
          '3.7 Wh: ≈ 9 h of standby plus the alarm sound if the power goes; never runs the room')
     z = FLOOR + 0.0012; obs = []                       # on a foam pad over the light-ring board
     obs.append(box('foam_pad', 0.032, 0.046, 0.0008, 0.0, 0.010, z - 0.0004, 'foam'))
-    obs.append(box('cell', 0.034, 0.047, 0.005, 0.0, 0.0095, z + 0.0004, 'battery', 0.0015))
+    obs.append(box('cell', 0.0316, 0.047, 0.005, 0.0, 0.0095, z + 0.0004, 'battery', 0.0015))   # 34 mm wide with its folds
     obs.append(box('cell_seal', 0.034, 0.003, 0.0006, 0.0, 0.0345, z + 0.0026, 'battery'))
     for sx in (-1, 1):                                  # folded side seals
-        obs.append(box(f'cell_fold{sx}', 0.0012, 0.044, 0.0045, sx * 0.0176, 0.0095, z + 0.0006, 'battery', 0.0004))
+        obs.append(box(f'cell_fold{sx}', 0.0012, 0.044, 0.0045, sx * 0.0164, 0.0095, z + 0.0006, 'battery', 0.0004))
     obs.append(box('pcm', 0.030, 0.004, 0.0008, 0.0, 0.0385, z + 0.0026, 'pcb'))
     obs.append(box('pcm_ic', 0.003, 0.0016, 0.0009, -0.005, 0.0385, z + 0.0034, 'chip'))
     obs.append(box('pcm_fet', 0.003, 0.0016, 0.0009, 0.004, 0.0385, z + 0.0034, 'chip'))

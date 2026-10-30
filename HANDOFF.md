@@ -1269,6 +1269,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-10-30 · LOCAL (72)** · Teardown finished (continuation session): the cell's folded seals now sit inside its
+  34 mm width (they stuck out 0.6 mm a side and touched the ±20 mm bosses; 0.2 mm clearance left, spec notes the
+  production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
+  photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
+  Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
 - **2026-10-30 · LOCAL (71)** · JustCook (02) filled in the PDF: 12 slides after its cover (overview, context, research
   with the real fridge photos, insights with a translated interview quote, framing with the two archetypes and three
   principles, the six reframing cycles, a two-lane service diagram, course prototype vs final design, solution, the
