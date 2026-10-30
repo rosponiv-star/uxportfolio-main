@@ -235,6 +235,14 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
    prototype (`om273DJAb0sL3whUHJE0IO`, page Design 1: intercom courier, babysitter temporary code, arm alarm with a
    window open, light left on), each with a flow starting point; (b) the owner runs the 5-person usability test in
    notes/03-smart-home-hub-test.md and sends results, quotes, hand photos and the 2 worst problems.
+   (c) **Schema redesign, one model at a time (owner, 2026-10-30):** redraw every Smart Home Hub schema/table as a
+   big, polished board in black and white strokes like AuraWake's drawings (no project colour), keeping the original
+   marks that carried meaning (highlights, underlines for touchpoints, sequences, artifacts, flow). Order: stakeholders
+   → domain map (artifact model, sequence/flow model, physical model) → pain-point table with the tackled ones →
+   personas → coherence between sequence/flow models and the UX flows (kept vs left out). The PDF shows ONE model as a
+   full example + a summary of the rest. **Stakeholders: TO REVISIT** (owner did not like the drafts: segmented
+   wedges, soft contour bands, petal fields like his HAWC reference; no arrows, primary/secondary/tertiary only).
+   Drafts + their HTML in Media/03-Smart Home Ecosystem/Schemi/bozze/stakeholder/. The deck still has the old rings.
 1. **Template built (07–17), waiting for the owner's review.** Then fill it with **01 Smart Home Hub** only when he
    says so. Material: only what is in the report (`Media/03-Smart Home Ecosystem/REPORT FINALE PIG.pdf`: sketches,
    Design Space, flows; owner 2026-10-27) + interfaces still undecided (original report MD3 screens vs the Oct 2026
@@ -1300,6 +1308,8 @@ When a CLOUD session hits something that needs the local environment, it must:
   trial, not used. The owner will run a quick 5-person usability test first: protocol in notes/03-smart-home-hub-test.md
   (4 tasks on the original prototype: intercom courier, babysitter temporary code, arm alarm with a window open,
   something left on; SEQ, SUS, critical errors). Results feed slides 07 and 09.
+- **2026-10-30 · LOCAL (75)** · Smart Home Hub schema redesign started (B/W strokes, one model at a time; plan in
+  §0.B item 0c). Stakeholders: three drafts rejected, marked TO REVISIT; drafts saved in Media/…/Schemi/bozze/stakeholder.
 - **2026-10-30 · LOCAL (74)** · Smart Home Hub slides (p01-overview … p01-outcome) filled with real content, per the
   approved plan: overview facts; context = brief + scope + stakeholder rings; research = redrawn domain map (artifact,
   sequence/flow, physical models) + 4 FigJam thumbnails; insights = 16×6 pain-point heat map (6 tackled) + 3 themes;
