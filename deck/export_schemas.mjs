@@ -50,8 +50,8 @@ await page.evaluate(() => document.fonts.ready);
 for (const [dest, name, sel] of SHOTS) {
   const el = await page.$(sel);
   if (!el) { console.log('missing', sel); continue; }
-  await el.screenshot({ path: path.join(dest, `${name}.png`), omitBackground: false });
-  console.log(name);
+  try { await el.screenshot({ path: path.join(dest, `${name}.png`), omitBackground: false }); console.log(name); }
+  catch (e) { console.log('skipped (file open elsewhere?)', name, e.code); }   // a locked file must not stop the rest
 }
 await browser.close();
 for (const [dest, name, src] of COPIES) {
