@@ -72,7 +72,7 @@ def solve_thumb(target):
     cost(); return c
 
 POSES = {
-    'palm': {'index': (4, 12, 7), 'middle': (4, 14, 8), 'ring': (5, 13, 7), 'little': (7, 12, 6)},   # flat on the top, relaxed
+    'palm': {'index': (2, 6, 3), 'middle': (2, 7, 4), 'ring': (3, 7, 3), 'little': (4, 6, 3)},   # flat on the top, relaxed
     'pinch': {'index': (35, 65, 35), 'middle': (35, 45, 22), 'ring': (40, 48, 22), 'little': (45, 48, 22)},   # a light two-finger pinch, the rest relaxed
 }
 KEEP = {'wrist.R', 'lowerarm01.R', 'lowerarm02.R', 'upperarm02.R'}   # past the elbow: the arm always leaves the frame

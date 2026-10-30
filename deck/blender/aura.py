@@ -923,6 +923,19 @@ def wrist_fit(pose):
     ys, zs = [y for y, _ in sl], [z for _, z in sl]
     return (max(ys) + min(ys)) / 2, (max(zs) + min(zs)) / 2, (max(ys) - min(ys)) / 2, (max(zs) - min(zs)) / 2
 
+def rest_on_top(hand, gap=0.0003, lift_only=False):
+    """Move a hand vertically so its lowest point over the base's top just touches it: nothing goes through.
+    Returns the shift; with lift_only it only ever raises the hand."""
+    bpy.context.view_layer.update()
+    zs = [(o.matrix_world @ v.co).z for o in hand if o.type == 'MESH' for v in o.data.vertices
+          if abs((o.matrix_world @ v.co).x) < W / 2 and abs((o.matrix_world @ v.co).y) < W / 2]
+    if zs:
+        dz = TOP + gap - min(zs)
+        if lift_only: dz = max(dz, 0.0)
+        for o in hand: o.matrix_world = Matrix.Translation((0, 0, dz)) @ o.matrix_world
+        return dz
+    return 0.0
+
 def palm_z(pose):
     """Lowest point of the palm (local z), so a resting hand can sit on a surface."""
     vs, _ = hand_mesh(pose)
@@ -960,8 +973,9 @@ def build_gesture(n):
     if n in (2, 4):            # 02 a short tap in the morning; 04 the palm held 3 s (evening): the palm flat on the top
         F = Vector((1, 1, 0)).normalized()            # from the bed, in front and to the left: the arm runs off the left corner
         R = basis(F, Vector((0, 0, 1)).cross(F))                                       # thumb to the left of the fingers
-        wrist = Vector((-0.058, -0.058, TOP - palm_z('palm') - 0.0015))   # heel of the palm on the near corner, flat and pressed on the top
-        hand, tips = build_hand('palm', R, wrist)
+        L = Vector(HAND_TIPS['palm']['index']).x                      # wrist → index tip
+        wrist = F * (0.078 - L); wrist.z = TOP - palm_z('palm')       # the fingertips end at the far corner
+        hand, tips = build_hand('palm', R, wrist); wrist.z += rest_on_top(hand)   # flat on the top, nothing through it
         yc, zc, hw, ht = wrist_fit('palm')
         br = build_bracelet()                                                          # worn: the strap closed to the wrist
         br.scale = ((ht + 0.0022) / STRAP_B, (hw + 0.0022) / STRAP_A, 1)
@@ -972,9 +986,11 @@ def build_gesture(n):
         br = build_bracelet(TOP); br.rotation_euler = (0, 0, -math.pi / 2)          # the pod's long side along the pins
         pod = Vector((STRAP_XF - POD_T, 0.0005, 0))
         br.location = Vector((0, -W / 2 + 0.020, TOP)) - Matrix.Rotation(-math.pi / 2, 3, 'Z') @ pod
-        R = pinch_basis(Vector((0, 1, 0)))                                          # thumb behind the pod, index in front
-        grip = Vector((0, -W / 2 + 0.020 + 0.001, TOP + STRAP_LIFT + STRAP_H - 0.004))
-        hand, tips = pinch_hand(grip, R)
+        # the hand from the bed, relaxed and tipped forward: the index fingertip presses the top of the band onto the pins
+        F = Vector((1, 1, -0.45)).normalized(); R = basis(F, Vector((0, 0, 1)).cross(F))
+        ctr = br.location.copy(); d = Vector((-1, -1, 0)).normalized()
+        tip = ctr + d * 0.0295; tip.z = TOP + STRAP_LIFT + STRAP_H + 0.005     # on the band's top edge, on the arm's side
+        hand, tips = build_hand('palm', R, tip - R @ Vector(HAND_TIPS['palm']['index'])); rest_on_top(hand, lift_only=True)
         return group('gesture', [base, br] + hand)
     z0 = TOP + 0.07
     br = build_bracelet(z0); br.rotation_euler.z += math.radians(225)

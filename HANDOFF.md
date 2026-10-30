@@ -1167,6 +1167,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   04 shows the hand still pinching the bracelet as it docks on the pins (`pinch_basis`: the 01 attitude yawed so the
   pinch crosses the pod, thumb behind it), arrow down; 01 forearm lowered to ~12° like the others, bracelet lifted
   70 mm; arrows and the 3 s ring moved clear of the frame edges.
+- **2026-10-30 · LOCAL (62)** · No more fingers through the base (owner): palm pose flattened (2–4°/6–7°/3–4°), the
+  hand placed so the index tip ends at the far corner and then set down by `rest_on_top` (lowest control vertex over
+  the top = TOP + 0.3 mm), the worn bracelet moved with it. 04 no longer pinches (the yawed pinch twisted the fingers):
+  a relaxed hand from the bed, tipped forward, presses the band's top edge onto the pins with the index fingertip, on
+  the arm's side of the ring, lifted only if it would touch the top.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's
