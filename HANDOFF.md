@@ -1147,6 +1147,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   slide row "You forgot tomorrow off", p05-light rebuilt (Front LED · by day / Ring · evening to morning / ladder).
   Renders: led-green and led-red added (LED_SAT), led-dawn and strip-charging retired (git rm in views; moved to
   Media/…/Renders/Superate).
+- **2026-10-30 · LOCAL (58)** · Palm gestures read as resting now (owner: "non sembra appoggiato"): palm centred on the
+  top (wrist 45 mm from the centre along the cross diagonal, 9 mm back), fingers folding over the far edge (MPFB palm
+  pose MCP 10–14°, PIP 30–36°, DIP 14–18°), thumb solved to lie along the index on the top so the time on the front
+  stays clear; 03 Palm tap rests too, the arrow shows the tap. Glow under the base round and soft (owner: "non può
+  essere quadrata"): a radial-gradient ellipse on the floor, R 0.105 m, full to 55 %, 35 % at 78 %, 0 at the rim.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's

@@ -72,7 +72,7 @@ def solve_thumb(target):
     cost(); return c
 
 POSES = {
-    'palm': {'index': (4, 12, 6), 'middle': (5, 14, 7), 'ring': (7, 16, 8), 'little': (9, 18, 9)},   # relaxed, flat on a surface
+    'palm': {'index': (10, 32, 16), 'middle': (10, 36, 18), 'ring': (12, 34, 16), 'little': (14, 30, 14)},   # resting on the top, fingers folding over its far edge
     'pinch': {'index': (35, 65, 35), 'middle': (65, 75, 40), 'ring': (70, 80, 40), 'little': (75, 80, 40)},
 }
 KEEP = {'wrist.R', 'lowerarm01.R', 'lowerarm02.R', 'upperarm02.R'}   # past the elbow: the arm always leaves the frame
@@ -90,6 +90,8 @@ for name, pose in POSES.items():
     for pb in PB: pb.rotation_euler = (0, 0, 0)
     upd(); straighten_elbow()
     curl(pose)
+    if name == 'palm':           # the thumb lies along the index on the top, not over the front with the time
+        solve_thumb(local(head('finger2-1.R')) + Vector((-0.012, 0.016, -0.012)))
     if name == 'pinch':          # thumb pad opposite the index pad, across the band (gap as in the procedural hand)
         it = local(tail('finger2-3.R'))
         err = solve_thumb(it + Vector((-0.0205, 0.0067, -0.008)))

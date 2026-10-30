@@ -835,8 +835,11 @@
     g += `<rect x="0" y="55" width="560" height="430" fill="${bg}" />`;
     if (col) {
       const blend = room === 'dark' ? 'screen' : 'multiply';
-      // a soft glow coming from under the base (owner, 2026-10-29: "semplicemente un glow sfumato")
-      g += `<path d="${sq(0.066)}" fill="${col}" opacity="${room === 'dark' ? 0.7 : 0.5}" filter="url(#gb${n})" style="mix-blend-mode: ${blend}" />`;
+      // the ring is round, so is its glow (owner, 2026-10-30): an ellipse on the floor, full under the base and fading
+      // just past its corners, no hard edge
+      const R = 0.105, peak = room === 'dark' ? 0.8 : 0.6;
+      g += `<defs><radialGradient id="rg${n}"><stop offset="0" stop-color="${col}" stop-opacity="${peak}" /><stop offset="0.55" stop-color="${col}" stop-opacity="${peak}" /><stop offset="0.78" stop-color="${col}" stop-opacity="${peak * 0.35}" /><stop offset="1" stop-color="${col}" stop-opacity="0" /></radialGradient></defs>`;
+      g += `<ellipse cx="${gx}" cy="${gy}" rx="${(R * k * 1.2247).toFixed(1)}" ry="${(R * k * 0.7071).toFixed(1)}" fill="url(#rg${n})" style="mix-blend-mode: ${blend}" />`;
     }
     g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560"${room === 'dark' ? ' style="filter: invert(0.92) hue-rotate(180deg)"' : ''} />`;
     g += `<text class="room" x="20" y="82" fill="${fg}">${name}</text>`;
