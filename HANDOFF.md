@@ -241,10 +241,24 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
 4. Closing slide (contact, thank you) — not built yet. Final check: size < 20 MB, file name, links, typos.
 5. Optional: propose a concrete small physical prototype (Arduino/ESP32) tied to one project.
 
-#### 0.B.1 AuraWake schemas: where each one lives and how to change it (owner, 2026-10-30)
+#### 0.B.0 JustCook (02, main) — 12 slides after its cover (owner, 2026-10-30)
+
+Filled from the verified facts (Appendix B) and the site case study (`src/content/projects/01-justcook.mdx`, same
+English copy), following the main-project template; ids `p02-overview` … `p02-outcome` (+ `p02-brand`, data-step
+solution). Owner's choices: template kept, 05 Ideas = the six CPS reframing cycles (no sketches exist; cycles 2 and 4
+had no idea in the report, so none is shown), 07 Prototypes = only the course version (Figma file
+`9kVAJhXfvlz569AYMRGGCn`, page "Page 1", frames a1–a8, Italian, 2025) and the final v3 (page `2056:180`);
+"Redesign" and "Redesign v2" were trials, never shown. Research numbers 41 / 4 / 3 (the old portfolio's "5 interviews,
+2 shadowing" is wrong). Tools: Figma, InDesign, Miro, Photoshop. The semiotics report's photos (team, post-its, pins,
+cloud head) are stock — never use them; the three fridge/pantry photos (sociology report p. 28) are real. Assets in
+`deck/assets/justcook/` (screens resized to 1000 px tall for the PDF size). Sources read: `Media/01-JustCook/*`
+(PDFs via pdf.js in headless Chrome, docx/xlsx unzipped). The service diagram is the `[data-jcflow]` script (8 steps
+on two lanes, App / Box).
+
+#### 0.B.1 Schemas: where each one lives and how to change it (owner, 2026-10-30)
 
 The owner wants every schema saved on its own (no kicker, headline or captions) in
-`Media/05-AuraWake/Schemi/` and wants any later change to be exact. After ANY change to a schema or its
+`Media/<project>/Schemi/` (05-AuraWake, 01-JustCook) and wants any later change to be exact. After ANY change to a schema or its
 sources: `node deck/build.mjs` (PDF + previews), then `node deck/export_schemas.mjs` (re-exports the folder; add a
 line to its SHOTS/COPIES lists for every new schema), then the §01 log entry. Interaction facts come from the spec
 `C:\Users\rospo\Documents\ClaudeCode\Design\AuraWake\AuraWake - Interaction Design Spec.md` (Italian); change the spec
@@ -261,6 +275,10 @@ deck/blender/aura.py -- <mode> <outdir> <shot> [plastic] [preview]` (run from th
 | 06 Inside, lines | `p05-inside` | `deck/blender/internals.py` (every part, `BOM`, `EXPLODE` offsets, `EXPLODE_PTS` anchors), `line <out> explode`; numbered list `PARTS` in the `[data-explode]` script | parts: internals.py → re-render → copy `iso-explode.png`, paste new anchors into `PT` |
 | 07 Inside, rendered | `p05-inside-real` | same internals + `real_mats`/`real_details`/`real_explode`, `real <out> explode plastic` (transparent) → `assets/aurawake/explode-real.jpg` (flatten #fdfdfc); points in `out/xreal/explode-real.json` | after a re-render paste the JSON points into the `[data-explode-real]` script |
 | 08 Fail-safe | `p05-app` | `[data-failsafe]` script: rows `F` | edit rows (spec §1 p.7, §7.3–7.4) |
+| JustCook 01 Service (app / box) | `p02-system` | `[data-jcflow]` script: steps `N`, lanes, sizes `X0 DX W H` | edit `N` |
+| JustCook 02 Reframing cycles | `p02-ideas` | `cyc` list in the slide HTML (6 cells, last outlined in --pc) | edit the cells |
+| JustCook 03–05 Insights, archetypes, research numbers | `p02-insights`, `p02-framing`, `p02-research` | slide HTML | edit the cells / rows |
+| JustCook 06–07 Course prototype, final design | `p02-prototypes` | `deck/assets/justcook/course-*.png` (Figma Page 1) and site screens | re-export from Figma, same file names |
 
 Product renders (21 views + dawn scene): `real out/blender <shot> plastic [state=…]` per line of
 `deck/out/blender/final-jobs.txt`, exported by `node deck/export_renders.mjs` to
@@ -1238,6 +1256,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   line drawing (points from out/xreal/explode-real.json). Every schema is now also saved on its own, without slide
   text, in Media/05-AuraWake/Schemi/ by `node deck/export_schemas.mjs`; the render export moved to the tracked
   `deck/export_renders.mjs`. New §0.B.1 says where each schema lives and exactly how to change it.
+- **2026-10-30 · LOCAL (71)** · JustCook (02) filled in the PDF: 12 slides after its cover (overview, context, research
+  with the real fridge photos, insights with a translated interview quote, framing with the two archetypes and three
+  principles, the six reframing cycles, a two-lane service diagram, course prototype vs final design, solution, the
+  nudge, brand and launch, outcome with targets). See §0.B.0. Schemas exported to Media/01-JustCook/Schemi/;
+  export_schemas.mjs now takes a folder per entry. PDF 41 pages, 8.8 MB.
 - **2026-10-28 · LOCAL (33)** · LED renders: 3/4 close view of the front corner (the alarm reads), saturated state colours
   (`LED_SAT`: white #fff6ea, night #5f6dff, dawn #ffa938) at LOW emission (1.4; 6 for white) so AgX keeps the hue, plus
   a post glow tinted with the state colour: `node deck/blender/glow.mjs <in.png> <out.jpg> 8 '#5f6dff'` (only the LED's
