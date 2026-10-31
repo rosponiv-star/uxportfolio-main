@@ -243,6 +243,10 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
    full example + a summary of the rest. **Stakeholders: TO REVISIT** (owner did not like the drafts: segmented
    wedges, soft contour bands, petal fields like his HAWC reference; no arrows, primary/secondary/tertiary only).
    Drafts + their HTML in Media/03-Smart Home Ecosystem/Schemi/bozze/stakeholder/. The deck still has the old rings.
+   **Framing to write into the project (owner, 2026-10-31):** the domain modelling (artifact, sequence/flow, physical
+   models) is "the world as it is now": the app does not exist yet, it is PURE research and analysis. Pain points and
+   personas are still analysis of today's domain. Only after them does the work try to solve them with the app. The
+   research copy (PDF and site) must say so; no model may show the app.
 1. **Template built (07–17), waiting for the owner's review.** Then fill it with **01 Smart Home Hub** only when he
    says so. Material: only what is in the report (`Media/03-Smart Home Ecosystem/REPORT FINALE PIG.pdf`: sketches,
    Design Space, flows; owner 2026-10-27) + interfaces still undecided (original report MD3 screens vs the Oct 2026
@@ -1303,6 +1307,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · Sequence/flow draft 2 (owner): the summary shades the "Entering the house" rows with
+  "The example in full on the next page →" and gains ARTIFACTS and TOUCHPOINTS counts beside STEPS (touchpoints in
+  bold, larger); the full board is titled "One of them in full: entering the house." and its caption says the other
+  six are built the same way; each column opens with its touchpoints (large), artifacts and steps. Framing recorded in
+  §0.B 0c: the domain models are "the world as it is now", pure research; the app comes only after pain points and
+  personas. Drafts in Media/…/Schemi/bozze/sequence-flow/bozza-2.
 - **2026-10-31 · LOCAL (75)** · Smart Home Hub sequence/flow model, draft 1 (physical model draft 3 parked: owner
   "andiamo avanti, modificheremo i dettagli successivamente"). Two boards from FigJam 07, B/W strokes: (1) all seven
   models, 18 variants, each a strip of its steps in order (dot = step, icon = artifact, line under = touchpoint, solid tag
