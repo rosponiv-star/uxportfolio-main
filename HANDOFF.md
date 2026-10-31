@@ -1307,6 +1307,13 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · Sequence/flow draft 4 saved as is (owner: "salvalo per ora"). Pain-point board, draft 1
+  (FigJam 10–14): the 16 × 6 matrix in B/W, IDs, translated descriptions, a dot per persona (alias under each name,
+  Noemi and Gianni tagged SECONDARY as in the report), personas count on the right; the board's untitled group row
+  ("Not knowing what is happening at home while away") kept as a small heading over pp04–06; the six tackled (pp02,
+  03, 06, 07, 09, 15 — green on boards 13–14, matching the deck's "6 tackled") as a shaded band with an ink bar, text
+  and count in ink. Caption keeps it "the home as it is today". Flagged to the owner: pp11 speaks of "anyone who has
+  the app", the only pain point that assumes the app. Draft in Media/…/Schemi/bozze/pain-point/bozza-1.
 - **2026-10-31 · LOCAL (75)** · Sequence/flow draft 4 (owner): legend back in the left column (bottom), more air in
   the summary (taller rows and group gaps); the example columns split a head (title, type, touchpoints large, artifacts
   · steps) from the steps below with a gap and a lighter rule; new marks: step text grey, the artifact in ink on a
