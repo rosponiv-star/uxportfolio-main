@@ -18,6 +18,7 @@ PLASTIC = 'plastic' in argv
 GRIDT = 'grid' in argv          # time option 4: a 3×5 dot font on the speaker grille's own grid (pitch, graded dot size)
 SEGS = 'seg' in argv            # time option 1: continuous segments under a thin dead-front window
 COARSE = 'coarse' in argv
+CLOCK = '* 06:30' if 'clock=sun' in argv else '06:30'   # clock=sun: the time shows the next wake-up, ☀ 06:30
 BODY_HEX = next((a.split('=', 1)[1] for a in argv if a.startswith('col=')), '#292a2e')   # graphite body (owner, 2026-10-29: a touch darker)
 GRAIN = float(next((a.split('=', 1)[1] for a in argv if a.startswith('grain=')), '0.25'))  # satin bump on plastic (0.30 → 0.25: a little finer)
 FINE = not (COARSE or SEGS or GRIDT)   # the time (owner, 2026-10-29): fine dot matrix behind ~0.1 mm laser micro-holes
@@ -455,6 +456,8 @@ def group(name, obs, loc=(0, 0, 0)):
 
 # 5×7 dot-matrix digits for the time behind the micro-perforation
 FONT = {'0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
+        '*': ['0001000', '0100010', '0011100', '1011101', '0011100', '0100010', '0001000'],   # ☀ (7×7): the next wake-up, not the time now
+        ' ': ['00', '00', '00', '00', '00', '00', '00'],
         '1': ['00100', '01100', '00100', '00100', '00100', '00100', '01110'],
         '3': ['11111', '00010', '00100', '00010', '00001', '10001', '01110'],
         '4': ['00010', '00110', '01010', '10010', '11111', '00010', '00010'],
@@ -1103,7 +1106,7 @@ def studio(view):
         cyl('usb', 0.0021, 0.5, 'cable', (0, W / 2 + 0.016 + 0.25, MID), axis='Y', seg=48)
         fw = 0.32; tgt = (0, 0.026, TOP / 2); pos = (0, 0.0261, 1)   # a stretch of braided cable shows before the frame cuts it
     elif view == 'time':
-        build_base(with_time=True); fw = 0.11; tgt = (-0.004, -W / 2 + 0.01, MID); pos = (-0.004 + 0.55, -W / 2 - 1.0, MID + 0.32)   # 3/4 on the time
+        build_base(with_time=True, time=CLOCK); fw = 0.11; tgt = (-0.004, -W / 2 + 0.01, MID); pos = (-0.004 + 0.55, -W / 2 - 1.0, MID + 0.32)   # 3/4 on the time
     elif view == 'ports':
         build_base(); fw = 0.11; tgt = (-0.018, W / 2 - 0.01, MID); pos = (-0.018 - 0.55, W / 2 + 1.0, MID + 0.32)   # 3/4 on the back marks
     elif view == 'led':

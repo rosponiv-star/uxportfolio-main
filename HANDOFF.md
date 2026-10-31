@@ -252,6 +252,12 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
 3. Real photos for the Selected projects index and, if wanted, the covers (objects, contexts, devices: not only phones).
 4. Closing slide (contact, thank you) — not built yet. Final check: size < 20 MB, file name, links, typos.
 5. Optional: propose a concrete small physical prototype (Arduino/ESP32) tied to one project.
+7. **AuraWake, left for later (owner, 2026-10-31):** cut the slides down (now cover + 11; decide after all is in);
+   bracelet model with the charging pads on the sensor side (spec says "da modellare"); English proofread of every
+   AuraWake slide against the spec; critical points (item 6). Site: the AuraWake case study is still Coming soon with
+   placeholder text — not now; sources for it: notes/05-aurawake.md, the spec, the Figma file `Y3cach5rXN4CDaQKKvTp27`
+   (SVEGLIA-1: Page 1 = the 2024 originals, dark screens are the final ones, white ones were trials; page "Redesign ·
+   Home" = the Oct 2026 redesign, NOT to be used for now), deck/assets/aurawake/ and Media/05-AuraWake/.
 6. **Critical points in every project (owner, 2026-10-30), to do:** add to each case study, in the PDF and on the
    site, an honest "what did not work" part: problems found in tests (e.g. the Smart Home Hub usability test, the
    JustCook pilot), weak decisions, limits of the design and what the owner would change. It must show self-criticism
@@ -1297,6 +1303,13 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (73)** · AuraWake additions (owner): p05-process after the cover (01 structure: the app's flow
+  cards; 02 the black-and-white trials; 03 the final dark screens; 04 the 2026 rethink), cropped from Figma
+  `Y3cach5rXN4CDaQKKvTp27` Page 1 (assets process-*.jpg); p05-product (persp render + front "☀ 06:30", back, light
+  ring); the app slide shows the original 2024 dark screens (Le tue routine 74:695, Imposta la tua sveglia 62:300,
+  Il tuo sonno 96:130 → assets app-*.png) instead of placeholders. Dot font gains a 7×7 sun and a space; `clock=sun`
+  renders the time close-up as "☀ 06:30" (assets time-sun.jpg). Cover keeps "An alarm with no buttons" (the pairing
+  button is setup-only, not part of the daily interaction: owner agrees). Deferred items saved as PDF to-do #7.
 - **2026-10-30 · LOCAL (73)** · Smart Home Hub (main project 01) planned for the Polimi PDF; owner approved: the
   11-slide template with process at the centre (Overview · Context = stakeholder rings · Research = domain map,
   artifact, sequence/flow and physical models redrawn in deck style WITH small thumbnails of the FigJam originals

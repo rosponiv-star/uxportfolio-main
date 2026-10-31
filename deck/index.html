@@ -603,6 +603,34 @@
      notes/05-aurawake.md + C:\Users\rospo\Documents\ClaudeCode\Design\AuraWake\AuraWake - Interaction Design Spec.md
      (owner: use all of it, whatever its date). Objects = placeholders (owner has an idea for them). data-page = a
      content slide of an additional project: colour and name from the cover, no process bar. -->
+<section class="slide" id="p05-process" data-page>
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1">Process</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">From an app for a 2024 course to a system you sleep with.</p>
+    <div class="aw-proc" style="grid-column: 1 / -1; align-self: end; margin-top: 40px">
+      <figure class="aw-flow"><img src="assets/aurawake/process-flow.jpg" alt="The app's structure as connected cards: access, pairing, routines, sleep quality" /><figcaption><span class="label kick"><span class="n">01</span>2024 · Structure</span><p class="small i2">Onboarding, routines, a 3-step alarm and sleep quality, mapped as flows before any screen.</p></figcaption></figure>
+      <figure class="aw-wire"><img src="assets/aurawake/process-wireframes.jpg" alt="Black-and-white wireframes: login, pairing, sleep quality, routines, settings" /><figcaption><span class="label kick"><span class="n">02</span>2024 · First trials</span><p class="small i2">Black-and-white screens to settle the order: pairing the alarm and the watch, routines, editing them.</p></figcaption></figure>
+      <figure class="aw-hifi"><img src="assets/aurawake/process-hifi.jpg" alt="The final dark screens, from welcome to the morning questionnaire" /><figcaption><span class="label kick"><span class="n">03</span>2024 · Final app</span><p class="small i2">A dark interface for the night: routines on a 24-hour dial, the alarm in three steps, a short questionnaire each morning.</p></figcaption></figure>
+      <div class="aw-next"><span class="label kick"><span class="n">04</span>2026 · Rethought</span><p class="small i2">The same idea redesigned as a product system: the room becomes the interface, the phone only plans. The next pages.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="p05-product" data-page>
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1">The base</p>
+    <p class="h2" style="grid-column: 1 / 9; margin-top: 24px">A quiet graphite block: nothing to press, nothing lit while you sleep.</p>
+    <figure class="aw-hero" style="grid-column: 1 / 9; align-self: end"><img src="assets/aurawake/views/persp.jpg" alt="The AuraWake base in graphite, three-quarter view" /></figure>
+    <div class="aw-details" style="grid-column: 9 / -1; grid-row: 3; align-self: end">
+      <figure><img src="assets/aurawake/time-sun.jpg" alt="Front: the time window showing the next wake-up, sun 06:30; the three charging pins on top" style="object-position: 40% 55%" /><figcaption class="small"><span class="m">Front</span><span class="i3"> · the time; here ☀ 06:30, the next wake-up, not the time now</span></figcaption></figure>
+      <figure><img src="assets/aurawake/views/ports.jpg" alt="Back: USB-C, the pairing button, grilles" style="object-position: 50% 55%" /><figcaption class="small"><span class="m">Back</span><span class="i3"> · USB-C and the pairing button, behind the grille the passive radiator</span></figcaption></figure>
+      <figure><img src="assets/aurawake/views/strip-night.jpg" alt="Underneath: the light ring glowing violet on the nightstand" style="object-position: 50% 62%" /><figcaption class="small"><span class="m">Underneath</span><span class="i3"> · the light ring, violet in the evening</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
 <section class="slide" id="p05-system" data-page>
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
@@ -688,9 +716,9 @@
     <p class="label kick" style="grid-column: 1 / -1">App and safety</p>
     <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">The phone sets the plan. Whatever fails, you still wake up.</p>
     <div class="shots" style="grid-column: 1 / 7; align-self: end; align-items: start; grid-template-columns: repeat(3, minmax(0, 1fr))">
-      <figure><div class="ph-box phone small" style="height: 440px">Screen</div><figcaption><span class="label kick"><span class="n">21:40</span></span><span class="small"><span class="m">Evening</span><br /><span class="i3">Next wake-up and bedtime</span></span></figcaption></figure>
-      <figure><div class="ph-box phone small" style="height: 440px">Screen</div><figcaption><span class="label kick"><span class="n">03:12</span></span><span class="small"><span class="m">Night</span><br /><span class="i3">Dimmed, nothing to do</span></span></figcaption></figure>
-      <figure><div class="ph-box phone small" style="height: 440px">Screen</div><figcaption><span class="label kick"><span class="n">07:10</span></span><span class="small"><span class="m">Morning</span><br /><span class="i3">How you slept</span></span></figcaption></figure>
+      <figure><img class="aw-screen" src="assets/aurawake/app-routine.png" alt="Routines: Work and weekend, each on a 24-hour dial" /><figcaption><span class="label kick"><span class="n">01</span></span><span class="small"><span class="m">Routines</span><br /><span class="i3">Work and weekend, each on a 24-hour dial</span></span></figcaption></figure>
+      <figure><img class="aw-screen" src="assets/aurawake/app-sveglia.png" alt="Set the alarm: Time and days, then light, sound, scent" /><figcaption><span class="label kick"><span class="n">02</span></span><span class="small"><span class="m">Set the alarm</span><br /><span class="i3">Time and days, then light, sound, scent</span></span></figcaption></figure>
+      <figure><img class="aw-screen" src="assets/aurawake/app-sonno.png" alt="Your sleep: Last night, its length and phases" /><figcaption><span class="label kick"><span class="n">03</span></span><span class="small"><span class="m">Your sleep</span><br /><span class="i3">Last night, its length and phases</span></span></figcaption></figure>
     </div>
     <div style="grid-column: 8 / 13; align-self: end">
       <p class="label i3" style="margin-bottom: 16px">What if…</p>
@@ -867,6 +895,21 @@
   .shh-phone { height: 470px; width: auto; max-width: 100%; justify-self: center; display: block; border: 1.5px solid var(--rule-strong); border-radius: 26px; }
   .shh-trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 16px; align-items: end; }
   .shh-trio img { width: auto; max-width: 100%; height: 420px; justify-self: center; display: block; border: 1.5px solid var(--rule-strong); border-radius: 24px; }
+  .aw-proc { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: var(--g); row-gap: 28px; align-items: end; }
+  .aw-proc figure { margin: 0; display: grid; gap: 12px; }
+  .aw-proc img { width: 100%; display: block; border-radius: 4px; }
+  .aw-flow { grid-column: 1 / 4; grid-row: 1 / 4; align-self: start; }
+  .aw-flow img { max-height: 400px; object-fit: cover; object-position: top; }
+  .aw-wire img, .aw-hifi img { height: 190px; object-fit: contain; object-position: left center; }
+  .aw-wire { grid-column: 4 / -1; grid-row: 1; }
+  .aw-hifi { grid-column: 4 / -1; grid-row: 2; }
+  .aw-next { grid-column: 4 / -1; grid-row: 3; display: grid; gap: 8px; padding-top: 16px; border-top: 1px solid var(--rule); }
+  .aw-hero { margin: 0; }
+  .aw-hero img { width: 100%; display: block; mix-blend-mode: multiply; }
+  .aw-details { display: grid; gap: 14px; }
+  .aw-details figure { margin: 0; display: grid; gap: 8px; }
+  .aw-details img { width: 100%; aspect-ratio: 7 / 2; object-fit: cover; display: block; border-radius: 4px; }
+  .aw-screen { width: 100%; height: 440px; object-fit: contain; display: block; border-radius: 28px; }
   .gest { grid-column: span 3; display: grid; gap: 10px; align-content: start; }
   .gest--text { grid-column: span 6; gap: 6px; padding-top: 16px; border-top: 1px solid var(--rule); }
   .gest--text .label { margin-top: 0; }
