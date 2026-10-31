@@ -686,7 +686,7 @@
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1">Light language</p>
     <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">One colour for each moment: the front speaks by day, the ring by night.</p>
-    <div style="grid-column: 1 / -1; align-self: start; margin-top: 56px; display: grid; grid-template-columns: subgrid" data-waves></div>
+    <div style="grid-column: 1 / -1; align-self: start; margin-top: 40px; display: grid; grid-template-columns: subgrid" data-waves></div>
   </div>
 </section>
 
@@ -922,8 +922,15 @@
   .waves--dark .cell { background: #17171d; border-color: #2c2c35; }
   .waves--dark .m { color: #f3f1ea; } .waves--dark .i3 { color: #a9a7a0; }
   .waves--dawn .cell { background: #f5ecdc; }
-  .waves .cell { padding: 14px 20px; gap: 6px; }
-  .waves svg { width: 100%; height: 30px; display: block; overflow: visible; }
+  .waves .cell { padding: 12px 16px 12px 12px; gap: 6px; }
+  .waves .cell:has(.wimg) { display: grid; grid-template-columns: 168px minmax(0, 1fr); column-gap: 16px; align-items: center; }
+  .waves .wtxt { display: grid; gap: 6px; }
+  .waves svg { width: 100%; height: 24px; display: block; overflow: visible; }
+  .wimg { width: 168px; aspect-ratio: 16 / 9; object-fit: cover; display: block; border-radius: 3px; background: #fff; }
+  .wimg--led { object-view-box: inset(28% 22% 8% 22%); }           /* the LED, closer */
+  .wimg--strip { object-view-box: inset(0 8% 32% 8%); }            /* the base and the ring under it */
+  .wfig { margin: 16px 0 0; display: grid; gap: 8px; }
+  .wfig img { width: 100%; aspect-ratio: 3 / 1; object-fit: cover; object-position: 50% 62%; display: block; border-radius: 3px; }
   .whatif > div { display: grid; grid-template-columns: 220px 1fr; column-gap: var(--g); align-items: baseline; padding-block: 16px; }
 </style>
 
@@ -1356,24 +1363,26 @@
     // spec §4.1 (owner, 2026-10-29): one colour per moment of the day; the ring's rows sit on a night ground
     const G = '#6cc48f', RED = '#e0604f', WH = '#efece4';
     const NIGHT = [
-      ['Wind-down', 'Violet as you take the bracelet, dimming with the room', ln('M0 4 C70 4 130 18 200 40 H240', '#8f9aff')],
-      ['Night', 'Off: darkness means all is well', `<line x1="0" x2="240" y1="40" y2="40" stroke="#4a4a55" stroke-width="3" />`],
-      ['Dawn', 'Amber, rising with the lamp; one beat at a palm tap', ln('M0 40 C90 40 150 22 240 4', '#f2b65a')],
-      ['Confirmed', 'One white beat: tomorrow off or on, today off', ln(BEAT, WH)],
+      ['Wind-down', 'Violet as you take the bracelet, dimming with the room', ln('M0 4 C70 4 130 18 200 40 H240', '#8f9aff'), 'strip-night'],
+      ['Night', 'Off: darkness means all is well', `<line x1="0" x2="240" y1="40" y2="40" stroke="#4a4a55" stroke-width="3" />`, 'strip-off'],
+      ['Dawn', 'Amber, rising with the lamp; one beat at a palm tap', ln('M0 40 C90 40 150 22 240 4', '#f2b65a'), 'strip-dawn'],
+      ['Confirmed', 'One white beat: tomorrow off or on, today off', ln(BEAT, WH), 'strip-white'],
     ];
     const COLS = [
       ['Front LED · by day', 'A direct point, read from the door. Off in the dark.', [
-        ['All set', 'Green for 5 s: tonight and tomorrow are ready', ln('M0 40 H50 V8 H170 V40 H240', G)],
-        ['Act', 'Red, slow pulse, until it is solved in the app', ln('M0 40 C15 40 15 8 30 8 C45 8 45 40 60 40 C75 40 75 8 90 8 C105 8 105 40 120 40 C135 40 135 8 150 8 C165 8 165 40 180 40 C195 40 195 8 210 8 C225 8 225 40 240 40', RED)],
-        ['Bedtime', 'Violet breath, 30 min before bed: take the bracelet', ln(BREATH, 'var(--night)')],
-        ['Info', 'White: pairing, updating, charging', ln('M0 40 H16 V28 H176 V40 H240', grey)]]],
+        ['All set', 'Green for 5 s: tonight and tomorrow are ready', ln('M0 40 H50 V8 H170 V40 H240', G), 'led-green'],
+        ['Act', 'Red, slow pulse, until it is solved in the app', ln('M0 40 C15 40 15 8 30 8 C45 8 45 40 60 40 C75 40 75 8 90 8 C105 8 105 40 120 40 C135 40 135 8 150 8 C165 8 165 40 180 40 C195 40 195 8 210 8 C225 8 225 40 240 40', RED), 'led-red'],
+        ['Bedtime', 'Violet breath, 30 min before bed: take the bracelet', ln(BREATH, 'var(--night)'), 'led-night'],
+        ['Info', 'White: pairing, updating, charging', ln('M0 40 H16 V28 H176 V40 H240', grey), 'led-white']]],
       ['Ring underneath · evening to morning', 'Indirect, on the nightstand. Off by day.', NIGHT, 'dark'],
       ['Still in bed at 06:30', 'No snooze: only getting up stops it, or the phone.', [
         ['06:30 · Brighter', 'Light 100%, 5000 K; the sound a little more present', step(0)],
         ['06:35 · Clear sound', 'Clear sound, medium volume', step(1)],
-        ['06:40 · Real alarm', 'On the base and the phone, until you are up', step(2)]], 'dawn'],
+        ['06:40 · Real alarm', 'On the base and the phone, until you are up', step(2)]], 'dawn', ['time', 'The time on the front from 06:00, here 06:30']],
     ];
-    waves.innerHTML = COLS.map(([h, sub, rows, room = '']) => `<div class="wcol"><p class="label kick" style="margin-bottom: 6px">${h}</p><p class="small i3" style="margin-bottom: 14px">${sub}</p><ol class="cells waves waves--${room}">${rows.map(([t, s, svg]) => `<li class="cell"><svg viewBox="0 0 240 44" preserveAspectRatio="xMinYMid meet">${svg}</svg><p class="small"><span class="m">${t}</span><br /><span class="i3">${s}</span></p></li>`).join('')}</ol></div>`).join('');
+    // each state with its render (owner, 2026-10-31): the white-ground studio shots, zoomed on the light that speaks
+    const R = (img) => `<img class="wimg wimg--${img.split('-')[0]}" src="assets/aurawake/views/${img}.jpg" alt="" />`;
+    waves.innerHTML = COLS.map(([h, sub, rows, room = '', fig]) => `<div class="wcol"><p class="label kick" style="margin-bottom: 6px">${h}</p><p class="small i3" style="margin-bottom: 14px">${sub}</p><ol class="cells waves waves--${room}">${rows.map(([t, s, svg, img]) => `<li class="cell">${img ? R(img) : ''}<div class="wtxt"><svg viewBox="0 0 240 44" preserveAspectRatio="xMinYMid meet">${svg}</svg><p class="small"><span class="m">${t}</span><br /><span class="i3">${s}</span></p></div></li>`).join('')}</ol>${fig ? `<figure class="wfig"><img src="assets/aurawake/views/${fig[0]}.jpg" alt="${fig[1]}" /></figure>` : ''}</div>`).join('');
   }
 
   const q = new URLSearchParams(location.search);

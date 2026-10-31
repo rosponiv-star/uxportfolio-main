@@ -294,7 +294,7 @@ deck/blender/aura.py -- <mode> <outdir> <shot> [plastic] [preview]` (run from th
 | 02 One night | `p05-night` | `[data-night]` script: `SEG` time stretches, `lanes` (events / areas / tags) | edit `lanes` values (they follow spec §6) |
 | 03 Scenes ×5 | `p05-scenes` | `deck/blender/bedroom.py`, `real <out> room1…room5`; `ROOM` table = time, lamp, ring, shutter, sky, exposure per frame; captions in the slide | edit `ROOM`/scene, render, convert the PNG to `assets/aurawake/roomN.jpg` (sharp, flatten #000) |
 | 04 Gestures ×4 | `p05-gestures` | `line <out> g1…g4` (`build_gesture`, hands from `deck/blender/hands/*.obj` made by `hand_mpfb.py` with MPFB2) + the `[data-gest]` script (room ground, ring glow, arrows, 3 s ring, LED) | poses: `POSES` in hand_mpfb.py → run it → re-render g1–g4 → copy to assets; framing: `cy` offset in `line()`; overlays: the script (ground anchor `gx, gy` from anchors.json) |
-| 05 Light language | `p05-light` | `[data-waves]` script: `COLS` (front LED / ring / ladder rows with their waveforms) | edit rows (spec §4.1) |
+| 05 Light language | `p05-light` | `[data-waves]` script: `COLS` (front LED / ring / ladder rows with their waveforms; 4th item of a row = its render in `assets/aurawake/views/`, `led-*` zoomed on the LED, `strip-*` on the ring, via `.wimg--led/--strip` object-view-box; the ladder column's 5th item = one render under it, `time.jpg`) | edit rows (spec §4.1); new renders: aura.py `real … led state=<green|red|night|white>` or `strip state=<night|dawn|white|off>` |
 | 06 Inside, lines | `p05-inside` | `deck/blender/internals.py` (every part, `BOM`, `EXPLODE` offsets, `EXPLODE_PTS` anchors), `line <out> explode`; numbered list `PARTS` in the `[data-explode]` script | parts: internals.py → re-render → copy `iso-explode.png`, paste new anchors into `PT` |
 | 07 Inside, rendered | `p05-inside-real` | same internals + `real_mats`/`real_details`/`real_explode`, `real <out> explode plastic` (transparent) → `assets/aurawake/explode-real.jpg` (flatten #fdfdfc); points in `out/xreal/explode-real.json` | after a re-render paste the JSON points into the `[data-explode-real]` script |
 | 08 Fail-safe | `p05-app` | `[data-failsafe]` script: rows `F` | edit rows (spec §1 p.7, §7.3–7.4) |
@@ -1303,6 +1303,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (76)** · p05-light: every cell shows its render (owner: "metti i render con la luce
+  corrispettiva… usa i render già fatti, quelli su sfondo bianco"): All set/Act/Bedtime/Info = views/led-green,
+  led-red, led-night, led-white (zoomed on the LED); Wind-down/Night/Dawn/Confirmed = strip-night, strip-off,
+  strip-dawn, strip-white; the 06:30 ladder has no per-minute render, so one shot (views/time.jpg) sits under its
+  three cells. A new close-up 'glow' scene in Blender was tried and dropped for the existing renders.
 - **2026-10-31 · LOCAL (73)** · AuraWake additions (owner): p05-process after the cover (01 structure: the app's flow
   cards; 02 the black-and-white trials; 03 the final dark screens; 04 the 2026 rethink), cropped from Figma
   `Y3cach5rXN4CDaQKKvTp27` Page 1 (assets process-*.jpg); p05-product (persp render + front "☀ 06:30", back, light
