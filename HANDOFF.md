@@ -1307,6 +1307,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · PDF research complete (owner: the index and the artifact model were missing): context →
+  research index (caption now says "the home as it is today, before any app" and that touchpoints come from service
+  design) → stakeholders → artifact model (approved) → sequence summary + entering → physical model ×3 → pain points
+  → personas + Giorgia → insights. The old p01-research slide (domain tree + FigJam thumbnails + "8 sequence models",
+  wrong: 7) was replaced, its facts now live in the index and the boards. 53 pages.
 - **2026-10-31 · LOCAL (75)** · PDF tidied (owner: "sistema il pdf e metti anche lo schema stakeholders"): order is now
   context → stakeholders (draft 3 "campi", still TO REVISIT) → research (domain map + FigJam thumbnails) → physical
   model ×3 → sequence summary + entering → pain points → personas + Giorgia → insights. Duplicates removed: the old
