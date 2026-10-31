@@ -1307,6 +1307,14 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · Personas, draft 1 (report pp. 25–29, FigJam 09 portraits in B/W): (1) the six side by
+  side under PRIMARY USERS | SECONDARY USERS (same split as the pain-point board), each with name, alias, the report's
+  one-line summary (p. 29), and its pain-point IDs with the tackled ones in the accent, underlined, plus "N · M
+  tackled"; Giorgia shaded with an ink top rule and "Example · in full on the next page →" (owner chose Giorgia);
+  (2) Giorgia in full: portrait, alias, PRIMARY USER, her story translated from the card with its bold phrases kept,
+  her 8 pain points with the 5 tackled in the accent band. Inaccuracies flagged: the persona cards and the pain-point
+  table disagree on three marks (table has pp03 for Giorgia and for Franco, the cards don't; Noemi's card has pp15,
+  the table doesn't). The boards follow the table. Drafts in …/bozze/personas/bozza-1.
 - **2026-10-31 · LOCAL (75)** · Pain-point board draft 3, approved for now (owner): "Why six personas" also says the
   owner's reason: everyone has a home, so anyone is a good persona; the team wrote as many as it took to cover the
   needs of something everybody lives in. Next: personas. Draft in …/bozze/pain-point/bozza-3.
