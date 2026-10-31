@@ -1307,6 +1307,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · Pain-point board draft 2 (owner): pp11 reworded without the app ("Not wanting to give
+  full control of the home to just anyone"); the six tackled in the accent (--signal #3d5a73: tinted band, bar, ID,
+  dots and count); persona columns regrouped PRIMARY USERS (Marco, Giorgia, Valeria, Franco, solid rule) | SECONDARY
+  USERS (Noemi, Gianni, dashed rule) with a dashed divider down the table, names and aliases aligned; "Why six
+  personas" note from the report (life of primary users tied to the secondary ones; leaving them out would narrow the
+  view); the pp04–06 group is a hairline box with its title, so its end is visible. Draft in …/bozze/pain-point/bozza-2.
 - **2026-10-31 · LOCAL (75)** · Sequence/flow draft 4 saved as is (owner: "salvalo per ora"). Pain-point board, draft 1
   (FigJam 10–14): the 16 × 6 matrix in B/W, IDs, translated descriptions, a dot per persona (alias under each name,
   Noemi and Gianni tagged SECONDARY as in the report), personas count on the right; the board's untitled group row
