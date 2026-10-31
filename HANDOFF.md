@@ -1307,6 +1307,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · Pain-point board draft 3, approved for now (owner): "Why six personas" also says the
+  owner's reason: everyone has a home, so anyone is a good persona; the team wrote as many as it took to cover the
+  needs of something everybody lives in. Next: personas. Draft in …/bozze/pain-point/bozza-3.
 - **2026-10-31 · LOCAL (75)** · Pain-point board draft 2 (owner): pp11 reworded without the app ("Not wanting to give
   full control of the home to just anyone"); the six tackled in the accent (--signal #3d5a73: tinted band, bar, ID,
   dots and count); persona columns regrouped PRIMARY USERS (Marco, Giorgia, Valeria, Franco, solid rule) | SECONDARY
