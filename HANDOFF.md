@@ -1307,6 +1307,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · Sequence/flow draft 3 (owner: readability, hierarchy, spacing): the legend is a key row
+  ABOVE the table on both boards; the summary gains column heads (model and variant, steps in order, steps, artifacts,
+  touchpoints in ink), air between groups, no inner row rules, the step rail breaks around each mark (icons have no
+  white backing), and the example group is a shaded band with an ink bar and "Example · in full on the next page →"
+  next to its title, away from the numbers. Drafts in Media/…/Schemi/bozze/sequence-flow/bozza-3.
 - **2026-10-31 · LOCAL (75)** · Sequence/flow draft 2 (owner): the summary shades the "Entering the house" rows with
   "The example in full on the next page →" and gains ARTIFACTS and TOUCHPOINTS counts beside STEPS (touchpoints in
   bold, larger); the full board is titled "One of them in full: entering the house." and its caption says the other
