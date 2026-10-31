@@ -1303,6 +1303,14 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · Smart Home Hub sequence/flow model, draft 1 (physical model draft 3 parked: owner
+  "andiamo avanti, modificheremo i dettagli successivamente"). Two boards from FigJam 07, B/W strokes: (1) all seven
+  models, 18 variants, each a strip of its steps in order (dot = step, icon = artifact, line under = touchpoint, solid tag
+  = Sequence, dashed = Flow, step count); (2) "Entering the house" in full, 4 columns, artifacts highlighted grey and
+  touchpoints underlined, as on the board. Highlights/underlines read off the board one by one (they are not always
+  consistent, e.g. the alarm is a touchpoint for burglars but not for fire: kept as drawn). Pain-point tags (pp#) and
+  kept/left out stay for the coherence board. Inaccuracy: the deck says "8 sequence and flow models", the board and the
+  report list 7. Files in Media/03-Smart Home Ecosystem/Schemi/bozze/sequence-flow/bozza-1.
 - **2026-10-31 · LOCAL (75)** · Smart Home Hub physical model, draft 3 (owner's notes): smaller bedroom (night wing
   ends at x=15.5, patio beside it), no grass/trees over the terrace, Kenney CC0 low-poly furniture/bath/car kits
   (`deck/blender/assets/`, git-ignored), chairs facing the table, darker people with outlines, sharper renders
