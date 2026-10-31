@@ -26,3 +26,4 @@ Media/
 
 # portfolio deck build output (regenerate with: node deck/build.mjs)
 deck/out/
+deck/blender/assets/

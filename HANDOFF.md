@@ -1303,6 +1303,14 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · Smart Home Hub physical model, draft 3 (owner's notes): smaller bedroom (night wing
+  ends at x=15.5, patio beside it), no grass/trees over the terrace, Kenney CC0 low-poly furniture/bath/car kits
+  (`deck/blender/assets/`, git-ignored), chairs facing the table, darker people with outlines, sharper renders
+  (`deck/out/house4`). Network overlay split into 4 line kinds (by hand / command at a distance / device triggers the
+  next / sees or warns), white halos, lanes for overlapping runs, bigger pins and labels, zoomed on the house. Three
+  boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
+  outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
+  session scratchpad.
 - **2026-10-31 · LOCAL (76)** · p05-light: every cell shows its render (owner: "metti i render con la luce
   corrispettiva… usa i render già fatti, quelli su sfondo bianco"): All set/Act/Bedtime/Info = views/led-green,
   led-red, led-night, led-white (zoomed on the LED); Wind-down/Night/Dawn/Confirmed = strip-night, strip-off,
