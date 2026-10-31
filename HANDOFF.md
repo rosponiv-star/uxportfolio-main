@@ -1307,6 +1307,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · All Smart Home Hub boards put in the PDF at once (owner, credits running out): ten
+  full-bleed image slides before p01-insights (physical model cut/top/views, sequence summary + entering example,
+  pain points, personas + Giorgia, coherence + guests example), PNGs in deck/assets/smarthome/schemi/. Coherence
+  draft 1 (report pp. 39–47, 130–135): 7 models with pp status (solved / partly / not) and KEPT vs LEFT OUT; example =
+  opening the door to guests, model steps numbered 1–4 against the intercom screens 18 and 20. Still to do: proper
+  slide integration (one example + summary, replace the old shh boards), export_schemas.mjs, stakeholders redo.
 - **2026-10-31 · LOCAL (75)** · Pain points vs persona cards settled (owner): Giorgia keeps pp03 (table right); Franco
   loses pp03 (he is home most of the time: the table was wrong), so pp03 now has 4 personas; Noemi has no pp15 (her
   card was wrong). Fixed on the pain-point board (bozza-4), the personas board (bozza-2) and the deck heat map
