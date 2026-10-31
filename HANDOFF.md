@@ -1307,6 +1307,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · Pain points vs persona cards settled (owner): Giorgia keeps pp03 (table right); Franco
+  loses pp03 (he is home most of the time: the table was wrong), so pp03 now has 4 personas; Noemi has no pp15 (her
+  card was wrong). Fixed on the pain-point board (bozza-4), the personas board (bozza-2) and the deck heat map
+  (p01-insights data). Why only six were tackled (owner): little time for the project, so only the highest
+  priorities, ranked by how many personas share a pain point and by the domain analysis; now in the pain-point caption.
 - **2026-10-31 · LOCAL (75)** · Personas, draft 1 (report pp. 25–29, FigJam 09 portraits in B/W): (1) the six side by
   side under PRIMARY USERS | SECONDARY USERS (same split as the pain-point board), each with name, alias, the report's
   one-line summary (p. 29), and its pain-point IDs with the tackled ones in the accent, underlined, plus "N · M
