@@ -1307,6 +1307,7 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-10-31 · LOCAL (75)** · Coherence boards taken out of the PDF (owner); drafts stay in …/bozze/coerenza/bozza-1.
 - **2026-10-31 · LOCAL (75)** · All Smart Home Hub boards put in the PDF at once (owner, credits running out): ten
   full-bleed image slides before p01-insights (physical model cut/top/views, sequence summary + entering example,
   pain points, personas + Giorgia, coherence + guests example), PNGs in deck/assets/smarthome/schemi/. Coherence
