@@ -1307,6 +1307,7 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-11-01 · LOCAL (75)** · Originals pages for stakeholders and personas removed (owner); the others stay.
 - **2026-11-01 · LOCAL (75)** · After each Smart Home Hub schema, a page of the originals (owner): an ink bar on top
   naming the schema ("The original boards · FigJam and report, 2025"), then 4 shots 2 × 2 with captions (`.orig__bar`,
   `.orig__grid` in deck.css; images resized into deck/assets/smarthome/orig/, fj-NN = FigJam board NN, rp-NN = report
