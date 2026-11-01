@@ -1307,6 +1307,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-11-01 · LOCAL (75)** · After each Smart Home Hub schema, a page of the originals (owner): an ink bar on top
+  naming the schema ("The original boards · FigJam and report, 2025"), then 4 shots 2 × 2 with captions (`.orig__bar`,
+  `.orig__grid` in deck.css; images resized into deck/assets/smarthome/orig/, fj-NN = FigJam board NN, rp-NN = report
+  page NN). Picks: index = whole board, domain map, report p.12, design brief p.31; stakeholders = report pp.8–10 + 31;
+  artifact = FigJam 01, 03, 04 + p.14; sequence = FigJam 06, 07 + pp.16–17; physical = FigJam 05, 08, p.21, whole
+  board; pain points = FigJam 10, 13, 14 + p.23; personas = FigJam 09 + pp.25–27. PDF 60 pages.
 - **2026-10-31 · LOCAL (75)** · PDF research complete (owner: the index and the artifact model were missing): context →
   research index (caption now says "the home as it is today, before any app" and that touchpoints come from service
   design) → stakeholders → artifact model (approved) → sequence summary + entering → physical model ×3 → pain points

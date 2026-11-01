@@ -232,3 +232,12 @@ a { color: inherit; text-decoration: none; }
   pointer-events: none;
 }
 .show-grid .frame { outline: 1px dashed rgb(230 40 90 / 0.5); }
+
+/* Smart Home Hub: the original boards behind each redrawn schema, 2 × 2 under a bar that names them */
+.orig__bar { position: absolute; left: 0; right: 0; top: 0; height: 72px; padding: 0 96px; display: flex; align-items: center; justify-content: space-between; background: var(--ink); color: var(--paper); }
+.orig__bar b { font-size: 22px; font-weight: 500; }
+.orig__bar span { font-size: 14px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; opacity: .72; }
+.orig__grid { position: absolute; left: 96px; right: 96px; top: 100px; bottom: 100px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 24px 32px; }
+.orig__grid figure { margin: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 10px; min-height: 0; }
+.orig__grid img { width: 100%; height: 100%; object-fit: contain; background: #f2f1ed; border-radius: 4px; min-height: 0; }
+.orig__grid figcaption { font-size: 15px; color: #6b6b65; }
