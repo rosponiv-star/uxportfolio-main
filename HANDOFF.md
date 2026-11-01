@@ -1392,6 +1392,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-01 · LOCAL (77)** · AuraWake app screens rethought after Silvia Gori's portfolio (owner: "grandi con
+  descrizioni"): three slides p05-app-setup / p05-app-plan / p05-app-morning, each with 3 big phones (640 px, a dark
+  CSS frame) numbered 01–03 and the matching notes in cols 10–12 (`.aw-phones`, `.aw-notes`). Screens = the original
+  2024 dark frames from Figma `Y3cach5rXN4CDaQKKvTp27` Page 1: welcome 52:32, pair-base 56:103, pair-watch 56:407,
+  routine 74:695, sveglia 62:300, graduale 74:805, reflect 125:296, questions 125:342, sonno 96:130 (assets
+  app-*.png, 440×956). Notes only say what the screens show. p05-app keeps the fail-safe alone (kicker Safety).
 - **2026-10-31 · LOCAL (76)** · p05-light: every cell shows its render (owner: "metti i render con la luce
   corrispettiva… usa i render già fatti, quelli su sfondo bianco"): All set/Act/Bedtime/Info = views/led-green,
   led-red, led-night, led-white (zoomed on the LED); Wind-down/Night/Dawn/Confirmed = strip-night, strip-off,
