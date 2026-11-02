@@ -964,12 +964,11 @@
   .solx--iphone img { border: 0; border-radius: 0; }   /* AuraWake: the Apple iPhone 16 Pro Max frame is in the image (Figma, iOS 26 kit) */
   /* light states (owner, 2026-11-02): cut-out renders (assets/aurawake/lights, transparent), the whole base in view */
   .wcol { display: flex; flex-direction: column; }
-  .wcol .waves { grid-auto-rows: 1fr; }
+  .wcol .waves { grid-auto-rows: 1fr; flex: 1; }
+  .waves--dawn .cell:has(.wimg) { grid-template-columns: 224px minmax(0, 1fr); }
+  .waves--dawn .wimg { width: 224px; height: 104px; }   /* the flat front: wider than tall */   /* the three columns end level; the 06:30 ladder has three taller rows */
   .wimg { width: 176px; height: 104px; object-fit: contain; display: block; }
   .waves--dark .wimg { background: radial-gradient(closest-side, rgb(255 255 255 / .16), rgb(255 255 255 / 0)); }   /* a soft light behind the graphite: no black on black */
-  .wfig { margin: 16px 0 0; flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
-  .wfig__pic { flex: 1 1 0; min-height: 0; position: relative; border-radius: 3px; overflow: hidden; background: #f5ecdc; }
-  .wfig img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 6px 10px; box-sizing: border-box; display: block; }
   .whatif > div { display: grid; grid-template-columns: 220px 1fr; column-gap: var(--g); align-items: baseline; padding-block: 16px; }
 </style>
 
@@ -1419,13 +1418,13 @@
         ['Info', 'White: pairing, updating, charging', ln('M0 40 H16 V28 H176 V40 H240', grey), 'led-white']]],
       ['Ring underneath · evening to morning', 'Indirect, on the nightstand. Off by day.', NIGHT, 'dark'],
       ['Still in bed at 06:30', 'No snooze: only getting up stops it, or the phone.', [
-        ['06:30 · Brighter', 'Light 100%, 5000 K; the sound a little more present', step(0)],
-        ['06:35 · Clear sound', 'Clear sound, medium volume', step(1)],
-        ['06:40 · Real alarm', 'On the base and the phone, until you are up', step(2)]], 'dawn', ['time', '06:30 on the front, the ring amber below, the LED off']],
+        ['06:30 · Brighter', 'Light 100%, 5000 K; the sound a little more present', step(0), 'wake-0630'],
+        ['06:35 · Clear sound', 'Clear sound, medium volume', step(1), 'wake-0635'],
+        ['06:40 · Real alarm', 'On the base and the phone, until you are up', step(2), 'wake-0640']], 'dawn'],
     ];
     // each state with its render (owner, 2026-11-02): cut-out studio shots (deck/export_lights.mjs → assets/aurawake/lights)
     const R = (img) => `<img class="wimg wimg--${img.split('-')[0]}" src="assets/aurawake/lights/${img}.png" alt="" />`;
-    waves.innerHTML = COLS.map(([h, sub, rows, room = '', fig]) => `<div class="wcol"><p class="label kick" style="margin-bottom: 6px">${h}</p><p class="small i3" style="margin-bottom: 14px">${sub}</p><ol class="cells waves waves--${room}">${rows.map(([t, s, svg, img]) => `<li class="cell">${img ? R(img) : ''}<div class="wtxt"><svg viewBox="0 0 240 44" preserveAspectRatio="xMinYMid meet">${svg}</svg><p class="small"><span class="m">${t}</span><br /><span class="i3">${s}</span></p></div></li>`).join('')}</ol>${fig ? `<figure class="wfig"><div class="wfig__pic"><img src="assets/aurawake/lights/${fig[0]}.png" alt="${fig[1]}" /></div><figcaption class="small i3">${fig[1]}</figcaption></figure>` : ''}</div>`).join('');
+    waves.innerHTML = COLS.map(([h, sub, rows, room = '']) => `<div class="wcol"><p class="label kick" style="margin-bottom: 6px">${h}</p><p class="small i3" style="margin-bottom: 14px">${sub}</p><ol class="cells waves waves--${room}">${rows.map(([t, s, svg, img]) => `<li class="cell">${img ? R(img) : ''}<div class="wtxt"><svg viewBox="0 0 240 44" preserveAspectRatio="xMinYMid meet">${svg}</svg><p class="small"><span class="m">${t}</span><br /><span class="i3">${s}</span></p></div></li>`).join('')}</ol></div>`).join('');
   }
 
   const q = new URLSearchParams(location.search);

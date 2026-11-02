@@ -302,7 +302,7 @@ deck/blender/aura.py -- <mode> <outdir> <shot> [plastic] [preview]` (run from th
 | 02 One night | `p05-night` | `[data-night]` script: `SEG` time stretches, `lanes` (events / areas / tags) | edit `lanes` values (they follow spec §6) |
 | 03 Scenes ×5 | `p05-scenes` | `deck/blender/bedroom.py`, `real <out> room1…room5`; `ROOM` table = time, lamp, ring, shutter, sky, exposure per frame; captions in the slide | edit `ROOM`/scene, render, convert the PNG to `assets/aurawake/roomN.jpg` (sharp, flatten #000) |
 | 04 Gestures ×4 | `p05-gestures` | `line <out> g1…g4` (`build_gesture`, hands from `deck/blender/hands/*.obj` made by `hand_mpfb.py` with MPFB2) + the `[data-gest]` script (room ground, ring glow, arrows, 3 s ring, LED) | poses: `POSES` in hand_mpfb.py → run it → re-render g1–g4 → copy to assets; framing: `cy` offset in `line()`; overlays: the script (ground anchor `gx, gy` from anchors.json) |
-| 05 Light language | `p05-light` | `[data-waves]` script: `COLS` (front LED / ring / ladder rows with their waveforms; 4th item of a row = its cut-out in `assets/aurawake/lights/*.png`; the ladder column's 5th item = `lights/time.png`, filling the rest of the column) | edit rows (spec §4.1); cut-outs: `node deck/export_lights.mjs` (LED shots = aura.py `real deck/out/blender led plastic wide state=<green|red|night|white>`; ring = `strip plastic state=…`) |
+| 05 Light language | `p05-light` | `[data-waves]` script: `COLS` (front LED / ring / 06:30 ladder rows with their waveforms; 4th item of a row = its cut-out in `assets/aurawake/lights/*.png`; all three columns have the same structure and end level) | edit rows (spec §4.1); cut-outs: `node deck/export_lights.mjs` (LED = aura.py `real deck/out/blender led plastic wide state=…`; ring = `strip plastic state=…`; ladder = `front plastic ledoff showtime ring=dawn clock=06:35`) |
 | 06 Inside, lines | `p05-inside` | `deck/blender/internals.py` (every part, `BOM`, `EXPLODE` offsets, `EXPLODE_PTS` anchors), `line <out> explode`; numbered list `PARTS` in the `[data-explode]` script | parts: internals.py → re-render → copy `iso-explode.png`, paste new anchors into `PT` |
 | 07 Inside, rendered | `p05-inside-real` | same internals + `real_mats`/`real_details`/`real_explode`, `real <out> explode plastic` (transparent) → `assets/aurawake/explode-real.jpg` (flatten #fdfdfc); points in `out/xreal/explode-real.json` | after a re-render paste the JSON points into the `[data-explode-real]` script |
 | 08 Fail-safe | `p05-app` | `[data-failsafe]` script: rows `F` | edit rows (spec §1 p.7, §7.3–7.4) |
@@ -1434,6 +1434,10 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-02 · LOCAL (84)** · Owner: light slide "più appealing, simmetrica, ordinata", no yellow box: the picture
+  under the third column is gone; each ladder row now has its own flat front (time 06:30 / 06:35 / 06:40 lit, ring amber,
+  LED off), so the three columns share one structure and end level. aura.py: `clock=HH:MM` (any time; `clock=sun` stays
+  ☀ 06:30) and dot-font glyphs 5, 7, 9 added. PDF 66 pages, 18.22 MB.
 - **2026-11-02 · LOCAL (83)** · Owner: the picture under the light slide's third column is the flat front with the time
   lit, the front LED off and the ring amber below (the morning). aura.py new flags for studio shots: `showtime` (the time
   on any view) and `ring=<night|dawn|white>` (the ring lit on any view): `real deck/out/blender front plastic ledoff

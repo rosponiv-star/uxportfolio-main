@@ -18,7 +18,8 @@ PLASTIC = 'plastic' in argv
 GRIDT = 'grid' in argv          # time option 4: a 3×5 dot font on the speaker grille's own grid (pitch, graded dot size)
 SEGS = 'seg' in argv            # time option 1: continuous segments under a thin dead-front window
 COARSE = 'coarse' in argv
-CLOCK = '* 06:30' if 'clock=sun' in argv else '06:30'   # clock=sun: the time shows the next wake-up, ☀ 06:30
+_CK = next((a.split('=', 1)[1] for a in argv if a.startswith('clock=')), '')
+CLOCK = '* 06:30' if _CK == 'sun' else (_CK or '06:30')   # clock=sun: ☀ 06:30 (the next wake-up); clock=HH:MM: that time   # clock=sun: the time shows the next wake-up, ☀ 06:30
 BODY_HEX = next((a.split('=', 1)[1] for a in argv if a.startswith('col=')), '#292a2e')   # graphite body (owner, 2026-10-29: a touch darker)
 GRAIN = float(next((a.split('=', 1)[1] for a in argv if a.startswith('grain=')), '0.25'))  # satin bump on plastic (0.30 → 0.25: a little finer)
 FINE = not (COARSE or SEGS or GRIDT)   # the time (owner, 2026-10-29): fine dot matrix behind ~0.1 mm laser micro-holes
@@ -467,6 +468,9 @@ FONT = {'0': ['01110', '10001', '10011', '10101', '11001', '10001', '01110'],
         '3': ['11111', '00010', '00100', '00010', '00001', '10001', '01110'],
         '4': ['00010', '00110', '01010', '10010', '11111', '00010', '00010'],
         '6': ['00110', '01000', '10000', '11110', '10001', '10001', '01110'],
+        '5': ['11111', '10000', '11110', '00001', '00001', '10001', '01110'],
+        '7': ['11111', '00001', '00010', '00100', '01000', '01000', '01000'],
+        '9': ['01110', '10001', '10001', '01111', '00001', '00010', '01100'],
         '2': ['01110', '10001', '00001', '00010', '00100', '01000', '11111'],
         'O': ['01110', '10001', '10001', '10001', '10001', '10001', '01110'],
         'F': ['11111', '10000', '10000', '11110', '10000', '10000', '10000'],
@@ -1203,7 +1207,7 @@ def real():
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
-    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-wide" if 'wide' in argv else ""}{"-ledoff" if 'ledoff' in argv else ""}{"-time" if 'showtime' in argv else ""}{"-ring" + RING if RING else ""}{"-plastic" if PLASTIC else ""}{"-coarse" if COARSE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-wide" if 'wide' in argv else ""}{"-ledoff" if 'ledoff' in argv else ""}{"-time" + CLOCK.replace(':', '').replace('* ', 'sun') if 'showtime' in argv else ""}{"-ring" + RING if RING else ""}{"-plastic" if PLASTIC else ""}{"-coarse" if COARSE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
 # ---------------------------------------------------------------------------------------------------------------
