@@ -1307,6 +1307,10 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-11-02 · LOCAL (75)** · New p01-flows after the 2 × 2 (owner): "PP06 in the app, factor by factor." Left, the 7
+  PP06 happiness factors from the report (pp. 61–62) with the faces of the personas each one serves (Marco; Giorgia;
+  Giorgia; Giorgia + Franco; Marco + Giorgia + Franco; Marco; Noemi) and the screen that carries it; right, the UX flow:
+  home (03), one room (05), left-on notice (13), history (14). Faces in deck/assets/smarthome/faces/.
 - **2026-11-02 · LOCAL (75)** · Concepts and happiness factors are per pain point × persona (owner), now in steps 02 and 04. The 2 × 2 scans are re-made as white-page scans (pixel ÷ blurred background, levels, gamma) and fill their cells (`.quad` columns 712px | 1fr, object-fit cover); boards sit on their own board colour.
 - **2026-11-02 · LOCAL (75)** · Process (owner): step 03 checks that a solution to one pain point does not get in another persona's way; step 04 says the boards split solutions into primary/secondary and stamped them solved or not (primary = must solve → happiness factors; secondary = welcome, or solved indirectly by other pain points or by the primary ones). Title shortened to "Five steps for each pain point tackled."
 - **2026-11-02 · LOCAL (75)** · Process step 03 also names the user story under each persona on the design space, in its fixed format "As …, I want …, so that …" (owner).
