@@ -1307,6 +1307,10 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-11-02 · LOCAL (75)** · PP06 followed start to end (owner), three slides after p01-process: p01-pp06 = the
+  analysis (report p. 50: need for control and peace of mind; Marco, Giorgia, Noemi, Franco with faces and one line);
+  p01-ideas 2 × 2 now all PP06 = Marco·Giorgia concept (p. 52) + board (p. 58), Franco·Noemi concept (p. 53) + board
+  (p. 59), white scans; p01-flows = happiness factors with personas + UX flow. PP02 pair removed.
 - **2026-11-02 · LOCAL (75)** · New p01-flows after the 2 × 2 (owner): "PP06 in the app, factor by factor." Left, the 7
   PP06 happiness factors from the report (pp. 61–62) with the faces of the personas each one serves (Marco; Giorgia;
   Giorgia; Giorgia + Franco; Marco + Giorgia + Franco; Marco; Noemi) and the screen that carries it; right, the UX flow:
