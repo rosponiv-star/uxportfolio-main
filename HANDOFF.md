@@ -1434,6 +1434,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-02 · LOCAL (78)** · AuraWake app screens re-laid out like Smart Home Hub's solution slides (`.solx`,
+  black `.quad__bar` with the title and "2024 screens · Figma", no frame or h2): p05-app-setup (welcome, pair alarm,
+  pair watch, sign up 59:269), p05-app-plan (routines, time and days, falling asleep 73:462, waking up), p05-app-morning
+  (3 columns: reflect, questions, sleep). Screens now `assets/aurawake/app/NN-name.jpg` (sharp, mozjpeg q84, 440×956:
+  the Figma frames' native width, not upscaled to 720); the old app-*.png removed; `.aw-phones/.aw-notes` CSS dropped.
+  No MD3-style notes (no real design-system fact to add). PDF 68 pages, 18.94 MB.
 - **2026-11-01 · LOCAL (77)** · AuraWake app screens rethought after Silvia Gori's portfolio (owner: "grandi con
   descrizioni"): three slides p05-app-setup / p05-app-plan / p05-app-morning, each with 3 big phones (640 px, a dark
   CSS frame) numbered 01–03 and the matching notes in cols 10–12 (`.aw-phones`, `.aw-notes`). Screens = the original
