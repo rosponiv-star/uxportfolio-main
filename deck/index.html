@@ -650,16 +650,38 @@
 <section class="slide slide--color pcover" id="p05" style="--pc: #8f6519" data-num="05" data-kind="additional" data-title="AuraWake">
   <div class="cols" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
   <p class="pcover__num" aria-hidden="true">05</p>
+  <!-- cover drawing (owner, 2026-11-02): the base with the bracelet docked, outline + a hint of ochre shading,
+       ultra-light construction lines; node deck/export_cover.mjs → assets/aurawake/cover-sketch.png -->
+  <svg class="aw-cover aw-cover--sketch" viewBox="0 0 1920 1080" aria-label="The AuraWake base with the bracelet on its pins, drawn in outline, ☀ 06:30 on the front">
+    <line x1="965.7" y1="485.5" x2="1553.6" y2="554.9" class="g" />
+    <line x1="1487.2" y1="560.4" x2="1863.4" y2="450.9" class="g" />
+    <line x1="1864.6" y1="463.8" x2="1309.8" y2="408.1" class="g" />
+    <line x1="1376.7" y1="404.0" x2="966.3" y2="497.0" class="g" />
+    <line x1="998.8" y1="455.4" x2="1003.8" y2="736.8" class="g" />
+    <line x1="1520.0" y1="516.9" x2="1518.7" y2="815.2" class="g" />
+    <line x1="1831.3" y1="426.4" x2="1826.7" y2="699.8" class="g" />
+    <line x1="969.6" y1="697.7" x2="1552.5" y2="786.3" class="g" />
+    <line x1="1487.0" y1="793.1" x2="1859.1" y2="653.9" class="g" />
+    <line x1="1519.8" y1="550.9" x2="1758.2" y2="579.1" class="g g--far" />
+    <line x1="1518.9" y1="781.2" x2="1756.2" y2="817.2" class="g g--far" />
+    <line x1="1830.7" y1="460.4" x2="2069.5" y2="484.4" class="g g--far" />
+    <line x1="1830.7" y1="460.4" x2="2061.2" y2="393.3" class="g g--far" />
+    <line x1="1827.2" y1="665.8" x2="2052.0" y2="581.7" class="g g--far" />
+    <line x1="999.4" y1="489.4" x2="1830.7" y2="460.4" class="g g--far" />
+    <line x1="1519.8" y1="550.9" x2="1343.6" y2="411.5" class="g g--far" />
+    <image href="assets/aurawake/cover-sketch.png" x="847.4" y="206.0" width="1152.0" height="648.0" />
+  </svg>
   <header class="chrome"><span class="chrome__sec"><span class="n">05</span>Additional project</span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto auto 1fr auto">
     <p class="label muted" style="grid-column: 1 / -1">Human–Computer Interaction 1 · University of Trento</p>
     <h2 class="display" style="grid-column: 1 / 11; margin-top: 24px; font-size: 136px">AuraWake</h2>
     <p class="lead" style="grid-column: 1 / 7; margin-top: 32px">An alarm with no buttons that wakes you gradually, with light, sound, scent and daylight, at the lightest moment of your sleep.</p>
     <dl class="pmeta rule" style="grid-column: 1 / 9; grid-row: 5">
-      <div><dt class="label muted">Type</dt><dd class="">Gradual alarm</dd></div><div><dt class="label muted">Year</dt><dd class="">2024</dd></div><div><dt class="label muted">Role</dt><dd class="">Concept and interface designer</dd></div><div><dt class="label muted">Team</dt><dd class="">2 design students</dd></div>
+      <div><dt class="label muted">Type</dt><dd class="">Interaction and Integrated product design</dd></div><div><dt class="label muted">Year</dt><dd class="">2024</dd></div><div><dt class="label muted">Role</dt><dd class="">Interaction and Product Designer</dd></div><div><dt class="label muted">Team</dt><dd class="">2 design students</dd></div>
     </dl>
   </div>
 </section>
+
 
 <!-- AuraWake (additional project, owner 2026-10-27): 4 slides, the physical interaction first. Facts from
      notes/05-aurawake.md + C:\Users\rospo\Documents\ClaudeCode\Design\AuraWake\AuraWake - Interaction Design Spec.md
@@ -939,6 +961,10 @@
   .shh-phone { height: 470px; width: auto; max-width: 100%; justify-self: center; display: block; border: 1.5px solid var(--rule-strong); border-radius: 26px; }
   .shh-trio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 16px; align-items: end; }
   .shh-trio img { width: auto; max-width: 100%; height: 420px; justify-self: center; display: block; border: 1.5px solid var(--rule-strong); border-radius: 24px; }
+  .aw-cover { position: absolute; z-index: 1; display: block; pointer-events: none; }
+  .aw-cover--sketch { inset: 0; width: 1920px; height: 1080px; }   /* drawn in slide pixels */
+  .aw-cover--sketch .g { stroke: #fff; stroke-opacity: .2; stroke-width: 1; fill: none; }        /* construction lines, ultra light */
+  .aw-cover--sketch .g--far { stroke-opacity: .11; }
   .aw-hero { margin: 0; display: grid; justify-items: end; gap: 4px; }
   .aw-hero img { width: 100%; display: block; }
   .aw-views { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--g); padding-top: 28px; border-top: 1px solid var(--rule); }

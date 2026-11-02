@@ -673,7 +673,7 @@ def build_base(with_time=False, time='06:30'):
     body = rbox('body', W, W, H, EDGE_P, EDGE_T, 'body', (0, 0, PL), sp=4, se=2)
     cut(body, stadium_bm(0.0084, 0.0026, 0.012), (0, W / 2, MID), 'rubber')  # USB-C receptacle
     cut(body, cutter_bm([(BTN_X, 0, BTN_HOLE)], 0.002), (0, W / 2, MID), 'rubber')
-    if MODE == 'real': cut(body, holes_bm(), (0, 0, 0), 'cavity')
+    if MODE == 'real' and 'outline' not in argv and 'noholes' not in argv: cut(body, holes_bm(), (0, 0, 0), 'cavity')   # outline drawings (and their shading pass): no grille holes
     wn = body.modifiers.new('wn', 'WEIGHTED_NORMAL'); wn.keep_sharp = True; wn.mode = 'FACE_AREA'
     btn = cyl('button', BTN_R, 0.002, 'shell', (BTN_X, W / 2 - 0.0008, MID), axis='Y')
     tongue = rbox('tongue', 0.0066, 0.004, 0.0007, 0.0003, 0.0, 'print', (0, W / 2 - 0.0035, MID - 0.00035), sp=4)
@@ -1124,8 +1124,12 @@ def studio(view):
     elif view == 'strip':
         build_base(); fw = W / 0.5; tgt = (0, 0, 0.004); pos = (0.55, -0.75, -0.17)
     elif view in ('persp', 'lit', 'persp_back', 'persp_band'):
-        build_base(with_time=(view == 'lit')); fw, tgt = W / 0.55, (0, 0, TOP * 0.42)
-        if view == 'persp_band': build_bracelet(TOP); fw, tgt = W / 0.52, (0, 0, TOP * 0.75)
+        build_base(with_time=(view == 'lit' or 'showtime' in argv), time=CLOCK); fw, tgt = W / 0.55, (0, 0, TOP * 0.42)
+        if view == 'persp_band':
+            br = build_bracelet(TOP); fw, tgt = W / 0.52, (0, 0, TOP * 0.75)
+            if 'docked' in argv:   # docked on the pins, as in gesture 03: the pod's flat sensor edge along the row of pins
+                br.rotation_euler = (0, 0, -math.pi / 2)
+                br.location = Vector((0, -W / 2 + 0.020, TOP)) - Matrix.Rotation(-math.pi / 2, 3, 'Z') @ Vector((STRAP_XF - POD_T, 0.0005, 0))
         pos = (-0.62, 0.95, 0.24) if view == 'persp_back' else (0.62, -0.95, 0.24)
     else:
         build_base(with_time=('showtime' in argv), time=CLOCK)   # showtime: the time lit (light slide, morning front)
@@ -1177,6 +1181,14 @@ def table_scene():
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'internals.py'), encoding='utf-8').read())   # the inside, for the exploded view
 exec(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bedroom.py'), encoding='utf-8').read())   # scenario frames
 
+def holdout_all():
+    """Every surface a holdout: only Freestyle lines are left (outline drawings)."""
+    for k in list(MATS):
+        m = bpy.data.materials.new('hold_' + k); m.use_nodes = True; nt = m.node_tree
+        for n in list(nt.nodes): nt.nodes.remove(n)
+        o = nt.nodes.new('ShaderNodeOutputMaterial'); hn = nt.nodes.new('ShaderNodeHoldout'); nt.links.new(hn.outputs[0], o.inputs[0])
+        MATS[k] = m
+
 def real():
     res = (1200, 675) if PREVIEW else (2400, 1350)
     if SHOT.startswith('room'): res = (540, 675) if PREVIEW else (1080, 1350)   # portrait frames for the strip
@@ -1190,7 +1202,21 @@ def real():
     elif SHOT == 'explode':
         real_explode()
     elif STUDIO:
+        if 'outline' in argv: holdout_all()   # cover draft (owner, 2026-11-02): lines only, in perspective
         studio(SHOT)
+        if 'outline' in argv:
+            colour_management('Standard'); freestyle(3.0, 6.0)
+            # the box's corners in image pixels, for the sketch marks drawn over it (deck: cover-outline.json)
+            scene.render.resolution_x, scene.render.resolution_y = res; bpy.context.view_layer.update()
+            px = lambda p: [round(c, 1) for c in ((lambda v: (v.x * res[0], (1 - v.y) * res[1]))(world_to_camera_view(scene, scene.camera, Vector(p))))]
+            h = W / 2
+            if SHOT.startswith('band'):   # the bracelet: the corners of the box around it (its construction volume)
+                cs = [o.matrix_world @ Vector(c) for o in scene.objects if o.type in ('MESH', 'CURVE') and not o.hide_render for c in o.bound_box]
+                lo = [min(c[i] for c in cs) for i in range(3)]; hi = [max(c[i] for c in cs) for i in range(3)]
+                pts = {f'{"t" if z else "b"}{i}': px((x, y, hi[2] if z else lo[2])) for z in (0, 1) for i, (x, y) in enumerate(((lo[0], lo[1]), (hi[0], lo[1]), (hi[0], hi[1]), (lo[0], hi[1])))}
+            else:
+                pts = {f'{"t" if z else "b"}{i}': px((x, y, TOP if z else PL)) for z in (0, 1) for i, (x, y) in enumerate(((-h, -h), (h, -h), (h, h), (-h, h)))}
+            json.dump({'size': list(res), 'pts': pts}, open(os.path.join(OUT, f'{SHOT}-outline.json'), 'w'), indent=1)
         if PLASTIC: scene.view_settings.exposure = -0.8
     else:
         build_base(with_time=(SHOT == 'dawn'))
@@ -1207,7 +1233,7 @@ def real():
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
-    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-wide" if 'wide' in argv else ""}{"-ledoff" if 'ledoff' in argv else ""}{"-time" + CLOCK.replace(':', '').replace('* ', 'sun') if 'showtime' in argv else ""}{"-ring" + RING if RING else ""}{"-plastic" if PLASTIC else ""}{"-coarse" if COARSE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-wide" if 'wide' in argv else ""}{"-ledoff" if 'ledoff' in argv else ""}{"-outline" if 'outline' in argv else ""}{"-noholes" if 'noholes' in argv else ""}{"-docked" if 'docked' in argv else ""}{"-time" + CLOCK.replace(':', '').replace('* ', 'sun') if 'showtime' in argv else ""}{"-ring" + RING if RING else ""}{"-plastic" if PLASTIC else ""}{"-coarse" if COARSE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -1239,7 +1265,7 @@ def line():
 
     # (group builder, size shown on the slide in px, named points for callouts)
     items = {
-        'base': (lambda: build_base(with_time=True, time='06:30'), 400, {
+        'base': (lambda: build_base(with_time=True, time=CLOCK), 400, {
             'top': (0.02, 0.02, TOP), 'time': (-0.012, -W / 2, MID + 0.003), 'led': (0.036, -W / 2, MID),
             'grille': (W / 2, 0.012, MID + 0.006)}),
         'bracelet': (build_bracelet, 240, {}),
@@ -1255,6 +1281,7 @@ def line():
         'base_under': (build_base, 300, {'under': (0.0, 0.0, 0.0), 'back': (0.0, W / 2, MID), 'under_exit': (-W / 2, -W / 2, PL), 'back_exit': (0.0, W / 2, TOP)}, ISO_UNDER),
     }
     if SHOT: items = {SHOT: items[SHOT]}                 # one drawing only: merged into the existing anchors
+    if 'outline' in argv: holdout_all()   # lines only, no fill (cover draft, owner 2026-11-02)
     path = os.path.join(OUT, 'anchors.json')
     anchors = json.load(open(path)) if SHOT and os.path.exists(path) else {}
     for name, (fn, size, pts, *rot) in items.items():

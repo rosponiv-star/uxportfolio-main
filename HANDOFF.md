@@ -1434,6 +1434,16 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-02 · LOCAL (85)** · AuraWake cover (owner chose draft "B5" of five): the solid ochre stays; on it, the base
+  with the bracelet docked on its 3 pins, in perspective outline (white Freestyle lines), ☀ 06:30 on the front, a hint
+  of shading in the same ochre (light veil from a normal render, with the grille holes as a whisper of texture) and
+  ultra-light construction lines (edge overshoots, vanishing lines, the top's diagonals; no dimensions or text), drawn
+  in slide pixels from the base's projected corners (out/cover/persp_band-outline.json). Make it: aura.py
+  `real deck/out/cover persp_band plastic showtime clock=sun ledoff outline docked` + the same without `outline`, then
+  `node deck/export_cover.mjs` → assets/aurawake/cover-sketch.png (also Media/…/Schemi/00-copertina-disegno.png).
+  aura.py flags added on the way: `outline` (real mode: lines only, no grille holes), `noholes`, `docked`
+  (persp_band). Meta row: Type "Interaction and Integrated product design", Year 2024, Role "Interaction and Product
+  Designer" (owner). Rejected drafts: cut-out render (A), isometric outline, sketch with dimensions. PDF 66 pages, 18.58 MB.
 - **2026-11-02 · LOCAL (84)** · Owner: light slide "più appealing, simmetrica, ordinata", no yellow box: the picture
   under the third column is gone; each ladder row now has its own flat front (time 06:30 / 06:35 / 06:40 lit, ring amber,
   LED off), so the three columns share one structure and end level. aura.py: `clock=HH:MM` (any time; `clock=sun` stays

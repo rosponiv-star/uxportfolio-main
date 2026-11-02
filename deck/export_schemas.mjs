@@ -41,6 +41,7 @@ const SHOTS = [   // [folder, file, selector] — the selector is the schema its
 const COPIES = [  // [folder, file, source in deck/assets/aurawake] — clean images, no numbers or text
   [AW, '03-scenario-1-2200.jpg', 'room1.jpg'], [AW, '03-scenario-2-2240.jpg', 'room2.jpg'], [AW, '03-scenario-3-0312.jpg', 'room3.jpg'],
   [AW, '03-scenario-4-0614.jpg', 'room4.jpg'], [AW, '03-scenario-5-0616.jpg', 'room5.jpg'],
+  [AW, '00-copertina-disegno.png', 'cover-sketch.png'],   // the cover drawing alone (transparent), node deck/export_cover.mjs
   [AW, '06-esploso-linee.png', 'iso-explode.png'],   // the line drawing is off the deck (2026-11-02); 06-esploso-linee-numerato.png stays from its last export [AW, '07-esploso-render.jpg', 'explode-real.jpg'],
 ];
 
