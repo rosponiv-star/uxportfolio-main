@@ -1307,6 +1307,14 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-11-02 · LOCAL (75)** · Owner: the brief pages were meant as content, not screenshots. The originals slide
+  is gone; p01-insights now carries the report's pp. 32–33: three themes (left) + "Design direction: a hub for security
+  and management, not a universal remote" with everything in one view, dynamic access, safety first (right). New
+  p01-process (report p. 35): five steps per pain point tackled, Diverge (pain-point analysis, individual design
+  concepts) · Converge (design space, happiness factors) · Prototype (UX flows: low fidelity first, then the final
+  high fidelity in MD3 once the LF problems were solved, owner). p01-ideas is now one pain point through it: the PP06
+  pencil concept as a scan (grayscale, flat-field corrected, on a grey scan bed; sketch-pp06-scanned.jpg) + the PP06
+  design space. The old three sketches and the universal-remote line left this slide (the remote is in Insights).
 - **2026-11-02 · LOCAL (75)** · One originals slide for the report's design brief, diamond 1 (pp. 31–33: brief, conclusions from the domain analysis, design direction), three in a row after p01-insights (owner).
 - **2026-11-01 · LOCAL (75)** · Originals pages for stakeholders and personas removed (owner); the others stay.
 - **2026-11-01 · LOCAL (75)** · After each Smart Home Hub schema, a page of the originals (owner): an ink bar on top
