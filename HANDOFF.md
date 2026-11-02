@@ -1434,6 +1434,13 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-02 · LOCAL (86)** · Lighter PDF (owner: "solo se la perdita di qualità è impercettibile"): 18.58 → 14.38 MB.
+  `node deck/optimize_images.mjs`: (1) PNGs with no transparency → JPEG (mozjpeg q90, 4:4:4), only when ≥ 25 % smaller;
+  references follow in index.html/deck.css (11 files: Smart Home schemi s01–s03 and screens 05, 13, 14, 18, 20; JustCook
+  course-home/box/summary — now `.jpg`); (2) transparent PNGs scaled down to 2× the widest they are shown (measured in
+  Chrome), lossless. Checked with `node deck/compare_previews.mjs <copy of deck/out/preview from before>`: 52/66 slides
+  pixel-identical, the rest ≥ 37 dB with no visible change at 3× zoom. Re-run optimize after re-exporting any asset (a
+  re-export writes the full-size PNG again). Why it works: Chrome embeds JPEGs as they are, PNGs as raw pixels.
 - **2026-11-02 · LOCAL (85)** · AuraWake cover (owner chose draft "B5" of five): the solid ochre stays; on it, the base
   with the bracelet docked on its 3 pins, in perspective outline (white Freestyle lines), ☀ 06:30 on the front, a hint
   of shading in the same ochre (light veil from a normal render, with the grille holes as a whisper of texture) and
