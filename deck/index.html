@@ -270,8 +270,8 @@
       <p class="label i3" style="grid-column: 1 / 3">Diverge</p><p class="label i3" style="grid-column: 3 / 5">Converge</p><p class="label i3">Prototype</p>
       <div class="cells" style="grid-column: 1 / -1; grid-template-columns: repeat(5, 1fr)">
         <div class="cell" style="min-height: 360px"><span class="label kick"><span class="n">01</span></span><p class="body m">Pain-point analysis</p><p class="small i2 cell__foot">One pain point at a time: who has it, and in which routines it shows up.</p></div>
-        <div class="cell"><span class="label kick"><span class="n">02</span></span><p class="body m">Individual design concepts</p><p class="small i2 cell__foot">Each of us alone, by hand on paper: ideas aimed at that pain point for each persona, so they diverged.</p></div>
-        <div class="cell"><span class="label kick"><span class="n">03</span></span><p class="body m">Design space</p><p class="small i2 cell__foot">All concepts on one board, grouped by pain-point affinity and compared across personas, so no choice clashed with another.</p></div>
+        <div class="cell"><span class="label kick"><span class="n">02</span></span><p class="body m">Individual design concepts</p><p class="small i2 cell__foot">Each of us alone, pencil on paper: any idea of a solution, for each persona, without judging it yet.</p></div>
+        <div class="cell"><span class="label kick"><span class="n">03</span></span><p class="body m">Design space</p><p class="small i2 cell__foot">All the concepts on one board: we aligned as a team, grouped them by affinity across personas and picked the best, so no choice clashed with another.</p></div>
         <div class="cell"><span class="label kick"><span class="n">04</span></span><p class="body m">Happiness factors</p><p class="small i2 cell__foot">The must-haves, the least that solves the pain point, set apart from the secondary ideas.</p></div>
         <div class="cell"><span class="label kick"><span class="n">05</span></span><p class="body m">UX flows</p><p class="small i2 cell__foot">Low-fidelity flows first; once their problems were solved, the final high-fidelity flows in Figma, Material Design 3.</p></div>
       </div>
@@ -280,18 +280,12 @@
 </section>
 
 <section class="slide" id="p01-ideas" data-step="ideas">
-  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
-  <div class="frame" style="grid-template-rows: auto auto 1fr">
-    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">PP06 through the process, for Marco and Giorgia.</p>
-    <figure style="grid-column: 1 / 7; align-self: end; margin: 0">
-      <div style="display: inline-block; background: #e6e5e0; padding: 20px; border-radius: 4px"><img src="assets/smarthome/sketch-pp06-mg.jpg" alt="Pencil concept for PP06: for Marco a device list and a reminder when he leaves; for Giorgia a floor plan with what is on, then the single room." style="height: 440px; width: auto; display: block; transform: rotate(-.6deg); box-shadow: 0 1px 2px rgba(0,0,0,.16), 0 12px 30px rgba(0,0,0,.12)" /></div>
-      <figcaption style="margin-top: 14px"><span class="label kick"><span class="n">02</span>Individual concept</span> <span class="small i2">“Did I leave something on?” Marco: a switch per appliance, a reminder on leaving. Giorgia, who reads pictures better: a floor plan of what is on, then one room.</span></figcaption>
-    </figure>
-    <figure style="grid-column: 7 / 13; align-self: end; margin: 0">
-      <img src="assets/smarthome/design-space-pp06-mg.jpg" alt="Design space for PP06: must-have and secondary solutions for Marco and Giorgia." style="width: 100%; display: block; border: 1px solid var(--rule-strong)" />
-      <figcaption style="margin-top: 14px"><span class="label kick"><span class="n">03–04</span>Design space</span> <span class="small i2">Same two personas. Green, the must-haves that became happiness factors; orange, the secondary ideas.</span></figcaption>
-    </figure>
+  <div class="quad__bar"><b>From pencil concept to design space: two pain points, Marco and Giorgia</b><span>Steps 02 → 03–04 · original sketches and boards</span></div>
+  <div class="quad">
+    <figure class="scan"><img src="assets/smarthome/sketch-pp06-mg.jpg" alt="Pencil concept for PP06, Marco and Giorgia." /><figcaption>PP06 · Concept</figcaption></figure>
+    <figure class="board"><img src="assets/smarthome/design-space-pp06-mg.jpg" alt="Design space for PP06, Marco and Giorgia." /><figcaption>PP06 · Design space</figcaption></figure>
+    <figure class="scan"><img src="assets/smarthome/sketch-pp02-mg.jpg" alt="Pencil concept for PP02, Marco and Giorgia." /><figcaption>PP02 · Concept</figcaption></figure>
+    <figure class="board"><img src="assets/smarthome/design-space-pp02-mg.jpg" alt="Design space for PP02, Marco and Giorgia." /><figcaption>PP02 · Design space</figcaption></figure>
   </div>
 </section>
 
@@ -1047,6 +1041,7 @@
     s.style.setProperty('--pc', cover.style.getPropertyValue('--pc'));
     s.querySelectorAll('[data-proj]').forEach((e) => (e.innerHTML = `<span class="n">${cover.dataset.num}</span>${cover.dataset.title}`));
     if (!('step' in s.dataset)) return; // additional projects: no process bar
+    if (s.querySelector('.quad')) return;  // full-bleed image slides: no process bar
     const at = STEPS.findIndex(([k]) => k === s.dataset.step);
     s.querySelectorAll('[data-kick]').forEach((e) => (e.innerHTML = `<span class="n">${pad(at + 1)}</span>${STEPS[at][1]}`));
     const bar = document.createElement('nav');

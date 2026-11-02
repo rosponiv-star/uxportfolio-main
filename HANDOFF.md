@@ -1307,6 +1307,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-11-02 · LOCAL (75)** · p01-ideas is now a full-bleed 2 × 2 (owner): ink banner "From pencil concept to design
+  space: two pain points, Marco and Giorgia", PP06 concept | PP06 design space, PP02 concept (report p. 70) | PP02 design
+  space (p. 74), all for Marco and Giorgia; labels bottom-right; `.quad` slides skip the process bar. Images recompressed
+  (PDF 19 MB, under the 20 MB limit). Process copy (owner): concepts = any solution idea, alone, unjudged; design space
+  = the team aligns and picks the best.
 - **2026-11-02 · LOCAL (75)** · p01-ideas example now matches: the PP06 concept for Marco and Giorgia (report p. 52,
   rendered at 4× with pdf.js, cropped, flat-field "scan" in grayscale on a grey scan bed: sketch-pp06-mg.jpg) next to
   the PP06 design space for the same two personas (report p. 58: design-space-pp06-mg.jpg). The earlier pairing
