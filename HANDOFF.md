@@ -1307,6 +1307,10 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-11-02 · LOCAL (75)** · p01-ideas example now matches: the PP06 concept for Marco and Giorgia (report p. 52,
+  rendered at 4× with pdf.js, cropped, flat-field "scan" in grayscale on a grey scan bed: sketch-pp06-mg.jpg) next to
+  the PP06 design space for the same two personas (report p. 58: design-space-pp06-mg.jpg). The earlier pairing
+  (Franco/Noemi sketch vs Marco/Giorgia board) did not match. Title "PP06 through the process, for Marco and Giorgia."
 - **2026-11-02 · LOCAL (75)** · Owner: the brief pages were meant as content, not screenshots. The originals slide
   is gone; p01-insights now carries the report's pp. 32–33: three themes (left) + "Design direction: a hub for security
   and management, not a universal remote" with everything in one view, dynamic access, safety first (right). New
