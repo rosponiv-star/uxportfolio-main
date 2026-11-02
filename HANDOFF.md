@@ -1434,6 +1434,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-02 · LOCAL (79)** · AuraWake app screens inside a real iPhone frame (owner: "nel frame di un iPhone, da
+  Figma con la libreria ufficiale di Apple"): in Figma `Y3cach5rXN4CDaQKKvTp27`, new page "Portfolio · iPhone frames"
+  (320:175): 11 frames 489×1000 (ids 320:183 … 320:1085), each = a clone of the 2024 screen (radius 56, clipped) at
+  24,22 under the Apple "iPhone 16 Pro Max" bezel (iOS and iPadOS 26 kit, component bca17a89…), fill #f1efe9. Exported
+  from there (get_screenshot, 490×1000) → `assets/aurawake/app/NN-*.jpg` (mozjpeg q84). `.solx--iphone img` drops the
+  CSS border/radius. To redo: edit the Figma page, re-export the same node ids. PDF 68 pages, 19.04 MB.
 - **2026-11-02 · LOCAL (78)** · AuraWake app screens re-laid out like Smart Home Hub's solution slides (`.solx`,
   black `.quad__bar` with the title and "2024 screens · Figma", no frame or h2): p05-app-setup (welcome, pair alarm,
   pair watch, sign up 59:269), p05-app-plan (routines, time and days, falling asleep 73:462, waking up), p05-app-morning
