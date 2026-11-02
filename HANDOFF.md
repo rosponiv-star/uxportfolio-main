@@ -1434,6 +1434,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-02 · LOCAL (81)** · Owner: p05-process removed (and its process-* assets); p05-product is now the first page
+  after the cover, redesigned: headline + three detail tiles (front ☀ 06:30, back, underneath) on the left, the base
+  large on a warm #f1efe9 stage on the right with "120 × 120 × 45 mm · PC/ABS, satin graphite · three charging pins on
+  top" (cut-outs `assets/aurawake/product-*.png` from Media/…/Renders/Transparent and deck/out/sun). Light slide: LED
+  shots without the halo, cropped between the first close-up and the whole base (`export_lights.mjs` extract 850,560
+  900×530). Open: the picture under the third column (the time at 06:30) — owner asked what it means. PDF 66 pages.
 - **2026-11-02 · LOCAL (80)** · Owner: (1) the parts page shows the rendered teardown: p05-inside now holds the
   `[data-explode-real]` render next to the 16-part list; p05-inside-real removed. The line drawing stays saved
   (assets/aurawake/iso-explode.png, Media/…/Schemi/06-esploso-linee*.png; the JS still draws it if a `[data-explode]`
