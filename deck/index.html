@@ -319,17 +319,8 @@
 </section>
 
 <section class="slide" id="p01-solution" data-step="solution">
-  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
-  <div class="frame" style="grid-template-rows: auto auto 1fr">
-    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">One app for the whole house: see it, open it, lend it, protect it.</p>
-    <div class="shots" style="grid-column: 1 / -1; align-self: end">
-      <figure><img class="shh-phone" src="assets/smarthome/07-casa-luci-generale.png" alt="Floor plan: lights by room." /><figcaption><span class="label kick"><span class="n">01</span></span><span class="small"><span class="m">Floor plan</span><br /><span class="i3">Every device where it is: on in the room’s colour, off in grey.</span></span></figcaption></figure>
-      <figure><img class="shh-phone" src="assets/smarthome/20-chiamata-citofono.png" alt="Intercom call with video and the slider to open." /><figcaption><span class="label kick"><span class="n">02</span></span><span class="small"><span class="m">Intercom</span><br /><span class="i3">Video, the bell that rang, and a slide to open.</span></span></figcaption></figure>
-      <figure><img class="shh-phone" src="assets/smarthome/29-codici-temporanei.png" alt="Temporary access codes, manual and automatic." /><figcaption><span class="label kick"><span class="n">03</span></span><span class="small"><span class="m">Access codes</span><br /><span class="i3">Personal, temporary, revocable: no keys to hand over.</span></span></figcaption></figure>
-      <figure><img class="shh-phone" src="assets/smarthome/49-sicurezza-errore-a.png" alt="Security: two windows open, the alarm can't be armed yet." /><figcaption><span class="label kick"><span class="n">04</span></span><span class="small"><span class="m">Security</span><br /><span class="i3">Won’t arm with a window open, and says which.</span></span></figcaption></figure>
-    </div>
-  </div>
+  <div class="quad__bar"><b>The solution: see the home, open it, lend it, protect it</b><span>Final screens · Figma, Material Design 3</span></div>
+  <div class="solx"><figure><img src="assets/smarthome/07-casa-luci-generale.png" alt="Floor plan" /><figcaption><b>01 Floor plan</b> On in the room’s colour, off in grey.<span class="md3"><span class="label">MD3</span> Tabs per floor; cards in the room’s colour.</span></figcaption></figure><figure><img src="assets/smarthome/20-chiamata-citofono.png" alt="Intercom" /><figcaption><b>02 Intercom</b> Video, the bell that rang, a slide to open.<span class="md3"><span class="label">MD3</span> Floating toolbar for the call.</span></figcaption></figure><figure><img src="assets/smarthome/29-codici-temporanei.png" alt="Access codes" /><figcaption><b>03 Access codes</b> Personal, temporary, revocable.<span class="md3"><span class="label">MD3</span> Connected buttons switch the view.</span></figcaption></figure><figure><img src="assets/smarthome/49-sicurezza-errore-a.png" alt="Security" /><figcaption><b>04 Security</b> Won’t arm with a window open.<span class="md3"><span class="label">MD3</span> Snackbar says what to close; a dialog confirms.</span></figcaption></figure></div>
 </section>
 
 <section class="slide" id="p01-system" data-step="solution">
@@ -356,17 +347,6 @@
       <div class="shh-trio"><img src="assets/smarthome/18-notifica-citofono-a.png" alt="Lock screen: someone rang the gate." /><img src="assets/smarthome/20-chiamata-citofono.png" alt="The call: video and the slider to open the gate." /><img src="assets/smarthome/22-storico-citofono.png" alt="History: the call and the opening." /></div>
       <figcaption class="small i3">Notification → call with the slider → history.</figcaption>
     </figure>
-  </div>
-</section>
-
-<section class="slide" id="p01-md3" data-step="solution">
-  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
-  <div class="frame" style="grid-template-rows: auto auto 1fr">
-    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Material Design 3, with a few conventions of our own.</p>
-    <div style="grid-column: 1 / 6; align-self: end"><p class="label i3" style="margin-bottom: 16px">How components behave</p><ol class="rows"><li class="prin"><span class="label kick"><span class="n">01</span></span><span><span class="body m">Basic dialog for the alarm</span><br /><span class="small i2">Arming or disarming asks for an explicit yes; the cancel button gets the emphasis, since it can do no harm.</span></span></li><li class="prin"><span class="label kick"><span class="n">02</span></span><span><span class="body m">Snackbar, not a block</span><br /><span class="small i2">If a window is open the alarm can’t arm: a short message at the bottom says what to close, without stopping the flow.</span></span></li><li class="prin"><span class="label kick"><span class="n">03</span></span><span><span class="body m">A colour per room</span><br /><span class="small i2">The floor plan gives each room its colour; a device icon is in the primary colour when on, neutral when off. Tap a room to see only its devices.</span></span></li></ol></div>
-    <div style="grid-column: 6 / 11; align-self: end"><p class="label i3" style="margin-bottom: 16px">Conventions across the app</p><ol class="rows"><li class="prin"><span class="label kick"><span class="n">04</span></span><span><span class="body m">FABs for the main actions</span><br /><span class="small i2">Always within reach; the destructive ones in a warning container, so they read as important but cautious.</span></span></li><li class="prin"><span class="label kick"><span class="n">05</span></span><span><span class="body m">Two levels of filter</span><br /><span class="small i2">Connected buttons switch the main view of a page; outlined chips filter the list below, lighter so they don’t compete.</span></span></li><li class="prin"><span class="label kick"><span class="n">06</span></span><span><span class="body m">Cards that match the plan</span><br /><span class="small i2">Device cards take the colour of their room; an active automation card turns to the primary colour.</span></span></li></ol></div>
-    <figure style="grid-column: 11 / 13; align-self: end; margin: 0"><img class="shh-phone" src="assets/smarthome/49-sicurezza-errore-a.png" alt="Security: the alarm can’t arm while two windows are open." style="width: 100%" /></figure>
   </div>
 </section>
 
@@ -1068,7 +1048,7 @@
     s.style.setProperty('--pc', cover.style.getPropertyValue('--pc'));
     s.querySelectorAll('[data-proj]').forEach((e) => (e.innerHTML = `<span class="n">${cover.dataset.num}</span>${cover.dataset.title}`));
     if (!('step' in s.dataset)) return; // additional projects: no process bar
-    if (s.querySelector('.quad')) return;  // full-bleed image slides: no process bar
+    if (s.querySelector('.quad, .solx')) return;  // full-bleed image slides: no process bar
     const at = STEPS.findIndex(([k]) => k === s.dataset.step);
     s.querySelectorAll('[data-kick]').forEach((e) => (e.innerHTML = `<span class="n">${pad(at + 1)}</span>${STEPS[at][1]}`));
     const bar = document.createElement('nav');
