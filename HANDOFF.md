@@ -1307,6 +1307,7 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-11-02 · LOCAL (75)** · Five more compact solution slides after p01-solution (owner: more of them, to show the solution well): home (03, 08, 12, 14), intercom (18, 20, 21, 22), access codes (23, 24, 36, 45), security (15, 17, 53, 56), automations (58, 60, 16, 57); each screen with a caption and an MD3 note. Screens as JPEG in deck/assets/smarthome/sol/. PDF 68 pages, 19.67 MB (close to the 20 MB limit).
 - **2026-11-02 · LOCAL (75)** · MD3 slide dropped (owner: MD3 notes go with the screens, here and there). p01-solution is now a compact full-bleed slide like the 2 × 2: ink banner with the title, four big screens (floor plan, intercom, access codes, security), each with a short caption and a one-line MD3 note (`.solx`, no process bar).
 - **2026-11-02 · LOCAL (75)** · Tail reordered (owner: first one example of the process, then the general overview):
   … p01-flows → solution (screens, no PP) → system → interaction (slide to open) → new p01-md3 (MD3 with a few
