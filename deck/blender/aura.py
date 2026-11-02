@@ -376,7 +376,7 @@ def strip_mat(state):
     return m
 
 if MODE == 'real' and SHOT == 'led':
-    LED_SAT = {'white': '#fff6ea', 'night': '#4d5cff', 'dawn': '#ff9a1f', 'green': '#34d27a', 'red': '#ff3a2a'}   # spec §4.1   # saturated: the state must read at a glance
+    LED_SAT = {'white': '#fff6ea', 'night': '#8a6bff', 'dawn': '#ff9a1f', 'green': '#34d27a', 'red': '#ff3a2a'}   # spec §4.1   # saturated: the state must read at a glance
     MATS['led_front'] = emit('led_front', srgb(LED_SAT[STATE]), 1.8 if STATE != 'white' else 4.0) if STATE in LED_SAT else principled('led_front', srgb('#0b0b0c'), rough=0.08)
 if MODE == 'real' and SHOT == 'strip':
     MATS['led_under'] = strip_mat(STATE)
@@ -1111,6 +1111,7 @@ def studio(view):
         build_base(); fw = 0.11; tgt = (-0.018, W / 2 - 0.01, MID); pos = (-0.018 - 0.55, W / 2 + 1.0, MID + 0.32)   # 3/4 on the back marks
     elif view == 'led':
         build_base(); fw = 0.11; tgt = (0.03, -W / 2 + 0.01, MID); pos = (0.03 + 0.55, -W / 2 - 1.0, MID + 0.32)   # 3/4 on the LED: the alarm still reads
+        if 'wide' in argv: fw = 0.22; tgt = (0.0, 0.0, TOP * 0.45); pos = (0.45, -1.0, 0.42)   # light slide (owner, 2026-11-02): far enough to see it is the front of the base
     elif view == 'strip':
         build_base(); fw = W / 0.5; tgt = (0, 0, 0.004); pos = (0.55, -0.75, -0.17)
     elif view in ('persp', 'lit', 'persp_back', 'persp_band'):
@@ -1197,7 +1198,7 @@ def real():
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
-    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-plastic" if PLASTIC else ""}{"-coarse" if COARSE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-wide" if 'wide' in argv else ""}{"-plastic" if PLASTIC else ""}{"-coarse" if COARSE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
 # ---------------------------------------------------------------------------------------------------------------

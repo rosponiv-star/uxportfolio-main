@@ -35,14 +35,13 @@ const SHOTS = [   // [folder, file, selector] — the selector is the schema its
   [AW, '04-gesto-03-palmo-tocco', '#p05-gestures [data-gest="2"]'],
   [AW, '04-gesto-04-rimetti-il-bracciale', '#p05-gestures [data-gest="3"]'],
   [AW, '05-linguaggio-della-luce', '#p05-light [data-waves]'],
-  [AW, '06-esploso-linee-numerato', '#p05-inside [data-explode]'],
-  [AW, '07-esploso-render-numerato', '#p05-inside-real [data-explode-real]'],
+  [AW, '07-esploso-render-numerato', '#p05-inside [data-explode-real]'],
   [AW, '08-fallimento-sicuro', '#p05-app [data-failsafe]'],
 ];
 const COPIES = [  // [folder, file, source in deck/assets/aurawake] — clean images, no numbers or text
   [AW, '03-scenario-1-2200.jpg', 'room1.jpg'], [AW, '03-scenario-2-2240.jpg', 'room2.jpg'], [AW, '03-scenario-3-0312.jpg', 'room3.jpg'],
   [AW, '03-scenario-4-0614.jpg', 'room4.jpg'], [AW, '03-scenario-5-0616.jpg', 'room5.jpg'],
-  [AW, '06-esploso-linee.png', 'iso-explode.png'], [AW, '07-esploso-render.jpg', 'explode-real.jpg'],
+  [AW, '06-esploso-linee.png', 'iso-explode.png'],   // the line drawing is off the deck (2026-11-02); 06-esploso-linee-numerato.png stays from its last export [AW, '07-esploso-render.jpg', 'explode-real.jpg'],
 ];
 
 const browser = await puppeteer.launch({

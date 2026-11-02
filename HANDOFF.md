@@ -302,7 +302,7 @@ deck/blender/aura.py -- <mode> <outdir> <shot> [plastic] [preview]` (run from th
 | 02 One night | `p05-night` | `[data-night]` script: `SEG` time stretches, `lanes` (events / areas / tags) | edit `lanes` values (they follow spec §6) |
 | 03 Scenes ×5 | `p05-scenes` | `deck/blender/bedroom.py`, `real <out> room1…room5`; `ROOM` table = time, lamp, ring, shutter, sky, exposure per frame; captions in the slide | edit `ROOM`/scene, render, convert the PNG to `assets/aurawake/roomN.jpg` (sharp, flatten #000) |
 | 04 Gestures ×4 | `p05-gestures` | `line <out> g1…g4` (`build_gesture`, hands from `deck/blender/hands/*.obj` made by `hand_mpfb.py` with MPFB2) + the `[data-gest]` script (room ground, ring glow, arrows, 3 s ring, LED) | poses: `POSES` in hand_mpfb.py → run it → re-render g1–g4 → copy to assets; framing: `cy` offset in `line()`; overlays: the script (ground anchor `gx, gy` from anchors.json) |
-| 05 Light language | `p05-light` | `[data-waves]` script: `COLS` (front LED / ring / ladder rows with their waveforms; 4th item of a row = its render in `assets/aurawake/views/`, `led-*` zoomed on the LED, `strip-*` on the ring, via `.wimg--led/--strip` object-view-box; the ladder column's 5th item = one render under it, `time.jpg`) | edit rows (spec §4.1); new renders: aura.py `real … led state=<green|red|night|white>` or `strip state=<night|dawn|white|off>` |
+| 05 Light language | `p05-light` | `[data-waves]` script: `COLS` (front LED / ring / ladder rows with their waveforms; 4th item of a row = its cut-out in `assets/aurawake/lights/*.png`; the ladder column's 5th item = `lights/time.png`, filling the rest of the column) | edit rows (spec §4.1); cut-outs: `node deck/export_lights.mjs` (LED shots = aura.py `real deck/out/blender led plastic wide state=<green|red|night|white>`; ring = `strip plastic state=…`) |
 | 06 Inside, lines | `p05-inside` | `deck/blender/internals.py` (every part, `BOM`, `EXPLODE` offsets, `EXPLODE_PTS` anchors), `line <out> explode`; numbered list `PARTS` in the `[data-explode]` script | parts: internals.py → re-render → copy `iso-explode.png`, paste new anchors into `PT` |
 | 07 Inside, rendered | `p05-inside-real` | same internals + `real_mats`/`real_details`/`real_explode`, `real <out> explode plastic` (transparent) → `assets/aurawake/explode-real.jpg` (flatten #fdfdfc); points in `out/xreal/explode-real.json` | after a re-render paste the JSON points into the `[data-explode-real]` script |
 | 08 Fail-safe | `p05-app` | `[data-failsafe]` script: rows `F` | edit rows (spec §1 p.7, §7.3–7.4) |
@@ -1434,6 +1434,14 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-02 · LOCAL (80)** · Owner: (1) the parts page shows the rendered teardown: p05-inside now holds the
+  `[data-explode-real]` render next to the 16-part list; p05-inside-real removed. The line drawing stays saved
+  (assets/aurawake/iso-explode.png, Media/…/Schemi/06-esploso-linee*.png; the JS still draws it if a `[data-explode]`
+  svg is put back). (2) Light slide: cut-out renders (transparent PNGs, `deck/export_lights.mjs` → assets/aurawake/lights),
+  front-LED shots re-rendered farther (aura.py `led … wide`: the whole base, LED with a soft halo of its own colour);
+  the bedtime LED is now violet `#8a6bff` (was blue `#4d5cff`; spec says violet). Ring column: a soft light behind each
+  cut-out so the graphite reads on the dark cells. Columns end level: the 06:30 shot fills what the third column
+  leaves. Wide LED PNGs also in Media/…/Renders/Transparent/AuraWake-led-*-wide.png. PDF 67 pages, 18.17 MB.
 - **2026-11-02 · LOCAL (79)** · AuraWake app screens inside a real iPhone frame (owner: "nel frame di un iPhone, da
   Figma con la libreria ufficiale di Apple"): in Figma `Y3cach5rXN4CDaQKKvTp27`, new page "Portfolio · iPhone frames"
   (320:175): 11 frames 489×1000 (ids 320:183 … 320:1085), each = a clone of the 2024 screen (radius 56, clipped) at
