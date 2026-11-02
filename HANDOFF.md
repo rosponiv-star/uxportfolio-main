@@ -244,8 +244,9 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
    wedges, soft contour bands, petal fields like his HAWC reference; no arrows, primary/secondary/tertiary only).
    Drafts + their HTML in Media/03-Smart Home Ecosystem/Schemi/bozze/stakeholder/. The deck still has the old rings.
    **TO REVISIT (owner, 2026-11-02): the reflections on p01-outcome** ("if I started again" was written by Claude, not the
-   owner's own findings) and **the role on p01-overview**: make it specific like Silvia Gori's ("UX/UI Designer in a team
-   of 3. My contributions included: …"); the owner did every phase but wants to show he can take on specific roles.
+   owner's own findings). **Role (owner, 2026-11-02):** "UX/UI designer in a team of 3. Every phase shared; I led the
+   domain modelling, the design space, the UX flows from low to high fidelity, the intercom with its slide-to-open, and
+   the access-code system" (on p01-overview; use the same on the site).
    **Framing to write into the project (owner, 2026-10-31):** the domain modelling (artifact, sequence/flow, physical
    models) is "the world as it is now": the app does not exist yet, it is PURE research and analysis. Pain points and
    personas are still analysis of today's domain. Only after them does the work try to solve them with the app. The
