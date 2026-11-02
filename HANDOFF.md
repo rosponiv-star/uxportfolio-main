@@ -243,6 +243,9 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
    full example + a summary of the rest. **Stakeholders: TO REVISIT** (owner did not like the drafts: segmented
    wedges, soft contour bands, petal fields like his HAWC reference; no arrows, primary/secondary/tertiary only).
    Drafts + their HTML in Media/03-Smart Home Ecosystem/Schemi/bozze/stakeholder/. The deck still has the old rings.
+   **TO REVISIT (owner, 2026-11-02): the reflections on p01-outcome** ("if I started again" was written by Claude, not the
+   owner's own findings) and **the role on p01-overview**: make it specific like Silvia Gori's ("UX/UI Designer in a team
+   of 3. My contributions included: …"); the owner did every phase but wants to show he can take on specific roles.
    **Framing to write into the project (owner, 2026-10-31):** the domain modelling (artifact, sequence/flow, physical
    models) is "the world as it is now": the app does not exist yet, it is PURE research and analysis. Pain points and
    personas are still analysis of today's domain. Only after them does the work try to solve them with the app. The
