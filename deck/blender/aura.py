@@ -378,6 +378,8 @@ def strip_mat(state):
 if MODE == 'real' and SHOT == 'led':
     LED_SAT = {'white': '#fff6ea', 'night': '#8a6bff', 'dawn': '#ff9a1f', 'green': '#34d27a', 'red': '#ff3a2a'}   # spec §4.1   # saturated: the state must read at a glance
     MATS['led_front'] = emit('led_front', srgb(LED_SAT[STATE]), 1.8 if STATE != 'white' else 4.0) if STATE in LED_SAT else principled('led_front', srgb('#0b0b0c'), rough=0.08)
+if MODE == 'real' and 'ledoff' in argv:   # the time alone, front LED dark (light slide, owner 2026-11-02: in the morning the front LED stays off)
+    MATS['led_front'] = principled('led_front', srgb('#0b0b0c'), rough=0.08)
 if MODE == 'real' and SHOT == 'strip':
     MATS['led_under'] = strip_mat(STATE)
     MATS['led_front'] = principled('led_front', srgb('#0b0b0c'), rough=0.08)   # only the strip speaks
@@ -1198,7 +1200,7 @@ def real():
             area('sun', (1.0, 0.3, 0.35), (0, 0, 0.03), 0.5, 45, (1.0, 0.62, 0.32))
             area('bounce', (-0.5, -0.6, 0.3), (0, 0, 0.03), 0.8, 14, (1.0, 0.85, 0.7))
         look((0.33, -0.46, 0.14), (0.0, 0.01, 0.024), 70, 2.8)
-    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-wide" if 'wide' in argv else ""}{"-plastic" if PLASTIC else ""}{"-coarse" if COARSE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
+    scene.render.filepath = os.path.join(OUT, f'aurawake-{SHOT}{"-" + STATE if STATE else ""}{"-wide" if 'wide' in argv else ""}{"-ledoff" if 'ledoff' in argv else ""}{"-plastic" if PLASTIC else ""}{"-coarse" if COARSE else ""}{"-seg" if SEGS else ""}{"-grid" if GRIDT else ""}{"-preview" if PREVIEW else ""}.png')
     bpy.ops.render.render(write_still=True)
 
 # ---------------------------------------------------------------------------------------------------------------

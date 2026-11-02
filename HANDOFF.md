@@ -1434,6 +1434,13 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-02 · LOCAL (82)** · Owner: the base page "più organica, meno riquadri, render puliti su bianco": no panels or
+  tiles; headline left, the base large on the right (product-hero.png) with "120 × 120 × 45 mm · PC/ABS, satin graphite",
+  then one hairline and four clean views on a shared baseline with a line each: Front, Back, Top, Underneath
+  (`assets/aurawake/view-{front,back,top}.png` + product-under.png, cut-outs from Media/…/Renders/Transparent).
+  Light slide: the picture under the third column is now the time at 06:30 with the front LED off (aura.py new flag
+  `ledoff`: `real deck/out/blender time plastic ledoff`) and a caption, "Only the time on the front, all through the
+  wake-up". PDF 66 pages, ~18.1 MB.
 - **2026-11-02 · LOCAL (81)** · Owner: p05-process removed (and its process-* assets); p05-product is now the first page
   after the cover, redesigned: headline + three detail tiles (front ☀ 06:30, back, underneath) on the left, the base
   large on a warm #f1efe9 stage on the right with "120 × 120 × 45 mm · PC/ABS, satin graphite · three charging pins on

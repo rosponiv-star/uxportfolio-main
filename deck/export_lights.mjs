@@ -5,7 +5,7 @@
 import sharp from 'sharp'; import fs from 'fs';
 const S = 'deck/out/blender', O = 'deck/assets/aurawake/lights'; fs.mkdirSync(O, { recursive: true });
 const JOBS = [['led-green', 'aurawake-led-green-wide-plastic.png', 1], ['led-red', 'aurawake-led-red-wide-plastic.png', 1], ['led-night', 'aurawake-led-night-wide-plastic.png', 1], ['led-white', 'aurawake-led-white-wide-plastic.png', 1],
-  ['strip-night', 'aurawake-strip-night-plastic.png'], ['strip-off', 'aurawake-strip-off-plastic.png'], ['strip-dawn', 'aurawake-strip-dawn-plastic.png'], ['strip-white', 'aurawake-strip-white-plastic.png'], ['time', 'aurawake-time-plastic.png']];
+  ['strip-night', 'aurawake-strip-night-plastic.png'], ['strip-off', 'aurawake-strip-off-plastic.png'], ['strip-dawn', 'aurawake-strip-dawn-plastic.png'], ['strip-white', 'aurawake-strip-white-plastic.png'], ['time', 'aurawake-time-ledoff-plastic.png']];
 for (const [name, src, bloom] of JOBS) {
   let img = sharp(`${S}/${src}`).ensureAlpha();
   if (bloom) {   // a closer view (owner, 2026-11-02): the front with the LED, the side and the edge of the top; no halo
