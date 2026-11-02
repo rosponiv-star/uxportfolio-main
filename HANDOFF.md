@@ -1434,6 +1434,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-02 · LOCAL (87)** · The black dividers of `.solx` (solution screens, Smart Home + AuraWake) and `.quad` (2 × 2
+  boards) went from 2 to 4 px (deck.css): at 2 px a PDF viewer fitting the page to its window drew them under one screen
+  pixel and they faded out (owner: "non ci sono più le linee"). Checked on the PDF itself rendered at 40 %.
 - **2026-11-02 · LOCAL (86)** · Lighter PDF (owner: "solo se la perdita di qualità è impercettibile"): 18.58 → 14.38 MB.
   `node deck/optimize_images.mjs`: (1) PNGs with no transparency → JPEG (mozjpeg q90, 4:4:4), only when ≥ 25 % smaller;
   references follow in index.html/deck.css (11 files: Smart Home schemi s01–s03 and screens 05, 13, 14, 18, 20; JustCook
