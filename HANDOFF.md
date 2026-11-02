@@ -1307,6 +1307,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   production fix), battery exploded forward (−80 mm) so it shows, radiator frame set on the back baffle. Line and
   photoreal exploded views re-rendered (final 1600 × 2000), both PT anchor sets re-pasted, schemas re-exported to
   Media/05-AuraWake/Schemi. Spec §8.2 fit notes updated (board y −46…+42 + tab, cell 34 × 47 × 5).
+- **2026-11-02 · LOCAL (75)** · Tail reordered (owner: first one example of the process, then the general overview):
+  … p01-flows → solution (screens, no PP) → system → interaction (slide to open) → new p01-md3 (MD3 with a few
+  conventions of our own, from report pp. 136–171: basic dialog for the alarm with cancel emphasised, snackbar when a
+  window blocks arming, a colour per room / device on = primary, FABs and destructive containers, two filter levels
+  connected buttons vs outlined chips, device cards in their room's colour) → outcome (reflections). Old p01-prototypes
+  removed (it repeated the sketches and design space). p01-system now sits under the Solution step.
 - **2026-11-02 · LOCAL (75)** · PP06 followed start to end (owner), three slides after p01-process: p01-pp06 = the
   analysis (report p. 50: need for control and peace of mind; Marco, Giorgia, Noemi, Franco with faces and one line);
   p01-ideas 2 × 2 now all PP06 = Marco·Giorgia concept (p. 52) + board (p. 58), Franco·Noemi concept (p. 53) + board

@@ -318,28 +318,6 @@
   </div>
 </section>
 
-<section class="slide" id="p01-system" data-step="system">
-  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
-  <div class="frame" style="grid-template-rows: auto auto 1fr">
-    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Who gets in, through what, and who decides: the app as the household’s gatekeeper.</p>
-    <svg class="shh" style="grid-column: 1 / -1; align-self: end" viewBox="0 0 1728 640" role="img" aria-label="Access system: people, touchpoints, the app and the devices; the life of a temporary code" data-shh="sys"></svg>
-  </div>
-</section>
-
-<section class="slide" id="p01-prototypes" data-step="prototypes">
-  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
-  <div class="frame" style="grid-template-rows: auto auto 1fr">
-    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">From paper to Material Design 3, with every flow checked against its sequence model.</p>
-    <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid">
-      <div class="iter"><div class="shh-wide"><img src="assets/smarthome/sketch-pp06.jpg" alt="A paper concept: the floor plan with what was left on." /></div><span class="label kick"><span class="n">01</span>Paper</span><p class="body m">One concept per pain point and persona</p><p class="small i2">Sketched alone, so the ideas diverged before we compared them.</p></div>
-      <div class="iter"><div class="shh-wide"><img src="assets/smarthome/design-space-pp06.jpg" alt="Design space board for PP06." /></div><span class="label kick"><span class="n">02</span>Design space</span><p class="body m">Concepts grouped by affinity</p><p class="small i2">Must-haves for every persona kept, the rest marked secondary: the happiness factors.</p></div>
-      <div class="iter"><div class="shh-wide"><img src="assets/smarthome/seq-vs-flow.jpg" alt="Sequence model next to the UX flow on the floor plan screen." /></div><span class="label kick"><span class="n">03</span>Figma, MD3</span><p class="body m">Flows replayed against the models</p><p class="small i2">Does the app replace the touchpoint at each step? Next: a usability test with five people (protocol ready).</p></div>
-    </div>
-  </div>
-</section>
-
 <section class="slide" id="p01-solution" data-step="solution">
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
@@ -351,6 +329,15 @@
       <figure><img class="shh-phone" src="assets/smarthome/29-codici-temporanei.png" alt="Temporary access codes, manual and automatic." /><figcaption><span class="label kick"><span class="n">03</span></span><span class="small"><span class="m">Access codes</span><br /><span class="i3">Personal, temporary, revocable: no keys to hand over.</span></span></figcaption></figure>
       <figure><img class="shh-phone" src="assets/smarthome/49-sicurezza-errore-a.png" alt="Security: two windows open, the alarm can't be armed yet." /><figcaption><span class="label kick"><span class="n">04</span></span><span class="small"><span class="m">Security</span><br /><span class="i3">Won’t arm with a window open, and says which.</span></span></figcaption></figure>
     </div>
+  </div>
+</section>
+
+<section class="slide" id="p01-system" data-step="solution">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Who gets in, through what, and who decides: the app as the household’s gatekeeper.</p>
+    <svg class="shh" style="grid-column: 1 / -1; align-self: end" viewBox="0 0 1728 640" role="img" aria-label="Access system: people, touchpoints, the app and the devices; the life of a temporary code" data-shh="sys"></svg>
   </div>
 </section>
 
@@ -369,6 +356,17 @@
       <div class="shh-trio"><img src="assets/smarthome/18-notifica-citofono-a.png" alt="Lock screen: someone rang the gate." /><img src="assets/smarthome/20-chiamata-citofono.png" alt="The call: video and the slider to open the gate." /><img src="assets/smarthome/22-storico-citofono.png" alt="History: the call and the opening." /></div>
       <figcaption class="small i3">Notification → call with the slider → history.</figcaption>
     </figure>
+  </div>
+</section>
+
+<section class="slide" id="p01-md3" data-step="solution">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Material Design 3, with a few conventions of our own.</p>
+    <div style="grid-column: 1 / 6; align-self: end"><p class="label i3" style="margin-bottom: 16px">How components behave</p><ol class="rows"><li class="prin"><span class="label kick"><span class="n">01</span></span><span><span class="body m">Basic dialog for the alarm</span><br /><span class="small i2">Arming or disarming asks for an explicit yes; the cancel button gets the emphasis, since it can do no harm.</span></span></li><li class="prin"><span class="label kick"><span class="n">02</span></span><span><span class="body m">Snackbar, not a block</span><br /><span class="small i2">If a window is open the alarm can’t arm: a short message at the bottom says what to close, without stopping the flow.</span></span></li><li class="prin"><span class="label kick"><span class="n">03</span></span><span><span class="body m">A colour per room</span><br /><span class="small i2">The floor plan gives each room its colour; a device icon is in the primary colour when on, neutral when off. Tap a room to see only its devices.</span></span></li></ol></div>
+    <div style="grid-column: 6 / 11; align-self: end"><p class="label i3" style="margin-bottom: 16px">Conventions across the app</p><ol class="rows"><li class="prin"><span class="label kick"><span class="n">04</span></span><span><span class="body m">FABs for the main actions</span><br /><span class="small i2">Always within reach; the destructive ones in a warning container, so they read as important but cautious.</span></span></li><li class="prin"><span class="label kick"><span class="n">05</span></span><span><span class="body m">Two levels of filter</span><br /><span class="small i2">Connected buttons switch the main view of a page; outlined chips filter the list below, lighter so they don’t compete.</span></span></li><li class="prin"><span class="label kick"><span class="n">06</span></span><span><span class="body m">Cards that match the plan</span><br /><span class="small i2">Device cards take the colour of their room; an active automation card turns to the primary colour.</span></span></li></ol></div>
+    <figure style="grid-column: 11 / 13; align-self: end; margin: 0"><img class="shh-phone" src="assets/smarthome/49-sicurezza-errore-a.png" alt="Security: the alarm can’t arm while two windows are open." style="width: 100%" /></figure>
   </div>
 </section>
 
