@@ -1434,6 +1434,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   boards in Media/03-Smart Home Ecosystem/Schemi/bozze/physical-model/bozza-3 (cutaway + network, plan + network,
   outside + zones); the owner picks the main one. Overlay scripts (mknet.py, mkviews.py, net_common.js) live in the
   session scratchpad.
+- **2026-11-02 · LOCAL (83)** · Owner: the picture under the light slide's third column is the flat front with the time
+  lit, the front LED off and the ring amber below (the morning). aura.py new flags for studio shots: `showtime` (the time
+  on any view) and `ring=<night|dawn|white>` (the ring lit on any view): `real deck/out/blender front plastic ledoff
+  showtime ring=dawn` → export_lights.mjs `lights/time.png`; caption "06:30 on the front, the ring amber below, the LED
+  off". Base page: Top = "All touch; three pins for the bracelet".
 - **2026-11-02 · LOCAL (82)** · Owner: the base page "più organica, meno riquadri, render puliti su bianco": no panels or
   tiles; headline left, the base large on the right (product-hero.png) with "120 × 120 × 45 mm · PC/ABS, satin graphite",
   then one hairline and four clean views on a shared baseline with a line each: Front, Back, Top, Underneath

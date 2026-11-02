@@ -671,7 +671,7 @@
     <p class="label kick" style="grid-column: 1 / 6">The base</p>
     <p class="h2" style="grid-column: 1 / 6; margin-top: 24px">A quiet graphite block: nothing to press, nothing lit while you sleep.</p>
     <figure class="aw-hero" style="grid-column: 6 / -1; grid-row: 1 / 3"><img src="assets/aurawake/product-hero.png" alt="The AuraWake base in graphite, three-quarter view" /><figcaption class="small i3">120 × 120 × 45 mm · PC/ABS, satin graphite</figcaption></figure>
-    <div class="aw-views" style="grid-column: 1 / -1; grid-row: 3; align-self: end"><figure><div class="aw-view"><img src="assets/aurawake/view-front.png" alt="Front view: plain graphite face, the status LED" /></div><figcaption class="small"><span class="m">Front</span><br /><span class="i3">The time behind micro-holes, one LED</span></figcaption></figure><figure><div class="aw-view"><img src="assets/aurawake/view-back.png" alt="Back view: USB-C and the pairing button in the grille" /></div><figcaption class="small"><span class="m">Back</span><br /><span class="i3">USB-C and the pairing button</span></figcaption></figure><figure><div class="aw-view"><img src="assets/aurawake/view-top.png" alt="Top view: three gold charging pins" /></div><figcaption class="small"><span class="m">Top</span><br /><span class="i3">Three pins: where the bracelet goes</span></figcaption></figure><figure><div class="aw-view"><img src="assets/aurawake/product-under.png" alt="Underneath: the light ring glowing violet" /></div><figcaption class="small"><span class="m">Underneath</span><br /><span class="i3">The light ring, here violet</span></figcaption></figure></div>
+    <div class="aw-views" style="grid-column: 1 / -1; grid-row: 3; align-self: end"><figure><div class="aw-view"><img src="assets/aurawake/view-front.png" alt="Front view: plain graphite face, the status LED" /></div><figcaption class="small"><span class="m">Front</span><br /><span class="i3">The time behind micro-holes, one LED</span></figcaption></figure><figure><div class="aw-view"><img src="assets/aurawake/view-back.png" alt="Back view: USB-C and the pairing button in the grille" /></div><figcaption class="small"><span class="m">Back</span><br /><span class="i3">USB-C and the pairing button</span></figcaption></figure><figure><div class="aw-view"><img src="assets/aurawake/view-top.png" alt="Top view: a touch surface with three gold charging pins" /></div><figcaption class="small"><span class="m">Top</span><br /><span class="i3">All touch; three pins for the bracelet</span></figcaption></figure><figure><div class="aw-view"><img src="assets/aurawake/product-under.png" alt="Underneath: the light ring glowing violet" /></div><figcaption class="small"><span class="m">Underneath</span><br /><span class="i3">The light ring, here violet</span></figcaption></figure></div>
   </div>
 </section>
 
@@ -969,7 +969,7 @@
   .waves--dark .wimg { background: radial-gradient(closest-side, rgb(255 255 255 / .16), rgb(255 255 255 / 0)); }   /* a soft light behind the graphite: no black on black */
   .wfig { margin: 16px 0 0; flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; gap: 10px; }
   .wfig__pic { flex: 1 1 0; min-height: 0; position: relative; border-radius: 3px; overflow: hidden; background: #f5ecdc; }
-  .wfig img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; display: block; }
+  .wfig img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 6px 10px; box-sizing: border-box; display: block; }
   .whatif > div { display: grid; grid-template-columns: 220px 1fr; column-gap: var(--g); align-items: baseline; padding-block: 16px; }
 </style>
 
@@ -1421,7 +1421,7 @@
       ['Still in bed at 06:30', 'No snooze: only getting up stops it, or the phone.', [
         ['06:30 · Brighter', 'Light 100%, 5000 K; the sound a little more present', step(0)],
         ['06:35 · Clear sound', 'Clear sound, medium volume', step(1)],
-        ['06:40 · Real alarm', 'On the base and the phone, until you are up', step(2)]], 'dawn', ['time', 'Only the time on the front, all through the wake-up']],
+        ['06:40 · Real alarm', 'On the base and the phone, until you are up', step(2)]], 'dawn', ['time', '06:30 on the front, the ring amber below, the LED off']],
     ];
     // each state with its render (owner, 2026-11-02): cut-out studio shots (deck/export_lights.mjs → assets/aurawake/lights)
     const R = (img) => `<img class="wimg wimg--${img.split('-')[0]}" src="assets/aurawake/lights/${img}.png" alt="" />`;
