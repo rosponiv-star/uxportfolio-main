@@ -1329,6 +1329,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-07 · LOCAL (91)** · Owner: p05-problem is also the project's presentation. Kicker "Problem and
+  project"; the three boxed cells under the chart became three plain columns on one hairline, read left to right:
+  The problem (demanding hours, fixed alarm, deep sleep → sleep inertia) · Why light sleep (faster waves, alert sooner)
+  · The project, label in amber like the AuraWake line (bracelet reads heart rate and movement, spec §2 PPG +
+  accelerometer; the room wakes you inside a 30-minute window ending at the set time).
 - **2026-11-07 · LOCAL (90)** · Owner: a dedicated problem slide instead of the problem on the cover. New
   `p05-problem` after the cover: h2 "Waking up tired depends on the sleep phase the alarm finds, not on the hour.", a
   schematic hypnogram (AASM stages Awake / REM / N1 / N2 / N3, ~90-min cycles, deep sleep early, REM late) with each

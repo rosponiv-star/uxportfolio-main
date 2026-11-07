@@ -1659,14 +1659,15 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
 <section class="slide" id="p05-problem" data-page>
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
-    <p class="label kick" style="grid-column: 1 / -1">The problem</p>
+    <p class="label kick" style="grid-column: 1 / -1">Problem and project</p>
     <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Waking up tired depends on the sleep phase the alarm finds, not on the hour.</p>
     <div style="grid-column: 1 / -1; align-self: end; display: grid; gap: 28px">
       <svg class="sleep" style="margin-top: 12px" viewBox="0 0 1728 320" role="img" aria-label="A night's sleep stages, simplified: cycles of about 90 minutes from light to deep sleep and REM; a fixed alarm at 06:30 finds deep sleep, AuraWake wakes at 06:14 in light sleep" data-sleep></svg>
-      <div class="cells" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
-        <div class="cell"><span class="label i3">Woken from deep sleep</span><p class="body cell__foot">Slow delta waves, the brain far from waking. Sleep inertia follows: groggy and slow, often for half an hour.</p></div>
-        <div class="cell"><span class="label i3">Woken from light sleep</span><p class="body cell__foot">Faster waves, close to waking. You are alert sooner: a few minutes of sleep lost cost less than a deep wake-up.</p></div>
-        <div class="cell"><span class="label i3">What it takes</span><p class="body cell__foot">Knowing when sleep is light, night by night, and a window wide enough to find it: 30 minutes, ending at the set time.</p></div>
+      <!-- problem → why light sleep → the project, read left to right under the night they explain (owner, 2026-11-07) -->
+      <div class="aw-why">
+        <div><p class="label">The problem</p><p class="body">People with demanding hours set a fixed alarm. It often finds them in deep sleep, and sleep inertia follows: groggy and slow, often for half an hour.</p></div>
+        <div><p class="label">Why light sleep</p><p class="body">In N1, N2 and REM the brain runs faster waves, close to waking. Woken there, you are alert sooner: a few minutes of sleep lost cost less than a deep wake-up.</p></div>
+        <div><p class="label aw">The project</p><p class="body">AuraWake: a bracelet reads heart rate and movement and tells the base when sleep turns light. The room wakes you then, inside a window of 30 minutes that ends at the set time.</p></div>
       </div>
       <p class="small i3">Schematic night, after the AASM sleep stages. Sleep inertia: Tassi &amp; Muzet, Sleep Medicine Reviews, 2000; Hilditch &amp; McHill, Nature and Science of Sleep, 2019.</p>
     </div>
@@ -1857,6 +1858,9 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .map .l.d { stroke-dasharray: 8 6; }
   .map .l.w { stroke: var(--ink); stroke-width: 2.5; }
   .map .lt { font-size: 18px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; fill: var(--ink-3); }
+  .aw-why { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--g); padding-top: 24px; border-top: 1px solid var(--rule); }
+  .aw-why .label { margin-bottom: 12px; color: var(--ink-3); }
+  .aw-why .label.aw { color: #9a6a12; }
   .sleep { width: 100%; height: auto; display: block; overflow: visible; }
   .sleep text { font-size: 18px; fill: var(--ink-2); }
   .sleep .st { font-size: 22px; font-weight: 500; fill: var(--ink); }
