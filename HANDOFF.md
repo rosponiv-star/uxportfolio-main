@@ -1329,6 +1329,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-07 · LOCAL (99)** · Weavy guide rebuilt as a node chain (owner asked): per shot NB1 generate → LLM check →
+  NB2 fix structure → check → NB3 fix foot and pads → check → NB4 fix finish → LLM final report; SPEC S1–S10, CHECK
+  C1–C12 (+C13–14 for B4), texts and wiring in `notes/05-aurawake-weavy-bracelet.md`.
 - **2026-11-07 · LOCAL (98)** · Correction to (97): the owner WANTS the side protrusion of v2: a small graphite foot
   that leaves the module below the strap's lower edge, with the 3 gold pads on its underside (they sit on the pins when
   the ring lies flat). Module fused into the fabric (framed, flush) and the real fold over the loop, both as in
