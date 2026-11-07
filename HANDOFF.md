@@ -1329,6 +1329,8 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-07 · LOCAL (96)** · p05-problem, The project column: adds "a base with no buttons" and "The phone only
+  sets the plan." PDF regenerated (the owner closed it).
 - **2026-11-07 · LOCAL (95)** · Owner: the brief's requirements on p05-problem. First column is now "The brief": an
   alarm for people who struggle to wake up and feel charged in the morning, and often hit snooze; then the deep-sleep
   problem (sleep inertia).
