@@ -1660,13 +1660,13 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1">Problem and project</p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Waking up tired depends on the sleep phase the alarm finds, not on the hour.</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Better to wake a little early from light sleep than on time from deep sleep.</p>
     <div style="grid-column: 1 / -1; align-self: end; display: grid; gap: 28px">
       <svg class="sleep" style="margin-top: 12px" viewBox="0 0 1728 320" role="img" aria-label="A night's sleep stages, simplified: cycles of about 90 minutes from light to deep sleep and REM; a fixed alarm at 06:30 finds deep sleep, AuraWake wakes at 06:14 in light sleep" data-sleep></svg>
       <!-- problem → why light sleep → the project, read left to right under the night they explain (owner, 2026-11-07) -->
       <div class="aw-why">
         <div><p class="label">The problem</p><p class="body">People with demanding hours set a fixed alarm. It often finds them in deep sleep, and sleep inertia follows: groggy and slow, often for half an hour.</p></div>
-        <div><p class="label">Why light sleep</p><p class="body">In N1, N2 and REM the brain runs faster waves, close to waking. Woken there, you are alert sooner: a few minutes of sleep lost cost less than a deep wake-up.</p></div>
+        <div><p class="label">Why a little early</p><p class="body">In N1, N2 and REM the brain runs faster waves, close to waking. Woken there, even minutes before the set time, you are alert sooner than on time from deep sleep.</p></div>
         <div><p class="label aw">The project</p><p class="body">AuraWake: a bracelet reads heart rate and movement and tells the base when sleep turns light. The room wakes you then, inside a window of 30 minutes that ends at the set time.</p></div>
       </div>
       <p class="small i3">Schematic night, after the AASM sleep stages. Sleep inertia: Tassi &amp; Muzet, Sleep Medicine Reviews, 2000; Hilditch &amp; McHill, Nature and Science of Sleep, 2019.</p>
@@ -2304,10 +2304,10 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     const xs = X('06:14'), xf = X('06:30');
     g += `<line class="smart" x1="${xs}" x2="${xs}" y1="${T0 - 4}" y2="${T0 + 5 * RH}" /><circle cx="${xs}" cy="${Y('1')}" r="7" fill="#c98f2a" />`;
     g += `<line class="fixed" x1="${xf}" x2="${xf}" y1="${T0 - 4}" y2="${T0 + 5 * RH}" /><circle cx="${xf}" cy="${Y('3')}" r="7" fill="var(--ink)" />`;
-    // the legend sits in the Awake row, empty between 04:00 and the window
-    const lx = X('06:00') - 20, ly = T0 + 24;
-    g += `<text class="note" x="${lx - 40}" y="${ly}" style="text-anchor: end; fill: #9a6a12">06:14 · AuraWake: light sleep</text><line class="smart" x1="${lx - 30}" x2="${lx}" y1="${ly - 6}" y2="${ly - 6}" />`;
-    g += `<text class="note" x="${lx - 40}" y="${ly + 24}" style="text-anchor: end">06:30 · a fixed alarm: deep sleep</text><line class="fixed" x1="${lx - 30}" x2="${lx}" y1="${ly + 18}" y2="${ly + 18}" />`;
+    // the legend sits in the Awake row, empty from 23:00 to the brief waking at 03:12
+    const lx = X('23:20'), ly = T0 + 24;
+    g += `<line class="smart" x1="${lx}" x2="${lx + 30}" y1="${ly - 6}" y2="${ly - 6}" /><text class="note" x="${lx + 42}" y="${ly}" style="fill: #9a6a12">06:14 · AuraWake: 16 min early, light sleep, alert</text>`;
+    g += `<line class="fixed" x1="${lx}" x2="${lx + 30}" y1="${ly + 18}" y2="${ly + 18}" /><text class="note" x="${lx + 42}" y="${ly + 24}">06:30 · a fixed alarm: on time, deep sleep, groggy</text>`;
     slp.innerHTML = g;
   }
 

@@ -1329,6 +1329,10 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-07 · LOCAL (92)** · Owner: focus on "better a little early from light sleep than on time from deep
+  sleep". That is now the h2 of p05-problem; the middle column is "Why a little early"; the chart legend (moved to the
+  empty Awake row, 23:20 onwards, clear of the 03:12 waking) reads "06:14 · AuraWake: 16 min early, light sleep,
+  alert" vs "06:30 · a fixed alarm: on time, deep sleep, groggy".
 - **2026-11-07 · LOCAL (91)** · Owner: p05-problem is also the project's presentation. Kicker "Problem and
   project"; the three boxed cells under the chart became three plain columns on one hairline, read left to right:
   The problem (demanding hours, fixed alarm, deep sleep → sleep inertia) · Why light sleep (faster waves, alert sooner)
