@@ -1329,6 +1329,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-07 · LOCAL (94)** · Owner rejected (93) outright ("la veste grafica deve rimanere quella di prima"):
+  the sleep chart is back to the (92) look, step hypnogram in ink with the deep row tinted, and the original sine EEG
+  traces. Do not restyle it as app-like rounded bars or noisy EEG again.
 - **2026-11-07 · LOCAL (93)** · Owner: the sleep chart less angular but still the way science draws it. Hypnogram
   now as sleep studies / sleep apps show it: each stage a rounded bar (deeper = darker on the night hue: N1 #c3c9f5,
   N2 #8d97ea, N3 #4e58b4; REM dusty violet #b9a6d8, awake warm grey #d6d1c6), thin grey links between stages, time on

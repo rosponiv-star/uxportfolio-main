@@ -1662,7 +1662,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     <p class="label kick" style="grid-column: 1 / -1">Problem and project</p>
     <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Better to wake a little early from light sleep than on time from deep sleep.</p>
     <div style="grid-column: 1 / -1; align-self: end; display: grid; gap: 28px">
-      <svg class="sleep" style="margin-top: 20px" viewBox="0 0 1728 330" role="img" aria-label="A night's sleep stages, simplified: cycles of about 90 minutes from light to deep sleep and REM; a fixed alarm at 06:30 finds deep sleep, AuraWake wakes at 06:14 in light sleep" data-sleep></svg>
+      <svg class="sleep" style="margin-top: 12px" viewBox="0 0 1728 320" role="img" aria-label="A night's sleep stages, simplified: cycles of about 90 minutes from light to deep sleep and REM; a fixed alarm at 06:30 finds deep sleep, AuraWake wakes at 06:14 in light sleep" data-sleep></svg>
       <!-- problem → why light sleep → the project, read left to right under the night they explain (owner, 2026-11-07) -->
       <div class="aw-why">
         <div><p class="label">The problem</p><p class="body">People with demanding hours set a fixed alarm. It often finds them in deep sleep, and sleep inertia follows: groggy and slow, often for half an hour.</p></div>
@@ -1867,13 +1867,9 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .sleep .hz { font-size: 16px; fill: var(--ink-3); }
   .sleep .ax { font-size: 16px; font-weight: 500; letter-spacing: .06em; fill: var(--ink-3); text-anchor: middle; }
   .sleep .hr { stroke: var(--rule); }
-  .sleep .vr { stroke: var(--rule); stroke-dasharray: 2 4; }
-  .sleep .sb { stroke: var(--ink-3); stroke-width: 1.5; }
-  .sleep .eeg { fill: none; stroke: var(--ink); stroke-width: 1.1; stroke-linejoin: round; }
-  /* stages: deeper = darker on the night hue; REM and awake set apart (dusty violet, warm grey) */
-  .sleep .s { stroke: none; }
-  .sleep .sW { fill: #d6d1c6; } .sleep .sR { fill: #b9a6d8; } .sleep .s1 { fill: #c3c9f5; } .sleep .s2 { fill: #8d97ea; } .sleep .s3 { fill: #4e58b4; }
-  .sleep .lk { stroke: color-mix(in srgb, var(--ink) 22%, transparent); stroke-width: 1.5; }
+  .sleep .eeg { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+  .sleep .hyp { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; }
+  .sleep .deep { fill: color-mix(in srgb, var(--night) 18%, transparent); }
   .sleep .win { fill: color-mix(in srgb, var(--dawn) 22%, transparent); }
   .sleep .smart { stroke: #c98f2a; stroke-width: 2.5; }
   .sleep .fixed { stroke: var(--ink); stroke-width: 2; stroke-dasharray: 6 5; }
@@ -2261,70 +2257,53 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     iso.innerHTML = g;
   }
 
-  // AuraWake · the problem (owner, 2026-11-07): a hypnogram drawn the way sleep studies and sleep apps show it (AASM
-  // stages as rounded bars, deeper = darker, thin links between stages, time on the bottom axis), each stage's EEG beside
-  // it as an irregular trace (band-limited noise from a fixed seed, 1 s scale bar); a fixed alarm at 06:30 finds deep
-  // sleep, the smart window wakes you at 06:14 in light sleep.
+  // AuraWake · the problem (owner, 2026-11-07): a schematic hypnogram (AASM stages) with each stage's EEG beside it;
+  // a fixed alarm at 06:30 finds deep sleep, the smart window wakes you at 06:14 in light sleep.
   const slp = document.querySelector('[data-sleep]');
   if (slp) {
     const ROWS = [['W', 'Awake', 'Beta 13–30, gamma 30+ Hz · alpha at rest'], ['R', 'REM', 'Mixed, fast: close to waking'], ['1', 'N1 · light', 'Theta 4–7 Hz, alpha fading'],
       ['2', 'N2 · light', 'Spindles 11–16 Hz, K-complexes'], ['3', 'N3 · deep', 'Delta 0.5–4 Hz, slow and large']];
-    const T0 = 6, RH = 56, X0 = 590, X1 = 1728, BH = 24;
+    const T0 = 36, RH = 56, X0 = 590, X1 = 1728;
     const m = (t) => { const [h, mm] = t.split(':').map(Number); return (h < 12 ? h + 24 : h) * 60 + mm; };
     const A = m('22:30'), Z = m('06:45'), X = (t) => X0 + ((m(t) - A) / (Z - A)) * (X1 - X0);
     const Y = (k) => T0 + ROWS.findIndex((r) => r[0] === k) * RH + RH / 2;
-    // EEG: 1.6 s of signal in 190 px; each stage = a few sinusoids drawn at random inside its band (seeded, so every
-    // build is identical), plus what marks it: a spindle and a K-complex in N2, sawtooth waves in REM
-    let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-    const BAND = { W: [[14, 30, 1], [8, 12, 0.5], [30, 40, 0.35]], R: [[4, 8, 1], [14, 25, 0.6]], 1: [[4, 7, 1], [8, 11, 0.35]], 2: [[4, 7, 1], [1.5, 3, 0.4]], 3: [[0.7, 2, 1], [3, 5, 0.18]] };
-    const AMP = { W: 4.5, R: 6, 1: 8, 2: 7, 3: 16 };
+    // the EEG traces: frequency, amplitude, and the extras that mark a stage (spindle, K-complex)
     const eeg = (k, x, y) => {
-      const W = 190, T = 1.6, N = 520, comp = [];
-      BAND[k].forEach(([lo, hi, w]) => { for (let i = 0; i < 5; i++) comp.push([lo + rnd() * (hi - lo), rnd() * 6.283, w * (0.5 + rnd() * 0.5)]); });
-      const tot = comp.reduce((q, c) => q + c[2], 0); let d = '';
-      for (let i = 0; i <= N; i++) {
-        const t = (i / N) * T; let v = 0;
-        comp.forEach(([f, ph, w]) => (v += w * Math.sin(6.283 * f * t + ph)));
-        v = (v / tot) * AMP[k] * 2.2;
-        if (k === '2') {
-          v += 7 * Math.exp(-(((t - 0.42) / 0.12) ** 2)) * Math.sin(6.283 * 13 * t);                       // spindle
-          v += -20 * Math.exp(-(((t - 1.08) / 0.07) ** 2)) + 12 * Math.exp(-(((t - 1.28) / 0.12) ** 2));   // K-complex
-        }
-        if (k === 'R') { const u = (t * 3.2) % 1; if (t > 0.5 && t < 1.15) v += 7 * (u < 0.8 ? u / 0.8 : (1 - u) / 0.2) - 3.5; }   // sawtooth
-        d += `${i ? 'L' : 'M'}${(x + (i / N) * W).toFixed(1)} ${(y - v).toFixed(1)}`;
+      const W = 190, f = { W: 26, R: 13, 1: 8, 2: 7, 3: 2.6 }[k], a = { W: 4, R: 6, 1: 8, 2: 6, 3: 14 }[k]; let d = '';
+      for (let i = 0; i <= 380; i++) {
+        const u = i / 380, ph = u * f * 2 * Math.PI;
+        let v = a * Math.sin(ph) * (k === 'W' || k === 'R' ? 0.6 + 0.4 * Math.sin(u * 37 + k.charCodeAt(0)) : 1);
+        if (k === 'W') v += 2.5 * Math.sin(u * 140);                                  // fast gamma ripples on top
+        if (k === '2' && u > 0.18 && u < 0.38) v += 6 * Math.sin(u * 13 * 2 * Math.PI * 6) * Math.sin((u - 0.18) / 0.2 * Math.PI);   // spindle
+        if (k === '2' && u > 0.62 && u < 0.78) v += -17 * Math.sin((u - 0.62) / 0.16 * Math.PI) * Math.cos((u - 0.62) / 0.16 * Math.PI * 0.5); // K-complex
+        d += `${i ? 'L' : 'M'}${(x + u * W).toFixed(1)} ${(y - v).toFixed(1)}`;
       }
       return `<path class="eeg" d="${d}" />`;
     };
     let g = '';
-    // grid: one hairline per stage row, a light vertical per hour, the window behind everything
+    // deep-sleep row tint, smart window, axis
+    g += `<rect class="deep" x="${X0}" y="${T0 + 4 * RH}" width="${X1 - X0}" height="${RH}" />`;
+    g += `<rect class="win" x="${X('06:00')}" y="${T0}" width="${X('06:30') - X('06:00')}" height="${5 * RH}" />`;
     ROWS.forEach(([k, name, hz], i) => {
       const y = T0 + i * RH;
       g += `<line class="hr" x1="0" x2="${X1}" y1="${y}" y2="${y}" />`;
       g += `<text class="st" x="0" y="${y + 25}">${name}</text><text class="hz" x="0" y="${y + 46}">${hz}</text>`;
       g += eeg(k, 370, y + RH / 2);
     });
-    const yB = T0 + 5 * RH;
-    g += `<line class="hr" x1="0" x2="${X1}" y1="${yB}" y2="${yB}" />`;
-    g += `<rect class="win" x="${X('06:00')}" y="${T0}" width="${X('06:30') - X('06:00')}" height="${5 * RH}" />`;
-    ['23:00', '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00'].forEach((t) => {
-      g += `<line class="vr" x1="${X(t)}" x2="${X(t)}" y1="${T0}" y2="${yB + 8}" /><text class="ax" x="${X(t)}" y="${yB + 30}">${t}</text>`;
-    });
-    g += `<line class="sb" x1="370" x2="${370 + 190 / 1.6}" y1="${yB + 18}" y2="${yB + 18}" /><text class="hz" x="${370 + 190 / 1.6 + 10}" y="${yB + 24}">1 s</text>`;
+    g += `<line class="hr" x1="0" x2="${X1}" y1="${T0 + 5 * RH}" y2="${T0 + 5 * RH}" />`;
+    ['23:00', '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00'].forEach((t) => (g += `<text class="ax" x="${X(t)}" y="${T0 - 14}">${t}</text>`));
     // a schematic night: ~90-minute cycles, deep sleep early, more REM towards morning, a brief waking at 03:12
-    const H = [['22:30', 'W'], ['22:42', '1'], ['22:50', '2'], ['23:05', '3'], ['23:50', '2'], ['00:02', 'R'], ['00:14', '2'], ['00:35', '3'], ['01:10', '2'],
+    const H = [['22:30', 'W'], ['22:42', '1'], ['22:50', '2'], ['23:05', '3'], ['23:50', '2'], ['24:02', 'R'], ['24:14', '2'], ['24:35', '3'], ['01:10', '2'],
       ['01:28', 'R'], ['01:48', '2'], ['02:08', '3'], ['02:28', '2'], ['02:50', 'R'], ['03:12', 'W'], ['03:20', '1'], ['03:26', '2'], ['03:56', '3'],
       ['04:06', '2'], ['04:30', 'R'], ['05:00', '2'], ['05:28', '3'], ['05:40', '2'], ['06:08', '1'], ['06:18', '2'], ['06:24', '3'], ['06:40', '2'], ['06:45', '2']];
-    let links = '', bars = '';
-    H.slice(0, -1).forEach(([t, k], i) => {
-      const x0 = X(t), x1 = X(H[i + 1][0]), y = Y(k), w = Math.max(x1 - x0 - 2, 4);
-      bars += `<rect class="s s${k}" x="${x0 + 1}" y="${y - BH / 2}" width="${w}" height="${BH}" rx="${Math.min(BH / 2, w / 2)}" />`;
-      const k2 = H[i + 1][1]; if (i < H.length - 2 && k2 !== k) links += `<line class="lk" x1="${x1}" x2="${x1}" y1="${y}" y2="${Y(k2)}" />`;
-    });
-    g += links + bars;
+    const hm = (t) => t.startsWith('24:') ? '00:' + t.slice(3) : t;
+    let d = '';
+    H.forEach(([t, k], i) => { const x = X(hm(t)), y = Y(k); d += i ? `H${x.toFixed(1)}V${y}` : `M${x.toFixed(1)} ${y}`; });
+    g += `<path class="hyp" d="${d}" />`;
     // the two wake-ups
     const xs = X('06:14'), xf = X('06:30');
-    g += `<line class="smart" x1="${xs}" x2="${xs}" y1="${T0}" y2="${yB}" /><circle cx="${xs}" cy="${Y('1')}" r="7" fill="#c98f2a" stroke="#fdfdfc" stroke-width="2.5" />`;
-    g += `<line class="fixed" x1="${xf}" x2="${xf}" y1="${T0}" y2="${yB}" /><circle cx="${xf}" cy="${Y('3')}" r="7" fill="var(--ink)" stroke="#fdfdfc" stroke-width="2.5" />`;
+    g += `<line class="smart" x1="${xs}" x2="${xs}" y1="${T0 - 4}" y2="${T0 + 5 * RH}" /><circle cx="${xs}" cy="${Y('1')}" r="7" fill="#c98f2a" />`;
+    g += `<line class="fixed" x1="${xf}" x2="${xf}" y1="${T0 - 4}" y2="${T0 + 5 * RH}" /><circle cx="${xf}" cy="${Y('3')}" r="7" fill="var(--ink)" />`;
     // the legend sits in the Awake row, empty from 23:00 to the brief waking at 03:12
     const lx = X('23:20'), ly = T0 + 24;
     g += `<line class="smart" x1="${lx}" x2="${lx + 30}" y1="${ly - 6}" y2="${ly - 6}" /><text class="note" x="${lx + 42}" y="${ly}" style="fill: #9a6a12">06:14 · AuraWake: 16 min early, light sleep, alert</text>`;
