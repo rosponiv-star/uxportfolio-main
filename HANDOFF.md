@@ -260,6 +260,16 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
 3. Real photos for the Selected projects index and, if wanted, the covers (objects, contexts, devices: not only phones).
 4. Closing slide (contact, thank you) — not built yet. Final check: size < 20 MB, file name, links, typos.
 5. Optional: propose a concrete small physical prototype (Arduino/ESP32) tied to one project.
+7a. **AuraWake plan agreed with the owner (2026-11-07), in this order:** (1) NEXT: a process slide, 2024 course
+   concept → 2026 product rethink (what was kept, what changed and why), from the 2024 PDFs/Figma page 1; (2) THEN cut
+   AuraWake from 12 pages to 7–8 (merge base + system, night + scenes, gestures + light, the three app slides into
+   one); IMPORTANT, later: (3) the app screens are the 2024 originals and do not show the 2026 rules (no snooze,
+   ladder, palm OFF, alarm status always visible): redesign 2–3 key screens or say what changed; (4) critical points
+   (item 6, real findings from the owner); (5) a proper bracelet model with its charging pads, re-rendered in the
+   product views, the scenes and the gestures; (6) LAST OF ALL: English proofread of every AuraWake slide against the
+   spec. Site case study: not now. On "2024 vs 2026": the owner may omit it; told him (2026-11-07) several decisions
+   are from Oct 2026 (palm gestures, no snooze, two lights, pins, no haptics, internals, plastic), so the process
+   slide is where to show it honestly.
 7. **AuraWake, left for later (owner, 2026-10-31):** cut the slides down (now cover + 11; decide after all is in);
    bracelet model with the charging pads on the sensor side (spec says "da modellare"); English proofread of every
    AuraWake slide against the spec; critical points (item 6). Site: the AuraWake case study is still Coming soon with
