@@ -1329,6 +1329,14 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-07 · LOCAL (97)** · Bracelet decisions (owner): design stays (woven light-blue Sport Loop strap, black
+  steel loop, module inside next to the loop). Charging: the bracelet lies on the base closed, as a ring standing on
+  its lower edge; 3 gold pads (4 mm pitch) on the module's lower edge sit on the 3 pins (spec §2 updated; module aimed
+  at ~36 × 19 × 6 mm, the Blender pod at 1.6 mm is too thin). The owner makes the photographic images in Weavy himself:
+  guide with references and prompts in `notes/05-aurawake-weavy-bracelet.md` (shots B1 hero, B2 wrist side, B3
+  charging edge, B4 on the base → `Media/05-AuraWake/Weavy/`). Then Claude: bracelet on slide 57 (product), 63
+  (exploded, its inside too), cover drawing; Blender model matched to the images (pads, thicker module) and re-render
+  system, gestures, room scenes.
 - **2026-11-07 · LOCAL (96)** · p05-problem, The project column: adds "a base with no buttons" and "The phone only
   sets the plan." PDF regenerated (the owner closed it).
 - **2026-11-07 · LOCAL (95)** · Owner: the brief's requirements on p05-problem. First column is now "The brief": an
