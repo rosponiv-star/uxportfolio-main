@@ -31,13 +31,20 @@ Reference images (all in the repo, `deck/assets/aurawake/`):
 
 ## The common description (paste it at the start of every prompt)
 
-> Product photograph of a sleep-tracking bracelet. One continuous woven nylon strap, light-blue melange with tiny
-> white flecks, 19 mm tall, with corded edges. A flat black satin-steel rectangular loop; the strap passes through the
-> loop and folds visibly over its outer bar; the tail closes with hook-and-loop on the outside, on the side opposite
-> the sensors. A slim graphite sensor module (36 × 19 × 6 mm, soft corners, matte) sits inside the strap right next to
-> the loop: hidden from outside, visible only on the wrist side, with a small dark glossy optical sensor window. On the
-> module's lower edge, three small gold contact pads in a row, 4 mm apart. No screen, no buttons, no lights, no logo.
-> Match the shape of the first reference and the fabric of the second exactly.
+Revised 2026-11-07 after a run that put the pads under the module, clipped a metal chip onto the fabric and left the
+strap end sticking out of the loop. Reference 2 (`bracelet-weavy-v2.jpg`) is right on three things and is now the base:
+the module fused into the fabric, the foot that sticks out below the strap edge, the real fold over the loop.
+
+> Product photograph of a sleep-tracking bracelet, built exactly like the second reference with two changes only.
+> Same woven nylon strap, light-blue melange with white flecks, corded edges. Same closure: the strap passes through a
+> flat black satin-steel rectangular loop, folds back over the loop's outer bar and lies flat on itself on the outside,
+> closing with hook-and-loop; the strap end is hidden under the folded layer, nothing sticks out of the ring. Same
+> sensor module: matte graphite, soft corners, set INTO the strap and framed by the fabric, flush, not a separate metal
+> chip clipped on. Same charging foot: a small flat graphite foot that leaves the module and sticks out just below the
+> strap's lower edge. Change 1: the module sits right next to the loop, not on the opposite side. Change 2: three small
+> gold contact pads in a row, 4 mm apart, on the UNDERSIDE of that foot, facing down towards the surface the ring stands
+> on; the module's wrist face has only a small dark optical sensor window, no pads. No screen, no buttons, no lights,
+> no logo.
 
 ## Shots
 
@@ -63,6 +70,10 @@ Reference images (all in the repo, `deck/assets/aurawake/`):
 
 ## If a result is wrong
 
-Add one short line at the end and run again, for example: "The module must be next to the loop, not opposite it.",
-"The strap must fold over the loop's outer bar.", "No logo, no text.", "Keep the base exactly as in the reference."
-If two runs miss, send the best one to Claude: small fixes can be done afterwards.
+Add one short line at the end and run again:
+- pads under the module: "The pads are only on the underside of the foot below the strap edge, not on the module's face."
+- metal chip on top of the fabric: "The module is set into the strap and framed by the fabric, flush, as in the second reference."
+- strap end sticking out: "The strap folds back over the loop and lies flat on itself; its end is hidden, nothing sticks out."
+- no foot: "Keep the small graphite foot sticking out below the strap edge, as in the second reference."
+- module opposite the loop: "The module must be next to the loop, not opposite it."
+- logo or text: "No logo, no text."

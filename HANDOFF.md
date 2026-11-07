@@ -1329,6 +1329,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-07 · LOCAL (98)** · Correction to (97): the owner WANTS the side protrusion of v2: a small graphite foot
+  that leaves the module below the strap's lower edge, with the 3 gold pads on its underside (they sit on the pins when
+  the ring lies flat). Module fused into the fabric (framed, flush) and the real fold over the loop, both as in
+  `bracelet-weavy-v2.jpg`; only the module position changes (next to the loop). A run had pads under the module, a
+  clipped-on metal chip and the strap end sticking out of the loop: the Weavy guide's description and fixes rewritten.
 - **2026-11-07 · LOCAL (97)** · Bracelet decisions (owner): design stays (woven light-blue Sport Loop strap, black
   steel loop, module inside next to the loop). Charging: the bracelet lies on the base closed, as a ring standing on
   its lower edge; 3 gold pads (4 mm pitch) on the module's lower edge sit on the 3 pins (spec §2 updated; module aimed
