@@ -37,6 +37,7 @@ const SHOTS = [   // [folder, file, selector] — the selector is the schema its
   [JC, '05-ricerca-numeri', '#p02-research .cells'],
   [JC, '06-prototipo-corso-2025', '#p02-prototypes .iter:nth-of-type(1)'],
   [JC, '07-design-finale', '#p02-prototypes .iter:nth-of-type(2)'],
+  [AW, '00-problema-fasi-del-sonno', '#p05-problem [data-sleep]'],
   [AW, '01-sistema', '#p05-system [data-iso]'],
   [AW, '02-una-notte', '#p05-night [data-night]'],
   [AW, '04-gesto-01-prendi-il-bracciale', '#p05-gestures [data-gest="1"]'],

@@ -260,7 +260,7 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
 3. Real photos for the Selected projects index and, if wanted, the covers (objects, contexts, devices: not only phones).
 4. Closing slide (contact, thank you) — not built yet. Final check: size < 20 MB, file name, links, typos.
 5. Optional: propose a concrete small physical prototype (Arduino/ESP32) tied to one project.
-7a. **AuraWake plan agreed with the owner (2026-11-07), in this order** (items 1–2 settled the same day: no process slide; the cover carries problem, project and the 2024 → 2026 line; the owner kept night/scenes and gestures/light as separate slides): (1) was: a process slide, 2024 course
+7a. **AuraWake plan agreed with the owner (2026-11-07), in this order** (items 1–2 settled the same day: no process slide; the cover is title, lead and facts (Year "2024 · detailed in 2026"), and a dedicated problem slide `p05-problem` follows it; the owner kept night/scenes and gestures/light as separate slides): (1) was: a process slide, 2024 course
    concept → 2026 product rethink (what was kept, what changed and why), from the 2024 PDFs/Figma page 1; (2) THEN cut
    AuraWake from 12 pages to 7–8 (merge base + system, night + scenes, gestures + light, the three app slides into
    one); IMPORTANT, later: (3) the app screens are the 2024 originals and do not show the 2026 rules (no snooze,
@@ -308,6 +308,7 @@ deck/blender/aura.py -- <mode> <outdir> <shot> [plastic] [preview]` (run from th
 
 | Schema (export name) | Slide id | Made of | To change it |
 |---|---|---|---|
+| 00 Problem, sleep stages | `p05-problem` | `[data-sleep]` script: `ROWS` (stage, wave band), `eeg()` traces, `H` = the schematic night (time, stage), window 06:00–06:30, wake 06:14 vs fixed 06:30 | night: edit `H`; waves: `f`/`a` in `eeg()`; sources in the slide's small line |
 | 01 System | `p05-system` | iso drawings `line` mode (`iso-base`, `-bracelet`, `-phone`, `-lamp`, `-shutters`, `-diffuser`, `-base_under`) + the `[data-iso]` script in index.html (uv layout `N`, groups `G`, flows, `KEYS`) | objects: edit the builder in aura.py, re-run `line out/blender <name>`, copy the PNG and the new anchors into `AN`; layout/keys: the script |
 | 02 One night | `p05-night` | `[data-night]` script: `SEG` time stretches, `lanes` (events / areas / tags) | edit `lanes` values (they follow spec §6) |
 | 03 Scenes ×5 | `p05-scenes` | `deck/blender/bedroom.py`, `real <out> room1…room5`; `ROOM` table = time, lamp, ring, shutter, sky, exposure per frame; captions in the slide | edit `ROOM`/scene, render, convert the PNG to `assets/aurawake/roomN.jpg` (sharp, flatten #000) |
@@ -1328,6 +1329,15 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-07 · LOCAL (90)** · Owner: a dedicated problem slide instead of the problem on the cover. New
+  `p05-problem` after the cover: h2 "Waking up tired depends on the sleep phase the alarm finds, not on the hour.", a
+  schematic hypnogram (AASM stages Awake / REM / N1 / N2 / N3, ~90-min cycles, deep sleep early, REM late) with each
+  stage's EEG drawn beside it (beta/gamma/alpha awake, theta N1, spindles 11–16 Hz + K-complexes N2, delta N3), the
+  06:00–06:30 window, AuraWake waking at 06:14 in N1 vs a fixed 06:30 alarm in N3; three cells (deep wake-up → sleep
+  inertia; light wake-up; what it takes: knowing when sleep is light + a 30-min window). Sources in the small line:
+  Tassi & Muzet 2000, Hilditch & McHill 2019 (sleep inertia). NB: alpha/beta/gamma are waking rhythms, sleep is
+  theta/delta; the slide says so. Cover back to title + lead + facts. Schema export `00-problema-fasi-del-sonno`.
+  AuraWake = 13 pages.
 - **2026-11-07 · LOCAL (89)** · Owner reverted most of (88): night and scenes, gestures and light are separate slides
   again as before ("troppo compatto"; index.html restored from be0d487), and the overview slide is gone: the COVER is
   now the project's introduction: title, lead, then Problem and Project (with "Concept and app from the 2024 course;

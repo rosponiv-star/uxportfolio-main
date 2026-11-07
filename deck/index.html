@@ -1649,17 +1649,29 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     <p class="label muted" style="grid-column: 1 / -1">Human–Computer Interaction 1 · University of Trento</p>
     <h2 class="display" style="grid-column: 1 / 11; margin-top: 24px; font-size: 136px">AuraWake</h2>
     <p class="lead" style="grid-column: 1 / 7; margin-top: 32px">An alarm with no buttons that wakes you gradually, with light, sound, scent and daylight, at the lightest moment of your sleep.</p>
-    <!-- the cover is also the project's introduction (owner, 2026-11-07): the problem and the project, then the facts -->
-    <div class="aw-intro" style="grid-column: 1 / 7; grid-row: 4; align-self: end">
-      <div><p class="label muted">Problem</p><p class="small">An alarm rings at a fixed time, often in deep sleep: people with demanding hours start the day tired.</p></div>
-      <div><p class="label muted">Project</p><p class="small">A base runs the room; a bracelet tells it when your sleep is light. Concept and app from the 2024 course; product, interaction and engineering detailed in 2026.</p></div>
-    </div>
     <dl class="pmeta rule" style="grid-column: 1 / 9; grid-row: 5">
       <div><dt class="label muted">Type</dt><dd class="">Interaction and Integrated product design</dd></div><div><dt class="label muted">Year</dt><dd class="">2024 · detailed in 2026</dd></div><div><dt class="label muted">Role</dt><dd class="">Concept, interaction and app; then product and engineering</dd></div><div><dt class="label muted">Team</dt><dd class="">2 design students</dd></div>
     </dl>
   </div>
 </section>
 
+
+<section class="slide" id="p05-problem" data-page>
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1">The problem</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Waking up tired depends on the sleep phase the alarm finds, not on the hour.</p>
+    <div style="grid-column: 1 / -1; align-self: end; display: grid; gap: 28px">
+      <svg class="sleep" style="margin-top: 12px" viewBox="0 0 1728 320" role="img" aria-label="A night's sleep stages, simplified: cycles of about 90 minutes from light to deep sleep and REM; a fixed alarm at 06:30 finds deep sleep, AuraWake wakes at 06:14 in light sleep" data-sleep></svg>
+      <div class="cells" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
+        <div class="cell"><span class="label i3">Woken from deep sleep</span><p class="body cell__foot">Slow delta waves, the brain far from waking. Sleep inertia follows: groggy and slow, often for half an hour.</p></div>
+        <div class="cell"><span class="label i3">Woken from light sleep</span><p class="body cell__foot">Faster waves, close to waking. You are alert sooner: a few minutes of sleep lost cost less than a deep wake-up.</p></div>
+        <div class="cell"><span class="label i3">What it takes</span><p class="body cell__foot">Knowing when sleep is light, night by night, and a window wide enough to find it: 30 minutes, ending at the set time.</p></div>
+      </div>
+      <p class="small i3">Schematic night, after the AASM sleep stages. Sleep inertia: Tassi &amp; Muzet, Sleep Medicine Reviews, 2000; Hilditch &amp; McHill, Nature and Science of Sleep, 2019.</p>
+    </div>
+  </div>
+</section>
 
 <!-- AuraWake (additional project, owner 2026-10-27): 4 slides, the physical interaction first. Facts from
      notes/05-aurawake.md + C:\Users\rospo\Documents\ClaudeCode\Design\AuraWake\AuraWake - Interaction Design Spec.md
@@ -1796,8 +1808,6 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .pthumb .cap { display: flex; gap: 14px; align-items: baseline; }
 
   /* Project cover meta */
-  .aw-intro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--g); margin-bottom: 40px; }
-  .aw-intro .label { margin-bottom: 8px; }
   .pmeta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--g); padding-top: 20px; border-top: 1px solid; font-size: var(--fs-small); }
   .pmeta dt { margin-bottom: 6px; }
 
@@ -1847,6 +1857,19 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .map .l.d { stroke-dasharray: 8 6; }
   .map .l.w { stroke: var(--ink); stroke-width: 2.5; }
   .map .lt { font-size: 18px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; fill: var(--ink-3); }
+  .sleep { width: 100%; height: auto; display: block; overflow: visible; }
+  .sleep text { font-size: 18px; fill: var(--ink-2); }
+  .sleep .st { font-size: 22px; font-weight: 500; fill: var(--ink); }
+  .sleep .hz { font-size: 16px; fill: var(--ink-3); }
+  .sleep .ax { font-size: 16px; font-weight: 500; letter-spacing: .06em; fill: var(--ink-3); text-anchor: middle; }
+  .sleep .hr { stroke: var(--rule); }
+  .sleep .eeg { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+  .sleep .hyp { fill: none; stroke: var(--ink); stroke-width: 2.5; stroke-linejoin: round; }
+  .sleep .deep { fill: color-mix(in srgb, var(--night) 18%, transparent); }
+  .sleep .win { fill: color-mix(in srgb, var(--dawn) 22%, transparent); }
+  .sleep .smart { stroke: #c98f2a; stroke-width: 2.5; }
+  .sleep .fixed { stroke: var(--ink); stroke-width: 2; stroke-dasharray: 6 5; }
+  .sleep .note { font-size: 18px; font-weight: 500; }
   .lanes text { font-size: 19px; fill: var(--ink-2); }
   .lanes .ax { font-size: 18px; font-weight: 500; letter-spacing: 0.06em; fill: var(--ink-3); text-anchor: middle; }
   .lanes .ln { font-size: 22px; font-weight: 500; fill: var(--ink); }
@@ -2228,6 +2251,60 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     const LG = [['wifi', 'Wi-Fi, local'], ['ble', 'BLE 5'], ['thread', 'Thread / Matter']];
     LG.forEach(([k, t], i) => (g += `<path class="fl fl-${k}" d="M0 ${800 + i * 36} h40" /><text class="lg" x="52" y="${806 + i * 36}">${t}</text>`));
     iso.innerHTML = g;
+  }
+
+  // AuraWake · the problem (owner, 2026-11-07): a schematic hypnogram (AASM stages) with each stage's EEG beside it;
+  // a fixed alarm at 06:30 finds deep sleep, the smart window wakes you at 06:14 in light sleep.
+  const slp = document.querySelector('[data-sleep]');
+  if (slp) {
+    const ROWS = [['W', 'Awake', 'Beta 13–30, gamma 30+ Hz · alpha at rest'], ['R', 'REM', 'Mixed, fast: close to waking'], ['1', 'N1 · light', 'Theta 4–7 Hz, alpha fading'],
+      ['2', 'N2 · light', 'Spindles 11–16 Hz, K-complexes'], ['3', 'N3 · deep', 'Delta 0.5–4 Hz, slow and large']];
+    const T0 = 36, RH = 56, X0 = 590, X1 = 1728;
+    const m = (t) => { const [h, mm] = t.split(':').map(Number); return (h < 12 ? h + 24 : h) * 60 + mm; };
+    const A = m('22:30'), Z = m('06:45'), X = (t) => X0 + ((m(t) - A) / (Z - A)) * (X1 - X0);
+    const Y = (k) => T0 + ROWS.findIndex((r) => r[0] === k) * RH + RH / 2;
+    // the EEG traces: frequency, amplitude, and the extras that mark a stage (spindle, K-complex)
+    const eeg = (k, x, y) => {
+      const W = 190, f = { W: 26, R: 13, 1: 8, 2: 7, 3: 2.6 }[k], a = { W: 4, R: 6, 1: 8, 2: 6, 3: 14 }[k]; let d = '';
+      for (let i = 0; i <= 380; i++) {
+        const u = i / 380, ph = u * f * 2 * Math.PI;
+        let v = a * Math.sin(ph) * (k === 'W' || k === 'R' ? 0.6 + 0.4 * Math.sin(u * 37 + k.charCodeAt(0)) : 1);
+        if (k === 'W') v += 2.5 * Math.sin(u * 140);                                  // fast gamma ripples on top
+        if (k === '2' && u > 0.18 && u < 0.38) v += 6 * Math.sin(u * 13 * 2 * Math.PI * 6) * Math.sin((u - 0.18) / 0.2 * Math.PI);   // spindle
+        if (k === '2' && u > 0.62 && u < 0.78) v += -17 * Math.sin((u - 0.62) / 0.16 * Math.PI) * Math.cos((u - 0.62) / 0.16 * Math.PI * 0.5); // K-complex
+        d += `${i ? 'L' : 'M'}${(x + u * W).toFixed(1)} ${(y - v).toFixed(1)}`;
+      }
+      return `<path class="eeg" d="${d}" />`;
+    };
+    let g = '';
+    // deep-sleep row tint, smart window, axis
+    g += `<rect class="deep" x="${X0}" y="${T0 + 4 * RH}" width="${X1 - X0}" height="${RH}" />`;
+    g += `<rect class="win" x="${X('06:00')}" y="${T0}" width="${X('06:30') - X('06:00')}" height="${5 * RH}" />`;
+    ROWS.forEach(([k, name, hz], i) => {
+      const y = T0 + i * RH;
+      g += `<line class="hr" x1="0" x2="${X1}" y1="${y}" y2="${y}" />`;
+      g += `<text class="st" x="0" y="${y + 25}">${name}</text><text class="hz" x="0" y="${y + 46}">${hz}</text>`;
+      g += eeg(k, 370, y + RH / 2);
+    });
+    g += `<line class="hr" x1="0" x2="${X1}" y1="${T0 + 5 * RH}" y2="${T0 + 5 * RH}" />`;
+    ['23:00', '00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00'].forEach((t) => (g += `<text class="ax" x="${X(t)}" y="${T0 - 14}">${t}</text>`));
+    // a schematic night: ~90-minute cycles, deep sleep early, more REM towards morning, a brief waking at 03:12
+    const H = [['22:30', 'W'], ['22:42', '1'], ['22:50', '2'], ['23:05', '3'], ['23:50', '2'], ['24:02', 'R'], ['24:14', '2'], ['24:35', '3'], ['01:10', '2'],
+      ['01:28', 'R'], ['01:48', '2'], ['02:08', '3'], ['02:28', '2'], ['02:50', 'R'], ['03:12', 'W'], ['03:20', '1'], ['03:26', '2'], ['03:56', '3'],
+      ['04:06', '2'], ['04:30', 'R'], ['05:00', '2'], ['05:28', '3'], ['05:40', '2'], ['06:08', '1'], ['06:18', '2'], ['06:24', '3'], ['06:40', '2'], ['06:45', '2']];
+    const hm = (t) => t.startsWith('24:') ? '00:' + t.slice(3) : t;
+    let d = '';
+    H.forEach(([t, k], i) => { const x = X(hm(t)), y = Y(k); d += i ? `H${x.toFixed(1)}V${y}` : `M${x.toFixed(1)} ${y}`; });
+    g += `<path class="hyp" d="${d}" />`;
+    // the two wake-ups
+    const xs = X('06:14'), xf = X('06:30');
+    g += `<line class="smart" x1="${xs}" x2="${xs}" y1="${T0 - 4}" y2="${T0 + 5 * RH}" /><circle cx="${xs}" cy="${Y('1')}" r="7" fill="#c98f2a" />`;
+    g += `<line class="fixed" x1="${xf}" x2="${xf}" y1="${T0 - 4}" y2="${T0 + 5 * RH}" /><circle cx="${xf}" cy="${Y('3')}" r="7" fill="var(--ink)" />`;
+    // the legend sits in the Awake row, empty between 04:00 and the window
+    const lx = X('06:00') - 20, ly = T0 + 24;
+    g += `<text class="note" x="${lx - 40}" y="${ly}" style="text-anchor: end; fill: #9a6a12">06:14 · AuraWake: light sleep</text><line class="smart" x1="${lx - 30}" x2="${lx}" y1="${ly - 6}" y2="${ly - 6}" />`;
+    g += `<text class="note" x="${lx - 40}" y="${ly + 24}" style="text-anchor: end">06:30 · a fixed alarm: deep sleep</text><line class="fixed" x1="${lx - 30}" x2="${lx}" y1="${ly + 18}" y2="${ly + 18}" />`;
+    slp.innerHTML = g;
   }
 
   // AuraWake · one night (spec §6, routine Work: bed 22:30, wake 06:30, window 06:00–06:30). Time runs to scale in
