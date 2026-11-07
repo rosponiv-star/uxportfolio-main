@@ -1649,31 +1649,17 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     <p class="label muted" style="grid-column: 1 / -1">Human–Computer Interaction 1 · University of Trento</p>
     <h2 class="display" style="grid-column: 1 / 11; margin-top: 24px; font-size: 136px">AuraWake</h2>
     <p class="lead" style="grid-column: 1 / 7; margin-top: 32px">An alarm with no buttons that wakes you gradually, with light, sound, scent and daylight, at the lightest moment of your sleep.</p>
+    <!-- the cover is also the project's introduction (owner, 2026-11-07): the problem and the project, then the facts -->
+    <div class="aw-intro" style="grid-column: 1 / 7; grid-row: 4; align-self: end">
+      <div><p class="label muted">Problem</p><p class="small">An alarm rings at a fixed time, often in deep sleep: people with demanding hours start the day tired.</p></div>
+      <div><p class="label muted">Project</p><p class="small">A base runs the room; a bracelet tells it when your sleep is light. Concept and app from the 2024 course; product, interaction and engineering detailed in 2026.</p></div>
+    </div>
     <dl class="pmeta rule" style="grid-column: 1 / 9; grid-row: 5">
-      <div><dt class="label muted">Type</dt><dd class="">Interaction and Integrated product design</dd></div><div><dt class="label muted">Year</dt><dd class="">2024</dd></div><div><dt class="label muted">Role</dt><dd class="">Interaction and Product Designer</dd></div><div><dt class="label muted">Team</dt><dd class="">2 design students</dd></div>
+      <div><dt class="label muted">Type</dt><dd class="">Interaction and Integrated product design</dd></div><div><dt class="label muted">Year</dt><dd class="">2024 · detailed in 2026</dd></div><div><dt class="label muted">Role</dt><dd class="">Concept, interaction and app; then product and engineering</dd></div><div><dt class="label muted">Team</dt><dd class="">2 design students</dd></div>
     </dl>
   </div>
 </section>
 
-
-<section class="slide" id="p05-overview" data-page>
-  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
-  <div class="frame" style="grid-template-rows: auto auto 1fr">
-    <p class="label kick" style="grid-column: 1 / -1">Overview</p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">The alarm moves into the room: it wakes you with light, sound, scent and daylight, when your sleep is lightest.</p>
-    <div class="cells" style="grid-column: 1 / -1; align-self: end; grid-template-columns: repeat(6, minmax(0, 1fr))">
-      <div class="cell" style="grid-column: span 2; min-height: 248px"><span class="label i3">Problem</span><p class="lead cell__foot">An alarm rings at a fixed time, often in deep sleep: people with demanding hours start the day tired.</p></div>
-      <div class="cell" style="grid-column: span 2"><span class="label i3">Approach</span><p class="lead cell__foot">A base with no buttons runs the room; a bracelet tells it when your sleep is light. The phone only sets the plan.</p></div>
-      <div class="cell" style="grid-column: span 2"><span class="label i3">Outcome</span><p class="lead cell__foot">A base, a bracelet and an app. Concept and app from the 2024 course; product, interaction and engineering detailed in 2026.</p></div>
-      <div class="cell"><span class="label i3">Course</span><p class="small cell__foot">Human–Computer Interaction 1 · University of Trento</p></div>
-      <div class="cell"><span class="label i3">Timeline</span><p class="small cell__foot">Spring 2024 · detailed in 2026</p></div>
-      <div class="cell"><span class="label i3">Team</span><p class="small cell__foot">2 design students</p></div>
-      <div class="cell"><span class="label i3">My role</span><p class="small cell__foot">Concept, interaction and app interfaces; then the product and its engineering</p></div>
-      <div class="cell"><span class="label i3">Methods</span><p class="small cell__foot">User flows, wireframes, prototyping, interaction spec, 3D modelling</p></div>
-      <div class="cell"><span class="label i3">Tools</span><p class="small cell__foot">Figma, Blender</p></div>
-    </div>
-  </div>
-</section>
 
 <!-- AuraWake (additional project, owner 2026-10-27): 4 slides, the physical interaction first. Facts from
      notes/05-aurawake.md + C:\Users\rospo\Documents\ClaudeCode\Design\AuraWake\AuraWake - Interaction Design Spec.md
@@ -1703,23 +1689,48 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1">One night</p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">One night, to scale: every change is a ramp.</p>
-    <svg class="lanes" style="grid-column: 1 / -1; align-self: end" viewBox="0 0 1728 692" role="img" aria-label="One night with AuraWake, 21:30 to 07:10: five moments in the room above the timeline" data-night></svg>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Every change is a ramp, never a jump. The wake-up comes at the first light sleep.</p>
+    <svg class="lanes" style="grid-column: 1 / -1; align-self: end" viewBox="0 0 1728 706" role="img" aria-label="One night with AuraWake, 21:30 to 07:10" data-night></svg>
+  </div>
+</section>
+
+<section class="slide" id="p05-scenes" data-page>
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1">In the room</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">The same nightstand, one night: only the light changes.</p>
+    <div class="scenes" style="grid-column: 1 / -1; align-self: end">
+      <figure class="scene"><img src="assets/aurawake/room1.jpg" alt="Evening: You take the bracelet: the ring glows violet, the lamp dims, the shutters close." /><figcaption><span class="label kick"><span class="n">22:00</span>Evening</span><p class="small i2">You take the bracelet: the ring glows violet, the lamp dims, the shutters close.</p></figcaption></figure>
+      <figure class="scene"><img src="assets/aurawake/room2.jpg" alt="Asleep: Nothing is lit. Darkness means all is well." /><figcaption><span class="label kick"><span class="n">22:40</span>Asleep</span><p class="small i2">Nothing is lit. Darkness means all is well.</p></figcaption></figure>
+      <figure class="scene"><img src="assets/aurawake/room3.jpg" alt="Awake for a moment: The time appears, dim and warm, while you are awake." /><figcaption><span class="label kick"><span class="n">03:12</span>Awake for a moment</span><p class="small i2">The time appears, dim and warm, while you are awake.</p></figcaption></figure>
+      <figure class="scene"><img src="assets/aurawake/room4.jpg" alt="Light sleep: Dawn on the lamp, the shutters open, the ring turns amber." /><figcaption><span class="label kick"><span class="n">06:14</span>Light sleep</span><p class="small i2">Dawn on the lamp, the shutters open, the ring turns amber.</p></figcaption></figure>
+      <figure class="scene"><img src="assets/aurawake/room5.jpg" alt="Awake in bed: A palm on the base softens the sound; the light keeps rising." /><figcaption><span class="label kick"><span class="n">06:16</span>Awake in bed</span><p class="small i2">A palm on the base softens the sound; the light keeps rising.</p></figcaption></figure>
+    </div>
   </div>
 </section>
 
 <section class="slide" id="p05-gestures" data-page>
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
-    <p class="label kick" style="grid-column: 1 / -1">Gestures and light</p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Four gestures, each answered by a light.</p>
-    <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid; row-gap: 28px">
-      <div class="gest"><svg class="gfig" viewBox="0 70 560 400" role="img" aria-label="A hand lifting the bracelet off the base in a dark room" data-gest="1"></svg><span class="label kick"><span class="n">01</span>Evening</span><p class="body m">Take the bracelet</p><p class="small i2">“I’m going to bed”: the wind-down starts.</p><p class="ans small" data-ans="wind"></p></div>
-      <div class="gest"><svg class="gfig" viewBox="0 70 560 400" role="img" aria-label="A palm held on the base, which shows OFF" data-gest="4"></svg><span class="label kick"><span class="n">02</span>Evening</span><p class="body m">Palm held 3 seconds</p><p class="small i2">Tomorrow off, or back on. In the window, 5 s: today off.</p><p class="ans small" data-ans="white"></p></div>
-      <div class="gest"><svg class="gfig" viewBox="0 70 560 400" role="img" aria-label="A palm tapping the base in the morning" data-gest="2"></svg><span class="label kick"><span class="n">03</span>Morning</span><p class="body m">Palm tap</p><p class="small i2">Softens the sound; never moves the wake-up.</p><p class="ans small" data-ans="amber"></p></div>
-      <div class="gest"><svg class="gfig" viewBox="0 70 560 400" role="img" aria-label="A hand putting the bracelet back on the base" data-gest="3"></svg><span class="label kick"><span class="n">04</span>Day</span><p class="body m">Put it back</p><p class="small i2">“I’m up”: everything stops, even the alarm.</p><p class="ans small" data-ans="green"></p></div>
-      <div class="also" style="grid-column: 1 / -1" data-also></div>
+    <p class="label kick" style="grid-column: 1 / -1">Gestures</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Four gestures replace the menus.</p>
+    <div style="grid-column: 1 / -1; align-self: end; display: grid; grid-template-columns: subgrid; row-gap: 32px">
+      <div class="gest"><svg class="gfig" viewBox="0 45 560 450" role="img" aria-label="A hand lifting the bracelet off the base in a dark room" data-gest="1"></svg><span class="label kick"><span class="n">01</span>Evening</span><p class="body m">Take the bracelet</p><p class="small i2">Means “I’m going to bed”: the wind-down starts, and the violet ring under the base dims with the room.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 45 560 450" role="img" aria-label="A palm held on the base, which shows OFF" data-gest="4"></svg><span class="label kick"><span class="n">02</span>Evening</span><p class="body m">Palm held 3 seconds</p><p class="small i2">Before you fall asleep: tomorrow off, or back on (OFF or ☀ 06:30). Forgot? In the morning hold it 5 s: today off.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 45 560 450" role="img" aria-label="A palm tapping the base in the morning" data-gest="2"></svg><span class="label kick"><span class="n">03</span>Morning</span><p class="body m">Palm tap</p><p class="small i2">The time is already on: the palm softens the sound but never moves the wake-up. By day, a touch shows the time for 8 s.</p></div>
+      <div class="gest"><svg class="gfig" viewBox="0 45 560 450" role="img" aria-label="A hand putting the bracelet back on the base" data-gest="3"></svg><span class="label kick"><span class="n">04</span>Day</span><p class="body m">Put it back</p><p class="small i2">Means “I’m up”: everything stops, even the alarm. The night syncs; the time shows the charge, then goes off.</p></div>
+      <div class="gest gest--text"><span class="label kick"><span class="n">05</span>Morning</span><p class="small"><span class="m">Get up</span><span class="i2"> · Getting up does the rest: it is the only way to end the wake-up. The bracelet senses steps and an upright posture; there is no snooze.</span></p></div>
+      <div class="gest gest--text"><span class="label kick"><span class="n">06</span>Setup</span><p class="small"><span class="m">Pairing button</span><span class="i2"> · At the back, beside the USB-C: pairs the base with the phone. Pressed once, never at night.</span></p></div>
     </div>
+  </div>
+</section>
+
+<section class="slide" id="p05-light" data-page>
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1">Light language</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">One colour for each moment: the front speaks by day, the ring by night.</p>
+    <div style="grid-column: 1 / -1; align-self: start; margin-top: 32px; display: grid; grid-template-columns: subgrid" data-waves></div>
   </div>
 </section>
 
@@ -1785,6 +1796,8 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .pthumb .cap { display: flex; gap: 14px; align-items: baseline; }
 
   /* Project cover meta */
+  .aw-intro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--g); margin-bottom: 40px; }
+  .aw-intro .label { margin-bottom: 8px; }
   .pmeta { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--g); padding-top: 20px; border-top: 1px solid; font-size: var(--fs-small); }
   .pmeta dt { margin-bottom: 6px; }
 
@@ -1839,9 +1852,6 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .lanes .ln { font-size: 22px; font-weight: 500; fill: var(--ink); }
   .lanes .ev { fill: var(--ink-2); }
   .lanes .dot { fill: var(--ink); }
-  .lanes .scn-t { font-size: 19px; font-weight: 500; fill: var(--ink); }
-  .lanes .scn-n { fill: #9a6a12; }
-  .lanes .scn-l { fill: none; stroke: var(--ink-3); stroke-width: 1.2; }
   .lanes .wake { stroke: #c98f2a; stroke-width: 2; }
   .lanes .ax-w { fill: #9a6a12; }
   .lanes .cut { font-size: 18px; fill: var(--ink-4); text-anchor: middle; letter-spacing: -0.1em; }
@@ -1941,12 +1951,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .aw-views figure { margin: 0; display: grid; gap: 18px; }
   .aw-view { height: 170px; display: flex; align-items: flex-end; justify-content: center; }
   .aw-view img { max-width: 82%; max-height: 100%; display: block; }
-  .gest { grid-column: span 3; display: grid; gap: 8px; align-content: start; }
-  .gest .ans { display: flex; gap: 10px; align-items: center; margin-top: 6px; padding-top: 10px; border-top: 1px solid var(--rule); color: var(--ink-2); }
-  .wv { width: 72px; height: 14px; flex: none; overflow: visible; }
-  .also { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--g); row-gap: 8px; padding-top: 16px; border-top: 1px solid var(--rule); }
-  .also .label { grid-column: 1 / -1; }
-  .also p.small { display: flex; gap: 10px; align-items: center; }
+  .gest { grid-column: span 3; display: grid; gap: 10px; align-content: start; }
   .gest--text { grid-column: span 6; gap: 6px; padding-top: 16px; border-top: 1px solid var(--rule); }
   .gest--text .label { margin-top: 0; }
   .gest .label { margin-top: 8px; }
@@ -2236,7 +2241,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     let x0 = L; const S = SEG.map(([a, b, w]) => { const s = { a, b, w, x: x0 }; x0 += w + GAP; return s; });
     const seg = (t) => S.find((s) => t >= s.a && t <= s.b);
     const X = (t) => { const s = seg(m(t)); return s.x + ((m(t) - s.a) / (s.b - s.a)) * s.w; };
-    const TOP = 44, LH = 46, AH = 16, OY = 180;   // OY: the swimlane under the row of room scenes
+    const TOP = 44, LH = 66, AH = 30;
     const lanes = [
       ['You', null, 'ev', [['22:00', 'Takes the bracelet'], ['22:30', 'Goes to bed'], ['03:12', 'Wakes up briefly'], ['06:16', 'Awake, still in bed'], ['06:26', 'Gets up'], ['07:10', 'Bracelet back', 'start', 9]]],
       ['Bracelet', 'bracelet', 'ev', [['21:30', 'On the base, charged'], ['22:00', 'Connects'], ['22:30', 'Senses lying down'], ['03:12', 'Senses waking'], ['06:14', 'Light sleep', 'end'], ['06:16', 'Senses awake, lying'], ['06:26', 'Steps, upright']]],
@@ -2269,7 +2274,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
       const y = TOP + k * LH, cy = y + LH / 2;
       S.forEach((s) => (g += `<line class="hr" x1="${s === S[0] ? 0 : s.x}" x2="${s.x + s.w}" y1="${y}" y2="${y}" />`));
       g += `<text class="ln" x="0" y="${cy + 8}">${name}</text>`;
-      if (icon) g += `<image href="assets/aurawake/iso-${icon}.png" x="${L - 60}" y="${cy - 20}" width="40" height="40" />`;
+      if (icon) g += `<image href="assets/aurawake/iso-${icon}.png" x="${L - 70}" y="${cy - 26}" width="52" height="52" />`;
       if (kind === 'ev') {
         data.forEach(([t, s, al = 'start', n]) => {
           const ls = wrap(s, n), x = X(t), anchor = al, tx = anchor === 'end' ? x - 12 : x + 12;
@@ -2285,21 +2290,11 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
           const px = (t) => s.x + ((t - s.a) / (s.b - s.a)) * s.w;
           g += `<path class="a-${kind}" d="M${px(s.a)} ${base} ${pts.map(([t, val]) => `L${px(t)} ${P(val)}`).join(' ')} L${px(s.b)} ${base} Z" />`;
         });
-        tags.forEach(([t, s]) => (g += `<text class="tag" x="${X(t) + 6}" y="${y + 17}">${s}</text>`));
+        tags.forEach(([t, s]) => (g += `<text class="tag" x="${X(t) + 6}" y="${y + 18}">${s}</text>`));
       }
     });
     S.forEach((s) => (g += `<line class="hr" x1="${s === S[0] ? 0 : s.x}" x2="${s.x + s.w}" y1="${B}" y2="${B}" />`));
-    // the room at five moments (deck/blender/bedroom.py), each joined to its time on the axis (owner, 2026-11-07)
-    const SC = [['room1', '22:00', 'Evening'], ['room2', '22:40', 'Asleep'], ['room3', '03:12', 'Awake for a moment'], ['room4', '06:14', 'Light sleep'], ['room5', '06:16', 'Awake in bed']];
-    const FW = 316, FH = 120, FG = (1728 - 5 * FW) / 4; let top = '';
-    SC.forEach(([img, t, name], i) => {
-      const fx = i * (FW + FG), cx = fx + FW / 2, tx = X(t);
-      top += `<clipPath id="scn${i}"><rect x="${fx}" y="0" width="${FW}" height="${FH}" /></clipPath>`;
-      top += `<image href="assets/aurawake/${img}.jpg" x="${fx}" y="${-FW * 1.25 * 0.42 + FH * 0.5}" width="${FW}" height="${FW * 1.25}" clip-path="url(#scn${i})" preserveAspectRatio="xMidYMid slice" />`;
-      top += `<text class="scn-t" x="${fx}" y="${FH + 26}"><tspan class="scn-n">${t}</tspan>  ${name}</text>`;
-      top += `<path class="scn-l" d="M${cx} ${FH + 38} V${FH + 46} L${tx} ${OY - 2}" /><circle class="dot" cx="${tx}" cy="${OY + 2}" r="3" />`;
-    });
-    night.innerHTML = top + `<g transform="translate(0 ${OY})">${g}</g>`;
+    night.innerHTML = g;
   }
 
   // AuraWake · gestures (spec §2.3): Blender line drawings (aura.py line gN, one scale, the base in the same place). The
@@ -2323,7 +2318,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
       g += `<ellipse cx="${gx}" cy="${gy}" rx="${(R * k * 1.2247).toFixed(1)}" ry="${(R * k * 0.7071).toFixed(1)}" fill="url(#rg${n})" style="mix-blend-mode: ${blend}" />`;
     }
     g += `<image href="assets/aurawake/iso-g${n}.png" x="0" y="0" width="560" height="560"${room === 'dark' ? ' style="filter: invert(0.92) hue-rotate(180deg)"' : ''} />`;
-    g += `<text class="room" x="545" y="458" fill="${fg}" text-anchor="end" style="text-anchor: end">${name}</text>`;   // bottom right: the arm comes from the top left
+    g += `<text class="room" x="545" y="484" fill="${fg}" text-anchor="end" style="text-anchor: end">${name}</text>`;   // bottom right: the arm comes from the top left
     const arrow = (z0, z1, x = 0.062, y = 0.0) => {          // a vertical arrow right of the bracelet, clear of the arm, chevron at z1
       const d = z1 > z0 ? 1 : -1, tip = P(x, y, z1).split(' ').map(Number);
       return `<path class="arw" style="stroke: ${fg === '#cfcdc6' ? '#e9e7e1' : 'var(--ink)'}" d="M${P(x, y, z0)} L${P(x, y, z1)} M${tip[0] - 11} ${tip[1] + 11 * d} L${tip[0]} ${tip[1]} L${tip[0] + 11} ${tip[1] + 11 * d}" />`;
@@ -2415,22 +2410,6 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     g += `<path d="M${X} 29 V${yb + 10}" stroke="#c98f2a" stroke-width="2" fill="none" /><path d="M${X - 8} ${yb + 2} L${X} ${yb + 12} L${X + 8} ${yb + 2}" stroke="#c98f2a" stroke-width="2" fill="none" />`;
     g += `<text class="end" x="${X}" y="${yb + 50}" text-anchor="end" style="text-anchor: end">You still wake up</text>`;
     fsv.innerHTML = g;
-  }
-
-  // AuraWake · gestures and light (owner, 2026-11-07): under each gesture the light that answers it; below, the other
-  // signals (spec §4.1). One waveform per state, 120 × 22, same shapes as the light-language columns used to have.
-  {
-    const W = (d, c) => `<svg viewBox="0 0 120 22" class="wv"><path d="${d}" fill="none" stroke="${c}" stroke-width="2.4" stroke-linejoin="round" /></svg>`;
-    const SH = { breath: 'M0 20 C20 20 25 2 50 2 C75 2 80 20 100 20 H120', beat: 'M0 20 H50 L54 2 H62 L66 20 H120', fall: 'M0 2 C35 2 65 9 100 20 H120',
-      rise: 'M0 20 C45 20 75 11 120 2', step: 'M0 20 H25 V4 H85 V20 H120', pulse: 'M0 20 C8 20 8 2 15 2 C22 2 22 20 30 20 C38 20 38 2 45 2 C52 2 52 20 60 20 C68 20 68 2 75 2 C82 2 82 20 90 20 C98 20 98 2 105 2 C112 2 112 20 120 20', flat: 'M0 20 H120', info: 'M0 20 H8 V12 H88 V20 H120' };
-    const ANS = { wind: [SH.fall, '#7a86e8', 'Ring: violet, dimming with the room'], white: [SH.beat, '#8a8a84', 'Ring: one white beat; OFF or ☀ 06:30'],
-      amber: [SH.beat, '#e0a33a', 'Ring: one amber beat'], green: [SH.step, '#4fae74', 'Front LED: green 5 s, all set'] };
-    document.querySelectorAll('[data-ans]').forEach((el) => { const [d, c, t] = ANS[el.dataset.ans]; el.innerHTML = W(d, c) + `<span>${t}</span>`; });
-    const also = document.querySelector('[data-also]');
-    if (also) also.innerHTML = `<p class="label i3">Also on the base</p>` + [[SH.breath, '#7a86e8', 'Bedtime', 'violet breath, 30 min before'],
-      [SH.flat, '#4a4a55', 'Night', 'all off: all is well'], [SH.rise, '#e0a33a', 'Dawn', 'ring, amber with the lamp'],
-      [SH.pulse, '#e0604f', 'Act', 'red pulse by day'], [SH.info, '#8a8a84', 'Info', 'white: pairing, charging']]
-      .map(([d, c, t, x]) => `<p class="small">${W(d, c)}<span><span class="m">${t}</span><span class="i3"> · ${x}</span></span></p>`).join('');
   }
 
   // AuraWake · the light line on the base (spec §4.2): each state drawn as its waveform over time.

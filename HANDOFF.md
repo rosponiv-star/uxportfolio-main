@@ -260,7 +260,7 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
 3. Real photos for the Selected projects index and, if wanted, the covers (objects, contexts, devices: not only phones).
 4. Closing slide (contact, thank you) — not built yet. Final check: size < 20 MB, file name, links, typos.
 5. Optional: propose a concrete small physical prototype (Arduino/ESP32) tied to one project.
-7a. **AuraWake plan agreed with the owner (2026-11-07), in this order** (items 1–2 DONE the same day: overview slide with the 2024 → 2026 line instead of a process slide; night + scenes and gestures + light merged): (1) was: a process slide, 2024 course
+7a. **AuraWake plan agreed with the owner (2026-11-07), in this order** (items 1–2 settled the same day: no process slide; the cover carries problem, project and the 2024 → 2026 line; the owner kept night/scenes and gestures/light as separate slides): (1) was: a process slide, 2024 course
    concept → 2026 product rethink (what was kept, what changed and why), from the 2024 PDFs/Figma page 1; (2) THEN cut
    AuraWake from 12 pages to 7–8 (merge base + system, night + scenes, gestures + light, the three app slides into
    one); IMPORTANT, later: (3) the app screens are the 2024 originals and do not show the 2026 rules (no snooze,
@@ -309,10 +309,10 @@ deck/blender/aura.py -- <mode> <outdir> <shot> [plastic] [preview]` (run from th
 | Schema (export name) | Slide id | Made of | To change it |
 |---|---|---|---|
 | 01 System | `p05-system` | iso drawings `line` mode (`iso-base`, `-bracelet`, `-phone`, `-lamp`, `-shutters`, `-diffuser`, `-base_under`) + the `[data-iso]` script in index.html (uv layout `N`, groups `G`, flows, `KEYS`) | objects: edit the builder in aura.py, re-run `line out/blender <name>`, copy the PNG and the new anchors into `AN`; layout/keys: the script |
-| 02 One night + scenes | `p05-night` | `[data-night]` script: `SEG` time stretches, `lanes` (events / areas / tags); since 2026-11-07 also the 5 room scenes on top (`SC`, frames `FW`×`FH`, each joined to its time; the swimlane sits under them at `OY`) | edit `lanes` values (they follow spec §6); scenes: `SC` |
-| 03 Scenes ×5 (images) | shown inside `p05-night` | `deck/blender/bedroom.py`, `real <out> room1…room5`; `ROOM` table = time, lamp, ring, shutter, sky, exposure per frame; captions in the slide | edit `ROOM`/scene, render, convert the PNG to `assets/aurawake/roomN.jpg` (sharp, flatten #000) |
+| 02 One night | `p05-night` | `[data-night]` script: `SEG` time stretches, `lanes` (events / areas / tags) | edit `lanes` values (they follow spec §6) |
+| 03 Scenes ×5 | `p05-scenes` | `deck/blender/bedroom.py`, `real <out> room1…room5`; `ROOM` table = time, lamp, ring, shutter, sky, exposure per frame; captions in the slide | edit `ROOM`/scene, render, convert the PNG to `assets/aurawake/roomN.jpg` (sharp, flatten #000) |
 | 04 Gestures ×4 | `p05-gestures` | `line <out> g1…g4` (`build_gesture`, hands from `deck/blender/hands/*.obj` made by `hand_mpfb.py` with MPFB2) + the `[data-gest]` script (room ground, ring glow, arrows, 3 s ring, LED) | poses: `POSES` in hand_mpfb.py → run it → re-render g1–g4 → copy to assets; framing: `cy` offset in `line()`; overlays: the script (ground anchor `gx, gy` from anchors.json) |
-| 05 Light language | inside `p05-gestures` (2026-11-07) | under each gesture the light that answers it (`ANS`), then "Also on the base" (`[data-also]`), waveforms `SH`; the old `[data-waves]` columns script (with the cut-outs in `assets/aurawake/lights/`) stays but has no slide | edit `ANS` / the also-list (spec §4.1) |
+| 05 Light language | `p05-light` | `[data-waves]` script: `COLS` (front LED / ring / 06:30 ladder rows with their waveforms; 4th item of a row = its cut-out in `assets/aurawake/lights/*.png`) | edit rows (spec §4.1) |
 | 06 Inside, lines | `p05-inside` | `deck/blender/internals.py` (every part, `BOM`, `EXPLODE` offsets, `EXPLODE_PTS` anchors), `line <out> explode`; numbered list `PARTS` in the `[data-explode]` script | parts: internals.py → re-render → copy `iso-explode.png`, paste new anchors into `PT` |
 | 07 Inside, rendered | `p05-inside-real` | same internals + `real_mats`/`real_details`/`real_explode`, `real <out> explode plastic` (transparent) → `assets/aurawake/explode-real.jpg` (flatten #fdfdfc); points in `out/xreal/explode-real.json` | after a re-render paste the JSON points into the `[data-explode-real]` script |
 | 08 Fail-safe | `p05-app` | `[data-failsafe]` script: rows `F` | edit rows (spec §1 p.7, §7.3–7.4) |
@@ -1328,6 +1328,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-07 · LOCAL (89)** · Owner reverted most of (88): night and scenes, gestures and light are separate slides
+  again as before ("troppo compatto"; index.html restored from be0d487), and the overview slide is gone: the COVER is
+  now the project's introduction: title, lead, then Problem and Project (with "Concept and app from the 2024 course;
+  product, interaction and engineering detailed in 2026") above the facts row (Year "2024 · detailed in 2026", Role
+  "Concept, interaction and app; then product and engineering"). AuraWake = 12 pages again.
 - **2026-11-07 · LOCAL (88)** · AuraWake restructured (owner): new p05-overview after the cover (Problem / Approach /
   Outcome + Course, Timeline, Team, My role, Methods, Tools), with the honest line "Concept and app from the 2024 course;
   product, interaction and engineering detailed in 2026" (the owner first thought of omitting it; told him several
