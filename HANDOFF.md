@@ -1083,6 +1083,18 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-11-07 · LOCAL (75)** · The 11 Smart Home Hub research boards are real deck slides again, no longer images
+  (owner: "riportale normali come il resto del pdf"). Sources in `deck/boards/<id>.html` (standalone 1920×1080 boards:
+  index, stakeholders, artifact, sequence ×2, physical ×3, pain points, personas, Giorgia); `node deck/boards/embed.mjs`
+  copies each into deck/index.html as a `<template class="shb">` beside its slide, and a small loader mounts it in a
+  shadow root (`:host { all: initial }`, `:root` tokens mapped to `:host`) and runs its script with a document scoped
+  to that root. Text is live (pdf.js check: every board page has its text), lines and tables are vector; only the
+  Blender renders (deck/assets/smarthome/house/*.jpg) and the persona portraits (…/persona/) are images.
+  deck/assets/smarthome/schemi/ removed. export_schemas.mjs shoots the SH boards from inside the shadow roots
+  ('host >> selector'); the old Schemi PNGs (domain map tree, heat map, old personas/system names) moved to
+  Schemi/bozze/vecchie-versioni. To edit a board: change deck/boards/<id>.html, re-run embed.mjs, then build.
+  Known, pre-existing: the process bar still sits over the bottom row of the pain-point table and the legends on a few
+  boards. PDF 66 pages, 16.8 MB.
 - **2026-10-28 · LOCAL (34)** · LED states final (owner: no glow, colours clearly distinct): crisp dot, `LED_SAT` white
   #fff6ea (emission 4), night #4d5cff and dawn #ff9a1f (emission 1.8). Glow post-process dropped for these
   (`glow.mjs` kept, unused).

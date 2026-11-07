@@ -1,0 +1,112 @@
+<!doctype html><html><head><meta charset="utf-8">
+<style>
+@font-face { font-family: Geist; src: url('file:///C:/Users/rospo/Documents/ClaudeCode/Websites/uxportfolio/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2'); font-weight: 100 900; }
+html,body { margin:0; background:#fdfdfc; font-family: Geist; font-feature-settings: 'tnum'; color:#111; }
+.slide { width:1920px; height:1080px; position:relative; overflow:hidden; }
+.k { position:absolute; left:96px; top:44px; font-size:18px; font-weight:500; letter-spacing:.08em; color:#6b6b65; text-transform:uppercase; }
+h1 { position:absolute; left:96px; top:110px; width:470px; margin:0; font-size:52px; font-weight:500; line-height:1.08; letter-spacing:-.02em; }
+p.c { position:absolute; left:96px; top:400px; width:430px; margin:0; font-size:23px; line-height:1.45; color:#6b6b65; }
+.leg { position:absolute; left:96px; top:700px; width:480px; display:grid; gap:18px; font-size:20px; color:#33332f; }
+.leg div { display:flex; align-items:center; gap:12px; }
+.leg svg { width:100px; height:40px; overflow:visible; flex:none; }
+svg text { font-family: Geist; }
+#m { position:absolute; left:600px; top:24px; width:1240px; height:1040px; overflow:visible; }
+.ic { fill:none; stroke:#111; stroke-width:1.5; vector-effect:non-scaling-stroke; stroke-linecap:round; stroke-linejoin:round; }
+.wv { fill:none; stroke:#111; stroke-width:1.3; stroke-linecap:round; }
+.rl { font-size:19px; fill:#111; } .rl0 { fill:#8a8a84; }
+.gh { font-size:15px; font-weight:500; letter-spacing:.1em; fill:#111; }
+.ch { font-size:18px; font-weight:500; fill:#111; text-anchor:middle; }
+.hr { stroke:#111; stroke-opacity:.1; stroke-width:1; } .hr2 { stroke:#111; stroke-width:1.2; }
+.cl { stroke:#111; stroke-opacity:.07; stroke-width:1; }
+.dt { fill:#111; } .em { fill:#111; fill-opacity:.12; }
+.n { font-size:17px; font-weight:500; fill:#111; text-anchor:end; } .n0 { fill:#8a8a84; }
+.dig { fill:none; stroke:#111; stroke-width:1.2; stroke-dasharray:4 3; }
+</style></head><body><div class="slide">
+<div class="k">01 · Smart Home Hub · Research</div>
+<h1>Every object the home already has, and when it matters.</h1>
+<p class="c">The artifact model: what is in the house, grouped as in the original board, and the objects each of the six modelled situations involves.</p>
+<div class="leg">
+ <div><svg viewBox="0 0 100 40"><circle cx="46" cy="20" r="8" class="dt"/></svg>Used in that situation</div>
+ <div><svg viewBox="0 0 100 40" id="lg-s"></svg>Sensor: it reads the home on its own</div>
+ <div><svg viewBox="0 0 100 40" id="lg-d"></svg>Digital, not an object: the notification</div>
+</div>
+<svg id="m" viewBox="0 0 1240 1040"></svg>
+</div>
+<script>
+// icons: 24×24 line drawings, one per artifact (drawn for this board)
+const I = {
+ gate: 'M3 21V5M21 21V5M3 5q9-3 18 0M3 9h18M7.5 9v12M12 8v13M16.5 9v12M3 21h18',
+ door: 'M5 21V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v17M3 21h18M15 12.5h.5',
+ window: 'M4 3h16v18H4zM12 3v18M4 12h16M6.5 6h3M14.5 6h3',
+ lock: 'M6 11h12v9a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zM8.5 11V8a3.5 3.5 0 0 1 7 0v3M12 15v2.5',
+ intercom: 'M7 2.5h10a1 1 0 0 1 1 1v17a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1zM12 5.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5zM9.5 14h5M9.5 17h5',
+ camera: 'M2.5 7.5l13 3.5l-1.5 5.5l-13-3.5zM15.2 13.5l4.3 1.2M19.5 11.5v6.5M6.5 14.5l-1 4.5H2.5',
+ alarm: 'M7 17v-4a5 5 0 0 1 10 0v4M5 17h14v4H5zM12 3v2M4.5 6.5l1.4 1.4M19.5 6.5l-1.4 1.4',
+ shield: 'M12 3l7 3v5.5c0 4.2-3 7.6-7 9.5c-4-1.9-7-5.3-7-9.5V6zM9 12l2 2l4-4',
+ sprinkler: 'M12 3v4M8 7h8l-1 3H9zM9 14l-1.5 2.2M12 14v2.6M15 14l1.5 2.2M6.5 19.5l-.8 1.3M12 19.6v1.6M17.5 19.5l.8 1.3',
+ panel: 'M5 3h14v18H5zM5 7h14M13 10l-3 4h4l-3 4',
+ contact: 'M4 6h6v12H4zM13.5 6h3v12h-3z',
+ smoke: 'M3 8h18M5 8c0 3 3 5 7 5s7-2 7-5M12 13v1.5',
+ motion: 'M8 4h8v10a4 4 0 0 1-8 0zM12 10.5a1.5 1.5 0 1 0 0 .01',
+ thermo: 'M10 13.5V5a2 2 0 0 1 4 0v8.5a4 4 0 1 1-4 0zM12 9v7.5',
+ grass: 'M5 20c2-4 2-8 0-12M11 20c0-5 1-8 3-11M17 20c0-4 1-7 3-9M3 20h18',
+ switch: 'M7 3h10a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM10 7h4v5.5h-4z',
+ bulb: 'M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z',
+ climate: 'M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9M10 4.5l2 1.5l2-1.5M10 19.5l2-1.5l2 1.5',
+ voice: 'M8 6a4 1.8 0 0 1 8 0v12a4 1.8 0 0 1-8 0zM8 6a4 1.8 0 0 0 8 0M10.5 11h3',
+ garage: 'M3 10l9-6l9 6v11H3zM7 21v-8h10v8M7 15.5h10M7 18h10',
+ ev: 'M5 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v17H5zM14 8h2v8a2 2 0 0 0 4 0V9M3 21h13M10.5 7l-2.5 4h3l-2.5 4',
+ drop: 'M12 3c3 5 6 8 6 11a6 6 0 0 1-12 0c0-3 3-6 6-11zM9 15a3 3 0 0 0 3 3',
+ router: 'M3 13h18v7H3zM7 13L5 6.5M17 13l2-6.5M6.5 16.5h1M10.5 16.5h1',
+ bell: 'M7 2.5h10a1 1 0 0 1 1 1v17a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1zM8.5 6h7v4h-7zM10.5 18.5h3',
+ broom: 'M15 3l-4 10M6 13h9l2 8H4zM9 16.5v4.5M12.5 16.5l.5 4.5',
+ robot: 'M12 4a8 8 0 1 0 0 16a8 8 0 1 0 0-16zM12 8.5v.5M7.5 15h9',
+ tv: 'M3 5h18v12H3zM8 21h8M12 17v4',
+};
+// one icon per artifact, no frame; a sensor carries a small black badge with waves at its top right
+const tile = (x, y, ic, sen) => `<g transform="translate(${x} ${y})"><g transform="translate(1 3) scale(1.04)"><path class="ic" d="${I[ic]}"/></g>`
+  + (sen ? `<circle cx="27" cy="4" r="6.5" fill="#111"/><path d="M26.4 1.6a3.4 3.4 0 0 1 0 4.8M28.6 -.2a6 6 0 0 1 0 8.4" fill="none" stroke="#fdfdfc" stroke-width="1.2" stroke-linecap="round"/><circle cx="24.6" cy="4" r="1" fill="#fdfdfc"/>` : '') + `</g>`;
+// sensor tag: solid ink pill with waves; digital tag: dashed pill
+const tag = (x, cy, sen) => sen
+  ? `<g transform="translate(${x} ${cy - 11})"><rect width="92" height="22" rx="11" fill="#111"/><path d="M14 7.5a4.5 4.5 0 0 1 0 7M17.5 5a8 8 0 0 1 0 12" fill="none" stroke="#fdfdfc" stroke-width="1.4" stroke-linecap="round"/><circle cx="10.5" cy="11" r="1.4" fill="#fdfdfc"/><text x="26" y="15.5" style="font-size:12px;font-weight:500;letter-spacing:.1em;fill:#fdfdfc">SENSOR</text></g>`
+  : `<g transform="translate(${x} ${cy - 11})"><rect width="76" height="22" rx="11" fill="none" stroke="#111" stroke-width="1.2" stroke-dasharray="3.5 2.5"/><text x="38" y="15.5" style="font-size:12px;font-weight:500;letter-spacing:.1em;fill:#111;text-anchor:middle">DIGITAL</text></g>`;
+document.getElementById('lg-s').innerHTML = tile(32, 4, 'contact', 1);
+document.getElementById('lg-d').innerHTML = tag(8, 20, 0);
+const COLS = ['Enter or|leave', 'Open to|visitors', 'Switch a|device', 'Clean or|mow', 'Burglars|break in', 'Fire'];
+// [group, [label, icon, sensor?, digital?, situations (0-5)]] — from the FigJam artifact model + the per-situation boards
+const G = [
+ ['SECURITY SYSTEM', [
+  ['Gate', 'gate', 0, 0, [0, 1]], ['Doors', 'door', 0, 0, [0, 1, 5]], ['Windows and shutters', 'window', 0, 0, [0, 5]],
+  ['Lock and keys', 'lock', 0, 0, [0, 1]], ['Intercom', 'intercom', 0, 0, [0, 1]], ['Cameras', 'camera', 1, 0, [0, 1, 4]],
+  ['Alarm', 'alarm', 0, 0, [0, 4, 5]], ['Defence systems: gas, noise', 'shield', 0, 0, [4]], ['Fire suppression', 'sprinkler', 0, 0, [5]],
+  ['Electrical panel', 'panel', 0, 0, [5]], ['Door and window contacts', 'contact', 1, 0, [4]], ['Smoke detector', 'smoke', 1, 0, [5]],
+  ['Motion detectors', 'motion', 1, 0, [4]]]],
+ ['SENSORS', [['Temperature, air, humidity, light', 'thermo', 1, 0, [2]], ['Dirt and grass', 'grass', 1, 0, [3]]]],
+ ['ENVIRONMENT', [['Switches, dimmers, remotes', 'switch', 0, 0, [0, 1, 2]], ['Lights', 'bulb', 0, 0, [0, 2]],
+  ['Heating, cooling, fan, air purifier', 'climate', 0, 0, [2]], ['Voice assistant', 'voice', 0, 0, []]]],
+ ['OTHER', [['Garage door', 'garage', 1, 0, [0]], ['EV charger', 'ev', 0, 0, [0]], ['Irrigation', 'drop', 0, 0, []],
+  ['Wi-Fi router', 'router', 0, 0, []], ['Notification', 'bell', 0, 1, [2, 4, 5]]]],
+ ['APPLIANCES', [['Cleaning and mowing tools', 'broom', 0, 0, [3]], ['Robot cleaner and mower', 'robot', 0, 0, [3]], ['Coffee machine, TV, stereo', 'tv', 0, 0, []]]],
+];
+const X0 = 0, LW = 470, CW = 116, XC = LW, XN = LW + 6 * CW + 70, RH = 30, GH = 30;
+let g = '', y = 64;
+COLS.forEach((c, i) => c.split('|').forEach((l, j) => (g += `<text class="ch" x="${XC + i * CW + CW / 2}" y="${22 + j * 22}">${l}</text>`)));
+g += `<text class="ch" x="${XN - 12}" y="44" style="text-anchor:end">Total</text>`;
+const yTop = y;
+G.forEach(([gn, rows]) => {
+  y += GH; g += `<line class="hr2" x1="0" x2="${XN}" y1="${y - GH + 6}" y2="${y - GH + 6}"/><text class="gh" x="0" y="${y - 8}">${gn}</text>`;
+  rows.forEach(([l, ic, sen, dig, on]) => {
+    const cy = y + RH / 2, has = on.length > 0;
+    g += tile(0, cy - 15, ic, sen);
+    g += `<text class="rl ${has ? '' : 'rl0'}" x="46" y="${cy + 6.5}" data-tag="${dig ? 'd' : ''}" data-cy="${cy}">${l}</text>`;
+    for (let i = 0; i < 6; i++) g += on.includes(i) ? `<circle class="dt" cx="${XC + i * CW + CW / 2}" cy="${cy}" r="7"/>` : `<circle class="em" cx="${XC + i * CW + CW / 2}" cy="${cy}" r="2"/>`;
+    g += `<text class="n ${has ? '' : 'n0'}" x="${XN - 12}" y="${cy + 6}">${on.length || '–'}</text>`;
+    y += RH; g += `<line class="hr" x1="0" x2="${XN}" y1="${y}" y2="${y}"/>`;
+  });
+});
+for (let i = 0; i <= 6; i++) g = `<line class="cl" x1="${XC + i * CW}" x2="${XC + i * CW}" y1="${yTop}" y2="${y}"/>` + g;
+const M = document.getElementById('m'); M.innerHTML = g;
+// tags sit right after each name
+document.fonts.ready.then(() => M.querySelectorAll('text[data-tag]').forEach((t) => { const k = t.dataset.tag; if (!k) return;
+  M.insertAdjacentHTML('beforeend', tag(46 + t.getComputedTextLength() + 14, +t.dataset.cy, k === 's')); }));
+</script></body></html>

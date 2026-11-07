@@ -16,11 +16,20 @@ const SH = path.join(MEDIA, '03-Smart Home Ecosystem', 'Schemi');
 for (const d of [AW, JC, SH]) fs.mkdirSync(d, { recursive: true });
 
 const SHOTS = [   // [folder, file, selector] — the selector is the schema itself, nothing around it
-  [SH, '01-stakeholder', '#p01-context [data-shh="rings"]'],
-  [SH, '02-mappa-del-dominio', '#p01-research [data-shh="tree"]'],
-  [SH, '03-pain-point-per-persona', '#p01-insights [data-shh="heat"]'],
-  [SH, '04-personas-a-confronto', '#p01-framing .arch'],
-  [SH, '05-sistema-degli-accessi', '#p01-system [data-shh="sys"]'],
+  // Smart Home Hub research boards live in shadow roots (deck/boards): 'host >> selector' shoots inside one
+  [SH, '00-indice-ricerca', 'shb-s0i-index >> .slide'],
+  [SH, '01-stakeholder', 'shb-s00-stakeholders >> #s'],
+  [SH, '02-artifact-model', 'shb-s0a-artifact >> #m'],
+  [SH, '03-sequence-flow-sette-modelli', 'shb-s04-sequence-all >> #m'],
+  [SH, '03-sequence-flow-entrare-in-casa', 'shb-s05-sequence-enter >> .cols'],
+  [SH, '04-physical-model-spaccato', 'shb-s01-physical-cut >> .slide'],
+  [SH, '04-physical-model-pianta', 'shb-s02-physical-top >> .slide'],
+  [SH, '04-physical-model-esterno-zone', 'shb-s03-physical-views >> .slide'],
+  [SH, '05-pain-point-per-persona', 'shb-s06-pain-points >> .m'],
+  [SH, '06-personas', 'shb-s07-personas >> .slide'],
+  [SH, '06-personas-giorgia', 'shb-s08-giorgia >> .slide'],
+  [SH, '07-personas-a-confronto', '#p01-framing .arch'],
+  [SH, '08-sistema-degli-accessi', '#p01-system [data-shh="sys"]'],
   [JC, '01-sistema-app-e-box', '#p02-system [data-jcflow]'],
   [JC, '02-cicli-di-riformulazione', '#p02-ideas ol.cells'],
   [JC, '03-insight', '#p02-insights ol.cells'],
@@ -54,7 +63,10 @@ await page.setViewport({ width: 1920, height: 1080, deviceScaleFactor: 2 });
 await page.goto(pathToFileURL(path.join(here, 'index.html')).href, { waitUntil: 'networkidle0' });
 await page.evaluate(() => document.fonts.ready);
 for (const [dest, name, sel] of SHOTS) {
-  const el = await page.$(sel);
+  const [host, inner] = sel.split(' >> ');
+  const el = inner
+    ? (await page.evaluateHandle((h, q) => document.getElementById(h)?.shadowRoot?.querySelector(q), host, inner)).asElement()
+    : await page.$(sel);
   if (!el) { console.log('missing', sel); continue; }
   try { await el.screenshot({ path: path.join(dest, `${name}.png`), omitBackground: false }); console.log(name); }
   catch (e) { console.log('skipped (file open elsewhere?)', name, e.code); }   // a locked file must not stop the rest

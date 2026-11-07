@@ -1,0 +1,168 @@
+<!doctype html><html><head><meta charset="utf-8"><style>@font-face { font-family: Geist; src: url('file:///C:/Users/rospo/Documents/ClaudeCode/Websites/uxportfolio/node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2'); font-weight: 100 900; }
+html,body { margin:0; background:#fdfdfc; font-family: Geist; font-feature-settings: 'tnum'; color:#111; }
+.slide { width:1920px; height:1080px; position:relative; overflow:hidden; }
+.k { position:absolute; left:96px; top:44px; font-size:18px; font-weight:500; letter-spacing:.08em; color:#6b6b65; text-transform:uppercase; z-index:3; }
+h1 { position:absolute; left:96px; top:110px; width:430px; z-index:3; margin:0; font-size:52px; font-weight:500; line-height:1.08; letter-spacing:-.02em; }
+p.c { position:absolute; left:96px; top:250px; width:400px; z-index:3; margin:0; font-size:21px; line-height:1.45; color:#6b6b65; }
+.leg { position:absolute; left:96px; bottom:72px; width:440px; z-index:3; display:grid; gap:12px; font-size:19px; color:#111; }
+.leg h4 { margin:0 0 2px; font-size:15px; font-weight:500; letter-spacing:.1em; color:#6b6b65; }
+.leg div { display:flex; align-items:center; gap:16px; } .leg svg { width:64px; height:30px; overflow:visible; flex:none; }
+.draw { position:absolute; }
+.draw img { position:absolute; inset:0; width:100%; height:100%; }
+.draw svg { position:absolute; left:0; top:0; width:100%; height:100%; overflow:visible; }
+svg text { font-family: Geist; }
+.ic { fill:none; stroke:#111; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+.ic-w { stroke:#fdfdfc; stroke-width:1.8; }
+.halo { vector-effect:non-scaling-stroke; fill:none; stroke:#fdfdfc; stroke-width:11; stroke-linejoin:round; stroke-linecap:round; opacity:.95; }
+.ln-hand { vector-effect:non-scaling-stroke; fill:none; stroke:#111; stroke-width:4.4; stroke-linejoin:round; stroke-linecap:round; }
+.ln-remote { vector-effect:non-scaling-stroke; fill:none; stroke:#111; stroke-width:3.6; stroke-dasharray:14 8; stroke-linejoin:round; }
+.ln-auto { vector-effect:non-scaling-stroke; fill:none; stroke:#111; stroke-width:4.6; stroke-dasharray:0.1 9.5; stroke-linecap:round; stroke-linejoin:round; }
+.ln-sense { vector-effect:non-scaling-stroke; fill:none; stroke:#111; stroke-width:2.2; stroke-linejoin:round; }
+.stem { vector-effect:non-scaling-stroke; fill:none; stroke:#111; stroke-width:1.4; stroke-dasharray:2 4; stroke-linecap:round; }
+.lt { font-size:19px; font-weight:600; fill:#111; paint-order:stroke; stroke:#fdfdfc; stroke-width:8px; stroke-linejoin:round; }
+.lp { font-size:16px; font-weight:600; letter-spacing:.08em; fill:#111; paint-order:stroke; stroke:#fdfdfc; stroke-width:8px; stroke-linejoin:round; }
+.fig { fill:#fdfdfc; stroke:#111; stroke-width:1.5; stroke-linejoin:round; }
+</style></head><body><div class="slide">
+<div class="k">01 · Smart Home Hub · Research</div><h1>How the home connects.</h1><p class="c">Who acts on what, and how one device hands over to the next, drawn where it happens: from the gate and the intercom to the living room and the garden.</p><div class="leg"><h4>LINES</h4><div id="lg-hand"></div><div id="lg-remote"></div><div id="lg-auto"></div><div id="lg-sense"></div><div><svg viewBox="0 0 64 30" id="lgs"></svg>Sensor: it reads the home on its own</div><div><svg viewBox="0 0 64 30" id="lgp"></svg>People: you outside and inside, the guests</div></div>
+<div id="clip" style="position:absolute;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 96%,transparent),linear-gradient(transparent,#000 5%,#000 95%,transparent);-webkit-mask-composite:source-in;mask-composite:intersect"><div class="draw" id="d"><img src="assets/smarthome/house/house-cut.jpg"><svg id="ov"></svg></div></div></div>
+<script>
+const AN = {"cut": {"w": 1700, "h": 1270, "M": [[29.42, 29.42, 0.0, 111.76], [16.980000000000018, -16.980000000000018, -33.960000000000036, 733.49]], "art": {"remote_gar": [417.65, 702.92], "keys": [701.47, 768.3], "alarm": [722.06, 758.11], "security": [780.88, 792.07], "remote_gate": [323.53, 743.68], "camera": [380.0, 817.04], "intercom": [525.88, 934.2], "gate": [482.35, 913.49], "door": [676.47, 740.28], "garage_sw": [641.18, 696.13], "light_sw": [673.53, 697.83], "light": [735.29, 658.77], "fire": [811.76, 753.87], "ac": [973.53, 629.91], "heating": [1061.76, 708.02], "thermostat": [879.41, 670.66], "router": [1019.12, 844.71], "tv": [1138.24, 830.28], "irrigation": [1111.76, 1000.09], "mower": [1382.35, 862.54]}, "art3": {"remote_gar": [5.4, 5.0, 1.1], "keys": [12.4, 7.65, 1.35], "alarm": [14.0, 6.75, 2.9], "security": [16.0, 6.75, 2.9], "remote_gate": [5.0, 2.2, 1.1], "camera": [9.12, 0.0, 2.1], "intercom": [14.4, -0.32, 1.45], "gate": [12.6, 0.0, 1.0], "door": [11.0, 8.2, 1.2], "garage_sw": [8.6, 9.5, 1.3], "light_sw": [10.2, 10.6, 1.3], "light": [11.6, 9.6, 2.8], "fire": [15.4, 8.4, 2.9], "ac": [14.0, 15.3, 2.4], "heating": [17.0, 15.3, 1.6], "thermostat": [12.7, 13.4, 1.5], "router": [19.6, 11.25, 0.9], "tv": [21.6, 13.3, 1.3], "irrigation": [25.0, 9.0, 0.15], "mower": [25.6, 17.6, 0.2]}, "people": {"owner_out": [423.53, 798.02], "guests": [520.59, 1027.26], "owner_in": [988.24, 804.81]}, "people3": {"owner_out": [7.2, 3.4, 0.0], "guests": [15.6, -1.7, 0.0], "owner_in": [17.0, 12.8, 0.0]}, "rooms": {"garage": [620.59, 666.92], "hall": [717.65, 755.22], "kitchen": [883.82, 871.54], "living": [964.71, 773.9], "bath": [758.82, 570.13], "dressing": [861.76, 510.7], "bedroom": [1008.82, 638.06]}, "zones": {"entrance": [[111.76, 731.45], [758.82, 1105.03], [964.71, 986.16], [685.29, 824.85], [720.59, 804.47], [632.35, 753.53], [614.71, 763.72], [452.94, 670.32], [335.29, 602.4]], "garage": [[452.94, 670.32], [614.71, 763.72], [788.24, 663.53], [626.47, 570.13]], "day": [[632.35, 753.53], [720.59, 804.47], [685.29, 824.85], [964.71, 986.16], [1214.71, 841.83], [847.06, 629.57]], "night": [[597.06, 553.15], [788.24, 663.53], [847.06, 629.57], [1023.53, 731.45], [1170.59, 646.55], [802.94, 434.29]], "garden": [[758.82, 1105.03], [935.29, 1206.92], [1641.18, 799.37], [817.65, 323.91], [335.29, 602.4], [452.94, 670.32], [626.47, 570.13], [597.06, 553.15], [802.94, 434.29], [1170.59, 646.55], [1023.53, 731.45], [1214.71, 841.83]]}}, "top": {"w": 1400, "h": 1279, "M": [[46.35999999999999, 0.0, 0.0, 55.63], [0.0, -46.36000000000013, 0.0, 1158.71]], "art": {"remote_gar": [305.96, 926.92], "keys": [630.46, 804.07], "alarm": [704.64, 845.79], "security": [797.35, 845.79], "remote_gate": [287.42, 1056.72], "camera": [478.41, 1158.71], "intercom": [723.18, 1173.54], "gate": [639.74, 1158.71], "door": [565.56, 778.57], "garage_sw": [482.12, 750.76], "light_sw": [509.93, 727.58], "light": [574.83, 695.13], "fire": [769.54, 769.3], "ac": [704.64, 449.43], "heating": [843.71, 449.43], "thermostat": [644.37, 537.51], "router": [964.24, 637.18], "tv": [1056.95, 542.15], "irrigation": [1214.57, 741.49], "mower": [1242.38, 342.81]}, "art3": {"remote_gar": [5.4, 5.0, 1.1], "keys": [12.4, 7.65, 1.35], "alarm": [14.0, 6.75, 2.9], "security": [16.0, 6.75, 2.9], "remote_gate": [5.0, 2.2, 1.1], "camera": [9.12, 0.0, 2.1], "intercom": [14.4, -0.32, 1.45], "gate": [12.6, 0.0, 1.0], "door": [11.0, 8.2, 1.2], "garage_sw": [8.6, 9.5, 1.3], "light_sw": [10.2, 10.6, 1.3], "light": [11.6, 9.6, 2.8], "fire": [15.4, 8.4, 2.9], "ac": [14.0, 15.3, 2.4], "heating": [17.0, 15.3, 1.6], "thermostat": [12.7, 13.4, 1.5], "router": [19.6, 11.25, 0.9], "tv": [21.6, 13.3, 1.3], "irrigation": [25.0, 9.0, 0.15], "mower": [25.6, 17.6, 0.2]}, "people": {"owner_out": [389.4, 1001.09], "guests": [778.81, 1237.51], "owner_in": [843.71, 565.33]}, "people3": {"owner_out": [7.2, 3.4, 0.0], "guests": [15.6, -1.7, 0.0], "owner_in": [17.0, 12.8, 0.0]}, "rooms": {"garage": [368.54, 669.63], "hall": [565.56, 713.67], "kitchen": [855.3, 741.49], "living": [785.76, 544.47], "bath": [345.36, 428.57], "dressing": [345.36, 266.32], "bedroom": [635.1, 324.27]}, "zones": {"entrance": [[55.63, 1158.71], [1075.5, 1158.71], [1075.5, 834.2], [635.1, 834.2], [635.1, 778.57], [496.03, 778.57], [496.03, 806.39], [241.06, 806.39], [55.63, 806.39]], "garage": [[241.06, 806.39], [496.03, 806.39], [496.03, 532.88], [241.06, 532.88]], "day": [[496.03, 778.57], [635.1, 778.57], [635.1, 834.2], [1075.5, 834.2], [1075.5, 440.16], [496.03, 440.16]], "night": [[194.7, 532.88], [496.03, 532.88], [496.03, 440.16], [774.17, 440.16], [774.17, 208.37], [194.7, 208.37]], "garden": [[1075.5, 1158.71], [1353.64, 1158.71], [1353.64, 46.12], [55.63, 46.12], [55.63, 806.39], [241.06, 806.39], [241.06, 532.88], [194.7, 532.88], [194.7, 208.37], [774.17, 208.37], [774.17, 440.16], [1075.5, 440.16]]}}, "out": {"w": 1300, "h": 971, "M": [[22.489999999999995, 22.489999999999995, 0.0, 85.47], [12.979999999999905, -12.990000000000009, -25.980000000000018, 560.82]], "art": {"remote_gar": [319.38, 537.44], "keys": [536.42, 587.44], "alarm": [552.16, 579.64], "security": [597.15, 605.61], "remote_gate": [247.4, 568.61], "camera": [290.59, 624.7], "intercom": [402.15, 714.3], "gate": [368.86, 698.46], "door": [517.3, 566.01], "garage_sw": [490.31, 532.25], "light_sw": [515.05, 533.55], "light": [562.28, 503.68], "fire": [620.76, 576.4], "ac": [744.46, 481.6], "heating": [811.94, 541.34], "thermostat": [672.49, 512.77], "router": [779.33, 645.87], "tv": [870.42, 634.83], "irrigation": [850.17, 764.69], "mower": [1057.09, 659.5]}, "art3": {"remote_gar": [5.4, 5.0, 1.1], "keys": [12.4, 7.65, 1.35], "alarm": [14.0, 6.75, 2.9], "security": [16.0, 6.75, 2.9], "remote_gate": [5.0, 2.2, 1.1], "camera": [9.12, 0.0, 2.1], "intercom": [14.4, -0.32, 1.45], "gate": [12.6, 0.0, 1.0], "door": [11.0, 8.2, 1.2], "garage_sw": [8.6, 9.5, 1.3], "light_sw": [10.2, 10.6, 1.3], "light": [11.6, 9.6, 2.8], "fire": [15.4, 8.4, 2.9], "ac": [14.0, 15.3, 2.4], "heating": [17.0, 15.3, 1.6], "thermostat": [12.7, 13.4, 1.5], "router": [19.6, 11.25, 0.9], "tv": [21.6, 13.3, 1.3], "irrigation": [25.0, 9.0, 0.15], "mower": [25.6, 17.6, 0.2]}, "people": {"owner_out": [323.88, 610.16], "guests": [398.1, 785.46], "owner_in": [755.71, 615.35]}, "people3": {"owner_out": [7.2, 3.4, 0.0], "guests": [15.6, -1.7, 0.0], "owner_in": [17.0, 12.8, 0.0]}, "rooms": {"garage": [474.57, 509.91], "hall": [548.79, 577.44], "kitchen": [675.87, 666.39], "living": [737.72, 591.72], "bath": [580.28, 435.9], "dressing": [659.0, 390.45], "bedroom": [771.45, 487.84]}, "zones": {"entrance": [[85.47, 559.26], [580.28, 844.94], [737.72, 754.04], [524.05, 630.68], [551.04, 615.09], [483.56, 576.14], [470.07, 583.93], [346.37, 512.51], [256.4, 460.57]], "garage": [[346.37, 512.51], [470.07, 583.93], [602.77, 507.32], [479.07, 435.9]], "day": [[483.56, 576.14], [551.04, 615.09], [524.05, 630.68], [737.72, 754.04], [928.89, 643.66], [647.75, 481.34]], "night": [[456.57, 422.91], [602.77, 507.32], [647.75, 481.34], [782.7, 559.26], [895.16, 494.33], [614.01, 332.01]], "garden": [[580.28, 844.94], [715.23, 922.85], [1255.02, 611.2], [625.26, 247.61], [256.4, 460.57], [346.37, 512.51], [479.07, 435.9], [456.57, 422.91], [614.01, 332.01], [895.16, 494.33], [782.7, 559.26], [928.89, 643.66]]}}, "zones": {"w": 1000, "h": 747, "M": [[17.310000000000002, 17.310000000000002, 0.0, 65.74], [9.990000000000009, -9.980000000000018, -19.970000000000027, 431.43]], "art": {"remote_gar": [245.67, 413.45], "keys": [412.63, 451.91], "alarm": [424.74, 445.92], "security": [459.34, 465.9], "remote_gate": [190.31, 437.43], "camera": [223.53, 480.58], "intercom": [309.34, 549.5], "gate": [283.74, 537.32], "door": [397.92, 435.43], "garage_sw": [377.16, 409.46], "light_sw": [396.19, 410.46], "light": [432.53, 387.48], "fire": [477.51, 443.42], "ac": [572.66, 370.5], "heating": [624.57, 416.45], "thermostat": [517.3, 394.48], "router": [599.48, 496.86], "tv": [669.55, 488.37], "irrigation": [653.98, 588.26], "mower": [813.15, 507.35]}, "art3": {"remote_gar": [5.4, 5.0, 1.1], "keys": [12.4, 7.65, 1.35], "alarm": [14.0, 6.75, 2.9], "security": [16.0, 6.75, 2.9], "remote_gate": [5.0, 2.2, 1.1], "camera": [9.12, 0.0, 2.1], "intercom": [14.4, -0.32, 1.45], "gate": [12.6, 0.0, 1.0], "door": [11.0, 8.2, 1.2], "garage_sw": [8.6, 9.5, 1.3], "light_sw": [10.2, 10.6, 1.3], "light": [11.6, 9.6, 2.8], "fire": [15.4, 8.4, 2.9], "ac": [14.0, 15.3, 2.4], "heating": [17.0, 15.3, 1.6], "thermostat": [12.7, 13.4, 1.5], "router": [19.6, 11.25, 0.9], "tv": [21.6, 13.3, 1.3], "irrigation": [25.0, 9.0, 0.15], "mower": [25.6, 17.6, 0.2]}, "people": {"owner_out": [249.14, 469.39], "guests": [306.23, 604.24], "owner_in": [581.31, 473.39]}, "people3": {"owner_out": [7.2, 3.4, 0.0], "guests": [15.6, -1.7, 0.0], "owner_in": [17.0, 12.8, 0.0]}, "rooms": {"garage": [365.05, 392.28], "hall": [422.15, 444.22], "kitchen": [519.9, 512.64], "living": [567.47, 455.21], "bath": [446.37, 335.34], "dressing": [506.92, 300.38], "bedroom": [593.43, 375.3]}, "zones": {"entrance": [[65.74, 430.24], [446.37, 649.99], [567.47, 580.07], [403.11, 485.17], [423.88, 473.19], [371.97, 443.22], [361.59, 449.21], [266.44, 394.28], [197.23, 354.32]], "garage": [[266.44, 394.28], [361.59, 449.21], [463.67, 390.28], [368.51, 335.34]], "day": [[371.97, 443.22], [423.88, 473.19], [403.11, 485.17], [567.47, 580.07], [714.53, 495.16], [498.27, 370.3]], "night": [[351.21, 325.35], [463.67, 390.28], [498.27, 370.3], [602.08, 430.24], [688.58, 380.29], [472.32, 255.43]], "garden": [[446.37, 649.99], [550.17, 709.92], [965.4, 470.19], [480.97, 190.51], [197.23, 354.32], [266.44, 394.28], [368.51, 335.34], [351.21, 325.35], [472.32, 255.43], [688.58, 380.29], [602.08, 430.24], [714.53, 495.16]]}}};
+const I = {
+ gate: 'M3 21V5M21 21V5M3 5q9-3 18 0M3 9h18M7.5 9v12M12 8v13M16.5 9v12M3 21h18',
+ door: 'M5 21V4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v17M3 21h18M15 12.5h.5',
+ window: 'M4 3h16v18H4zM12 3v18M4 12h16M6.5 6h3M14.5 6h3',
+ lock: 'M6 11h12v9a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zM8.5 11V8a3.5 3.5 0 0 1 7 0v3M12 15v2.5',
+ intercom: 'M7 2.5h10a1 1 0 0 1 1 1v17a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1zM12 5.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5zM9.5 14h5M9.5 17h5',
+ camera: 'M2.5 7.5l13 3.5l-1.5 5.5l-13-3.5zM15.2 13.5l4.3 1.2M19.5 11.5v6.5M6.5 14.5l-1 4.5H2.5',
+ alarm: 'M7 17v-4a5 5 0 0 1 10 0v4M5 17h14v4H5zM12 3v2M4.5 6.5l1.4 1.4M19.5 6.5l-1.4 1.4',
+ shield: 'M12 3l7 3v5.5c0 4.2-3 7.6-7 9.5c-4-1.9-7-5.3-7-9.5V6zM9 12l2 2l4-4',
+ sprinkler: 'M12 3v4M8 7h8l-1 3H9zM9 14l-1.5 2.2M12 14v2.6M15 14l1.5 2.2M6.5 19.5l-.8 1.3M12 19.6v1.6M17.5 19.5l.8 1.3',
+ panel: 'M5 3h14v18H5zM5 7h14M13 10l-3 4h4l-3 4',
+ contact: 'M4 6h6v12H4zM13.5 6h3v12h-3z',
+ smoke: 'M3 8h18M5 8c0 3 3 5 7 5s7-2 7-5M12 13v1.5',
+ motion: 'M8 4h8v10a4 4 0 0 1-8 0zM12 10.5a1.5 1.5 0 1 0 0 .01',
+ thermo: 'M10 13.5V5a2 2 0 0 1 4 0v8.5a4 4 0 1 1-4 0zM12 9v7.5',
+ grass: 'M5 20c2-4 2-8 0-12M11 20c0-5 1-8 3-11M17 20c0-4 1-7 3-9M3 20h18',
+ switch: 'M7 3h10a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM10 7h4v5.5h-4z',
+ bulb: 'M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z',
+ climate: 'M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9M10 4.5l2 1.5l2-1.5M10 19.5l2-1.5l2 1.5',
+ voice: 'M8 6a4 1.8 0 0 1 8 0v12a4 1.8 0 0 1-8 0zM8 6a4 1.8 0 0 0 8 0M10.5 11h3',
+ garage: 'M3 10l9-6l9 6v11H3zM7 21v-8h10v8M7 15.5h10M7 18h10',
+ ev: 'M5 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v17H5zM14 8h2v8a2 2 0 0 0 4 0V9M3 21h13M10.5 7l-2.5 4h3l-2.5 4',
+ drop: 'M12 3c3 5 6 8 6 11a6 6 0 0 1-12 0c0-3 3-6 6-11zM9 15a3 3 0 0 0 3 3',
+ router: 'M3 13h18v7H3zM7 13L5 6.5M17 13l2-6.5M6.5 16.5h1M10.5 16.5h1',
+ bell: 'M7 2.5h10a1 1 0 0 1 1 1v17a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1zM8.5 6h7v4h-7zM10.5 18.5h3',
+ broom: 'M15 3l-4 10M6 13h9l2 8H4zM9 16.5v4.5M12.5 16.5l.5 4.5',
+ robot: 'M12 4a8 8 0 1 0 0 16a8 8 0 1 0 0-16zM12 8.5v.5M7.5 15h9',
+ tv: 'M3 5h18v12H3zM8 21h8M12 17v4',
+ remote: 'M8 3h8a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM12 6.5a1.5 1.5 0 1 0 0 3a1.5 1.5 0 1 0 0-3zM10 13h4M10 16h4',
+ heater: 'M7 3h10v16H7zM7 7h10M12 10c1.5 1.8 2 3 2 4a2 2 0 0 1-4 0c0-1 .5-2.2 2-4zM9 19v2M15 19v2',
+ key: 'M8 14a4 4 0 1 1 3.5-6h9.5v3h-2v2h-3v-2h-4.5A4 4 0 0 1 8 14zM6.5 10h.5',
+};
+// The board's network (FigJam physical model, board 08), split by kind of interaction (owner, 2026-10-31):
+//   hand   — a person uses the device directly (keys, remotes, switches, intercom, thermostat)
+//   remote — a command sent at a distance (remote → gate or garage, intercom → gate, router → TV, phone → irrigation)
+//   auto   — one device triggers the next on its own (keys → alarm → security and door, door → light, climate chain, irrigation → mower)
+//   sense  — a device sees or warns (camera → guests, owner and intercom; fire alarm → the owner inside)
+// [from, to, kind, route, added]  route: 'xy' = along x first, 'yx' = along y first (lines follow the floor grid)
+const E = [
+ ['owner_out', 'remote_gar', 'hand', 'yx'], ['remote_gar', 'garage_sw', 'remote', 'yx'],
+ ['owner_out', 'keys', 'hand', 'xy'], ['keys', 'alarm', 'auto', 'xy'], ['alarm', 'security', 'auto', 'xy'], ['alarm', 'door', 'auto', 'yx'],
+ ['owner_out', 'remote_gate', 'hand', 'xy'], ['remote_gate', 'gate', 'remote', 'xy'],
+ ['camera', 'owner_out', 'sense', 'yx'], ['camera', 'guests', 'sense', 'xy'],
+ ['guests', 'intercom', 'hand', 'xy'], ['intercom', 'gate', 'remote', 'xy'],
+ ['door', 'light_sw', 'auto', 'yx'], ['light_sw', 'light', 'auto', 'xy'], ['owner_in', 'light', 'hand', 'xy'],
+ ['owner_in', 'ac', 'hand', 'yx'], ['ac', 'heating', 'auto', 'xy'], ['heating', 'thermostat', 'auto', 'xy'],
+ ['owner_in', 'thermostat', 'hand', 'xy'], ['owner_in', 'router', 'hand', 'yx'], ['router', 'tv', 'remote', 'xy'],
+ ['fire', 'owner_in', 'sense', 'xy'], ['owner_in', 'irrigation', 'remote', 'xy'], ['irrigation', 'mower', 'auto', 'yx'],
+ // added after checking the sequences: the owner answers the intercom from inside; the camera is part of the intercom
+ ['owner_in', 'intercom', 'hand', 'yx', 1], ['camera', 'intercom', 'sense', 'xy', 1],
+];
+const KIND = { hand: 'A person uses it, by hand', remote: 'A command sent at a distance', auto: 'One device triggers the next', sense: 'A device sees or warns' };
+const N = { // node: icon, label, sensor
+ remote_gar: ['remote', 'Remote'], garage_sw: ['garage', 'Garage door switch'], keys: ['key', 'Keys, entry code'], alarm: ['alarm', 'Alarm'],
+ security: ['shield', 'Security systems'], door: ['door', 'Front door'], remote_gate: ['remote', 'Remote'], gate: ['gate', 'Gate'],
+ camera: ['camera', 'Cameras', 1], intercom: ['intercom', 'Intercom'], light_sw: ['switch', 'Light switch'], light: ['bulb', 'Light'],
+ fire: ['smoke', 'Fire alarm', 1], ac: ['climate', 'Air conditioner'], heating: ['heater', 'Heating'], thermostat: ['thermo', 'Thermostat, sensors', 1],
+ router: ['router', 'Wi-Fi router'], tv: ['tv', 'Television'], irrigation: ['drop', 'Irrigation'], mower: ['robot', 'Mowing'] };
+const PL = { owner_out: 'You, outside', guests: 'Guests', owner_in: 'You, inside' };
+const badge = (x, y) => `<circle cx="${x}" cy="${y}" r="8" fill="#fdfdfc"/><circle cx="${x}" cy="${y}" r="6.5" fill="#111"/><path d="M${x - .6} ${y - 2.5}a3.5 3.5 0 0 1 0 5M${x + 1.7} ${y - 4.4}a6.2 6.2 0 0 1 0 8.8" fill="none" stroke="#fdfdfc" stroke-width="1.2" stroke-linecap="round"/><circle cx="${x - 2.7}" cy="${y}" r="1" fill="#fdfdfc"/>`;
+const pin = (x, y, ic, sen) => `<circle cx="${x}" cy="${y}" r="22" fill="#fdfdfc"/><circle cx="${x}" cy="${y}" r="19" fill="#111"/><g transform="translate(${x - 12} ${y - 12})"><path class="ic ic-w" d="${I[ic]}"/></g>` + (sen ? badge(x + 16, y - 16) : '');
+const pdot = (x, y) => `<circle cx="${x}" cy="${y}" r="11" fill="#fdfdfc"/><circle cx="${x}" cy="${y}" r="8" fill="#111"/><circle cx="${x}" cy="${y}" r="3" fill="#fdfdfc"/>`;
+const fig = (x, y, s = 1) => `<g transform="translate(${x} ${y}) scale(${s})"><path class="fig" d="M-8 0v-19q0-10 8-10t8 10v19zM-8 -13h16"/><circle class="fig" cx="0" cy="-36" r="6"/></g>`;
+const swatch = (kind) => `<svg viewBox="0 0 64 30"><path class="halo" d="M4 15H60"/><path class="ln-${kind}" d="M4 15H60"${kind === 'sense' ? ' marker-end="url(#arrow)"' : ''}/></svg>`;
+
+function network(A, zr, opts = {}) {
+  const k = opts.k || 1;   // drawing units per slide px: keeps strokes, pins and text at their slide size on a zoomed drawing
+  const P = (x, y, z) => [A.M[0][0] * x + A.M[0][1] * y + A.M[0][2] * z + A.M[0][3], A.M[1][0] * x + A.M[1][1] * y + A.M[1][2] * z + A.M[1][3]];
+  const W = Object.assign({}, A.art3, A.people3);
+  const T = (x, y, str) => `<g transform="translate(${x} ${y}) scale(${k}) translate(${-x} ${-y})">${str}</g>`;
+  // routes on the floor grid; segments that share a line get their own lane (0.42 m apart), so no two lines overlap
+  const routes = E.map(([a, b, kind, route, added]) => {
+    const pa = W[a], pb = W[b];
+    const segs = route === 'xy' ? [{ o: 'h', c: pa[1], a0: pa[0], a1: pb[0] }, { o: 'v', c: pb[0], a0: pa[1], a1: pb[1] }]
+                                : [{ o: 'v', c: pa[0], a0: pa[1], a1: pb[1] }, { o: 'h', c: pb[1], a0: pa[0], a1: pb[0] }];
+    return { a, b, kind, route, added, pa, pb, segs: segs.filter((s) => Math.abs(s.a1 - s.a0) > 0.05) };
+  });
+  const groups = {};
+  routes.forEach((r, i) => r.segs.forEach((s) => { (groups[s.o + Math.round(s.c / 0.25)] ||= []).push([i, s]); }));
+  for (const g of Object.values(groups)) {
+    // only segments that actually overlap along the line need separate lanes
+    g.sort((p, q) => Math.min(p[1].a0, p[1].a1) - Math.min(q[1].a0, q[1].a1));
+    const lanes = [];
+    for (const [, s] of g) {
+      const lo = Math.min(s.a0, s.a1), hi = Math.max(s.a0, s.a1);
+      let l = lanes.findIndex((end) => end < lo - 0.3); if (l < 0) { l = lanes.length; lanes.push(0); }
+      lanes[l] = hi; s.lane = l;
+    }
+    const n = lanes.length; g.forEach(([, s]) => { s.off = (s.lane - (n - 1) / 2) * 0.42; });
+  }
+  let halos = '', lines = '', nodes = '', labels = '', stems = '';
+  const used = new Set();
+  for (const r of routes) {
+    used.add(r.a); used.add(r.b);
+    // polyline in world metres: start, the offset segments, end
+    const pts = [[r.pa[0], r.pa[1]]];
+    const s1 = r.segs[0], s2 = r.segs[1];
+    const off = (s) => (s ? s.off || 0 : 0);
+    if (r.route === 'xy') {
+      const y1 = r.pa[1] + off(s1), x2 = r.pb[0] + off(s2);
+      pts.push([r.pa[0], y1], [x2, y1], [x2, r.pb[1]]);
+    } else {
+      const x1 = r.pa[0] + off(s1), y2 = r.pb[1] + off(s2);
+      pts.push([x1, r.pa[1]], [x1, y2], [r.pb[0], y2]);
+    }
+    pts.push([r.pb[0], r.pb[1]]);
+    const d = 'M' + pts.map(([x, y]) => P(x, y, zr).join(' ')).join('L');
+    halos += `<path class="halo" d="${d}"/>`;
+    lines += `<path class="ln-${r.kind}" d="${d}"${r.kind === 'sense' ? ' marker-end="url(#arrow)"' : ''}/>`;
+  }
+  for (const n of used) {
+    const p = W[n], [lx, ly] = P(p[0], p[1], zr);
+    const o = (opts.lab || {})[n] || [30, 6], anc = o[0] < 0 ? 'end' : o[0] > 0 ? 'start' : 'middle';
+    if (N[n]) {
+      nodes += T(lx, ly, pin(lx, ly, N[n][0], N[n][2]));
+      labels += T(lx, ly, `<text class="lt" x="${lx + o[0]}" y="${ly + o[1]}" style="text-anchor:${anc}">${N[n][1]}</text>`);
+    } else {
+      const [px, py] = A.people[n];
+      if (!opts.plan) stems += `<path class="stem" d="M${px} ${py - 56 * k}L${lx} ${ly}"/>`;
+      nodes += T(lx, ly, pdot(lx, ly));
+      labels += T(lx, ly, `<text class="lp" x="${lx + o[0]}" y="${ly + o[1]}" style="text-anchor:${anc}">${PL[n].toUpperCase()}</text>`);
+    }
+  }
+  const defs = `<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="${4.2}" markerHeight="${4.2}" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#111"/></marker></defs>`;
+  return defs + halos + stems + lines + nodes + labels;
+}
+
+const A = AN['cut'], box = [500, 0, 1420, 1080], zoom = 1.4, C = [15.2, 9.8];
+const s = Math.min(box[2] / A.w, box[3] / A.h) * zoom, d = document.getElementById('d'), clip = document.getElementById('clip');
+const c = [A.M[0][0] * C[0] + A.M[0][1] * C[1] + A.M[0][3], A.M[1][0] * C[0] + A.M[1][1] * C[1] + A.M[1][3]];
+clip.style.left = box[0] + 'px'; clip.style.top = box[1] + 'px'; clip.style.width = box[2] + 'px'; clip.style.height = box[3] + 'px';
+d.style.left = box[2] / 2 - c[0] * s + 'px'; d.style.top = box[3] / 2 - c[1] * s + 'px'; d.style.width = A.w * s + 'px'; d.style.height = A.h * s + 'px';
+const ov = document.getElementById('ov'); ov.setAttribute('viewBox', `0 0 ${A.w} ${A.h}`);
+ov.innerHTML = network(A, 1.3, { lab: {"garage_sw": [-30, 6], "light_sw": [30, 6], "light": [30, 8], "door": [-30, 6], "keys": [30, 6], "alarm": [-30, 6], "thermostat": [-24, -26], "ac": [0, -32], "router": [0, 48], "tv": [30, 6], "mower": [-30, 6], "remote_gate": [30, 6], "remote_gar": [30, 6]}, k: 1 / s, plan: false });
+for (const k of ['hand', 'remote', 'auto', 'sense']) document.getElementById('lg-' + k).innerHTML = swatch(k).replace('<svg ', '<svg ') + KIND[k];
+document.querySelector('.leg').insertAdjacentHTML('afterbegin', '<svg width="0" height="0" style="position:absolute"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4.2" markerHeight="4.2" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#111"/></marker></defs></svg>');
+document.getElementById('lgs').innerHTML = '<g transform="translate(26 15) scale(.68) translate(-26 -15)">' + pin(26, 15, 'smoke', 1) + '</g>';
+document.getElementById('lgp').innerHTML = pdot(26, 15);
+</script></body></html>
