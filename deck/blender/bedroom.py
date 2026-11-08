@@ -10,13 +10,14 @@
 # Materials: Poly Haven CC0 in deck/blender/assets/polyhaven_tex (git-ignored).
 import random
 from mathutils import noise
+DAWN_LED = '#f2b53a'                    # the ring in the morning, a little yellower than DAWN (owner, 2026-11-09)
 FRAME = int(SHOT[4]) if SHOT.startswith('room') and SHOT[4:].isdigit() else 0
 ROOM = {   # time, lamp (share of 14 W, kelvin), ring colour or None, shutter open 0–1, exposure, sky: 'night' or sun elevation in degrees
     1: ('22:00', (0.40, 2200), NIGHT, 0.55, 0.65, 'night'),
     2: ('', (0.0, 2200), None, 0.0, 1.6, 'night'),
     3: ('03:12', (0.0, 1800), None, 0.0, 1.6, 'night'),
-    4: ('06:14', (0.13, 2800), DAWN, 0.20, 1.2, 1.0),
-    5: ('06:20', (0.62, 4400), DAWN, 0.65, 0.85, 2.4),
+    4: ('06:14', (0.13, 2800), DAWN_LED, 0.20, 1.2, 1.0),
+    5: ('06:20', (0.62, 4400), DAWN_LED, 0.65, 0.85, 2.4),
 }
 LED_W = {1: 20000.0, 4: 16000.0, 5: 30000.0}          # emission of the strip under the base: the bright contact line
 LED_SPILL = {1: 55.0, 4: 38.0, 5: 115.0}                # emission of the light that leaves the gap all along the base's edge: the soft halo

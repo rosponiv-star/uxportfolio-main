@@ -1339,7 +1339,8 @@ When a CLOUD session hits something that needs the local environment, it must:
   unseen by the camera, for the light that leaves the 2 mm gap (stronger mid-side). Both are light-linked to `stand_top` only (`only_on_the_wood`),
   otherwise the grazing rays draw a line across curtains and bed. Strengths in `LED_W` / `LED_SPILL`. Scenes 2, 3 (LED off) not re-rendered.
   Same day, owner: "visibile bene come prima": `LED_SPILL` raised, source 12 mm up for a wider halo, and `led_spill` is now a row of point lights
-  every 5 mm (a thin mesh emitter left a band on the base's sides).
+  every 5 mm (a thin mesh emitter left a band on the base's sides). 2026-11-09, owner: the morning LED a little yellower, `DAWN_LED` #f2b53a in
+  bedroom.py, scenes 4 and 5 only (`DAWN` in aura.py is unchanged, so the other renders keep their amber).
 - **2026-11-08 · LOCAL (109)** · Scenes: the base turned 38° towards the bed so the time reads from the pillow (`BASE_ROT` in
   bedroom.py, also applied to the ring's glow), camera moved about 15° round the nightstand to (0.46, -1.48, 0.78). The owner
   compared it side by side with the front-on version and chose this one.
