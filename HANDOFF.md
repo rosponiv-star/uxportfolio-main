@@ -260,7 +260,7 @@ stay clickable in the PDF. Contact sheet for review: resize the previews with sh
 3. Real photos for the Selected projects index and, if wanted, the covers (objects, contexts, devices: not only phones).
 4. Closing slide (contact, thank you) — not built yet. Final check: size < 20 MB, file name, links, typos.
 5. Optional: propose a concrete small physical prototype (Arduino/ESP32) tied to one project.
-7a. **AuraWake plan agreed with the owner (2026-11-07), in this order** (items 1–2 settled the same day: no process slide; the cover is title, lead and facts (Year "2024 · detailed in 2026"), and a dedicated problem slide `p05-problem` follows it; the owner kept night/scenes and gestures/light as separate slides): (1) was: a process slide, 2024 course
+7a. **AuraWake plan agreed with the owner (2026-11-07), in this order** (items 1–2 settled the same day: no process slide; the cover is title, lead and facts (Year "2024 · detailed in 2026", Role "Interaction and Product Designer": owner, 2026-11-08), and a dedicated problem slide `p05-problem` follows it; the owner kept night/scenes and gestures/light as separate slides): (1) was: a process slide, 2024 course
    concept → 2026 product rethink (what was kept, what changed and why), from the 2024 PDFs/Figma page 1; (2) THEN cut
    AuraWake from 12 pages to 7–8 (merge base + system, night + scenes, gestures + light, the three app slides into
    one); IMPORTANT, later: (3) the app screens are the 2024 originals and do not show the 2026 rules (no snooze,
@@ -1329,6 +1329,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-08 · LOCAL (100)** · AuraWake cover: Role back to "Interaction and Product Designer" (owner), replacing "Concept,
+  interaction and app; then product and engineering" of LOCAL (89). Type and "2024 · detailed in 2026" unchanged. Only deck/index.html
+  changed; deck/out/ NOT rebuilt on purpose: **the AuraWake session's next `node deck/build.mjs` carries it into the PDF.**
 - **2026-11-07 · LOCAL (99)** · Weavy guide rebuilt as a node chain (owner asked): per shot NB1 generate → LLM check →
   NB2 fix structure → check → NB3 fix foot and pads → check → NB4 fix finish → LLM final report; SPEC S1–S10, CHECK
   C1–C12 (+C13–14 for B4), texts and wiring in `notes/05-aurawake-weavy-bracelet.md`.
