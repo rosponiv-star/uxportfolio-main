@@ -277,3 +277,13 @@ a { color: inherit; text-decoration: none; }
 
 /* Smart Home Hub research boards mounted from deck/boards (shadow roots) */
 .shb-host { position: absolute; inset: 0; }
+
+/* Smart Home Hub: low fidelity next to high fidelity, one pair per column */
+.lfhf { grid-template-columns: repeat(3, 1fr); }
+.lfhf figure { padding: 22px 20px 0; }
+.lfhf .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-self: start; width: 100%; padding-top: 104px; }
+.lfhf .pair > div { display: grid; gap: 10px; justify-items: center; }
+.lfhf .pair span { font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: #6b6b65; }
+.lfhf .pair .hfi span { color: var(--ink); }
+.lfhf img { width: 100%; height: auto; max-height: none; border-width: 5px; border-radius: 28px; align-self: start; }
+.lfhf figcaption { min-height: 104px; }

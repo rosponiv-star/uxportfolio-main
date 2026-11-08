@@ -1094,6 +1094,11 @@ When a CLOUD session hits something that needs the local environment, it must:
 
 ## Appendix A — Session log (newest first; keep ~15 entries, fold older facts into §1–§9 above)
 
+- **2026-11-08 · LOCAL (75)** · Two slides after p01-ideas (owner): p01-ideas-2, a second 2 × 2 with matching concept and
+  board for PP02 (Marco, Giorgia; report pp. 70, 74) and PP09 (Giorgia, Franco; pp. 103, 109), white scans;
+  p01-lfhf, low fidelity next to high fidelity for PP06 (home, one room, history). LF screens from the owner's Figma
+  EOy3a5lhnQDIG31LjaVPyp (frames 4:787, 17:4268, 16:2553), in deck/assets/smarthome/lf/. Captions state only what
+  visibly changed between the two; the owner has not yet said which problems the LF round found.
 - **2026-11-07 · LOCAL (75)** · The 11 Smart Home Hub research boards are real deck slides again, no longer images
   (owner: "riportale normali come il resto del pdf"). Sources in `deck/boards/<id>.html` (standalone 1920×1080 boards:
   index, stakeholders, artifact, sequence ×2, physical ×3, pain points, personas, Giorgia); `node deck/boards/embed.mjs`
