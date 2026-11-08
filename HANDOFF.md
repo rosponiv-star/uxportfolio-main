@@ -1334,6 +1334,10 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-08 · LOCAL (102)** · Owner changes the bracelet direction: a single new reference (woven loop with orange
+  edges and inner stripes, satin metal loop, dark plate inside), generated identical in Weavy with Nano Banana, the brown
+  weave turned graphite; all earlier references dropped. Open: that reference shows no charging foot or pads, while the
+  spec and the Blender model have them; align once the image is approved.
 - **2026-11-08 · LOCAL (101)** · First render-guided Nano Banana result: fabric and soft shape right, closure wrong (a
   black frame laid on the fabric, a stray strap end). Correction prompt with the strap's path step by step, plus
   `ref-loop-rotated.jpg` (v2's loop turned to the same orientation), in the Weavy guide §0.
