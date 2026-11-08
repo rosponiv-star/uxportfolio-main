@@ -1334,6 +1334,13 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-08 · LOCAL (104)** · Owner's corrections on (103). `explode-real.jpg` restored byte for byte (the re-render was
+  lower quality; it still shows the pins at the old pitch: leave it, do not re-render). Body now bulges past the strap on
+  BOTH sides, just to the loop's level (1.6–1.7 mm); both arms of the U alike, cross bar broader (it read as a thin line in
+  some views). Loop and body are one solid (Boolean union, `build_bracelet`), so no small lines where they meet.
+  Handedness back to the old one, loop on the side every view shows (cover, gestures); the fit view `photo` mirrors the
+  model to compare with the photo. Docked (cover, gesture 04), pins and contacts are hidden. Cover: bracelet shading 1.5×
+  in `export_cover.mjs`, inside its area only.
 - **2026-11-08 · LOCAL (103)** · Bracelet photo approved by the owner (Nano Banana Pro, two-tone dotted weave, black and
   grey, one matte black piece for loop and body, three gold contacts in one slot). `aura.py` rebuilt on it and fitted
   against the photo with an overlay (view `photo`, `pv=b,phi,gamma,fw,dx,dz`; camera `pv=35,-20,0,0.135,0,0`): one strip

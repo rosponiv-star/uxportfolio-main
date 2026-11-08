@@ -13,6 +13,8 @@ const DARK = [0x3d, 0x2a, 0x07];   // the cover's ochre, darker: shadows in the 
 for (let i = 0; i < out.length; i += 4) {
   const a = shade.data[i + 3] / 255, L = (0.2126 * shade.data[i] + 0.7152 * shade.data[i + 1] + 0.0722 * shade.data[i + 2]) / 255;
   let r = DARK[0], g = DARK[1], b = DARK[2], al = a * (0.06 + 0.40 * (1 - L));                  // a light veil, deeper on the dark faces
+  const x = (i / 4) % width, y = Math.floor(i / 4 / width), edge = Math.min(x - 740, 1460 - x, y - 280, 680 - y);   // the bracelet's area in the 2400×1350 pass
+  al = Math.min(1, al * (1 + 0.5 * Math.max(0, Math.min(1, edge / 30))));                         // owner, 2026-11-08: the bracelet's shading a little deeper
   if (L > 0.55) { const k = (L - 0.55) / 0.45; r = g = b = 255; al = a * 0.13 * k; }              // the lit top: a whisper lighter
   const la = lines.data[i + 3] / 255;                                                               // white lines on top
   const A = la + al * (1 - la);

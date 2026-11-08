@@ -746,18 +746,18 @@ def strap_e(th):
     """Centre line of the strip: an oval, softly flattened on +x (the body's side)."""
     a, b, k = STRAP_B * math.cos(th), STRAP_XF, 0.0045
     h = max(k - abs(a - b), 0.0) / k
-    return Vector((min(a, b) - h * h * k / 4, -STRAP_A * math.sin(th)))
+    return Vector((min(a, b) - h * h * k / 4, STRAP_A * math.sin(th)))
 
-POD_T, POD_LEN, POD_Y = 0.0050, 0.034, -0.0005       # the body: at most 5 mm towards the wrist (a slim lens), 34 mm long
+POD_T, POD_LEN, POD_Y = 0.0050, 0.034, 0.0005        # the body: at most 5 mm towards the wrist (a slim lens), 34 mm long
 POD_SC = 0.44                                        # where the contacts are along it, from its lower end
 def pod_t(u):
     """Thickness towards the wrist along the body (u: 0 lower end, 1 into the loop): a lens that narrows into the loop's bar."""
     return BAR_T + (POD_T - BAR_T) * (max(0.0, 1 - abs(2 * u - 1) ** 1.9)) ** (1 / 1.9)
-POD_OVER, POD_DOME = 0.0022, 0.0005                  # how far its crown stands past the strap's lower edge; height of the dome
+POD_OVER, POD_DOME = 0.0017, 0.0004                  # how far its crown stands past the strap's lower edge; height of the dome
 POD_Z0, POD_ZC = STRAP_LIFT - POD_OVER, STRAP_LIFT + STRAP_H / 2   # the crown's lowest point; the strap's middle
-BAR_T, BAR_W = 0.0012, 0.0019                        # the loop: a flat bar
+BAR_T, BAR_W = 0.0012, 0.0015                        # the loop: a flat bar
 LOOP_GAP, LOOP_ARM = 0.0005, 0.0060                  # room for the strip under the cross bar; length of the two arms
-POD_CY = POD_Y - 0.0015                              # the row of contacts along the body
+POD_CY = POD_Y + 0.0015                              # the row of contacts along the body
 POD_GAP = STRAP_T / 2 + 0.0001                       # from the strip's centre line to the body's outer face
 LOOP_ZLO, LOOP_ZHI = STRAP_LIFT - 0.0001 - BAR_W / 2, STRAP_LIFT + STRAP_H + 0.0001 + BAR_W / 2   # centre of its two arms
 
@@ -815,26 +815,26 @@ def build_pod():
     """The metal body: one bar swept along the inside of the strap, from a short rounded lower end up into the loop's
     inner bar. Section: 3 mm towards the wrist, as tall as the strap, the lower side gently domed. On the crown, one slot
     with three gold contacts, female, for the base's spring pins; on the wrist face, the dark optical window."""
-    th0 = math.asin(-(POD_Y + POD_LEN / 2) / STRAP_A); n = 120; Ns = 12; th1 = LOOP_TH - LOOP_ARM / loop_speed()
+    th0 = math.asin((POD_Y - POD_LEN / 2) / STRAP_A); n = 120; Ns = 12; th1 = LOOP_TH - LOOP_ARM / loop_speed()
     P, ds = [], [0.0]
     for i in range(n + 1):
         th = th0 + (th1 - th0) * i / n; P.append((strap_e(th), strap_n(th)))
         if i: ds.append(ds[-1] + (P[i][0] - P[i - 1][0]).length)
     L = ds[-1]; R_END, R_TOP = 0.0100, 0.0065
     C = [(e - nn * (POD_GAP + pod_t(d / L) / 2), nn) for (e, nn), d in zip(P, ds)]
-    z_hi0 = STRAP_LIFT + STRAP_H - 0.0030                        # the upper side stays hidden behind the strap
-    z_lo1, z_hi1 = LOOP_ZLO - BAR_W / 2, STRAP_LIFT + STRAP_H - 0.0005   # the upper arm dives behind the strap
+    z_hi0 = STRAP_LIFT + STRAP_H + 0.0016                        # the upper side bulges too, up to the loop's level
+    z_lo1, z_hi1 = LOOP_ZLO - BAR_W / 2 + 0.00012, LOOP_ZHI + BAR_W / 2 - 0.00012   # just inside the arms: no step where they meet
     bm = bmesh.new(); secs = []
     for i, (c, nn) in enumerate(C):
         d = ds[i]; u = min(d / R_END, 1.0); f = math.sqrt(max(0.0, 1 - (1 - u) ** 2)); f = max(f, 0.06)   # the lower end, rounded
         k = max(0.0, min(1.0, (d - (L - R_TOP)) / R_TOP)); k = k * k * (3 - 2 * k)                           # into the loop's bar
         lo, hi = POD_Z0 + (z_lo1 - POD_Z0) * k, z_hi0 + (z_hi1 - z_hi0) * k
-        ht = pod_t(d / L) / 2 * f ** 0.5
+        ht = (pod_t(d / L) / 2 - 0.00012 * k) * f ** 0.5
         zc = (lo + hi) / 2; dome = POD_DOME * (1 - k); ring = []
         for j in range(Ns + 1):                               # the lower side, domed
             a = -1 + 2 * j / Ns; z = zc + (lo + dome * a * a - zc) * f; ring.append(bm.verts.new((c.x + nn.x * a * ht, c.y + nn.y * a * ht, z)))
         for j in range(Ns + 1):                               # the upper side
-            a = 1 - 2 * j / Ns; z = zc + (hi - 0.00025 * (1 - k) * a * a - zc) * f; ring.append(bm.verts.new((c.x + nn.x * a * ht, c.y + nn.y * a * ht, z)))
+            a = 1 - 2 * j / Ns; z = zc + (hi - POD_DOME * (1 - k) * a * a - zc) * f; ring.append(bm.verts.new((c.x + nn.x * a * ht, c.y + nn.y * a * ht, z)))
         secs.append(ring)
     q = len(secs[0])
     for i in range(len(secs) - 1):
@@ -866,11 +866,7 @@ def build_loop():
     path += [(0.0, z_lo + rc + (z_hi - z_lo - 2 * rc) * k / 8) for k in range(1, 8)]
     for k in range(9):
         a = math.radians(180 - 90 * k / 8); path.append((rc + rc * math.cos(a), z_hi - rc + rc * math.sin(a)))
-    z_end = STRAP_LIFT + STRAP_H - 0.0005 - BAR_W / 2; arm_up = rc + 0.0018      # past this point the upper arm is behind the strap
-    def up(k):
-        sv = rc + (s_end - rc) * k / 24; q = max(0.0, min(1.0, (sv - arm_up) / (s_end - arm_up))); return (sv, z_hi + (z_end - z_hi) * q * q * (3 - 2 * q))
-    n_up = len(path)
-    path += [up(k) for k in range(1, 25)]
+    path += [(rc + (s_end - rc) * k / 24, z_hi) for k in range(1, 25)]
     sec = []; cr = 0.00035
     for qx, qy, a0 in ((BAR_W / 2 - cr, BAR_T / 2 - cr, 0), (-BAR_W / 2 + cr, BAR_T / 2 - cr, 90), (-BAR_W / 2 + cr, -BAR_T / 2 + cr, 180), (BAR_W / 2 - cr, -BAR_T / 2 + cr, 270)):
         for k in range(4):
@@ -881,11 +877,10 @@ def build_loop():
         ds, dz = b[0] - a[0], b[1] - a[1]; ln = math.hypot(ds, dz); ds, dz = ds / ln, dz / ln
         ring = []
         for w, q in sec:
-            s1 = sv - dz * w; z1 = zz + ds * w; th = LOOP_TH - s1 / sp
-            n_c = nn(sv)
-            if i >= n_up:                                            # upper arm: at the body's level before it moves behind the strap
-                u = max(0.0, min(1.0, (sv - rc) / (arm_up - rc))); n_c = n_out + (n_in - n_out) * u * u * (3 - 2 * u)
-            v = strap_e(th) + strap_n(th) * (n_c + q); ring.append(bm.verts.new((v.x, v.y, z1)))
+            g = max(0.0, 1 - sv / rc); g = g * g * (3 - 2 * g)          # the cross bar grows towards the opening only
+            w1 = w * (1 + 1.2 * g) if w < 0 else w
+            s1 = sv - dz * w1; z1 = zz + ds * w1; th = LOOP_TH - s1 / sp
+            v = strap_e(th) + strap_n(th) * (nn(sv) + q); ring.append(bm.verts.new((v.x, v.y, z1)))
         rings.append(ring)
     k = len(sec)
     for i in range(L - 1):
@@ -899,9 +894,13 @@ def dock(br):
     """The bracelet lying on the base as a ring, the crown of its body on the three pins (row along x)."""
     br.rotation_euler = (0, 0, -math.pi / 2)
     br.location = Vector((0, -W / 2 + 0.020, TOP + 0.00015 - POD_Z0)) - Matrix.Rotation(-math.pi / 2, 3, 'Z') @ Vector((pod_contact_x(), POD_CY, 0))
+    for o in bpy.data.objects:                                # docked, nothing of the pins or the contacts shows
+        if o.name.startswith(('pin', 'slot', 'contact')): o.hide_render = True
 
 def build_bracelet(z0=0.0):
-    parts = [build_strip(), build_loop()] + build_pod()
+    strip, loop, pods = build_strip(), build_loop(), build_pod()
+    u = pods[0].modifiers.new('one', 'BOOLEAN'); u.operation = 'UNION'; u.object = loop; loop.hide_render = True   # loop and body: one piece, no line where they meet
+    parts = [strip, loop] + pods
     g = group('bracelet', parts); g.location.z = z0; g.rotation_euler = (0, 0, AP)
     return g
 
@@ -1173,7 +1172,7 @@ def studio(view):
         b_, ph_, ga_ = math.radians(pv[0]), math.radians(pv[1]), math.radians(pv[2]); fw = pv[3]
         X = Vector((math.sin(b_), -math.cos(b_), 0)); Y = Vector((0, 0, -1)); Z = X.cross(Y)
         g = build_bracelet(); B_ = Matrix((X, Y, Z)).transposed().to_4x4()
-        g.matrix_world = Matrix.Translation((pv[4], 0, pv[5])) @ Matrix.Rotation(ph_, 4, 'Y') @ B_ @ Matrix.Rotation(ga_, 4, 'Z') @ Matrix.Translation((0, 0, -STRAP_LIFT - STRAP_H / 2))
+        g.matrix_world = Matrix.Translation((pv[4], 0, pv[5])) @ Matrix.Rotation(ph_, 4, 'Y') @ B_ @ Matrix.Diagonal((1, -1, 1, 1)) @ Matrix.Rotation(ga_, 4, 'Z') @ Matrix.Translation((0, 0, -STRAP_LIFT - STRAP_H / 2))
         tgt, pos = (0, 0, 0), (0, -1, 0)
     elif view == 'wrist':       # B2: the wrist face, close
         g = build_bracelet(); a = math.radians(118); g.rotation_euler = (0, 0, a)
