@@ -20,6 +20,7 @@ ROOM = {   # time, lamp (share of 14 W, kelvin), ring colour or None, shutter op
 }
 TEX = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'polyhaven_tex')
 FLOOR_Z, CEIL_Z, WALL_Y = -0.50, 2.20, 0.39
+BASE_ROT = math.radians(-38)                     # the base turned to the bed (owner, 2026-11-08): the time faces the pillow and the camera at about the same angle
 WIN = (-0.22, 1.00, -0.05, 1.75)      # window opening: x0, x1, z0, z1
 BED_R, BED_TOP, DUVET_Y = -0.30, 0.02, 0.02
 
@@ -87,8 +88,11 @@ def ring_glow(m, color, strength):
             else: nt.links.new(x, n.inputs[i])
         return n.outputs[0]
     tc = nt.nodes.new('ShaderNodeTexCoord'); P = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], P.inputs[0])
-    qx = op('MAXIMUM', op('SUBTRACT', op('ABSOLUTE', op('ADD', P.outputs[0], 0.02)), 0.06), 0.0)      # the base sits at (-0.02, -0.03) in the top's own space
-    qy = op('MAXIMUM', op('SUBTRACT', op('ABSOLUTE', op('ADD', P.outputs[1], 0.03)), 0.06), 0.0)
+    X, Y = op('ADD', P.outputs[0], 0.02), op('ADD', P.outputs[1], 0.03)                                # the base sits at (-0.02, -0.03) in the top's own space
+    c, sn = math.cos(BASE_ROT), math.sin(BASE_ROT)
+    U, V = op('ADD', op('MULTIPLY', X, c), op('MULTIPLY', Y, sn)), op('SUBTRACT', op('MULTIPLY', Y, c), op('MULTIPLY', X, sn))   # into the base's own axes
+    qx = op('MAXIMUM', op('SUBTRACT', op('ABSOLUTE', U), 0.06), 0.0)
+    qy = op('MAXIMUM', op('SUBTRACT', op('ABSOLUTE', V), 0.06), 0.0)
     d = op('SQRT', op('ADD', op('POWER', qx, 2.0), op('POWER', qy, 2.0)))
     fall = op('EXPONENT', op('MULTIPLY', d, -1 / 0.028))
     diff = next(n for n in nt.nodes if n.type == 'TEX_IMAGE' and 'diff' in n.image.filepath)
@@ -270,7 +274,7 @@ def bedroom_scene(n):
     if ring:
         MATS['oak_top'] = pbr('oak_top', 'oak_veneer_01', 0.75, rot=math.pi / 2, bump=0.08, rough=0.8)
         ring_glow(MATS['oak_top'], srgb(ring), {1: 3.2, 4: 2.1, 5: 4.8}[n])
-    build_base(with_time=bool(t), time=t or '06:30')
+    b_ = build_base(with_time=bool(t), time=t or '06:30'); b_.rotation_euler = (0, 0, BASE_ROT)
     build_shell(); build_window(shut); build_curtains(); build_stand(); build_bed(n); build_lamp(lamp)
     if shut > 0: build_outside(n)
     build_arm(n)
@@ -282,5 +286,5 @@ def bedroom_scene(n):
         o = bpy.data.objects.new('portal', ld); col.objects.link(o); o.location = ((x0 + x1) / 2, WALL_Y + 0.17, (z0 + zt) / 2); o.rotation_euler = (math.pi / 2, 0, 0)
     else:                                                  # shutters closed: only what the eye finds in the dark
         area('dark', (-0.4, -1.4, 1.8), (0, 0, 0), 2.5, 1.8, (0.50, 0.60, 1.0))
-    look((0.85, -1.30, 0.78), (-0.02, 0.06, 0.03), 55, 4.0)
+    look((0.46, -1.48, 0.78), (-0.02, 0.06, 0.03), 55, 4.0)
     scene.view_settings.exposure = expo
