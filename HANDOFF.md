@@ -1334,6 +1334,15 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-08 · LOCAL (106)** · Scenes slide re-rendered (owner: real room, real outside, light true to hour and source).
+  `deck/blender/bedroom.py` rewritten: same camera position as before (lens 52), walls, floor, oak nightstand with one
+  drawer, linen bed in the old squared shapes (owner preferred them to soft cloth), Poly Haven CC0 maps in
+  `deck/blender/assets/polyhaven_tex` (git-ignored, box-projected), a real two-leaf window on a north wall, roller
+  shutter outside it, two apartment blocks and trees outside (early May, Milan). Light from spec §6: lamp 2200 K 40 % at
+  22:00, 2800 K 28 % at 06:14, 3800 K 50 % at 06:16 (Blackbody); shutters 55 % closing, 0, 0, 20 %, 36 %; dawn = sky texture,
+  sun 1–1.4° and never in the window. Table lamp on the nightstand (owner), small note on the slide that the bulb fits a
+  ceiling light. Arms leave the frame in a sleeve; bracelet in the hand at 22:00, on the wrist after. Rejected in preview:
+  floor lamp, wider frame, soft pillows and duvet. Known: the lamp shows as a faint reflection in the glass.
 - **2026-11-08 · LOCAL (105)** · Last mark at the loop's joint removed: the fused body + loop gets a voxel Remesh (0.12 mm)
   and a Smooth modifier in `build_bracelet`, so it is one continuous surface and Freestyle draws no step. PDF rebuilt.
 - **2026-11-08 · LOCAL (104)** · Owner's corrections on (103). `explode-real.jpg` restored byte for byte (the re-render was
