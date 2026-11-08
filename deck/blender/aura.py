@@ -271,7 +271,7 @@ def braid(name, dark, R=0.0021, w=0.00085):
     mx.inputs[6].default_value = dark; nt.links.new(cc.outputs[0], mx.inputs[7]); nt.links.new(mx.outputs[2], b.inputs['Base Color'])
     return m
 
-def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.00042):
+def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.00042, pale_hex='#c9dbf2', white_hex='#eef3fa'):
     """Woven melange strap: a 2/1 twill whose threads wander slightly (noise-warped grid), each thread rounded in the
     bump, colour in soft clouds between two blues, a few near-white weft flecks, fibre fuzz, darker corded edges."""
     m = principled(name, dark, rough=0.92); nt = m.node_tree; b = nt.nodes['Principled BSDF']
@@ -310,10 +310,10 @@ def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.0004
     # heather (owner's reference, 2026-11-07): pale threads in short runs along the weft, a few near-white ones
     run = nt.nodes.new('ShaderNodeCombineXYZ'); nt.links.new(op('FLOOR', op('DIVIDE', fu, 6.0)), run.inputs[0]); nt.links.new(iv, run.inputs[1])
     rn = nt.nodes.new('ShaderNodeTexWhiteNoise'); rn.noise_dimensions = '3D'; nt.links.new(run.outputs[0], rn.inputs['Vector'])
-    pale = nt.nodes.new('ShaderNodeMix'); pale.data_type = 'RGBA'; pale.inputs[7].default_value = srgb('#c9dbf2')
+    pale = nt.nodes.new('ShaderNodeMix'); pale.data_type = 'RGBA'; pale.inputs[7].default_value = srgb(pale_hex)
     nt.links.new(base.outputs[2], pale.inputs[6])
     nt.links.new(op('MULTIPLY', op('MULTIPLY', weft, op('GREATER_THAN', rn.outputs['Value'], 0.72)), 0.85), pale.inputs['Factor'])
-    fleck = nt.nodes.new('ShaderNodeMix'); fleck.data_type = 'RGBA'; fleck.inputs[7].default_value = srgb('#eef3fa')
+    fleck = nt.nodes.new('ShaderNodeMix'); fleck.data_type = 'RGBA'; fleck.inputs[7].default_value = srgb(white_hex)
     nt.links.new(pale.outputs[2], fleck.inputs[6])
     nt.links.new(op('MULTIPLY', weft, op('GREATER_THAN', wn.outputs['Value'], 0.985)), fleck.inputs['Factor'])
     edge_m = op('MAXIMUM', op('LESS_THAN', P.outputs[2], lift + 0.0014), op('GREATER_THAN', P.outputs[2], lift + h - 0.0014))
@@ -327,7 +327,7 @@ def loop_fabric(name, dark, light, edge, R=0.031, h=0.020, lift=0.0016, p=0.0004
     return m
 
 TABLE = SHOT == 'table'
-STUDIO = SHOT in ('outside', 'under', 'hero', 'wrist', 'pads', 'dock', 'ports', 'time', 'left', 'right', 'top_cable', 'led', 'strip', 'pod_in', 'pod_side', 'foot', 'persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
+STUDIO = SHOT in ('photo', 'outside', 'under', 'hero', 'wrist', 'pads', 'dock', 'ports', 'time', 'left', 'right', 'top_cable', 'led', 'strip', 'pod_in', 'pod_side', 'foot', 'persp_band', 'table', 'front', 'back', 'top', 'bottom', 'cable', 'persp', 'lit', 'band', 'persp_back')
 if MODE == 'real':
     MATS = {
         'body': body_real('body', srgb(BODY_HEX)),
@@ -346,8 +346,8 @@ if MODE == 'real':
         'dots': emit('dots', srgb('#ffd9a0'), 7.0),
         'band': principled('band', srgb('#2a2b2f'), rough=0.62),
         'fabric': fabric('fabric', srgb('#1c1d20')),
-        'loop': loop_fabric('loop', srgb('#5b8ccc'), srgb('#93b6e3'), srgb('#4f7fc0')),
-        'pocket': loop_fabric('pocket', srgb('#5b8ccc'), srgb('#93b6e3'), srgb('#4f7fc0'), lift=-1.0, h=10.0),
+        'loop': (loop_fabric('loop', srgb('#5b8ccc'), srgb('#93b6e3'), srgb('#4f7fc0')) if 'docked' in argv else   # cover shading: a light cloth, so the weave shows as a whisper
+                 loop_fabric('loop', srgb('#17181b'), srgb('#4a4c52'), srgb('#0f1012'), pale_hex='#5c5e64', white_hex='#6c6e74')),
         'lens': principled('lens', srgb('#050506'), rough=0.06, coat=0.0),
         'steel': bump_tex(principled('steel', srgb('#1c1d20'), metal=1.0, rough=0.36), 'noise', 9000, 0.04),
         'modalu': bump_tex(principled('modalu', srgb('#4a4b50'), metal=1.0, rough=0.34), 'noise', 9000, 0.05),
@@ -357,7 +357,7 @@ if MODE == 'real':
 else:
     T = {'alu': 0.86, 'grille': 0.42, 'rubber': 0.3, 'print': 0.4, 'pin': 0.75, 'band': 0.5, 'cable': 0.25, 'dots': 0.28,
          'led_front': 0.25, 'phone': 0.88, 'screen': 0.30, 'ui': 0.92, 'card': 0.5, 'metal': 0.74, 'glass': 0.98,
-         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'pocket': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3, 'mark': 0.62, 'skin': 0.985, 'gold': 0.7, 'pcb': 0.48, 'chip': 0.22, 'shield': 0.84, 'speaker': 0.34, 'cone': 0.66, 'battery': 0.8, 'copper': 0.74, 'pmma': 0.97, 'chassis': 0.92, 'magnet': 0.56, 'screw': 0.5, 'led': 0.98}
+         'frame': 0.96, 'fabric': 0.5, 'loop': 0.62, 'steel': 0.3, 'lens': 0.1, 'modalu': 0.4, 'slat': 0.80, 'pane': 0.90, 'cap': 0.70, 'plug': 0.3, 'mark': 0.62, 'skin': 0.985, 'gold': 0.7, 'pcb': 0.48, 'chip': 0.22, 'shield': 0.84, 'speaker': 0.34, 'cone': 0.66, 'battery': 0.8, 'copper': 0.74, 'pmma': 0.97, 'chassis': 0.92, 'magnet': 0.56, 'screw': 0.5, 'led': 0.98}
     MATS = {k: toon(k, grey(v)) for k, v in T.items()}
     MATS['body'] = body_toon('body', grey(0.86))
     MATS['shell'] = toon('shell', grey(0.86))
@@ -662,12 +662,14 @@ def back_marks():
         cu.materials.append(M('mark')); obs.append(ob)
     return obs
 
+PIN_P = 0.0025   # pitch of the base's pins and of the bracelet's contacts (owner, 2026-11-08: close together, in one slot)
+
 def charge_pins():
     """Three gold spring pins for the bracelet (owner, 2026-10-29): one row parallel to the front, centred left-right,
-    20 mm from the front edge, 4 mm pitch; each a 1.5 mm dome 0.2 mm proud in a dark 2.2 mm insulating ring."""
+    20 mm from the front edge, 2.5 mm pitch; each a 1.5 mm dome 0.2 mm proud in a dark 2.2 mm insulating ring."""
     obs = []
     for i in (-1, 0, 1):
-        x, y = i * 0.004, -W / 2 + 0.020
+        x, y = i * PIN_P, -W / 2 + 0.020
         obs.append(cyl(f'pin_ring{i}', 0.0011, 0.0001, 'rubber', (x, y, TOP + 0.00002), seg=32))
         bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=32, v_segments=16, radius=0.00075)
         for v in bm.verts: v.co.z = max(v.co.z, 0.0) * 0.27
@@ -726,67 +728,56 @@ def frame(name, sx, sy, sz, bar, mat, loc):
     return [rbox(f'{name}{i}', w, d, sz, min(w, d) * 0.45, sz * 0.4, mat, (x + dx, y + dy, z), sp=4, se=3) for i, (w, d, dx, dy) in enumerate((
         (sx, bar, 0, -(sy - bar) / 2), (sx, bar, 0, (sy - bar) / 2), (bar, sy, -(sx - bar) / 2, 0), (bar, sy, (sx - bar) / 2, 0)))]
 
-# Bracelet (owner refs: Sport Loop, blue and orange/grey). One continuous woven strip, lying on its edge:
-# fixed to the steel loop, round the wrist (an oval, straight where the pod is), back through the loop, folded, and
-# its tail runs back on the outside over the pod, closing with hook-and-loop. The pod sits in the pocket between the
-# two layers, right next to the loop; its lower end leaves the strip as the flat charging foot.
-STRAP_A, STRAP_B, STRAP_XF = 0.033, 0.027, 0.0225   # oval half-axes (y, x) and the straight side where the pod is
-STRAP_T, STRAP_H, STRAP_LIFT = 0.0012, 0.019, 0.0016
-STRAP_N = 1500                                      # path steps on the first lap (~0.15 mm at the module)
-LOOP_TH = math.radians(42)                          # steel loop: just past the straight side
-POD_HALF = math.radians(33.5)                       # the straight side = the pod (≈37 mm)
-AP = math.radians(-30)                              # where the pod faces once the bracelet is turned for the views
+# Bracelet (owner, 2026-11-08, from the approved photo Media/05-AuraWake/Weavy/B1-final.png). One woven strip, on its edge:
+# it starts at the lower end of the metal body, runs round the wrist as the inner layer, passes through the loop, then
+# over the outside of the body and on as the outer layer to one free end, opposite the loop. Loop and body are one
+# piece of matte graphite: a slim bar inside the ring, 3 mm towards the wrist, as tall as the strap, whose lower side
+# is gently domed and stands 1.5 mm past the strap's edge. That side carries the three contacts: lying as a ring on the
+# base, the bracelet rests on it, with the contacts on the three pins.
+STRAP_A, STRAP_B, STRAP_XF = 0.0305, 0.0255, 0.0215   # oval half-axes (y, x) and the straight side where the body is
+STRAP_T, STRAP_H, STRAP_LIFT = 0.0012, 0.0205, 0.0022
+STRAP_N = 1100                                      # path steps
+LOOP_TH = math.radians(42)                          # the loop: just past the straight side
+POD_HALF = math.radians(33.5)                       # the straight side = the body
+FREE_TH = math.radians(-172) - 2 * math.pi          # the free end, on the second lap, opposite the loop
+AP = math.radians(-30)                              # where the body faces once the bracelet is turned for the views
 
 def strap_e(th):
-    """Centre line of the inner layer: an oval, clipped straight on +x (the pod side)."""
-    return Vector((min(STRAP_B * math.cos(th), STRAP_XF), STRAP_A * math.sin(th)))
+    """Centre line of the strip: an oval, softly flattened on +x (the body's side)."""
+    a, b, k = STRAP_B * math.cos(th), STRAP_XF, 0.0045
+    h = max(k - abs(a - b), 0.0) / k
+    return Vector((min(a, b) - h * h * k / 4, -STRAP_A * math.sin(th)))
 
-POD_T, POD_LEN, POD_Y = 0.0030, 0.034, 0.0005        # sensor module: 3 mm proud of the strap (more sits in it), 34 mm long
-POD_PH, POD_ZC = 0.0125, STRAP_LIFT + STRAP_H / 2          # module 12.5 mm tall: the fabric frames it above and below too
-FOOT_OUT, FOOT_LEN, FOOT_T = 0.0045, 0.016, 0.0014     # charging foot: sticks out 4.5 mm past the module face
-FOOT_Z = STRAP_LIFT - 0.0005                           # its underside, 0.5 mm below the strap's lower edge
-PAD_X = STRAP_XF - STRAP_T / 2 - POD_T - FOOT_OUT / 2 + 0.0003   # the row of pads, under the part that sticks out
-BAR_T, BAR_W = 0.0011, 0.0040                       # steel loop: a flat metal ribbon
-OV = 0.24                                           # the strip runs this far past the loop before folding (≈7 mm)
+POD_T, POD_LEN, POD_Y = 0.0050, 0.034, -0.0005       # the body: at most 5 mm towards the wrist (a slim lens), 34 mm long
+POD_SC = 0.44                                        # where the contacts are along it, from its lower end
+def pod_t(u):
+    """Thickness towards the wrist along the body (u: 0 lower end, 1 into the loop): a lens that narrows into the loop's bar."""
+    return BAR_T + (POD_T - BAR_T) * (max(0.0, 1 - abs(2 * u - 1) ** 1.9)) ** (1 / 1.9)
+POD_OVER, POD_DOME = 0.0022, 0.0005                  # how far its crown stands past the strap's lower edge; height of the dome
+POD_Z0, POD_ZC = STRAP_LIFT - POD_OVER, STRAP_LIFT + STRAP_H / 2   # the crown's lowest point; the strap's middle
+BAR_T, BAR_W = 0.0012, 0.0019                        # the loop: a flat bar
+LOOP_GAP, LOOP_ARM = 0.0005, 0.0060                  # room for the strip under the cross bar; length of the two arms
+POD_CY = POD_Y - 0.0015                              # the row of contacts along the body
+POD_GAP = STRAP_T / 2 + 0.0001                       # from the strip's centre line to the body's outer face
+LOOP_ZLO, LOOP_ZHI = STRAP_LIFT - 0.0001 - BAR_W / 2, STRAP_LIFT + STRAP_H + 0.0001 + BAR_W / 2   # centre of its two arms
 
 def strap_n(th):
     """Outward unit normal of the oval at angle th."""
     a, b = strap_e(th - 1e-3), strap_e(th + 1e-3); T = (b - a).normalized(); N = Vector((T.y, -T.x))
     return N if N.dot(strap_e(th)) >= 0 else -N
 
-def arrive_off(th):
-    """The returning strip rides over the strip's own start as it nears the loop (offset 0 → t)."""
-    t = STRAP_T; d = th - LOOP_TH
-    if d <= 0: return t
-    k = max(0.0, 1 - d / 0.45); return t * k * k * (3 - 2 * k)
-
 def strap_path():
-    """(point, angle) along the strip centre line: start at the loop (its inner bar wrapped inside), past the pod, once
-    round the wrist, back over its own start, through the loop, a fold over the loop's outer bar, and the tail running
-    back on the outside: the hook-and-loop closure sits on the side opposite the sensors."""
-    t = STRAP_T; pts = []; n = STRAP_N
-    for k in range(n + 1):
-        th = LOOP_TH + 0.065 - (2 * math.pi + OV + 0.065) * k / n   # starts past the inner bar, which it wraps
-        off = arrive_off(th + 2 * math.pi) if k > n * 0.5 else 0.0
+    """Points along the strip's centre line, from the lower end of the body to the free end (angle always decreasing).
+    On the second lap the strip rises over its own start, past the body, so it lies on the inner layer."""
+    t = STRAP_T; th_s = -POD_HALF; th2 = th_s - 2 * math.pi; pts = []
+    for k in range(STRAP_N + 1):
+        th = th_s + (FREE_TH - th_s) * k / STRAP_N
+        q = max(0.0, min(1.0, (th2 + 0.28 - th) / 0.28)); off = t * q * q * (3 - 2 * q)
         pts.append(strap_e(th) + strap_n(th) * off)
-    thF = LOOP_TH - OV; P0 = strap_e(thF) + strap_n(thF) * t; No = strap_n(thF)
-    Tm = (strap_e(thF - 1e-3) - strap_e(thF + 1e-3)).normalized()       # direction of travel (decreasing angle)
-    r = 0.0011                                            # soft U fold; the tail comes back over the strip, under the loop's outer bar
-    for k in range(1, 16):
-        ph = math.pi * k / 16
-        pts.append(P0 + No * (r - r * math.cos(ph)) + Tm * (r * 1.25) * math.sin(ph))
-    m = 160
-    for k in range(m + 1):
-        th = thF + (OV + math.radians(150)) * k / m
-        k = max(0.0, 1 - (th - thF) / (OV + 0.35)); k = k * k * (3 - 2 * k)       # the tail settles onto the strip past the loop
-        pts.append(strap_e(th) + strap_n(th) * (arrive_off(th) + t + (2 * r - t) * k))
     return pts
 
 def build_strip():
-    """The strip as one swept solid; its section has a flat body and corded (piped) edges. Where the module sits the
-    strip itself thickens towards the wrist (owner, 2026-11-07: the module fused into the fabric, not a patch on it):
-    the inner face rises in a soft cushion, rolls over the module's edge and leaves only the graphite face showing
-    through a rounded window; the outside of the strap stays flat."""
+    """The strip as one swept solid; its section has a flat body and corded edges. The free end is rounded."""
     t, h, z0 = STRAP_T, STRAP_H, STRAP_LIFT
     rp = 0.00085; phi0 = math.acos(min(1.0, (t / 2) / rp))
     top, bot = [], []
@@ -794,38 +785,19 @@ def build_strip():
         a = -phi0 + (math.pi + 2 * phi0) * k / 9; top.append((rp * math.cos(a), z0 + h - rp + rp * math.sin(a)))
     for k in range(10):                                    # bottom cord
         a = math.pi - phi0 + (math.pi + 2 * phi0) * k / 9; bot.append((rp * math.cos(a), z0 + rp + rp * math.sin(a)))
-    M = 90                                                 # rows across each flat face (~0.2 mm), so the cushion can bend
+    M = 8
     face_out = [(top[-1][0], top[-1][1] + (bot[0][1] - top[-1][1]) * j / (M + 1)) for j in range(1, M + 1)]
     face_in = [(bot[-1][0], bot[-1][1] + (top[0][1] - bot[-1][1]) * j / (M + 1)) for j in range(1, M + 1)]
-    prof = top + face_out + bot + face_in                  # (offset across the thickness, z); + offset = towards the wrist
-    # the cushion: height over the strip's inner face as a function of the distance from the module's window
-    a_w, b_w, r_w = POD_LEN / 2 - 0.0008, POD_PH / 2 - 0.0008, 0.0038   # the window: 0.8 mm inside the module's outline
-    h_in, h_c, crest, fall = POD_T - 0.0012, POD_T + 0.0002, 0.0006, 0.0030   # a tight lip, 0.2 mm over the face
-    def sdf(u, v):
-        qx, qz = abs(u) - a_w + r_w, abs(v) - b_w + r_w
-        return math.hypot(max(qx, 0), max(qz, 0)) + min(max(qx, qz), 0) - r_w
-    def rise(d):
-        if d < -0.0006: return h_in
-        if d < 0.0002:  k = (d + 0.0006) / 0.0008; return h_in + (h_c - h_in) * math.sin(k * math.pi / 2)   # rolls over the edge
-        if d < crest:   return h_c
-        if d < crest + fall: k = (d - crest) / fall; return h_c * (1 - k * k * k * (k * (k * 6 - 15) + 10))   # long soft slope
-        return 0.0
-    th0 = LOOP_TH + 0.065; span = 2 * math.pi + OV + 0.065
-    path = strap_path(); bm = bmesh.new(); secs = []
+    prof = top + face_out + bot + face_in                  # (offset across the thickness, z)
+    path = strap_path(); bm = bmesh.new(); secs = []; zc = z0 + h / 2
+    tail = [0.0] * len(path)                               # distance from the free end
+    for i in range(len(path) - 2, -1, -1): tail[i] = tail[i + 1] + (path[i + 1] - path[i]).length
+    R_END = 0.0045
     for i, pnt in enumerate(path):
         a = path[max(i - 1, 0)]; b = path[min(i + 1, len(path) - 1)]
         T = (b - a).normalized(); N = Vector((T.y, -T.x))
-        first = i <= STRAP_N and th0 - span * i / STRAP_N > -1.3          # the first pass over the straight side only
-        ring = []
-        for o, z in prof:
-            lift = 0.0
-            if first and o > 0:                                        # the inner (wrist) face only
-                lift = rise(sdf(pnt.y - POD_Y, z - POD_ZC))
-            elif first and abs(o) < t / 2 - 1e-6 and z > z0 + h / 2:  # cord vertices between the faces follow halfway
-                lift = rise(sdf(pnt.y - POD_Y, z - POD_ZC)) * (o + t / 2) / t
-            elif first and abs(o) < t / 2 - 1e-6:
-                lift = rise(sdf(pnt.y - POD_Y, z - POD_ZC)) * (o + t / 2) / t
-            ring.append(bm.verts.new((pnt.x + N.x * (o + lift), pnt.y + N.y * (o + lift), z)))
+        f = (max(0.0, 1 - (1 - min(tail[i] / R_END, 1.0)) ** 4)) ** 0.25
+        ring = [bm.verts.new((pnt.x + N.x * o, pnt.y + N.y * o, zc + (z - zc) * f)) for o, z in prof]
         secs.append(ring)
     k = len(prof)
     for i in range(len(secs) - 1):
@@ -835,67 +807,98 @@ def build_strip():
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     ob = link('strip', bm, 'loop'); shade(ob, 70); return ob
 
+def loop_speed(): return (strap_e(LOOP_TH + 1e-3) - strap_e(LOOP_TH - 1e-3)).length / 2e-3   # metres of strap per radian at the loop
+
+def pod_contact_x(): return STRAP_XF - POD_GAP - pod_t(POD_SC) / 2 + 0.0004   # the row of contacts, on the crown
+
 def build_pod():
-    """Sensor module (owner, 2026-11-07): matte graphite like the base, ~34 × 17 × 4 mm, on the inner side of the
-    straight stretch next to the loop, set into a fabric pocket that frames it on every side (its face stands 1.2 mm
-    proud); on the wrist face only the dark optical window. Under it the charging foot: a graphite plate that sticks out
-    sideways, towards the centre of the ring, its underside just below the strap's lower edge, with three gold pads
-    4 mm apart that sit on the base's three pins when the ring lies on the base."""
-    t, lift, h = STRAP_T, STRAP_LIFT, STRAP_H
-    x_out = STRAP_XF - t / 2                                   # inner surface of the strap
-    ph, zc = POD_PH, POD_ZC
-    obs = []
-    pod = rbox('pod', POD_LEN, ph, POD_T, 0.0046, 0.0011, 'shell', sp=14, se=5)
-    pod.rotation_euler = (math.pi / 2, 0, math.pi / 2); pod.location = (x_out - POD_T, POD_Y, zc); obs.append(pod)
+    """The metal body: one bar swept along the inside of the strap, from a short rounded lower end up into the loop's
+    inner bar. Section: 3 mm towards the wrist, as tall as the strap, the lower side gently domed. On the crown, one slot
+    with three gold contacts, female, for the base's spring pins; on the wrist face, the dark optical window."""
+    th0 = math.asin(-(POD_Y + POD_LEN / 2) / STRAP_A); n = 120; Ns = 12; th1 = LOOP_TH - LOOP_ARM / loop_speed()
+    P, ds = [], [0.0]
+    for i in range(n + 1):
+        th = th0 + (th1 - th0) * i / n; P.append((strap_e(th), strap_n(th)))
+        if i: ds.append(ds[-1] + (P[i][0] - P[i - 1][0]).length)
+    L = ds[-1]; R_END, R_TOP = 0.0100, 0.0065
+    C = [(e - nn * (POD_GAP + pod_t(d / L) / 2), nn) for (e, nn), d in zip(P, ds)]
+    z_hi0 = STRAP_LIFT + STRAP_H - 0.0030                        # the upper side stays hidden behind the strap
+    z_lo1, z_hi1 = LOOP_ZLO - BAR_W / 2, STRAP_LIFT + STRAP_H - 0.0005   # the upper arm dives behind the strap
+    bm = bmesh.new(); secs = []
+    for i, (c, nn) in enumerate(C):
+        d = ds[i]; u = min(d / R_END, 1.0); f = math.sqrt(max(0.0, 1 - (1 - u) ** 2)); f = max(f, 0.06)   # the lower end, rounded
+        k = max(0.0, min(1.0, (d - (L - R_TOP)) / R_TOP)); k = k * k * (3 - 2 * k)                           # into the loop's bar
+        lo, hi = POD_Z0 + (z_lo1 - POD_Z0) * k, z_hi0 + (z_hi1 - z_hi0) * k
+        ht = pod_t(d / L) / 2 * f ** 0.5
+        zc = (lo + hi) / 2; dome = POD_DOME * (1 - k); ring = []
+        for j in range(Ns + 1):                               # the lower side, domed
+            a = -1 + 2 * j / Ns; z = zc + (lo + dome * a * a - zc) * f; ring.append(bm.verts.new((c.x + nn.x * a * ht, c.y + nn.y * a * ht, z)))
+        for j in range(Ns + 1):                               # the upper side
+            a = 1 - 2 * j / Ns; z = zc + (hi - 0.00025 * (1 - k) * a * a - zc) * f; ring.append(bm.verts.new((c.x + nn.x * a * ht, c.y + nn.y * a * ht, z)))
+        secs.append(ring)
+    q = len(secs[0])
+    for i in range(len(secs) - 1):
+        A, B = secs[i], secs[i + 1]
+        for j in range(q): bm.faces.new((A[j], A[(j + 1) % q], B[(j + 1) % q], B[j]))
+    bm.faces.new(list(reversed(secs[0]))); bm.faces.new(secs[-1])
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    pod = link('pod', bm, 'steel'); shade(pod, 60); obs = [pod]
+    CONTACT_X = pod_contact_x(); x_in = CONTACT_X - pod_t(POD_SC) / 2   # the wrist face
     lens = rbox('lens', 0.011, 0.0062, 0.00035, 0.0029, 0.00012, 'lens', sp=10, se=2)
-    lens.rotation_euler = (math.pi / 2, 0, -math.pi / 2); lens.location = (x_out - POD_T + 0.00012, POD_Y, zc); obs.append(lens)
-    fx0, fx1 = x_out - POD_T - FOOT_OUT, x_out - 0.0003       # the foot reaches from under the strap to past the face
-    foot = rbox('foot', fx1 - fx0, FOOT_LEN, FOOT_T, 0.0018, 0.00045, 'shell', ((fx0 + fx1) / 2, POD_Y, FOOT_Z), sp=10, se=3)
-    obs.append(foot)
-    sx0, sx1 = x_out - POD_T + 0.0004, x_out - 0.0003            # the L's upright: out of the module's lower edge, down through the fabric
-    stem = rbox('stem', sx1 - sx0, FOOT_LEN, zc - ph / 2 + 0.002 - FOOT_Z, 0.0008, 0.0004, 'shell', ((sx0 + sx1) / 2, POD_Y, FOOT_Z), sp=8, se=2)
-    obs.append(stem)
-    for i in (-1, 0, 1):                                       # pads under the part that sticks out
-        obs.append(cyl(f'pad{i}', 0.00085, 0.00008, 'gold', (PAD_X, POD_Y + i * 0.004, FOOT_Z - 0.00003), seg=40))
+    lens.rotation_euler = (math.pi / 2, 0, -math.pi / 2); lens.location = (x_in + 0.00012, POD_Y, POD_ZC); obs.append(lens)
+    slot_w, slot_l = 0.0019, 2 * PIN_P + 0.0034                # one slot on the crown
+    obs.append(rbox('slot', slot_w, slot_l, 0.00018, slot_w / 2 - 0.00001, 0.00002, 'rubber', (CONTACT_X, POD_CY, POD_Z0 - 0.00002), sp=8, se=1))
+    for i in (-1, 0, 1):
+        obs.append(cyl(f'contact{i}', 0.0008, 0.00008, 'gold', (CONTACT_X, POD_CY + i * PIN_P, POD_Z0 - 0.00003), seg=40))
     return obs
 
 def build_loop():
-    """Steel loop as a flat metal ribbon bent into a soft rectangle around the strip layers; its inner bar is wrapped
-    inside the strip's start, so only the outer bar and the two arms show."""
-    t, h, z0 = STRAP_T, STRAP_H, STRAP_LIFT
-    c2 = strap_e(LOOP_TH); N2 = strap_n(LOOP_TH); T2 = Vector((-N2.y, N2.x))
-    n_in, n_out = 0.0, 1.5 * t + 2 * 0.0011 + 0.0006 + BAR_T / 2
-    z_lo, z_hi = z0 - 0.0003 - BAR_T / 2, z0 + h + 0.0003 + BAR_T / 2
-    rc = 0.0014; path = []
-    corners = [(n_out - rc, z_hi - rc, 0), (n_in + rc, z_hi - rc, 90), (n_in + rc, z_lo + rc, 180), (n_out - rc, z_lo + rc, 270)]
-    for cx, cz, a0 in corners:
-        for k in range(9):
-            a = math.radians(a0 + 90 * k / 8); path.append((cx + rc * math.cos(a), cz + rc * math.sin(a)))
+    """The loop: a flat U that grows out of the top of the body. Its two arms run along the strap's edges and rise from
+    the body's level to the outside of the strap, where the cross bar spans its width: the strap passes under it."""
+    t = STRAP_T; sp = loop_speed()
+    n_in, n_out = -(POD_GAP + BAR_T / 2), t / 2 + LOOP_GAP + BAR_T / 2
+    z_lo, z_hi = LOOP_ZLO, LOOP_ZHI; rc = 0.0016; s_end = LOOP_ARM + 0.001
+    def nn(sv):
+        k = min(max(sv / LOOP_ARM, 0.0), 1.0); return n_out + (n_in - n_out) * k * k * (3 - 2 * k)
+    path = [(s_end + (rc - s_end) * k / 24, z_lo) for k in range(24)]
+    for k in range(9):
+        a = math.radians(270 - 90 * k / 8); path.append((rc + rc * math.cos(a), z_lo + rc + rc * math.sin(a)))
+    path += [(0.0, z_lo + rc + (z_hi - z_lo - 2 * rc) * k / 8) for k in range(1, 8)]
+    for k in range(9):
+        a = math.radians(180 - 90 * k / 8); path.append((rc + rc * math.cos(a), z_hi - rc + rc * math.sin(a)))
+    z_end = STRAP_LIFT + STRAP_H - 0.0005 - BAR_W / 2; arm_up = rc + 0.0018      # past this point the upper arm is behind the strap
+    def up(k):
+        sv = rc + (s_end - rc) * k / 24; q = max(0.0, min(1.0, (sv - arm_up) / (s_end - arm_up))); return (sv, z_hi + (z_end - z_hi) * q * q * (3 - 2 * q))
+    n_up = len(path)
+    path += [up(k) for k in range(1, 25)]
     sec = []; cr = 0.00035
     for qx, qy, a0 in ((BAR_W / 2 - cr, BAR_T / 2 - cr, 0), (-BAR_W / 2 + cr, BAR_T / 2 - cr, 90), (-BAR_W / 2 + cr, -BAR_T / 2 + cr, 180), (BAR_W / 2 - cr, -BAR_T / 2 + cr, 270)):
         for k in range(4):
             a = math.radians(a0 + 90 * k / 3); sec.append((qx + cr * math.cos(a), qy + cr * math.sin(a)))
     bm = bmesh.new(); rings = []; L = len(path)
-    for i, (nn, zz) in enumerate(path):
-        a = path[(i - 1) % L]; b = path[(i + 1) % L]
-        dn, dz = b[0] - a[0], b[1] - a[1]; ln = math.hypot(dn, dz); dn, dz = dn / ln, dz / ln
-        pn, pz = -dz, dn                                      # in-plane normal of the ribbon's path
+    for i, (sv, zz) in enumerate(path):
+        a = path[max(i - 1, 0)]; b = path[min(i + 1, L - 1)]
+        ds, dz = b[0] - a[0], b[1] - a[1]; ln = math.hypot(ds, dz); ds, dz = ds / ln, dz / ln
         ring = []
-        for sw, sq in sec:
-            v2 = c2 + N2 * (nn + pn * sq) + T2 * sw
-            ring.append(bm.verts.new((v2.x, v2.y, zz + pz * sq)))
+        for w, q in sec:
+            s1 = sv - dz * w; z1 = zz + ds * w; th = LOOP_TH - s1 / sp
+            n_c = nn(sv)
+            if i >= n_up:                                            # upper arm: at the body's level before it moves behind the strap
+                u = max(0.0, min(1.0, (sv - rc) / (arm_up - rc))); n_c = n_out + (n_in - n_out) * u * u * (3 - 2 * u)
+            v = strap_e(th) + strap_n(th) * (n_c + q); ring.append(bm.verts.new((v.x, v.y, z1)))
         rings.append(ring)
     k = len(sec)
-    for i in range(L):
-        A, B = rings[i], rings[(i + 1) % L]
+    for i in range(L - 1):
+        A, B = rings[i], rings[i + 1]
         for q in range(k): bm.faces.new((A[q], A[(q + 1) % k], B[(q + 1) % k], B[q]))
+    bm.faces.new(list(reversed(rings[0]))); bm.faces.new(rings[-1])
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
-    return link('steelloop', bm, 'steel')
+    return link('loopbar', bm, 'steel')
 
 def dock(br):
-    """The bracelet lying on the base as a ring, its three pads on the three pins (row along x, 4 mm pitch)."""
+    """The bracelet lying on the base as a ring, the crown of its body on the three pins (row along x)."""
     br.rotation_euler = (0, 0, -math.pi / 2)
-    br.location = Vector((0, -W / 2 + 0.020, TOP + 0.0002 - FOOT_Z + 0.00011)) - Matrix.Rotation(-math.pi / 2, 3, 'Z') @ Vector((PAD_X, POD_Y, 0))
+    br.location = Vector((0, -W / 2 + 0.020, TOP + 0.00015 - POD_Z0)) - Matrix.Rotation(-math.pi / 2, 3, 'Z') @ Vector((pod_contact_x(), POD_CY, 0))
 
 def build_bracelet(z0=0.0):
     parts = [build_strip(), build_loop()] + build_pod()
@@ -1034,7 +1037,7 @@ def pinch_basis(inward):
         if best is None or score > best[0]: best = (score, R)
     return best[1]
 
-GRIP = (0.0277, 0.0030)          # the bracelet's pod side, turned to face +X by AP: where the fingers pinch it
+GRIP = (0.0262, 0.0028)          # the bracelet's pod side, turned to face +X by AP: where the fingers pinch it
 PINCH_R = basis((-0.906, 0.0, -0.423), (0.0, -1.0, 0.0))   # index inside the band, thumb outside
 TURN = Matrix.Rotation(math.radians(225), 3, 'Z')            # the whole pinch turned so the arm comes from the bed (front-left)
 
@@ -1054,9 +1057,7 @@ def build_gesture(n):
                            @ Matrix.Rotation(math.pi / 2, 4, 'Y') @ Matrix.Diagonal(br.scale.to_4d()))   # ring round the wrist, pod underneath
         return group('gesture', [base, br] + hand)
     if n == 3:                 # put back: the bracelet docks, its flat sensor edge on the row of pins, still in the hand
-        br = build_bracelet(TOP); br.rotation_euler = (0, 0, -math.pi / 2)          # the pod's long side along the pins
-        pod = Vector((STRAP_XF - POD_T, 0.0005, 0))
-        br.location = Vector((0, -W / 2 + 0.020, TOP)) - Matrix.Rotation(-math.pi / 2, 3, 'Z') @ pod
+        br = build_bracelet(TOP); dock(br)                                          # the body's long side along the pins
         # the hand from the bed, relaxed and tipped forward: the index fingertip presses the top of the band onto the pins
         F = Vector((1, 1, -0.45)).normalized(); R = basis(F, Vector((0, 0, 1)).cross(F))
         ctr = br.location.copy(); d = Vector((-1, -1, 0)).normalized()
@@ -1167,6 +1168,13 @@ def studio(view):
         build_bracelet(); fw, tgt, pos = 0.13, (0, 0, 0.011), (0.6, -0.9, 0.55)
     elif view == 'hero':        # B1: the module on the far side, its face and foot seen across the ring, the loop beside it
         g = build_bracelet(); g.rotation_euler = (0, 0, math.radians(118)); fw, tgt, pos = 0.098, (0, 0, 0.010), (0.55, -0.95, 0.52)
+    elif view == 'photo':       # the approved photo's view (pv=b,phi,gamma,fw,dx,dz): the ring seen nearly edge-on, loop up, contact side towards the camera
+        pv = [float(x) for x in next((a.split('=', 1)[1] for a in argv if a.startswith('pv=')), '35,-15,0,0.11,0,0').split(',')]
+        b_, ph_, ga_ = math.radians(pv[0]), math.radians(pv[1]), math.radians(pv[2]); fw = pv[3]
+        X = Vector((math.sin(b_), -math.cos(b_), 0)); Y = Vector((0, 0, -1)); Z = X.cross(Y)
+        g = build_bracelet(); B_ = Matrix((X, Y, Z)).transposed().to_4x4()
+        g.matrix_world = Matrix.Translation((pv[4], 0, pv[5])) @ Matrix.Rotation(ph_, 4, 'Y') @ B_ @ Matrix.Rotation(ga_, 4, 'Z') @ Matrix.Translation((0, 0, -STRAP_LIFT - STRAP_H / 2))
+        tgt, pos = (0, 0, 0), (0, -1, 0)
     elif view == 'wrist':       # B2: the wrist face, close
         g = build_bracelet(); a = math.radians(118); g.rotation_euler = (0, 0, a)
         c = Vector((0.017 * math.cos(a), 0.017 * math.sin(a), 0.011)); d = Vector((math.cos(a), math.sin(a), 0))
@@ -1174,7 +1182,7 @@ def studio(view):
     elif view == 'pads':        # B3: the foot from below, the three pads
         g = build_bracelet(); a = math.radians(118); g.rotation_euler = (0, 0, a)
         d = Vector((math.cos(a), math.sin(a), 0)); tg = Vector((-math.sin(a), math.cos(a), 0))
-        c = d * (PAD_X + 0.001) + Vector((0, 0, 0.004))
+        c = d * (pod_contact_x() + 0.001) + Vector((0, 0, 0.004))
         fw = 0.042; tgt = tuple(c); pos = tuple(c - d * 0.16 + tg * 0.07 - Vector((0, 0, 0.13)))
         area('below', tuple(c - d * 0.3 - Vector((0, 0, 0.35))), tuple(c), 0.8, 60)
     elif view in ('outside', 'under'):   # from outside, the module on the near side: only fabric, loop and the foot
@@ -1272,7 +1280,8 @@ def real():
     res = (1200, 675) if PREVIEW else (2400, 1350)
     if SHOT.startswith('room'): res = (540, 675) if PREVIEW else (1080, 1350)   # portrait frames for the strip
     if SHOT == 'explode': res = (800, 1000) if PREVIEW else (1600, 2000)        # the exploded base, portrait
-    if SHOT in ('outside', 'under', 'hero', 'wrist', 'pads', 'dock'): res = (1000, 750) if PREVIEW else (3200, 2400)   # bracelet shots B1–B4, 4:3
+    if SHOT == 'photo': res = (1000, 746)
+    elif SHOT in ('outside', 'under', 'hero', 'wrist', 'pads', 'dock'): res = (1000, 750) if PREVIEW else (3200, 2400)   # bracelet shots B1–B4, 4:3
     cycles(64 if PREVIEW else (768 if SHOT in ('outside', 'under', 'hero', 'wrist', 'pads', 'dock') else 384), res)
     colour_management('AgX')
     if TABLE:

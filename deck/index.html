@@ -2195,7 +2195,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   const iso = document.querySelector('[data-iso]');
   if (iso) {
     const C = 0.866, S = 0.5, A = 'assets/aurawake/';
-    const AN = {"base":{"size":400,"ground":[200.0,239.2],"points":{"top":[257.5,164.5],"time":[96.6,234.8],"led":[165.5,279.6],"grille":[303.4,229.9]}},"bracelet":{"size":240,"ground":[119.3,145.0],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}},"base_under":{"size":300,"ground":[150,179.4],"points":{"under":[150,179.4],"back":[214.7,112.7],"under_exit":[150,251.3],"back_exit":[214.7,86]}}};
+    const AN = {"base":{"size":400,"ground":[200.0,239.2],"points":{"top":[257.5,164.5],"time":[96.6,234.8],"led":[165.5,279.6],"grille":[303.4,229.9]}},"bracelet":{"size":240,"ground":[120.1,152.1],"points":{}},"phone":{"size":250,"ground":[125.0,129.4],"points":{}},"lamp":{"size":170,"ground":[85.0,144.8],"points":{}},"shutters":{"size":300,"ground":[147.5,234.7],"points":{}},"diffuser":{"size":200,"ground":[100.0,143.8],"points":{"caps":[123.0,53.6]}},"base_under":{"size":300,"ground":[150,179.4],"points":{"under":[150,179.4],"back":[214.7,112.7],"under_exit":[150,251.3],"back_exit":[214.7,86]}}};
     const toUV = ([x, y]) => [(x / C + y / S) / 2, (x / C - y / S) / 2], toXY = ([u, v]) => [(u + v) * C, (u - v) * S];
     const N = { // [u, v, name, role] = where the object touches the floor
       base: [955, 223, 'Base', 'Runs every ramp'],

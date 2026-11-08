@@ -165,8 +165,8 @@ def shell():
         cut(outer, holes_bm(), (0, 0, 0), 'cavity')
     cutter = rbox('shell_in', IN, IN, H - WALL + 0.001, 0.001, 0.0, 'body', (0, 0, PL - 0.001), sp=2)
     boolean_diff(outer, cutter); holes_line = []
-    for name, x, y, z, r, ax in (('ph0', -0.004, PIN_Y, TOP - 0.001, 0.00095, 'Z'), ('ph1', 0.0, PIN_Y, TOP - 0.001, 0.00095, 'Z'),
-                                 ('ph2', 0.004, PIN_Y, TOP - 0.001, 0.00095, 'Z'), ('led_h', 0.036, -W / 2 + 0.001, MID, 0.00085, 'Y')):
+    for name, x, y, z, r, ax in (('ph0', -PIN_P, PIN_Y, TOP - 0.001, 0.00095, 'Z'), ('ph1', 0.0, PIN_Y, TOP - 0.001, 0.00095, 'Z'),
+                                 ('ph2', PIN_P, PIN_Y, TOP - 0.001, 0.00095, 'Z'), ('led_h', 0.036, -W / 2 + 0.001, MID, 0.00085, 'Y')):
         if LINE:                                         # the drawing: a dark disc reads as the hole, no boolean seams
             d = cyl(name, r, 0.0002, 'chip', (x, y, TOP + 0.00005) if ax == 'Z' else (x, -W / 2 - 0.00005, z), axis=ax, seg=32)
             holes_line.append(d)
@@ -188,8 +188,8 @@ def top_inside():
     obs.append(box('pin_jst', 0.0058, 0.0035, 0.0029, 0.0085, PIN_Y, CEIL - 0.0050 - 0.0029, 'jst'))
     obs.append(box('gasket', 0.016, 0.005, 0.0012, 0, PIN_Y, CEIL - 0.0012, 'rubber', 0.001))
     for i in (-1, 0, 1):
-        obs.append(cyl(f'pin_barrel{i}', 0.0009, 0.0034, 'gold', (i * 0.004, PIN_Y, CEIL - 0.0042 + 0.0017), seg=24))
-        obs.append(cyl(f'pin_tip{i}', 0.00075, 0.0026, 'gold', (i * 0.004, PIN_Y, CEIL + 0.0007), seg=24))
+        obs.append(cyl(f'pin_barrel{i}', 0.0009, 0.0034, 'gold', (i * PIN_P, PIN_Y, CEIL - 0.0042 + 0.0017), seg=24))
+        obs.append(cyl(f'pin_tip{i}', 0.00075, 0.0026, 'gold', (i * PIN_P, PIN_Y, CEIL + 0.0007), seg=24))
     for sx in (-1, 1):
         obs.append(cyl(f'magnet_cup{sx}', 0.0036, 0.0026, 'nickel', (sx * 0.013, PIN_Y, CEIL - 0.0013), seg=32))
         obs.append(cyl(f'magnet{sx}', 0.003, 0.002, 'magnet', (sx * 0.013, PIN_Y, CEIL - 0.0010), seg=32))

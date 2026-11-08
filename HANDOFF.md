@@ -1334,6 +1334,19 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-08 · LOCAL (103)** · Bracelet photo approved by the owner (Nano Banana Pro, two-tone dotted weave, black and
+  grey, one matte black piece for loop and body, three gold contacts in one slot). `aura.py` rebuilt on it and fitted
+  against the photo with an overlay (view `photo`, `pv=b,phi,gamma,fw,dx,dz`; camera `pv=35,-20,0,0.135,0,0`): one strip
+  from the body's lower end, round the wrist, through the loop, over the body to one free end; ring 61 × 51 mm, strap
+  20.5 mm; loop = a flat U growing out of the body, upper arm a short stub behind the strap; body = a lens, 34 mm long and
+  at most 5 mm towards the wrist, its domed lower side 2.2 mm past the strap's edge (the most protruding point: it rests
+  on the base); handedness as in the photo (`strap_e`, so the loop sits at -y and on the left of the cover). Pins and
+  contacts at one pitch, 2.5 mm (`PIN_P`, aura.py + internals.py, spec too). Re-rendered: cover (shading pass with the
+  old light cloth when `docked`, so the weave whisper stays: owner), `iso-bracelet`, `iso-g1…g4`, `product-hero`,
+  `view-top`, `explode-real` (the copper electrode rendered black: its pixels restored from the previous render).
+  Owner's two wrist photos (zip in `deck/assets/aurawake/bracialet/`, not committed) are NOT accurate, the loop stands
+  too proud: do not use. Still to generate in Weavy: on the base, contacts close-up, wrist. Rejected on the way: flat
+  blade body, reflective sheen on the fabric, stubby body pushing into the wrist.
 - **2026-11-08 · LOCAL (102)** · Owner changes the bracelet direction: a single new reference (woven loop with orange
   edges and inner stripes, satin metal loop, dark plate inside), generated identical in Weavy with Nano Banana, the brown
   weave turned graphite; all earlier references dropped. Open: that reference shows no charging foot or pads, while the
