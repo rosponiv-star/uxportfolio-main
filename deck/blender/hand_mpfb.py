@@ -3,7 +3,7 @@
 # hand and forearm are cut out and written as OBJ in the frame aura.py uses for hands: wrist at the origin, X along
 # the fingers, Y towards the thumb, Z the back of the hand (metres). Tips of thumb and index go to hands.json.
 #   blender -b -P deck/blender/hand_mpfb.py
-import bpy, json, math, os
+import bpy, json, math, os, sys
 from mathutils import Vector, Matrix
 from bl_ext.user_default.mpfb.services.humanservice import HumanService
 
@@ -74,7 +74,9 @@ def solve_thumb(target):
 POSES = {
     'palm': {'index': (2, 6, 3), 'middle': (2, 7, 4), 'ring': (3, 7, 3), 'little': (4, 6, 3)},   # flat on the top, relaxed
     'pinch': {'index': (35, 65, 35), 'middle': (35, 45, 22), 'ring': (40, 48, 22), 'little': (45, 48, 22)},   # a light two-finger pinch, the rest relaxed
+    'relax': {'index': (10, 20, 10), 'middle': (13, 23, 11), 'ring': (16, 25, 11), 'little': (19, 26, 11)},   # asleep (owner, 2026-11-09): soft, the curl growing towards the little finger
 }
+WANT = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else list(POSES)   # blender -b -P hand_mpfb.py -- relax: only that pose, the others stay as they are
 KEEP = {'wrist.R', 'lowerarm01.R', 'lowerarm02.R', 'upperarm02.R'}   # past the elbow: the arm always leaves the frame
 KEEP = KEEP | {f'metacarpal{i}.R' for i in range(1, 5)} | set(AX)
 def straighten_elbow():
@@ -85,13 +87,23 @@ def straighten_elbow():
     q = lo.rotation_difference(up).to_matrix().to_4x4()
     la.matrix = Matrix.Translation(h) @ q @ Matrix.Translation(-h) @ la.matrix; upd()
 
-info = {}
+info = json.load(open(os.path.join(OUT, 'hands.json')))
 for name, pose in POSES.items():
+    if name not in WANT: continue
     for pb in PB: pb.rotation_euler = (0, 0, 0)
     upd(); straighten_elbow()
     curl(pose)
     if name == 'palm':           # the thumb lies along the index on the top, not over the front with the time
         solve_thumb(local(head('finger2-1.R')) + Vector((-0.012, 0.016, -0.012)))
+    if name == 'relax':          # the fingers close up towards the middle one, the thumb falls beside the index, a little under it
+        for i, deg in ((2, 5), (4, 3), (5, 8)):
+            n = f'finger{i}-1.R'; ax = 2 - AX[n][0]; pb = PB[n]; e0 = pb.rotation_euler.copy(); best = None
+            for sg in (1, -1):
+                pb.rotation_euler = e0; pb.rotation_euler[ax] = e0[ax] + sg * math.radians(deg); upd()
+                d = (tail(f'finger{i}-3.R') - tail('finger3-3.R')).length
+                if best is None or d < best[0]: best = (d, sg)
+            pb.rotation_euler = e0; pb.rotation_euler[ax] = e0[ax] + best[1] * math.radians(deg); upd()
+        solve_thumb(local(head('finger2-1.R')) + Vector((0.020, 0.014, -0.020)))
     if name == 'pinch':          # thumb pad opposite the index pad, across the band (gap as in the procedural hand)
         it = local(tail('finger2-3.R'))
         err = solve_thumb(it + Vector((-0.0205, 0.0067, -0.008)))

@@ -19,8 +19,9 @@ ROOM = {   # time, lamp (share of 14 W, kelvin), ring colour or None, shutter op
     4: ('06:14', (0.13, 2800), DAWN_LED, 0.20, 1.2, 1.0),
     5: ('06:20', (0.62, 4400), DAWN_LED, 0.65, 0.85, 2.4),
 }
-LED_W = {1: 20000.0, 4: 16000.0, 5: 30000.0}          # emission of the strip under the base: the bright contact line
-LED_SPILL = {1: 55.0, 4: 38.0, 5: 115.0}                # emission of the light that leaves the gap all along the base's edge: the soft halo
+RELAX_X, RELAX_Y, RELAX_ROLL = -0.465, -0.09, 12.0
+LED_W = {1: 20000.0, 4: 16000.0, 5: 18000.0}          # emission of the strip under the base: the bright contact line
+LED_SPILL = {1: 55.0, 4: 38.0, 5: 62.0}                # emission of the light that leaves the gap all along the base's edge: the soft halo
 TEX = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'polyhaven_tex')
 FLOOR_Z, CEIL_Z, WALL_Y = -0.50, 2.20, 0.39
 BASE_ROT = math.radians(-38)                     # the base turned to the bed (owner, 2026-11-08): the time faces the pillow and the camera at about the same angle
@@ -159,8 +160,6 @@ def build_stand():
         for sy in (-1, 1):
             cyl(f'leg{sx}{sy}', 0.014, 0.10, 'oak', (cx + sx * (w / 2 - 0.05), cy + sy * (d / 2 - 0.05), -0.45), seg=24)
 
-def duvet_top(x, y, n): return 0.05
-
 def build_bed(n):
     """Bed against the back wall, left of the nightstand: squared-off shapes (owner, 2026-11-08), linen and oak."""
     rbox('bed_base', 1.56, 1.96, 0.20, 0.02, 0.01, 'oak', (-1.12, -0.72, FLOOR_Z + 0.06), sp=4, se=2)
@@ -248,8 +247,8 @@ def build_sleeve(R, wrist, pose='pinch', start=0.075):
 
 def build_arm(n):
     if n == 1:                                             # 22:00: the hand lifts the bracelet off the base; the arm comes in from the left, in a sleeve
-        F = Vector((1, -0.15, -0.75)).normalized(); R = basis(F, Vector((0, 0.3, 1)))
-        wr = Vector((-0.10, -0.03, 0.225)); hand, tips = build_hand('pinch', R, wr); build_sleeve(R, wr)
+        F = Vector((1, 0.12, -0.30)).normalized(); R = basis(F, Vector((0, 0.3, 1)))       # sitting on the bed (owner, 2026-11-09): the forearm almost level, not coming down from above
+        wr = Vector((-0.11, -0.05, 0.17)); hand, tips = build_hand('pinch', R, wr); build_sleeve(R, wr)
         mid = (tips['index'] + tips['thumb']) / 2; d = Vector((0.78, -0.30, -0.55)).normalized(); xv = -d   # the ring hangs from the pinch, towards the camera
         cam = Vector((0.85, -1.30, 0.65)).normalized(); cp = (cam - xv * cam.dot(xv)).normalized(); side = xv.cross(cp)
         zv = (cp * 0.62 + side * 0.78).normalized(); yv = zv.cross(xv)                                     # tilted: the woven band shows, not just its edge
@@ -260,8 +259,10 @@ def build_arm(n):
         L_ = Vector(HAND_TIPS['palm']['index']).x; wrist = Vector((0.05 - L_, -0.01, TOP - palm_z('palm')))
         hand, _ = build_hand('palm', R, wrist); wrist.z += rest_on_top(hand); wear_bracelet(R, wrist); build_sleeve(R, wrist, 'palm', 0.12)
     else:                                                  # asleep: the forearm out of the covers on the duvet, the bracelet on the wrist
-        F = Vector((1, 0.05, -0.02)).normalized(); R = basis(F, Vector((0, 0, 1)).cross(F)); wx, wy = -0.385, -0.20
-        wrist = Vector((wx, wy, duvet_top(wx, wy, n) - palm_z('palm') - 0.006)); build_hand('palm', R, wrist); wear_bracelet(R, wrist); build_sleeve(R, wrist, 'palm', 0.12)
+        F = Vector((1, 0.30, 0.17)).normalized(); Y = Vector((0, 0, 1)).cross(F); roll = math.radians(RELAX_ROLL)      # soft, a little on its side, lying on the sheet inside the bed's edge (owner, 2026-11-09)
+        R = basis(F, Y * math.cos(roll) + Vector((0, 0, 1)) * math.sin(roll)); vs, _ = hand_mesh('relax')
+        low = min((R @ Vector(v)).z for v in vs if v[0] > -0.01); wrist = Vector((RELAX_X, RELAX_Y, -0.006 - low))
+        build_hand('relax', R, wrist); wear_bracelet(R, wrist); build_sleeve(R, wrist, 'palm', 0.12)
 
 def bedroom_scene(n):
     t, lamp, ring, shut, expo, sky = ROOM[n]
