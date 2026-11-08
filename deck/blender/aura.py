@@ -1044,7 +1044,7 @@ TURN = Matrix.Rotation(math.radians(225), 3, 'Z')            # the whole pinch t
 
 def build_gesture(n):
     """01 take the bracelet off the base, 02 palm on the base (bracelet on the wrist), 03 put it back, 04 palm held 3 s."""
-    base = build_base(with_time=True, time={1: '22:00', 2: '06:16', 3: '86%', 4: 'OFF'}[n])   # awake: the time is on; bracelet back: its charge
+    base = build_base(with_time=True, time={1: '22:00', 2: '06:20', 3: '86%', 4: 'OFF'}[n])   # awake: the time is on; bracelet back: its charge
     if n in (2, 4):            # 02 a short tap in the morning; 04 the palm held 3 s (evening): the palm flat on the top
         F = Vector((1, 1, 0)).normalized()            # from the bed, in front and to the left: the arm runs off the left corner
         R = basis(F, Vector((0, 0, 1)).cross(F))                                       # thumb to the left of the fingers

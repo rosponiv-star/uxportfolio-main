@@ -1334,6 +1334,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-08 · LOCAL (108)** · The palm moves to 06:20 everywhere (owner): spec §6, `p05-night` (labels shortened so they fit
+  before 06:26, birds hold 40 % until the palm), gesture 03's clock (`build_gesture`, `iso-g2`). The wake-up stays at 06:14
+  (owner considered 06:10 for the scene, then kept it). Scenes: every frame a touch closer (lens 55); at 22:00 the hand
+  points down and lifts the bracelet over the base, the ring just beyond the fingertips and tilted so its band shows
+  (the fist hid it in every closer position).
 - **2026-11-08 · LOCAL (107)** · Scenes, owner's corrections: 22:00 a little darker; 22:40 and 03:12 much darker and bluer;
   06:14 lamp weaker (13 %, below the spec's ramp, by choice); last frame moved to 06:20 (lamp 62 % 4400 K, shutters 65 %,
   sun 2.4°, brighter). Soft pillows, moved so the arm passes in front of them. The ring's light on the nightstand is now

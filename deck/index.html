@@ -2340,17 +2340,17 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     const X = (t) => { const s = seg(m(t)); return s.x + ((m(t) - s.a) / (s.b - s.a)) * s.w; };
     const TOP = 44, LH = 66, AH = 30;
     const lanes = [
-      ['You', null, 'ev', [['22:00', 'Takes the bracelet'], ['22:30', 'Goes to bed'], ['03:12', 'Wakes up briefly'], ['06:16', 'Awake, still in bed'], ['06:26', 'Gets up'], ['07:10', 'Bracelet back', 'start', 9]]],
-      ['Bracelet', 'bracelet', 'ev', [['21:30', 'On the base, charged'], ['22:00', 'Connects'], ['22:30', 'Senses lying down'], ['03:12', 'Senses waking'], ['06:14', 'Light sleep', 'end'], ['06:16', 'Senses awake, lying'], ['06:26', 'Steps, upright']]],
-      ['Base', 'base', 'ev', [['21:30', 'Violet: bed soon', 'start', 10], ['22:00', 'Ring dims', 'start', 10], ['06:00', 'Opens the window', 'start', 10], ['06:14', 'Wake-up moment', 'end', 8], ['06:16', 'Amber beat'], ['07:10', 'Green: all set', 'start', 9]]],
+      ['You', null, 'ev', [['22:00', 'Takes the bracelet'], ['22:30', 'Goes to bed'], ['03:12', 'Wakes up briefly'], ['06:20', 'Awake, in bed', 'start', 6], ['06:26', 'Gets up'], ['07:10', 'Bracelet back', 'start', 9]]],
+      ['Bracelet', 'bracelet', 'ev', [['21:30', 'On the base, charged'], ['22:00', 'Connects'], ['22:30', 'Senses lying down'], ['03:12', 'Senses waking'], ['06:14', 'Light sleep', 'end'], ['06:20', 'Awake, lying', 'start', 7], ['06:26', 'Steps, upright']]],
+      ['Base', 'base', 'ev', [['21:30', 'Violet: bed soon', 'start', 10], ['22:00', 'Ring dims', 'start', 10], ['06:00', 'Opens the window', 'start', 10], ['06:14', 'Wake-up moment', 'end', 8], ['06:20', 'Amber beat'], ['07:10', 'Green: all set', 'start', 9]]],
       ['Time', null, 'time', [['21:24', 0], ['22:00', 0], ['22:00', 100], ['22:40', 100], ['22:40', 0], ['03:11', 0], ['03:12', 100], ['03:22', 100], ['03:22', 0], ['06:00', 0], ['06:00', 100], ['07:10', 100], ['07:10', 0], ['07:34', 0]],
         [['22:00', 'On while you are awake'], ['03:12', 'On while awake'], ['06:00', 'On for the whole window'], ['07:10', 'Tap: 8 s']]],
       ['Lamp', 'lamp', 'light', [['21:24', 0], ['22:00', 0], ['22:00', 40], ['22:30', 15], ['22:40', 0], ['03:11', 0], ['03:12', 8], ['03:14', 8], ['03:15', 0], ['06:00', 0], ['06:14', 28], ['06:20', 80], ['07:34', 80]],
         [['22:00', '2200 K · 40%'], ['22:30', '15%'], ['03:12', '1%, optional'], ['06:00', 'Dawn · 1800 K'], ['06:20', '80% · 5000 K']]],
       ['Shutters', 'shutters', 'grey', [['21:24', 100], ['22:00', 100], ['22:02', 0], ['06:00', 0], ['06:14', 9], ['06:19', 60], ['06:26', 60], ['06:28', 100], ['07:34', 100]],
         [['22:02', 'Close in 2 min'], ['06:00', 'Open slowly'], ['06:28', 'Fully open']]],
-      ['Sound', null, 'nightc', [['21:24', 0], ['22:00', 0], ['22:00', 20], ['22:40', 20], ['23:00', 0], ['06:14', 0], ['06:16', 40], ['06:16', 15], ['06:26', 15], ['06:26', 0], ['07:34', 0]],
-        [['22:00', 'Rain · 20%'], ['06:16', 'Birds, lowered by the palm']]],
+      ['Sound', null, 'nightc', [['21:24', 0], ['22:00', 0], ['22:00', 20], ['22:40', 20], ['23:00', 0], ['06:14', 0], ['06:16', 40], ['06:20', 40], ['06:20', 15], ['06:26', 15], ['06:26', 0], ['07:34', 0]],
+        [['22:00', 'Rain · 20%'], ['06:20', 'Birds, lowered by the palm']]],
       ['Scent', 'diffuser', 'grey', [['21:24', 0], ['22:00', 0], ['22:00', 30], ['22:50', 30], ['22:50', 0], ['06:14', 0], ['06:14', 40], ['06:36', 40], ['06:36', 0], ['07:34', 0]],
         [['22:00', 'Vanilla'], ['06:14', 'Lemon']]],
       ['Phone', 'phone', 'ev', [['21:30', 'Alerts only if needed'], ['22:00', 'Live Activity: wind-down'], ['06:26', 'How did you sleep?']]],
@@ -2360,10 +2360,10 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     // smart window, wake-up moment, axis, cut marks
     let g = `<rect class="win" x="${X('06:00')}" y="${TOP}" width="${X('06:30') - X('06:00')}" height="${B - TOP}" />`;
     ['21:30', '22:00', '22:30', '23:00', '03:12', '06:00', '07:10'].forEach((t) => (g += `<text class="ax" x="${X(t)}" y="22">${t}</text><line class="vr" x1="${X(t)}" x2="${X(t)}" y1="${TOP}" y2="${B}" />`));
-    g += `<text class="ax ax-w" x="${X('06:14') - 6}" y="22" style="text-anchor:end">06:14</text><text class="ax" x="${X('06:16') + 6}" y="22" style="text-anchor:start">06:16</text>`;
+    g += `<text class="ax ax-w" x="${X('06:14') - 6}" y="22" style="text-anchor:end">06:14</text><text class="ax" x="${X('06:20') - 6}" y="22" style="text-anchor:end">06:20</text>`;
     g += `<text class="ax" x="${X('06:26') - 6}" y="22" style="text-anchor:end">06:26</text><text class="ax" x="${X('06:30') + 6}" y="22" style="text-anchor:start">06:30</text>`;
     ['06:26', '06:30'].forEach((t) => (g += `<line class="vr" x1="${X(t)}" x2="${X(t)}" y1="${TOP}" y2="${B}" />`));
-    g += `<line class="vr" x1="${X('06:16')}" x2="${X('06:16')}" y1="${TOP}" y2="${B}" /><line class="wake" x1="${X('06:14')}" x2="${X('06:14')}" y1="${TOP - 10}" y2="${B}" />`;
+    g += `<line class="vr" x1="${X('06:20')}" x2="${X('06:20')}" y1="${TOP}" y2="${B}" /><line class="wake" x1="${X('06:14')}" x2="${X('06:14')}" y1="${TOP - 10}" y2="${B}" />`;
     S.slice(1).forEach((s) => (g += `<text class="cut" x="${s.x - GAP / 2}" y="22">//</text>`));
     g += `<text class="win-t" x="${X('06:00')}" y="${B + 30}">Smart window 06:00 – 06:30 · the room wakes with you at the first light sleep</text>`;
     g += `<text class="win-t" x="${X('06:00')}" y="${B + 56}">Still in bed at 06:30: brighter · 06:35 clear sound · 06:40 real alarm, until you are up</text>`;

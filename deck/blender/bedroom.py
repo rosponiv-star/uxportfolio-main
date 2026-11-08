@@ -246,13 +246,14 @@ def build_sleeve(R, wrist, pose='pinch', start=0.075):
 
 def build_arm(n):
     if n == 1:                                             # 22:00: the hand lifts the bracelet off the base; the arm comes in from the left, in a sleeve
-        F = Vector((1, -0.15, -0.35)).normalized(); R = basis(F, Vector((0, 0.3, 1)))
-        hand, tips = build_hand('pinch', R, Vector((-0.125, -0.02, 0.14))); build_sleeve(R, Vector((-0.125, -0.02, 0.14)))
-        mid = (tips['index'] + tips['thumb']) / 2; d = Vector((0.75, -0.45, -0.5)).normalized(); xv = -d   # the ring hangs from the pinch, towards the camera
-        cam = Vector((0.85, -1.30, 0.65)).normalized(); zv = (cam - xv * cam.dot(xv)).normalized(); yv = zv.cross(xv)
+        F = Vector((1, -0.15, -0.75)).normalized(); R = basis(F, Vector((0, 0.3, 1)))
+        wr = Vector((-0.10, -0.03, 0.225)); hand, tips = build_hand('pinch', R, wr); build_sleeve(R, wr)
+        mid = (tips['index'] + tips['thumb']) / 2; d = Vector((0.78, -0.30, -0.55)).normalized(); xv = -d   # the ring hangs from the pinch, towards the camera
+        cam = Vector((0.85, -1.30, 0.65)).normalized(); cp = (cam - xv * cam.dot(xv)).normalized(); side = xv.cross(cp)
+        zv = (cp * 0.62 + side * 0.78).normalized(); yv = zv.cross(xv)                                     # tilted: the woven band shows, not just its edge
         Rb = Matrix((xv, yv, zv)).transposed(); br = build_bracelet()
-        br.matrix_world = Matrix.Translation(mid - Rb @ Vector((STRAP_XF, 0, STRAP_LIFT + STRAP_H - 0.004))) @ Rb.to_4x4()
-    elif n == 5:                                           # 06:16: from under the duvet, the palm on the base, the bracelet on the wrist
+        br.matrix_world = Matrix.Translation(mid + d * 0.020 - Rb @ Vector((STRAP_XF, 0, STRAP_LIFT + STRAP_H / 2))) @ Rb.to_4x4()   # beyond the fingertips: the fist would hide it
+    elif n == 5:                                           # 06:20: from under the duvet, the palm on the base, the bracelet on the wrist
         F = Vector((1, 0.36, 0.03)).normalized(); R = basis(F, Vector((0, 0, 1)).cross(F))
         L_ = Vector(HAND_TIPS['palm']['index']).x; wrist = Vector((0.05 - L_, -0.01, TOP - palm_z('palm')))
         hand, _ = build_hand('palm', R, wrist); wrist.z += rest_on_top(hand); wear_bracelet(R, wrist); build_sleeve(R, wrist, 'palm', 0.12)
@@ -281,5 +282,5 @@ def bedroom_scene(n):
         o = bpy.data.objects.new('portal', ld); col.objects.link(o); o.location = ((x0 + x1) / 2, WALL_Y + 0.17, (z0 + zt) / 2); o.rotation_euler = (math.pi / 2, 0, 0)
     else:                                                  # shutters closed: only what the eye finds in the dark
         area('dark', (-0.4, -1.4, 1.8), (0, 0, 0), 2.5, 1.8, (0.50, 0.60, 1.0))
-    look((0.85, -1.30, 0.78), (-0.02, 0.06, 0.02), 52, 4.0)
+    look((0.85, -1.30, 0.78), (-0.02, 0.06, 0.03), 55, 4.0)
     scene.view_settings.exposure = expo
