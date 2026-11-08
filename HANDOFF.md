@@ -1338,6 +1338,8 @@ When a CLOUD session hits something that needs the local environment, it must:
   (`ring_glow`, emission decal) is gone. The strip under the base lights the top, plus `led_spill`: a thin source along the base's edge,
   unseen by the camera, for the light that leaves the 2 mm gap (stronger mid-side). Both are light-linked to `stand_top` only (`only_on_the_wood`),
   otherwise the grazing rays draw a line across curtains and bed. Strengths in `LED_W` / `LED_SPILL`. Scenes 2, 3 (LED off) not re-rendered.
+  Same day, owner: "visibile bene come prima": `LED_SPILL` raised, source 12 mm up for a wider halo, and `led_spill` is now a row of point lights
+  every 5 mm (a thin mesh emitter left a band on the base's sides).
 - **2026-11-08 · LOCAL (109)** · Scenes: the base turned 38° towards the bed so the time reads from the pillow (`BASE_ROT` in
   bedroom.py, also applied to the ring's glow), camera moved about 15° round the nightstand to (0.46, -1.48, 0.78). The owner
   compared it side by side with the front-on version and chose this one.

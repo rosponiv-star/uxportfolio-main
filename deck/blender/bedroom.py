@@ -19,7 +19,7 @@ ROOM = {   # time, lamp (share of 14 W, kelvin), ring colour or None, shutter op
     5: ('06:20', (0.62, 4400), DAWN, 0.65, 0.85, 2.4),
 }
 LED_W = {1: 20000.0, 4: 16000.0, 5: 30000.0}          # emission of the strip under the base: the bright contact line
-LED_SPILL = {1: 11.0, 4: 9.0, 5: 18.0}                # emission of the light that leaves the gap all along the base's edge: the soft halo
+LED_SPILL = {1: 55.0, 4: 38.0, 5: 115.0}                # emission of the light that leaves the gap all along the base's edge: the soft halo
 TEX = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'polyhaven_tex')
 FLOOR_Z, CEIL_Z, WALL_Y = -0.50, 2.20, 0.39
 BASE_ROT = math.radians(-38)                     # the base turned to the bed (owner, 2026-11-08): the time faces the pillow and the camera at about the same angle
@@ -81,29 +81,17 @@ def mat_room():
 
 def led_spill(color, strength):
     """The light that leaves the 2 mm gap: the strip fills the gap with bounced light and it spills out all along the base's edge.
-    A thin source hugging the footprint, unseen by the camera, a little stronger at the middle of each side, nearer the round strip."""
-    a, rc, t, z0 = W / 2 + 0.0016, EDGE_P + 0.0016, 0.0016, 0.0065
-    m = emit('led_spill', color, strength); nt = m.node_tree; e = next(n for n in nt.nodes if n.type == 'EMISSION')
-    tc = nt.nodes.new('ShaderNodeTexCoord'); sp = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], sp.inputs[0])
-    cb = nt.nodes.new('ShaderNodeCombineXYZ'); nt.links.new(sp.outputs[0], cb.inputs[0]); nt.links.new(sp.outputs[1], cb.inputs[1])
-    ln = nt.nodes.new('ShaderNodeVectorMath'); ln.operation = 'LENGTH'; nt.links.new(cb.outputs[0], ln.inputs[0])
-    d = nt.nodes.new('ShaderNodeMath'); d.operation = 'SUBTRACT'; nt.links.new(ln.outputs['Value'], d.inputs[0]); d.inputs[1].default_value = W / 2
-    k = nt.nodes.new('ShaderNodeMath'); k.operation = 'MULTIPLY'; nt.links.new(d.outputs[0], k.inputs[0]); k.inputs[1].default_value = -1 / 0.03
-    x = nt.nodes.new('ShaderNodeMath'); x.operation = 'EXPONENT'; nt.links.new(k.outputs[0], x.inputs[0])
-    f = nt.nodes.new('ShaderNodeMath'); f.operation = 'MULTIPLY'; nt.links.new(x.outputs[0], f.inputs[0]); f.inputs[1].default_value = strength; nt.links.new(f.outputs[0], e.inputs['Strength'])
-    MATS['led_spill'] = m
-    pts = []
-    for (sx, sy, a0) in ((1, 1, 0), (-1, 1, 90), (-1, -1, 180), (1, -1, 270)):
-        for i in range(13):
-            th = math.radians(a0 + 90 * i / 12); pts.append((sx * (a - rc) + rc * math.cos(th), sy * (a - rc) + rc * math.sin(th), math.cos(th), math.sin(th)))
-    bm = bmesh.new(); rings = []; ns = 8
-    for x_, y_, nx, ny in pts:
-        rings.append([bm.verts.new((x_ + t * math.cos(b) * nx, y_ + t * math.cos(b) * ny, z0 + t * math.sin(b))) for b in (2 * math.pi * j / ns for j in range(ns))])
-    for i, r0 in enumerate(rings):
-        r1 = rings[(i + 1) % len(rings)]
-        for j in range(ns): bm.faces.new((r0[j], r1[j], r1[(j + 1) % ns], r0[(j + 1) % ns]))
-    ob = link('led_spill', bm, 'led_spill'); ob.rotation_euler = (0, 0, BASE_ROT); ob.visible_camera = False; ob.visible_shadow = False
-    return ob
+    A row of tiny point lights hugging the footprint (lights, not meshes: a thin emitter here left a band on the base's sides),
+    a little stronger at the middle of each side, nearer the round strip. strength = radiance of the source they stand for."""
+    a, t, z0, step = W / 2 + 0.0016, 0.0016, 0.012, 0.005
+    n_ = int(round(2 * a / step)); c, sn = math.cos(BASE_ROT), math.sin(BASE_ROT); obs = []
+    for side in range(4):
+        for i in range(n_):
+            u = -a + (i + 0.5) * step; x, y = {0: (u, -a), 1: (a, u), 2: (-u, a), 3: (-a, -u)}[side]
+            P = 4 * math.pi * strength * 2 * t * step * math.exp(-(math.hypot(x, y) - W / 2) / 0.03)
+            ld = bpy.data.lights.new(f'spill{side}_{i}', 'POINT'); ld.color = color[:3]; ld.energy = P; ld.shadow_soft_size = 0.005
+            o = bpy.data.objects.new(ld.name, ld); col.objects.link(o); o.location = (x * c - y * sn, x * sn + y * c, z0); o.visible_camera = False; obs.append(o)
+    return obs
 
 def only_on_the_wood(*obs):
     """Light linking: the strip lights the nightstand's top and nothing else, so its grazing rays draw no line across the room."""
@@ -283,7 +271,7 @@ def bedroom_scene(n):
     b_ = build_base(with_time=bool(t), time=t or '06:30'); b_.rotation_euler = (0, 0, BASE_ROT)
     build_shell(); build_window(shut); build_curtains(); build_stand(); build_bed(n); build_lamp(lamp)
     if shut > 0: build_outside(n)
-    if ring: only_on_the_wood(bpy.data.objects['ring'], led_spill(srgb(ring), LED_SPILL[n]))
+    if ring: only_on_the_wood(bpy.data.objects['ring'], *led_spill(srgb(ring), LED_SPILL[n]))
     build_arm(n)
     set_sky(sky)
     x0, x1, z0, z1 = WIN
