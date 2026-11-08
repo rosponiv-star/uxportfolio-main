@@ -1334,6 +1334,8 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-08 · LOCAL (105)** · Last mark at the loop's joint removed: the fused body + loop gets a voxel Remesh (0.12 mm)
+  and a Smooth modifier in `build_bracelet`, so it is one continuous surface and Freestyle draws no step. PDF rebuilt.
 - **2026-11-08 · LOCAL (104)** · Owner's corrections on (103). `explode-real.jpg` restored byte for byte (the re-render was
   lower quality; it still shows the pins at the old pitch: leave it, do not re-render). Body now bulges past the strap on
   BOTH sides, just to the loop's level (1.6–1.7 mm); both arms of the U alike, cross bar broader (it read as a thin line in

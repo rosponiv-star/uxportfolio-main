@@ -900,6 +900,8 @@ def dock(br):
 def build_bracelet(z0=0.0):
     strip, loop, pods = build_strip(), build_loop(), build_pod()
     u = pods[0].modifiers.new('one', 'BOOLEAN'); u.operation = 'UNION'; u.object = loop; loop.hide_render = True   # loop and body: one piece, no line where they meet
+    v = pods[0].modifiers.new('skin', 'REMESH'); v.mode = 'VOXEL'; v.voxel_size = 0.00012; v.use_smooth_shade = True   # one continuous surface: no step at the joint
+    sm = pods[0].modifiers.new('calm', 'SMOOTH'); sm.factor = 0.6; sm.iterations = 12                                   # no voxel noise in the drawn lines
     parts = [strip, loop] + pods
     g = group('bracelet', parts); g.location.z = z0; g.rotation_euler = (0, 0, AP)
     return g
