@@ -12,9 +12,28 @@ matches the Blender model (line drawings, system, gestures, room scenes, explode
 - Charging: the bracelet lies on the base closed, as a ring standing on its lower edge. A small graphite foot leaves
   the module and sticks out just below the strap's lower edge (as in v2); 3 gold pads, 4 mm apart, on its underside,
   sit on the base's 3 gold pins (a row parallel to the front). Two magnets in the base pull it onto the pins.
-- Module about 36 × 19 × 6 mm. It does not vibrate. No screen, buttons, lights, logo.
+- Module about 34 × 12.5 × 3 mm, the strap itself rising around it. It does not vibrate. No screen, buttons, lights, logo.
 
 ---
+
+## 0. Current method (2026-11-08): Blender render as the shape, Nano Banana for the photo
+
+The chain below let the model invent the shape (pads in the wrong place, a chip on the fabric, a fake closure). Blender
+gets the parts right but looks fake. So: one Nano Banana Pro node per shot, with the render as the FIRST image and
+`bracelet-weavy-v2.jpg` as the SECOND. Guides in `Media/05-AuraWake/Weavy/`: `guide-outside.jpg`, `guide-under.jpg`.
+Settings: 4K, 4:3. The Figma/Weave connector in Claude Code is out of free runs: run it in the Weavy app.
+
+**Prompt, `guide-outside.jpg`** (save as `B1-outside.png`)
+
+```
+Turn the FIRST image into a real studio product photograph of the same bracelet. The first image is a 3D render that fixes the layout: keep exactly the same camera angle, framing, proportions, the position of the black loop and the position of the fold. Do not add, remove or move any part. Do not show any sensor, module or electronics: from this side only the fabric and the loop are visible. The render looks rigid and fake, so make it a real soft object: the woven strap relaxes a little, with a gentle, slightly irregular curve instead of a perfect oval, soft rounded corded edges, real fabric thickness, and natural tension where it passes through the loop and folds back on itself, closing with hook-and-loop. Copy the material exactly from the SECOND image: the same chunky woven nylon, light-blue melange with white heathered threads, same corded edges, and the same flat black satin-steel loop. Use the second image only for material, never for its shape or its visible sensor. Pure white seamless background, soft studio light from the top left, one very soft contact shadow, sharp focus, true colours, photorealistic. No logo, no text.
+```
+
+**Prompt, `guide-under.jpg`** (save as `B2-under.png`)
+
+```
+Turn the FIRST image into a real studio product photograph of the same bracelet. The first image is a 3D render that fixes the layout: keep exactly the same camera angle, framing, proportions, the position of the black loop and the position of the fold. Do not add, remove or move any part. From this low angle the only hardware besides the loop is the small flat graphite charging foot under the strap, with exactly three small round gold contact pads in a row, exactly where they are in the first image: keep it, same size, same place. Do not show any sensor window or other electronics. The render looks rigid and fake, so make it a real soft object: the woven strap relaxes a little, with a gentle, slightly irregular curve instead of a perfect oval, soft rounded corded edges, real fabric thickness, and natural tension where it passes through the loop and folds back on itself, closing with hook-and-loop. Copy the material exactly from the SECOND image: the same chunky woven nylon, light-blue melange with white heathered threads, same corded edges, and the same flat black satin-steel loop. Use the second image only for material, never for its shape or its visible sensor. Pure white seamless background, soft studio light from the top left, one very soft contact shadow, sharp focus, true colours, photorealistic. No logo, no text.
+```
 
 ## 1. How the chain works
 

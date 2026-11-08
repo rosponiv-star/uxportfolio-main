@@ -1337,6 +1337,13 @@ When a CLOUD session hits something that needs the local environment, it must:
 - **2026-11-08 · LOCAL (100)** · AuraWake cover: Role back to "Interaction and Product Designer" (owner), replacing "Concept,
   interaction and app; then product and engineering" of LOCAL (89). Type and "2024 · detailed in 2026" unchanged. Only deck/index.html
   changed; deck/out/ NOT rebuilt on purpose: **the AuraWake session's next `node deck/build.mjs` carries it into the PDF.**
+- **2026-11-08 · LOCAL (100)** · Bracelet in `deck/blender/aura.py`: module 34 × 12.5 × 3 mm next to the loop, the strip
+  itself rises around it and rolls over its edge (no separate patch: owner rejected it), L-shaped foot with 3 gold pads
+  underneath on the base pins (`dock()`), finer heathered weave; views hero, wrist, pads, dock, outside, under (4:3).
+  Owner's verdict: the parts are right but the shape reads rigid and fake; Blender from script does not reach photo
+  realism (told him plainly). Blender stays for line drawings. Photos: render as the shape + `bracelet-weavy-v2.jpg` as
+  material in Nano Banana Pro, guides and prompts in `notes/05-aurawake-weavy-bracelet.md` §0. The Figma/Weave connector
+  answers "used your 2 free Weave model runs" even at 23 credits approved: the owner runs it in the Weavy app.
 - **2026-11-07 · LOCAL (99)** · Weavy guide rebuilt as a node chain (owner asked): per shot NB1 generate → LLM check →
   NB2 fix structure → check → NB3 fix foot and pads → check → NB4 fix finish → LLM final report; SPEC S1–S10, CHECK
   C1–C12 (+C13–14 for B4), texts and wiring in `notes/05-aurawake-weavy-bracelet.md`.
