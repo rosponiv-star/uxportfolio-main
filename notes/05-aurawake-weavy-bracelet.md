@@ -35,6 +35,49 @@ Turn the FIRST image into a real studio product photograph of the same bracelet.
 Turn the FIRST image into a real studio product photograph of the same bracelet. The first image is a 3D render that fixes the layout: keep exactly the same camera angle, framing, proportions, the position of the black loop and the position of the fold. Do not add, remove or move any part. From this low angle the only hardware besides the loop is the small flat graphite charging foot under the strap, with exactly three small round gold contact pads in a row, exactly where they are in the first image: keep it, same size, same place. Do not show any sensor window or other electronics. The render looks rigid and fake, so make it a real soft object: the woven strap relaxes a little, with a gentle, slightly irregular curve instead of a perfect oval, soft rounded corded edges, real fabric thickness, and natural tension where it passes through the loop and folds back on itself, closing with hook-and-loop. Copy the material exactly from the SECOND image: the same chunky woven nylon, light-blue melange with white heathered threads, same corded edges, and the same flat black satin-steel loop. Use the second image only for material, never for its shape or its visible sensor. Pure white seamless background, soft studio light from the top left, one very soft contact shadow, sharp focus, true colours, photorealistic. No logo, no text.
 ```
 
+### Closure fix (2026-11-08)
+
+First result from `guide-outside.jpg`: fabric and soft shape are right, but the loop was a black frame laid on the
+fabric, with a stray strap end at the upper right. Fix as an edit of that result: FIRST image = the result, SECOND =
+`Media/05-AuraWake/Weavy/ref-loop-rotated.jpg` (the loop of v2, cropped and turned to the same orientation).
+
+```
+EDIT the FIRST image. Change ONLY the closure area: the black loop, the right end of the fabric flap, and the stray fabric tab at the upper right of the ring. Everything else stays identical: camera, framing, ring shape, fabric, colour, white background, shadow.
+
+The SECOND image is a close-up of the CORRECT closure, seen from the same side and in the same orientation: free flap to the left, visible metal bar to the right. Reproduce its construction exactly, scaled to this bracelet.
+
+THE TWO OBJECTS
+A. THE STRAP: one single continuous woven ribbon, 19 mm wide, about 1.5 mm thick, with two long corded edges. It has exactly ONE visible free end.
+B. THE LOOP: one single rigid rectangular metal ring, flat black satin steel, rounded corners. It has four sides and one opening: a RIGHT BAR, a LEFT BAR, a TOP ARM, a BOTTOM ARM, and one rectangular SLOT in the middle. The slot is about 21 mm tall, only 1 mm taller than the strap on each side, and about 6 mm wide. The bars are about 3 mm wide and 2 mm thick. The loop is only slightly taller than the strap.
+
+THE PATH OF THE STRAP, followed like a wire, in this exact order:
+1. The strap's fixed end is hidden, anchored on the wrist side behind the RIGHT BAR.
+2. From there it comes out from behind the RIGHT BAR and runs to the right, around the back of the ring, one full lap, and returns to the front from the left. This is the INNER LAYER.
+3. The inner layer runs rightwards towards the loop.
+4. It passes UNDER the LEFT BAR, on the wrist side of it.
+5. It comes up THROUGH THE SLOT, from the inside of the ring to the outside.
+6. It makes a tight 180-degree U-turn AROUND the LEFT BAR. The LEFT BAR is now INSIDE the fold, completely wrapped by the fabric.
+7. It runs back to the left, lying flat on top of the inner layer. This is the FLAP. It ends in the one free end, exactly where the flap ends now.
+
+WHAT THE CAMERA MUST SEE, from left to right across the closure:
+- The flap's surface runs right, towards the loop.
+- The flap's right end is NOT a cut edge and NOT a flat panel going under a frame: it is a soft, thick, rounded fold, two layers of fabric bending around a hidden bar, curving away into the slot.
+- The LEFT BAR is INVISIBLE, entirely hidden inside that fold. There is NO black metal on top of the flap.
+- Then a narrow dark shadow gap, about 1.5 mm, inside the slot, between the rounded fold and the RIGHT BAR.
+- Then the RIGHT BAR, the only complete vertical metal bar visible, standing in front.
+- To the right of the RIGHT BAR the strap emerges from behind it and continues as a single layer.
+- The TOP ARM and the BOTTOM ARM are visible only as short pieces, just above and just below the strap's edges: each starts at an end of the RIGHT BAR, runs left, and disappears behind the fold.
+- Along the flap's top edge a thin sliver of the inner layer shows just behind it, proving there are two layers.
+
+REMOVE COMPLETELY:
+- The closed black rectangular frame lying flat over the fabric, and above all its left vertical bar across the flap.
+- The fabric tab sticking out at the upper right of the ring: there the strap is one smooth continuous layer, with no end, no step and no overlap.
+
+DO NOT: draw the loop as an outline placed on top of the fabric; show the same fabric continuing flat through the slot; add a second free end, a second loop, a buckle, stitching patches or a logo; make the loop thicker, larger or glossier than in the second image.
+
+Check before finishing: exactly one strap, exactly one free end, exactly one loop, only one complete vertical bar visible, and the fabric visibly goes through the slot and bends around the hidden bar.
+```
+
 ## 1. How the chain works
 
 For each shot, four rounds. Each round = an image model draws or corrects, then a vision LLM inspects the result

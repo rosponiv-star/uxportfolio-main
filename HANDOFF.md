@@ -1334,6 +1334,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-08 · LOCAL (101)** · First render-guided Nano Banana result: fabric and soft shape right, closure wrong (a
+  black frame laid on the fabric, a stray strap end). Correction prompt with the strap's path step by step, plus
+  `ref-loop-rotated.jpg` (v2's loop turned to the same orientation), in the Weavy guide §0.
 - **2026-11-08 · LOCAL (100)** · AuraWake cover: Role back to "Interaction and Product Designer" (owner), replacing "Concept,
   interaction and app; then product and engineering" of LOCAL (89). Type and "2024 · detailed in 2026" unchanged. Only deck/index.html
   changed; deck/out/ NOT rebuilt on purpose: **the AuraWake session's next `node deck/build.mjs` carries it into the PDF.**
