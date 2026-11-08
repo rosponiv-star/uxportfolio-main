@@ -18,6 +18,8 @@ ROOM = {   # time, lamp (share of 14 W, kelvin), ring colour or None, shutter op
     4: ('06:14', (0.13, 2800), DAWN, 0.20, 1.2, 1.0),
     5: ('06:20', (0.62, 4400), DAWN, 0.65, 0.85, 2.4),
 }
+LED_W = {1: 20000.0, 4: 16000.0, 5: 30000.0}          # emission of the strip under the base: the bright contact line
+LED_SPILL = {1: 11.0, 4: 9.0, 5: 18.0}                # emission of the light that leaves the gap all along the base's edge: the soft halo
 TEX = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'polyhaven_tex')
 FLOOR_Z, CEIL_Z, WALL_Y = -0.50, 2.20, 0.39
 BASE_ROT = math.radians(-38)                     # the base turned to the bed (owner, 2026-11-08): the time faces the pillow and the camera at about the same angle
@@ -77,29 +79,36 @@ def mat_room():
     sk.inputs['Subsurface Weight'].default_value = 0.35; sk.inputs['Subsurface Radius'].default_value = (0.012, 0.005, 0.003)
     MATS['skin'] = skin
 
-def ring_glow(m, color, strength):
-    """The light ring under the base, thrown on the wood: emission that follows the wood's colour and fades from the base's edge."""
-    nt = m.node_tree; b = nt.nodes['Principled BSDF']; out = nt.nodes['Material Output']
-    def op(o, a, c=None):
-        n = nt.nodes.new('ShaderNodeMath'); n.operation = o
-        for i, x in enumerate((a, c)):
-            if x is None: continue
-            if isinstance(x, (int, float)): n.inputs[i].default_value = x
-            else: nt.links.new(x, n.inputs[i])
-        return n.outputs[0]
-    tc = nt.nodes.new('ShaderNodeTexCoord'); P = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], P.inputs[0])
-    X, Y = op('ADD', P.outputs[0], 0.02), op('ADD', P.outputs[1], 0.03)                                # the base sits at (-0.02, -0.03) in the top's own space
-    c, sn = math.cos(BASE_ROT), math.sin(BASE_ROT)
-    U, V = op('ADD', op('MULTIPLY', X, c), op('MULTIPLY', Y, sn)), op('SUBTRACT', op('MULTIPLY', Y, c), op('MULTIPLY', X, sn))   # into the base's own axes
-    qx = op('MAXIMUM', op('SUBTRACT', op('ABSOLUTE', U), 0.06), 0.0)
-    qy = op('MAXIMUM', op('SUBTRACT', op('ABSOLUTE', V), 0.06), 0.0)
-    d = op('SQRT', op('ADD', op('POWER', qx, 2.0), op('POWER', qy, 2.0)))
-    fall = op('EXPONENT', op('MULTIPLY', d, -1 / 0.028))
-    diff = next(n for n in nt.nodes if n.type == 'TEX_IMAGE' and 'diff' in n.image.filepath)
-    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 0.45
-    nt.links.new(diff.outputs[0], mx.inputs[7]); mx.inputs[6].default_value = color      # mostly the ring's colour, a little of the wood's
-    em = nt.nodes.new('ShaderNodeEmission'); nt.links.new(mx.outputs[2], em.inputs[0]); nt.links.new(op('MULTIPLY', fall, strength), em.inputs[1])
-    ad = nt.nodes.new('ShaderNodeAddShader'); nt.links.new(b.outputs[0], ad.inputs[0]); nt.links.new(em.outputs[0], ad.inputs[1]); nt.links.new(ad.outputs[0], out.inputs[0])
+def led_spill(color, strength):
+    """The light that leaves the 2 mm gap: the strip fills the gap with bounced light and it spills out all along the base's edge.
+    A thin source hugging the footprint, unseen by the camera, a little stronger at the middle of each side, nearer the round strip."""
+    a, rc, t, z0 = W / 2 + 0.0016, EDGE_P + 0.0016, 0.0016, 0.0065
+    m = emit('led_spill', color, strength); nt = m.node_tree; e = next(n for n in nt.nodes if n.type == 'EMISSION')
+    tc = nt.nodes.new('ShaderNodeTexCoord'); sp = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], sp.inputs[0])
+    cb = nt.nodes.new('ShaderNodeCombineXYZ'); nt.links.new(sp.outputs[0], cb.inputs[0]); nt.links.new(sp.outputs[1], cb.inputs[1])
+    ln = nt.nodes.new('ShaderNodeVectorMath'); ln.operation = 'LENGTH'; nt.links.new(cb.outputs[0], ln.inputs[0])
+    d = nt.nodes.new('ShaderNodeMath'); d.operation = 'SUBTRACT'; nt.links.new(ln.outputs['Value'], d.inputs[0]); d.inputs[1].default_value = W / 2
+    k = nt.nodes.new('ShaderNodeMath'); k.operation = 'MULTIPLY'; nt.links.new(d.outputs[0], k.inputs[0]); k.inputs[1].default_value = -1 / 0.03
+    x = nt.nodes.new('ShaderNodeMath'); x.operation = 'EXPONENT'; nt.links.new(k.outputs[0], x.inputs[0])
+    f = nt.nodes.new('ShaderNodeMath'); f.operation = 'MULTIPLY'; nt.links.new(x.outputs[0], f.inputs[0]); f.inputs[1].default_value = strength; nt.links.new(f.outputs[0], e.inputs['Strength'])
+    MATS['led_spill'] = m
+    pts = []
+    for (sx, sy, a0) in ((1, 1, 0), (-1, 1, 90), (-1, -1, 180), (1, -1, 270)):
+        for i in range(13):
+            th = math.radians(a0 + 90 * i / 12); pts.append((sx * (a - rc) + rc * math.cos(th), sy * (a - rc) + rc * math.sin(th), math.cos(th), math.sin(th)))
+    bm = bmesh.new(); rings = []; ns = 8
+    for x_, y_, nx, ny in pts:
+        rings.append([bm.verts.new((x_ + t * math.cos(b) * nx, y_ + t * math.cos(b) * ny, z0 + t * math.sin(b))) for b in (2 * math.pi * j / ns for j in range(ns))])
+    for i, r0 in enumerate(rings):
+        r1 = rings[(i + 1) % len(rings)]
+        for j in range(ns): bm.faces.new((r0[j], r1[j], r1[(j + 1) % ns], r0[(j + 1) % ns]))
+    ob = link('led_spill', bm, 'led_spill'); ob.rotation_euler = (0, 0, BASE_ROT); ob.visible_camera = False; ob.visible_shadow = False
+    return ob
+
+def only_on_the_wood(*obs):
+    """Light linking: the strip lights the nightstand's top and nothing else, so its grazing rays draw no line across the room."""
+    c = bpy.data.collections.new('led_receivers'); c.objects.link(bpy.data.objects['stand_top'])
+    for ob in obs: ob.light_linking.receiver_collection = c
 
 def box(name, x0, x1, y0, y1, z0, z1, mat, r=0.0, e=0.0, sp=1, se=1):
     return rbox(name, x1 - x0, y1 - y0, z1 - z0, r, e, mat, ((x0 + x1) / 2, (y0 + y1) / 2, z0), sp=sp, se=se)
@@ -150,7 +159,7 @@ def build_curtains():
 def build_stand():
     """Oak nightstand with one drawer, 460 × 380 × 500 mm, on four short legs."""
     cx, cy, w, d = 0.02, 0.03, 0.46, 0.38
-    box('stand_top', cx - w / 2, cx + w / 2, cy - d / 2, cy + d / 2, -0.028, 0.0, 'oak_top', r=0.004, e=0.0025, sp=4, se=3)
+    box('stand_top', cx - w / 2, cx + w / 2, cy - d / 2, cy + d / 2, -0.028, 0.0, 'oak', r=0.004, e=0.0025, sp=4, se=3)
     box('stand_body', cx - w / 2 + 0.008, cx + w / 2 - 0.008, cy - d / 2 + 0.012, cy + d / 2 - 0.006, -0.40, -0.028, 'oak', r=0.002, e=0.001, sp=2, se=1)
     fy = cy - d / 2 + 0.012
     box('drawer_gap', cx - w / 2 + 0.018, cx + w / 2 - 0.018, fy - 0.001, fy, -0.225, -0.042, 'cavity')
@@ -268,15 +277,13 @@ def build_arm(n):
 def bedroom_scene(n):
     t, lamp, ring, shut, expo, sky = ROOM[n]
     mat_room()
-    MATS['led_under'] = emit('led_under', srgb(ring), 500.0) if ring else principled('led_under', srgb('#141416'), rough=0.6)
+    # the light strip is the only source of the halo (owner, 2026-11-08: real light, no glow painted on the wood): it leaves the 2 mm gap at a grazing angle, so it tints the wood and fades fast
+    MATS['led_under'] = emit('led_under', srgb(ring), LED_W[n]) if ring else principled('led_under', srgb('#141416'), rough=0.6)
     MATS['dots'] = emit('dots', srgb('#ffd9a0'), 2.5 if n == 3 else 6.0)
-    MATS['oak_top'] = MATS['oak']
-    if ring:
-        MATS['oak_top'] = pbr('oak_top', 'oak_veneer_01', 0.75, rot=math.pi / 2, bump=0.08, rough=0.8)
-        ring_glow(MATS['oak_top'], srgb(ring), {1: 3.2, 4: 2.1, 5: 4.8}[n])
     b_ = build_base(with_time=bool(t), time=t or '06:30'); b_.rotation_euler = (0, 0, BASE_ROT)
     build_shell(); build_window(shut); build_curtains(); build_stand(); build_bed(n); build_lamp(lamp)
     if shut > 0: build_outside(n)
+    if ring: only_on_the_wood(bpy.data.objects['ring'], led_spill(srgb(ring), LED_SPILL[n]))
     build_arm(n)
     set_sky(sky)
     x0, x1, z0, z1 = WIN
