@@ -4,19 +4,19 @@
 #   1 22:00 take the bracelet: lamp 2200 K 40 %, violet ring, shutters closing, night outside, the bed still empty
 #   2 22:40 asleep: everything off, shutters closed
 #   3 03:12 awake for a moment: the time on, dim and warm
-#   4 06:14 the wake-up: lamp ~28 % 2800 K, shutters 20 %, amber ring
-#   5 06:16 a palm on the base: lamp ~50 % 3800 K, shutters 36 %
+#   4 06:14 the wake-up: lamp low (owner: less strong than the spec's ramp) 2800 K, shutters 20 %, amber ring
+#   5 06:20 a palm on the base: lamp ~62 % 4400 K, shutters 65 % (owner: a little later and brighter)
 # Loaded by aura.py (exec) in real mode: shots room1 … room5. Base at the origin, the nightstand top at z = 0.
 # Materials: Poly Haven CC0 in deck/blender/assets/polyhaven_tex (git-ignored).
 import random
 from mathutils import noise
 FRAME = int(SHOT[4]) if SHOT.startswith('room') and SHOT[4:].isdigit() else 0
 ROOM = {   # time, lamp (share of 14 W, kelvin), ring colour or None, shutter open 0–1, exposure, sky: 'night' or sun elevation in degrees
-    1: ('22:00', (0.40, 2200), NIGHT, 0.55, 0.9, 'night'),
-    2: ('', (0.0, 2200), None, 0.0, 2.6, 'night'),
-    3: ('03:12', (0.0, 1800), None, 0.0, 2.6, 'night'),
-    4: ('06:14', (0.28, 2800), DAWN, 0.20, 1.0, 1.0),
-    5: ('06:16', (0.50, 3800), DAWN, 0.36, 0.5, 1.4),
+    1: ('22:00', (0.40, 2200), NIGHT, 0.55, 0.65, 'night'),
+    2: ('', (0.0, 2200), None, 0.0, 1.6, 'night'),
+    3: ('03:12', (0.0, 1800), None, 0.0, 1.6, 'night'),
+    4: ('06:14', (0.13, 2800), DAWN, 0.20, 1.2, 1.0),
+    5: ('06:20', (0.62, 4400), DAWN, 0.65, 0.85, 2.4),
 }
 TEX = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'polyhaven_tex')
 FLOOR_Z, CEIL_Z, WALL_Y = -0.50, 2.20, 0.39
@@ -65,7 +65,7 @@ def mat_room():
     # glass: light passes, a faint reflection stays
     g = bpy.data.materials.new('glass'); g.use_nodes = True; nt = g.node_tree; out = nt.nodes['Material Output']
     nt.nodes.remove(nt.nodes['Principled BSDF']); tr = nt.nodes.new('ShaderNodeBsdfTransparent'); gl = nt.nodes.new('ShaderNodeBsdfGlossy')
-    gl.inputs['Roughness'].default_value = 0.02; mx = nt.nodes.new('ShaderNodeMixShader'); mx.inputs[0].default_value = 0.025
+    gl.inputs['Roughness'].default_value = 0.02; mx = nt.nodes.new('ShaderNodeMixShader'); mx.inputs[0].default_value = 0.017
     nt.links.new(tr.outputs[0], mx.inputs[1]); nt.links.new(gl.outputs[0], mx.inputs[2]); nt.links.new(mx.outputs[0], out.inputs[0]); MATS['glass'] = g
     # the lamp's shade: fabric that lets the light through
     s = bpy.data.materials.new('shade'); s.use_nodes = True; nt = s.node_tree; out = nt.nodes['Material Output']; p = nt.nodes['Principled BSDF']
@@ -75,6 +75,27 @@ def mat_room():
     skin = principled('skin', srgb('#d8a689'), rough=0.5); sk = skin.node_tree.nodes['Principled BSDF']
     sk.inputs['Subsurface Weight'].default_value = 0.35; sk.inputs['Subsurface Radius'].default_value = (0.012, 0.005, 0.003)
     MATS['skin'] = skin
+
+def ring_glow(m, color, strength):
+    """The light ring under the base, thrown on the wood: emission that follows the wood's colour and fades from the base's edge."""
+    nt = m.node_tree; b = nt.nodes['Principled BSDF']; out = nt.nodes['Material Output']
+    def op(o, a, c=None):
+        n = nt.nodes.new('ShaderNodeMath'); n.operation = o
+        for i, x in enumerate((a, c)):
+            if x is None: continue
+            if isinstance(x, (int, float)): n.inputs[i].default_value = x
+            else: nt.links.new(x, n.inputs[i])
+        return n.outputs[0]
+    tc = nt.nodes.new('ShaderNodeTexCoord'); P = nt.nodes.new('ShaderNodeSeparateXYZ'); nt.links.new(tc.outputs['Object'], P.inputs[0])
+    qx = op('MAXIMUM', op('SUBTRACT', op('ABSOLUTE', op('ADD', P.outputs[0], 0.02)), 0.06), 0.0)      # the base sits at (-0.02, -0.03) in the top's own space
+    qy = op('MAXIMUM', op('SUBTRACT', op('ABSOLUTE', op('ADD', P.outputs[1], 0.03)), 0.06), 0.0)
+    d = op('SQRT', op('ADD', op('POWER', qx, 2.0), op('POWER', qy, 2.0)))
+    fall = op('EXPONENT', op('MULTIPLY', d, -1 / 0.028))
+    diff = next(n for n in nt.nodes if n.type == 'TEX_IMAGE' and 'diff' in n.image.filepath)
+    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 0.45
+    nt.links.new(diff.outputs[0], mx.inputs[7]); mx.inputs[6].default_value = color      # mostly the ring's colour, a little of the wood's
+    em = nt.nodes.new('ShaderNodeEmission'); nt.links.new(mx.outputs[2], em.inputs[0]); nt.links.new(op('MULTIPLY', fall, strength), em.inputs[1])
+    ad = nt.nodes.new('ShaderNodeAddShader'); nt.links.new(b.outputs[0], ad.inputs[0]); nt.links.new(em.outputs[0], ad.inputs[1]); nt.links.new(ad.outputs[0], out.inputs[0])
 
 def box(name, x0, x1, y0, y1, z0, z1, mat, r=0.0, e=0.0, sp=1, se=1):
     return rbox(name, x1 - x0, y1 - y0, z1 - z0, r, e, mat, ((x0 + x1) / 2, (y0 + y1) / 2, z0), sp=sp, se=se)
@@ -125,7 +146,7 @@ def build_curtains():
 def build_stand():
     """Oak nightstand with one drawer, 460 × 380 × 500 mm, on four short legs."""
     cx, cy, w, d = 0.02, 0.03, 0.46, 0.38
-    box('stand_top', cx - w / 2, cx + w / 2, cy - d / 2, cy + d / 2, -0.028, 0.0, 'oak', r=0.004, e=0.0025, sp=4, se=3)
+    box('stand_top', cx - w / 2, cx + w / 2, cy - d / 2, cy + d / 2, -0.028, 0.0, 'oak_top', r=0.004, e=0.0025, sp=4, se=3)
     box('stand_body', cx - w / 2 + 0.008, cx + w / 2 - 0.008, cy - d / 2 + 0.012, cy + d / 2 - 0.006, -0.40, -0.028, 'oak', r=0.002, e=0.001, sp=2, se=1)
     fy = cy - d / 2 + 0.012
     box('drawer_gap', cx - w / 2 + 0.018, cx + w / 2 - 0.018, fy - 0.001, fy, -0.225, -0.042, 'cavity')
@@ -144,7 +165,13 @@ def build_bed(n):
     rbox('headboard', 1.7, 0.08, 0.95, 0.03, 0.02, 'linen2', (-1.12, 0.33, FLOOR_Z), sp=6, se=3)
     rbox('mattress', 1.6, 2.0, 0.24, 0.04, 0.03, 'linen', (-1.12, -0.72, -0.24), sp=6, se=4)
     rbox('duvet', 1.66, 1.55, 0.06, 0.08, 0.03, 'linen', (-1.12, -0.95, -0.01), sp=8, se=4)
-    rbox('pillow', 0.62, 0.40, 0.13, 0.08, 0.05, 'linen', (-0.62, 0.085, 0.0), sp=8, se=5)
+    for k, (px, ry) in enumerate(((-0.86, 0.03), (-1.50, -0.04))):       # soft pillows, clear of the arm that reaches the nightstand
+        bm = bmesh.new(); bmesh.ops.create_uvsphere(bm, u_segments=96, v_segments=64, radius=1.0)
+        for v in bm.verts:
+            x, y, z = v.co; sx = lambda a: math.copysign(abs(a) ** 0.55, a)
+            q = Vector((sx(x) * 0.36, sx(y) * 0.20, z * 0.085)); w = noise.fractal(Vector((x, y, z)) * 2.2 + Vector((k * 3.1, 0, 0)), 1.0, 2.0, 3)
+            v.co = q * (1 + 0.05 * w)
+        ob = link(f'pillow{k}', bm, 'linen'); ob.location = (px, 0.08, BED_TOP + 0.085); ob.rotation_euler = (math.radians(10), ry * 0.5, 0)
 
 def build_lamp(kw):
     """A table lamp on the nightstand: the smart bulb in a fabric drum (it fits a ceiling light as well)."""
@@ -226,7 +253,7 @@ def build_arm(n):
         Rb = Matrix((xv, yv, zv)).transposed(); br = build_bracelet()
         br.matrix_world = Matrix.Translation(mid - Rb @ Vector((STRAP_XF, 0, STRAP_LIFT + STRAP_H - 0.004))) @ Rb.to_4x4()
     elif n == 5:                                           # 06:16: from under the duvet, the palm on the base, the bracelet on the wrist
-        F = Vector((1, 0.25, 0.06)).normalized(); R = basis(F, Vector((0, 0, 1)).cross(F))
+        F = Vector((1, 0.36, 0.03)).normalized(); R = basis(F, Vector((0, 0, 1)).cross(F))
         L_ = Vector(HAND_TIPS['palm']['index']).x; wrist = Vector((0.05 - L_, -0.01, TOP - palm_z('palm')))
         hand, _ = build_hand('palm', R, wrist); wrist.z += rest_on_top(hand); wear_bracelet(R, wrist); build_sleeve(R, wrist, 'palm', 0.12)
     else:                                                  # asleep: the forearm out of the covers on the duvet, the bracelet on the wrist
@@ -238,6 +265,10 @@ def bedroom_scene(n):
     mat_room()
     MATS['led_under'] = emit('led_under', srgb(ring), 500.0) if ring else principled('led_under', srgb('#141416'), rough=0.6)
     MATS['dots'] = emit('dots', srgb('#ffd9a0'), 2.5 if n == 3 else 6.0)
+    MATS['oak_top'] = MATS['oak']
+    if ring:
+        MATS['oak_top'] = pbr('oak_top', 'oak_veneer_01', 0.75, rot=math.pi / 2, bump=0.08, rough=0.8)
+        ring_glow(MATS['oak_top'], srgb(ring), {1: 3.2, 4: 2.1, 5: 4.8}[n])
     build_base(with_time=bool(t), time=t or '06:30')
     build_shell(); build_window(shut); build_curtains(); build_stand(); build_bed(n); build_lamp(lamp)
     if shut > 0: build_outside(n)
@@ -249,6 +280,6 @@ def bedroom_scene(n):
         ld = bpy.data.lights.new('portal', 'AREA'); ld.shape = 'RECTANGLE'; ld.size = x1 - x0; ld.size_y = zt - z0; ld.cycles.is_portal = True
         o = bpy.data.objects.new('portal', ld); col.objects.link(o); o.location = ((x0 + x1) / 2, WALL_Y + 0.17, (z0 + zt) / 2); o.rotation_euler = (math.pi / 2, 0, 0)
     else:                                                  # shutters closed: only what the eye finds in the dark
-        area('dark', (-0.4, -1.4, 1.8), (0, 0, 0), 2.5, 2.4, (0.66, 0.73, 1.0))
+        area('dark', (-0.4, -1.4, 1.8), (0, 0, 0), 2.5, 1.8, (0.50, 0.60, 1.0))
     look((0.85, -1.30, 0.78), (-0.02, 0.06, 0.02), 52, 4.0)
     scene.view_settings.exposure = expo

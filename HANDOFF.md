@@ -1334,6 +1334,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-08 · LOCAL (107)** · Scenes, owner's corrections: 22:00 a little darker; 22:40 and 03:12 much darker and bluer;
+  06:14 lamp weaker (13 %, below the spec's ramp, by choice); last frame moved to 06:20 (lamp 62 % 4400 K, shutters 65 %,
+  sun 2.4°, brighter). Soft pillows, moved so the arm passes in front of them. The ring's light on the nightstand is now
+  evident: `ring_glow()` adds an emission on the stand's top that fades from the base's edge. Lamp's reflection in the
+  glass kept, weaker. NOTE: the night timeline (`p05-night`), gesture 03 and the spec still say 06:16 for the palm.
 - **2026-11-08 · LOCAL (106)** · Scenes slide re-rendered (owner: real room, real outside, light true to hour and source).
   `deck/blender/bedroom.py` rewritten: same camera position as before (lens 52), walls, floor, oak nightstand with one
   drawer, linen bed in the old squared shapes (owner preferred them to soft cloth), Poly Haven CC0 maps in
