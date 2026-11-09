@@ -178,8 +178,8 @@ def build_usb_cable():
     """The base's braided power cable (owner, 2026-11-09): out of the USB-C at the back, soft curves on the wood clear of the lamp, over the back edge to the floor."""
     c, sn = math.cos(BASE_ROT), math.sin(BASE_ROT); L = lambda x, y, z: (x * c - y * sn, x * sn + y * c, z)
     boot = rbox('boot', 0.011, 0.016, 0.0062, 0.0005, 0.0003, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=4, se=2); group('boot_g', [boot]).rotation_euler = (0, 0, BASE_ROT)
-    curve('usb', [L(0, W / 2 + 0.015, MID), L(0, W / 2 + 0.045, MID - 0.004), L(-0.004, W / 2 + 0.08, 0.0032), (0.078, 0.158, 0.0026), (0.02, 0.196, 0.0026), (-0.07, 0.168, 0.0026),
-                  (-0.145, 0.170, 0.0026), (-0.172, 0.205, 0.0025), (-0.176, 0.2255, 0.0008), (-0.178, 0.233, -0.014), (-0.182, 0.24, -0.06), (-0.19, 0.26, -0.28), (-0.21, 0.31, -0.492), (-0.30, 0.33, -0.4925)], 0.0021, 'cable')
+    curve('usb', [L(0, W / 2 + 0.015, MID), L(0, W / 2 + 0.045, MID - 0.004), L(-0.004, W / 2 + 0.08, 0.0032), (0.078, 0.158, 0.0026), (0.066, 0.196, 0.0026), (0.05, 0.2145, 0.0025), (0.044, 0.2255, 0.0008),
+                  (0.041, 0.233, -0.014), (0.037, 0.24, -0.06), (0.024, 0.26, -0.28), (-0.006, 0.31, -0.492), (-0.096, 0.33, -0.4925)], 0.0021, 'cable')
 
 def build_lamp(kw):
     """A table lamp on the nightstand: the smart bulb in a fabric drum (it fits a ceiling light as well)."""
