@@ -178,8 +178,13 @@ def build_usb_cable():
     """The base's braided power cable (owner, 2026-11-09): out of the USB-C at the back, soft curves on the wood clear of the lamp, over the back edge to the floor."""
     c, sn = math.cos(BASE_ROT), math.sin(BASE_ROT); L = lambda x, y, z: (x * c - y * sn, x * sn + y * c, z)
     boot = rbox('boot', 0.011, 0.016, 0.0062, 0.0005, 0.0003, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=4, se=2); group('boot_g', [boot]).rotation_euler = (0, 0, BASE_ROT)
-    curve('usb', [L(0, W / 2 + 0.015, MID), L(0, W / 2 + 0.045, MID - 0.004), (0.079, 0.113, 0.0045), (0.0855, 0.150, 0.0026), (0.079, 0.190, 0.0026), (0.0725, 0.2135, 0.0026), (0.0695, 0.2222, -0.0005),
-                  (0.068, 0.2242, -0.012), (0.066, 0.227, -0.06), (0.05, 0.26, -0.28), (0.01, 0.31, -0.492), (-0.08, 0.33, -0.4925)], 0.0021, 'cable')
+    # one circular arc (owner: "una curva continua"): tangent to the plug, it comes down to the wood in its first stretch and keeps the same curvature up to the back edge, clear of the lamp
+    sx, sy, _ = L(0, W / 2 + 0.015, MID); R_, h0 = 0.204, math.radians(90) + BASE_ROT; cx_, cy_ = sx + R_ * math.cos(h0 + math.pi / 2), sy + R_ * math.sin(h0 + math.pi / 2)
+    h1 = math.pi / 2 + math.asin((0.2135 - cy_) / R_); arc = lambda h: (cx_ + R_ * math.cos(h - math.pi / 2), cy_ + R_ * math.sin(h - math.pi / 2)); ease = lambda t: t * t * (3 - 2 * t)
+    pts = [(*arc(h0 + (h1 - h0) * i / 9), MID + (0.0026 - MID) * ease(min(1.0, i / 9 / 0.45))) for i in range(10)]
+    ex, ey = arc(h1); dx, dy = math.cos(h1), math.sin(h1)
+    pts += [(ex + dx * k, ey + dy * k, z) for k, z in ((0.0088, -0.0005), (0.0108, -0.012), (0.0138, -0.06))] + [(0.07, 0.26, -0.28), (0.03, 0.31, -0.492), (-0.06, 0.33, -0.4925)]
+    curve('usb', pts, 0.0021, 'cable')
 
 def build_lamp(kw):
     """A table lamp on the nightstand: the smart bulb in a fabric drum (it fits a ceiling light as well)."""

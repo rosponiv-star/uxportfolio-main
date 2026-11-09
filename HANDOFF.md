@@ -1335,7 +1335,8 @@ When a CLOUD session hits something that needs the local environment, it must:
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
 - **2026-11-09 · LOCAL (112)** · All five scenes: the base's braided power cable (`build_usb_cable` in bedroom.py), out of the USB-C at the back, soft
-  curve on the wood clear of the lamp, one wide arc over the back edge just behind the base to the floor (owner: no long detour to the left, "morbidissima").
+  one circular arc (radius 204 mm, computed) tangent to the plug, down to the wood in its first stretch, clear of the lamp, over the back edge just behind the base
+  to the floor (owner: no long detour to the left, "una curva continua").
 - **2026-11-09 · LOCAL (111)** · Scenes, owner's notes. 2, 3, 4: a new `relax` hand (`hand_mpfb.py -- relax` makes only that pose, palm and pinch untouched),
   soft fingers closed up, lying on the sheet inside the mattress edge (it stuck out over the edge before, `RELAX_X/Y/ROLL` in bedroom.py). 1: forearm almost
   level, someone sitting on the bed (it came down from above, as if standing on the bed). 5: LED softer (`LED_W` 18000, `LED_SPILL` 62).
