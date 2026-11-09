@@ -174,6 +174,13 @@ def build_bed(n):
             v.co = q * (1 + 0.05 * w)
         ob = link(f'pillow{k}', bm, 'linen'); ob.location = (px, 0.08, BED_TOP + 0.085); ob.rotation_euler = (math.radians(10), ry * 0.5, 0)
 
+def build_usb_cable():
+    """The base's braided power cable (owner, 2026-11-09): out of the USB-C at the back, soft curves on the wood clear of the lamp, over the back edge to the floor."""
+    c, sn = math.cos(BASE_ROT), math.sin(BASE_ROT); L = lambda x, y, z: (x * c - y * sn, x * sn + y * c, z)
+    boot = rbox('boot', 0.011, 0.016, 0.0062, 0.0005, 0.0003, 'plug', (0, W / 2 + 0.008, MID - 0.0031), sp=4, se=2); group('boot_g', [boot]).rotation_euler = (0, 0, BASE_ROT)
+    curve('usb', [L(0, W / 2 + 0.015, MID), L(0, W / 2 + 0.045, MID - 0.004), L(-0.004, W / 2 + 0.08, 0.0032), (0.078, 0.158, 0.0026), (0.02, 0.196, 0.0026), (-0.07, 0.168, 0.0026),
+                  (-0.145, 0.170, 0.0026), (-0.172, 0.205, 0.0025), (-0.176, 0.2255, 0.0008), (-0.178, 0.233, -0.014), (-0.182, 0.24, -0.06), (-0.19, 0.26, -0.28), (-0.21, 0.31, -0.492), (-0.30, 0.33, -0.4925)], 0.0021, 'cable')
+
 def build_lamp(kw):
     """A table lamp on the nightstand: the smart bulb in a fabric drum (it fits a ceiling light as well)."""
     x, y, h = 0.15, 0.13, 0.31
@@ -271,7 +278,7 @@ def bedroom_scene(n):
     MATS['led_under'] = emit('led_under', srgb(ring), LED_W[n]) if ring else principled('led_under', srgb('#141416'), rough=0.6)
     MATS['dots'] = emit('dots', srgb('#ffd9a0'), 2.5 if n == 3 else 6.0)
     b_ = build_base(with_time=bool(t), time=t or '06:30'); b_.rotation_euler = (0, 0, BASE_ROT)
-    build_shell(); build_window(shut); build_curtains(); build_stand(); build_bed(n); build_lamp(lamp)
+    build_shell(); build_window(shut); build_curtains(); build_stand(); build_usb_cable(); build_bed(n); build_lamp(lamp)
     if shut > 0: build_outside(n)
     if ring: only_on_the_wood(bpy.data.objects['ring'], *led_spill(srgb(ring), LED_SPILL[n]))
     build_arm(n)
