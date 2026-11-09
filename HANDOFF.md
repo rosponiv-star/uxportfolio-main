@@ -1334,6 +1334,8 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-09 · LOCAL (113)** · Projects index (`#projects`): the additional-projects column now stretches to the height of
+  the main projects (two equal rows), so Realiti's top lines up with the others (was 51 px higher); AuraWake stays on the baseline.
 - **2026-11-09 · LOCAL (112)** · All five scenes: the base's braided power cable (`build_usb_cable` in bedroom.py), out of the USB-C at the back, soft
   one circular arc (radius 204 mm, computed) tangent to the plug, down to the wood in its first stretch, clear of the lamp, over the back edge just behind the base
   to the floor (owner: no long detour to the left, "una curva continua").
