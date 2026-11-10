@@ -1334,6 +1334,16 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-11 · LOCAL (114)** · Scenes ×5 (slide 62) re-rendered in Blender with the furniture of the Higgsfield photo pass. The owner
+  compared three versions (old renders, AI photos, new renders) and chose the new renders, refined: no AI image is in the deck, so no
+  method line is needed. bedroom.py: `build_stand` = one light-oak carcass with rounded corners standing on the floor, no feet, two
+  flush drawers with a finger groove routed 12 mm deep (boolean through drawer, gap and carcass); `build_lamp` = travertine foot
+  (procedural, `mat_lamp`), thin bronze stem, pleated ivory shade (56 pleats). 22:00: the ring is placed first (`BR_C`, turned
+  `BR_YAW`/`BR_TILT` to show the weave, strip a shade lighter `BR_DARK`) and the hand brought to it; the hand is mirrored to a left hand
+  (`BR_LEFT`) so thumb and index sit on the camera's side and the curled fingers stay behind the ring. All tunable from argv
+  (`brth= bryaw= brtilt= brc= brf= brpose= brback= brright brdebug nohand`). New hand pose `hold` in hand_mpfb.py (index+thumb pinch,
+  other fingers open), generated but not used (its open fingers covered the ring). The AI photos stay in Media/05-AuraWake/Higgsfield,
+  the old renders in Media/05-AuraWake/Blender-originali. Known limit: the ring is at true scale and still smaller than in the photos.
 - **2026-11-09 · LOCAL (113)** · Projects index (`#projects`): the additional-projects column now stretches to the height of
   the main projects (two equal rows), so Realiti's top lines up with the others (was 51 px higher); AuraWake stays on the baseline.
 - **2026-11-09 · LOCAL (112)** · All five scenes: the base's braided power cable (`build_usb_cable` in bedroom.py), out of the USB-C at the back, soft

@@ -27,6 +27,17 @@ FLOOR_Z, CEIL_Z, WALL_Y = -0.50, 2.20, 0.39
 BASE_ROT = math.radians(-38)                     # the base turned to the bed (owner, 2026-11-08): the time faces the pillow and the camera at about the same angle
 WIN = (-0.22, 1.00, -0.05, 1.75)      # window opening: x0, x1, z0, z1
 BED_R, BED_TOP, DUVET_Y = -0.30, 0.02, 0.02
+CAM = (0.46, -1.48, 0.78)
+BR_YAW = float(next((a.split('=', 1)[1] for a in argv if a.startswith('bryaw=')), '-60'))    # 22:00: the ring's opening, turned from the camera towards the left
+BR_TILT = float(next((a.split('=', 1)[1] for a in argv if a.startswith('brtilt=')), '35'))   # and tipped up a little
+BR_TH = float(next((a.split('=', 1)[1] for a in argv if a.startswith('brth=')), '120'))   # 22:00: where the fingers hold the band (90 = top)
+BR_DARK = next((a.split('=', 1)[1] for a in argv if a.startswith('brdark=')), '#45464b')
+BR_BACK = float(next((a.split('=', 1)[1] for a in argv if a.startswith('brback=')), '0.004'))
+BR_F = [float(v) for v in next((a.split('=', 1)[1] for a in argv if a.startswith('brf=')), '1,0.12,-0.45').split(',')]   # 22:00: the forearm's direction
+BR_LEFT = 'brright' not in argv
+BR_POSE = next((a.split('=', 1)[1] for a in argv if a.startswith('brpose=')), 'pinch')
+BR_C = [float(v) for v in next((a.split('=', 1)[1] for a in argv if a.startswith('brc=')), '-0.02,-0.04,0.13').split(',')]   # 22:00: the ring's centre
+WR = [float(v) for v in next((a.split('=', 1)[1] for a in argv if a.startswith('wr=')), '-0.11,-0.05,0.17').split(',')]   # 22:00: wrist
 
 def pbr(name, folder, size, tint=None, rot=0.0, bump=0.25, rough=1.0, sheen=0.0, flat=None):
     """Poly Haven maps, box-projected in object space, so no UVs are needed; size = metres covered by one tile."""
@@ -147,18 +158,33 @@ def build_curtains():
         link(nm, bm, 'linen')
 
 def build_stand():
-    """Oak nightstand with one drawer, 460 × 380 × 500 mm, on four short legs."""
-    cx, cy, w, d = 0.02, 0.03, 0.46, 0.38
-    box('stand_top', cx - w / 2, cx + w / 2, cy - d / 2, cy + d / 2, -0.028, 0.0, 'oak', r=0.004, e=0.0025, sp=4, se=3)
-    box('stand_body', cx - w / 2 + 0.008, cx + w / 2 - 0.008, cy - d / 2 + 0.012, cy + d / 2 - 0.006, -0.40, -0.028, 'oak', r=0.002, e=0.001, sp=2, se=1)
-    fy = cy - d / 2 + 0.012
-    box('drawer_gap', cx - w / 2 + 0.018, cx + w / 2 - 0.018, fy - 0.001, fy, -0.225, -0.042, 'cavity')
-    box('drawer', cx - w / 2 + 0.021, cx + w / 2 - 0.021, fy - 0.010, fy - 0.0005, -0.222, -0.045, 'oak', r=0.002, e=0.0015, sp=2, se=2)
-    box('panel_gap', cx - w / 2 + 0.018, cx + w / 2 - 0.018, fy - 0.001, fy, -0.242, -0.2385, 'cavity')
-    ob = cyl('knob', 0.011, 0.016, 'brass', (cx, fy - 0.018, -0.1335), axis='Y', seg=32)
-    for sx in (-1, 1):
-        for sy in (-1, 1):
-            cyl(f'leg{sx}{sy}', 0.014, 0.10, 'oak', (cx + sx * (w / 2 - 0.05), cy + sy * (d / 2 - 0.05), -0.45), seg=24)
+    """Light oak nightstand, 460 × 400 × 500 mm (owner, 2026-11-10, the design of the photo pass): one carcass with softly rounded
+    corners standing on the floor, no feet; two flush drawers, each with a finger groove under its top edge, no knobs."""
+    cx, cy, w, d = 0.02, 0.03, 0.46, 0.40
+    rbox('stand_top', w, d, -FLOOR_Z, 0.032, 0.006, 'oak', (cx, cy, FLOOR_Z), sp=10, se=4)   # carcass: the strip lights its top
+    fy = cy - d / 2; side = 0.024
+    for k, (z0, z1) in enumerate(((-0.250, -0.034), (-0.470, -0.256))):
+        box(f'drawer_gap{k}', cx - w / 2 + side, cx + w / 2 - side, fy - 0.0008, fy + 0.001, z0, z1, 'cavity')
+        dr = box(f'drawer{k}', cx - w / 2 + side + 0.0022, cx + w / 2 - side - 0.0022, fy - 0.0030, fy + 0.016, z0 + 0.0022, z1 - 0.0022, 'oak', r=0.0015, e=0.0008, sp=2, se=2)
+        # the finger groove: a rounded slot routed 12 mm into the front, its inside in its own shadow (owner, 2026-11-11: a real recess, not a black bar)
+        for tgt in (dr, bpy.data.objects[f'drawer_gap{k}'], bpy.data.objects['stand_top']):   # through the drawer, its gap and the carcass behind it
+            boolean_diff(tgt, rbox(f'cut{k}', w - 0.12, 0.030, 0.017, 0.0085, 0.0, 'cavity', (cx, fy + 0.009 - 0.015, z1 - 0.040), sp=12, se=1))
+
+def mat_lamp():
+    MATS['bronze'] = principled('bronze', srgb('#4a3a2a'), metal=1.0, rough=0.38)
+    m = bpy.data.materials.new('travertine'); m.use_nodes = True; nt = m.node_tree; b = nt.nodes['Principled BSDF']
+    tc = nt.nodes.new('ShaderNodeTexCoord'); nz = nt.nodes.new('ShaderNodeTexNoise'); nz.inputs['Scale'].default_value = 60.0; nz.inputs['Detail'].default_value = 6.0
+    nt.links.new(tc.outputs['Object'], nz.inputs['Vector'])
+    cr = nt.nodes.new('ShaderNodeValToRGB'); cr.color_ramp.elements[0].color = srgb('#bfa98a'); cr.color_ramp.elements[1].color = srgb('#dccdb2'); nt.links.new(nz.outputs['Fac'], cr.inputs[0])
+    vo = nt.nodes.new('ShaderNodeTexVoronoi'); vo.inputs['Scale'].default_value = 260.0; nt.links.new(tc.outputs['Object'], vo.inputs['Vector'])
+    pr = nt.nodes.new('ShaderNodeMapRange'); pr.inputs['From Min'].default_value = 0.05; pr.inputs['From Max'].default_value = 0.16; pr.inputs['To Min'].default_value = 0.42; pr.inputs['To Max'].default_value = 1.0
+    nt.links.new(vo.outputs['Distance'], pr.inputs['Value'])
+    mx = nt.nodes.new('ShaderNodeMix'); mx.data_type = 'RGBA'; mx.blend_type = 'MULTIPLY'; mx.inputs['Factor'].default_value = 1.0
+    nt.links.new(cr.outputs['Color'], mx.inputs[6]); nt.links.new(pr.outputs['Result'], mx.inputs[7]); nt.links.new(mx.outputs[2], b.inputs['Base Color'])
+    b.inputs['Roughness'].default_value = 0.7
+    bp = nt.nodes.new('ShaderNodeBump'); bp.inputs['Strength'].default_value = 0.35; bp.inputs['Distance'].default_value = 0.0008
+    nt.links.new(pr.outputs['Result'], bp.inputs['Height']); nt.links.new(bp.outputs[0], b.inputs['Normal'])
+    MATS['travertine'] = m
 
 def build_bed(n):
     """Bed against the back wall, left of the nightstand: squared-off shapes (owner, 2026-11-08), linen and oak."""
@@ -187,15 +213,19 @@ def build_usb_cable():
     curve('usb', pts, 0.0021, 'cable')
 
 def build_lamp(kw):
-    """A table lamp on the nightstand: the smart bulb in a fabric drum (it fits a ceiling light as well)."""
-    x, y, h = 0.15, 0.13, 0.31
-    cyl('lamp_foot', 0.052, 0.014, 'lampmetal', (x, y, 0.007), seg=96)
-    cyl('lamp_stem', 0.0055, 0.24, 'lampmetal', (x, y, 0.134), seg=32)
-    bm = bmesh.new(); r0, r1, z0, z1 = 0.095, 0.08, h - 0.075, h + 0.075; n = 128; a0 = []; a1 = []
+    """A table lamp on the nightstand (owner, 2026-11-10, the design of the photo pass): travertine foot, thin bronze stem, pleated
+    ivory shade. The smart bulb inside (it fits a ceiling light as well)."""
+    x, y, h = 0.15, 0.13, 0.33
+    mat_lamp()
+    rbox('lamp_foot', 0.124, 0.124, 0.030, 0.062, 0.006, 'travertine', (x, y, 0.0), sp=48, se=4)
+    cyl('lamp_stem', 0.0042, 0.215, 'bronze', (x, y, 0.030 + 0.1075), seg=32)
+    bm = bmesh.new(); r0, r1, z0, z1 = 0.112, 0.086, h - 0.092, h + 0.092; n = 56 * 8; a0 = []; a1 = []
+    pleat = lambda i: 1 + 0.055 * abs(((i % 8) / 4.0) - 1.0)                    # 56 knife pleats: a soft triangle wave round the drum
     for i in range(n):
-        t = 2 * math.pi * i / n; a0.append(bm.verts.new((x + r0 * math.cos(t), y + r0 * math.sin(t), z0))); a1.append(bm.verts.new((x + r1 * math.cos(t), y + r1 * math.sin(t), z1)))
+        t = 2 * math.pi * i / n; k = pleat(i)
+        a0.append(bm.verts.new((x + r0 * k * math.cos(t), y + r0 * k * math.sin(t), z0))); a1.append(bm.verts.new((x + r1 * k * math.cos(t), y + r1 * k * math.sin(t), z1)))
     for i in range(n): bm.faces.new((a0[i], a0[(i + 1) % n], a1[(i + 1) % n], a1[i]))
-    link('lamp_shade', bm, 'shade')
+    link('lamp_shade', bm, 'shade', smooth=False)
     share, kelvin = kw
     if share > 0:
         L = bpy.data.lights.new('bulb', 'POINT'); L.energy = 22.0 * share; L.shadow_soft_size = 0.03; L.use_nodes = True; nt = L.node_tree
@@ -259,13 +289,20 @@ def build_sleeve(R, wrist, pose='pinch', start=0.075):
 
 def build_arm(n):
     if n == 1:                                             # 22:00: the hand lifts the bracelet off the base; the arm comes in from the left, in a sleeve
-        F = Vector((1, 0.12, -0.30)).normalized(); R = basis(F, Vector((0, 0.3, 1)))       # sitting on the bed (owner, 2026-11-09): the forearm almost level, not coming down from above
-        wr = Vector((-0.11, -0.05, 0.17)); hand, tips = build_hand('pinch', R, wr); build_sleeve(R, wr)
-        mid = (tips['index'] + tips['thumb']) / 2; d = Vector((0.78, -0.30, -0.55)).normalized(); xv = -d   # the ring hangs from the pinch, towards the camera
-        cam = Vector((0.85, -1.30, 0.65)).normalized(); cp = (cam - xv * cam.dot(xv)).normalized(); side = xv.cross(cp)
-        zv = (cp * 0.62 + side * 0.78).normalized(); yv = zv.cross(xv)                                     # tilted: the woven band shows, not just its edge
-        Rb = Matrix((xv, yv, zv)).transposed(); br = build_bracelet()
-        br.matrix_world = Matrix.Translation(mid + d * 0.020 - Rb @ Vector((STRAP_XF, 0, STRAP_LIFT + STRAP_H / 2))) @ Rb.to_4x4()   # beyond the fingertips: the fist would hide it
+        F = Vector(BR_F).normalized(); R = basis(F, Vector((0, 0.3, 1)))
+        R = R @ Matrix.Diagonal((1, -1, 1)) if BR_LEFT else R   # the left hand: thumb and index on the camera's side, the other fingers behind the ring       # sitting on the bed (owner, 2026-11-09): the forearm almost level, not coming down from above
+        # the ring first, over the base and clear of it, its opening turned to the camera (owner, 2026-11-10: as clear as in the photo pass),
+        # loop and body on the right; then the hand is brought to it, so the pinch holds the band where its surface faces the fingers
+        W0 = Matrix.Translation(Vector(WR)) @ R.to_4x4(); t0 = {k: W0 @ Vector(HAND_TIPS[BR_POSE][k]) for k in ('index', 'thumb')}
+        mid0 = (t0['index'] + t0['thumb']) / 2; tv = t0['thumb'] - t0['index']; U = Vector((0, 0, 1)); C = Vector(BR_C)
+        ch = Vector((CAM[0] - C.x, CAM[1] - C.y, 0)).normalized(); zv = Matrix.Rotation(math.radians(BR_YAW), 3, 'Z') @ ch
+        zv = (zv * math.cos(math.radians(BR_TILT)) + U * math.sin(math.radians(BR_TILT))).normalized()
+        xv = (-zv).cross(U).normalized(); yv = zv.cross(xv); Rb = Matrix((xv, yv, zv)).transposed()
+        th = math.radians(BR_TH)                                                         # held by its top edge: the ring hangs below the fingers, all of it in view
+        P = strap_e(th); br = build_bracelet(); br.matrix_world = Matrix.Translation(C - Rb @ Vector((0, 0, POD_ZC))) @ Rb.to_4x4()
+        Q = br.matrix_world @ Vector((P.x, P.y, POD_ZC)) - zv * BR_BACK; wr = Vector(WR) + (Q - mid0)
+        _, tw = build_hand(BR_POSE, R, wr); build_sleeve(R, wr); [cyl(f'dbg{k}', 0.003, 0.003, 'dots', tw[k]) for k in tw if 'brdebug' in argv]; print('DBG tips', [round(v, 3) for v in (tw['index'] + tw['thumb']) / 2], 'Q', [round(v, 3) for v in Q], 'C', [round(v, 3) for v in C], 'yv', [round(v, 2) for v in yv], 'zv', [round(v, 2) for v in zv])
+        print('bracelet pinch at', round(math.degrees(th)), 'wrist', [round(v, 3) for v in wr])
     elif n == 5:                                           # 06:20: from under the duvet, the palm on the base, the bracelet on the wrist
         F = Vector((1, 0.36, 0.03)).normalized(); R = basis(F, Vector((0, 0, 1)).cross(F))
         L_ = Vector(HAND_TIPS['palm']['index']).x; wrist = Vector((0.05 - L_, -0.01, TOP - palm_z('palm')))
@@ -286,6 +323,8 @@ def bedroom_scene(n):
     build_shell(); build_window(shut); build_curtains(); build_stand(); build_usb_cable(); build_bed(n); build_lamp(lamp)
     if shut > 0: build_outside(n)
     if ring: only_on_the_wood(bpy.data.objects['ring'], *led_spill(srgb(ring), LED_SPILL[n]))
+    if n == 1:   # the woven strip a shade lighter in the room, so the graphite reads against the warm light (owner, 2026-11-10)
+        MATS['loop'] = loop_fabric('loop', srgb(BR_DARK), srgb('#8a8c92'), srgb('#2c2d31'), pale_hex='#9a9ca2', white_hex='#aeb0b6')
     build_arm(n)
     set_sky(sky)
     x0, x1, z0, z1 = WIN
@@ -295,5 +334,14 @@ def bedroom_scene(n):
         o = bpy.data.objects.new('portal', ld); col.objects.link(o); o.location = ((x0 + x1) / 2, WALL_Y + 0.17, (z0 + zt) / 2); o.rotation_euler = (math.pi / 2, 0, 0)
     else:                                                  # shutters closed: only what the eye finds in the dark
         area('dark', (-0.4, -1.4, 1.8), (0, 0, 0), 2.5, 1.8, (0.50, 0.60, 1.0))
-    look((0.46, -1.48, 0.78), (-0.02, 0.06, 0.03), 55, 4.0)
+    look(CAM, (-0.02, 0.06, 0.03), 55, 4.0)
+    if n == 1 and 'brdebug' in argv:
+        from bpy_extras.object_utils import world_to_camera_view as w2c
+        bpy.context.view_layer.update()
+        for nm in ('bracelet', 'hand'):
+            ob = bpy.data.objects.get(nm)
+            if ob: print('DBG', nm, [round(v, 3) for v in w2c(scene, scene.camera, ob.matrix_world.translation)], [round(v, 3) for v in ob.matrix_world.translation])
+        if 'nohand' in argv:
+            for ob in bpy.data.objects:
+                if ob.name.startswith(('hand', 'sleeve')): ob.hide_render = True
     scene.view_settings.exposure = expo

@@ -74,6 +74,7 @@ def solve_thumb(target):
 POSES = {
     'palm': {'index': (2, 6, 3), 'middle': (2, 7, 4), 'ring': (3, 7, 3), 'little': (4, 6, 3)},   # flat on the top, relaxed
     'pinch': {'index': (35, 65, 35), 'middle': (35, 45, 22), 'ring': (40, 48, 22), 'little': (45, 48, 22)},   # a light two-finger pinch, the rest relaxed
+    'hold': {'index': (35, 65, 35), 'middle': (14, 20, 10), 'ring': (18, 24, 10), 'little': (22, 26, 11)},   # 22:00 (owner, 2026-11-10): index and thumb hold the ring, the other fingers open, clear of it
     'relax': {'index': (10, 20, 10), 'middle': (13, 23, 11), 'ring': (16, 25, 11), 'little': (19, 26, 11)},   # asleep (owner, 2026-11-09): soft, the curl growing towards the little finger
 }
 WANT = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else list(POSES)   # blender -b -P hand_mpfb.py -- relax: only that pose, the others stay as they are
@@ -104,7 +105,7 @@ for name, pose in POSES.items():
                 if best is None or d < best[0]: best = (d, sg)
             pb.rotation_euler = e0; pb.rotation_euler[ax] = e0[ax] + best[1] * math.radians(deg); upd()
         solve_thumb(local(head('finger2-1.R')) + Vector((0.020, 0.014, -0.020)))
-    if name == 'pinch':          # thumb pad opposite the index pad, across the band (gap as in the procedural hand)
+    if name in ('pinch', 'hold'):   # thumb pad opposite the index pad, across the band (gap as in the procedural hand)
         it = local(tail('finger2-3.R'))
         err = solve_thumb(it + Vector((-0.0205, 0.0067, -0.008)))
         print(f'pinch: thumb error {err * 1000:.1f} mm')
