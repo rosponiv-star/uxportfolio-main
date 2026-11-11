@@ -294,8 +294,11 @@ waste 4/7 → survey 95% → sized for one) → `p02-insights` → `p02-profile`
 3 Solution: `p02-solution-index` (value map: physical / intangible / digital; healthy ready-made food struck) →
 `p02-fit` = coherence matrix, 8 pains × Box/Plan/Focus/Nudge/Streak/Pickup, with matrix code and sources out of 7
 (pains = the report's pain relievers, p. 23; dots = report + final design) → system → `p02-scene-week` →
-prototypes → solution → interaction → `p02-scene-tonight`. Scenes are composed by `deck/compose_jc_scenes.cjs`
-(box renders + final screens on #e9e3d6, no hands; hand-held mockups stay rejected). 4 Communication: `p02-comm`
+prototypes → five screen slides like Smart Home Hub's (`.solx.solx--jc`, framed screens from
+`deck/assets/justcook/sol/`, flattened on #f1efe9; caption = number, title, description, "Why" line tied to the
+research): `p02-sol-tonight`, `p02-sol-plan`, `p02-sol-pantry` (3, `solx--3`), `p02-sol-cook`, `p02-sol-outside` →
+`p02-interaction`. **Rejected (owner, 2026-11-11): boxes and screens in one picture** (the composed scenes were removed);
+screens always stand alone, boxes only on the brand slides. 4 Communication: `p02-comm`
 index → `p02-brand` (four colour panels) → `p02-flyers` → `p02-social` (3×3 posts + launch plan); images in
 `deck/assets/justcook/brand/`. 5 Impact: `p02-impact` = the monitoring plan (no launch, so no data; every line an
 indicator) → `p02-outcome` targets + "If I started again". Facts checked 2026-11-11: the coding matrix has **7 themes,
@@ -344,7 +347,6 @@ deck/blender/aura.py -- <mode> <outdir> <shot> [plastic] [preview]` (run from th
 | JustCook 08, 10, 12, 14, 15 Phase index tables | `p02-problem`, `p02-research-index`, `p02-solution-index`, `p02-comm`, `p02-impact` | `ol.jx` rows, generated once by the scratchpad script, now plain HTML | edit the `<li>`: number, `jx__t`, `jx__s`, `jx__f`; class `jx--x` strikes a row, `jx--dense` for 6 rows |
 | JustCook 09 Desk numbers · 11 Customer profile | `p02-context`, `p02-profile` | slide HTML (cells, `.prof__l` lists) | edit the cells |
 | JustCook 13 Pain × solution matrix | `p02-fit` | `table.fit` in the slide HTML; a dot is `<i></i>` in a `fit__c` cell; recount the "Pains relieved" row by hand | edit rows / dots |
-| JustCook scenes (not schemas) | `p02-scene-week`, `p02-scene-tonight` | `node deck/compose_jc_scenes.cjs` (positions `cx`, `base`, `h`) | re-run, same file names |
 | JustCook 06–07 Course prototype, final design | `p02-prototypes` | `deck/assets/justcook/course-*.png` (Figma Page 1) and site screens | re-export from Figma, same file names |
 
 **Smart Home Hub (project 01, slides `p01-*`)** — schemas drawn by the `[data-shh]` script in index.html: `rings`
@@ -1359,6 +1361,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-11 · LOCAL (116)** · JustCook: owner rejected boxes and screens together. Both scenes and their script
+  removed; p02-solution replaced by five full-bleed screen slides (Tonight, Plan and buy, At home, Cooking, Outside
+  the app), 19 final screens, each with title, description and a "Why" line. See §0.B.0.
 - **2026-11-11 · LOCAL (115)** · JustCook restructured in five phases (owner: 1 ok without report boards, 2 ok, 3 ok +
   scenic mockups, 4 ok + branding, flyers, social, 5 ok, 6 ok): 23 slides, per-project process bar, index table per
   phase + one worked example each, pain × solution matrix, two composed scenes, brand/flyers/social full-bleed slides,
