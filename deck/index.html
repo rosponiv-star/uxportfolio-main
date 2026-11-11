@@ -1386,7 +1386,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   </div>
 </section>
 
-<section class="slide slide--color pcover" id="p02" style="--pc: #b04a32" data-num="02" data-kind="main" data-title="JustCook">
+<section class="slide slide--color pcover" id="p02" style="--pc: #b04a32" data-num="02" data-kind="main" data-title="JustCook" data-steps="problem:Problem|research:Research|solution:Solution|communication:Communication|impact:Impact">
   <div class="cols" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
   <p class="pcover__num" aria-hidden="true">02</p>
   <header class="chrome"><span class="chrome__sec"><span class="n">02</span>Main project</span><span class="chrome__pg" data-pg></span></header>
@@ -1413,28 +1413,65 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
       <div class="cell"><span class="label i3">Timeline</span><p class="small cell__foot">Sep 2024 – May 2025</p></div>
       <div class="cell"><span class="label i3">Team</span><p class="small cell__foot">4 design students</p></div>
       <div class="cell"><span class="label i3">My role</span><p class="small cell__foot">End-to-end UX designer: research, framing, app, packaging</p></div>
-      <div class="cell"><span class="label i3">Methods</span><p class="small cell__foot">Survey, in-kitchen interviews, field observation, CPS, value proposition canvas</p></div>
+      <div class="cell"><span class="label i3">Methods</span><p class="small cell__foot">Desk research, CPS, field observation, interviews, coding matrix, survey, value proposition canvas</p></div>
       <div class="cell"><span class="label i3">Tools</span><p class="small cell__foot">Figma, InDesign, Miro, Photoshop</p></div>
     </div>
   </div>
 </section>
 
-<section class="slide" id="p02-context" data-step="context">
+<section class="slide" id="p02-problem" data-step="problem">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <div style="grid-column: 1 / 5; grid-row: 2; padding-top: 24px"><p class="h2">We started from the problem, before meeting anyone.</p><p class="body i2" style="margin-top: 64px">Semiotics course. The problem as studies and our own lives as off-site students described it; each step narrowed who we were designing for.</p></div>
+    <ol class="jx" style="grid-column: 6 / 13; grid-row: 2; align-self: start; margin-top: 32px"><li><span class="label kick"><span class="n">01</span></span><span><span class="jx__t">Problem definition</span><span class="jx__s">Eating well and wasting less, tied to two UN goals</span></span><span class="jx__f"><b>SDG 3</b> good health · <b>SDG 12</b> responsible consumption</span></li><li><span class="label kick"><span class="n">02</span></span><span><span class="jx__t">Desk research</span><span class="jx__s">What studies already said about off-site students</span></span><span class="jx__f"><b>92%</b> change habits after moving out · <b>&gt;60%</b> take-away every week</span></li><li><span class="label kick"><span class="n">03</span></span><span><span class="jx__t">Client · Problem · Solution</span><span class="jx__s">Six reframing cycles, from who eats out to who cooks alone</span></span><span class="jx__f"><b>6</b> cycles · <b>2</b> ideas discarded</span></li><li><span class="label kick"><span class="n">04</span></span><span><span class="jx__t">Research question</span><span class="jx__s">What we still had to see for ourselves</span></span><span class="jx__f">Can off-site students eat balanced meals? How do they shop, cook and waste?</span></li></ol>
+  </div>
+</section>
+
+<section class="slide" id="p02-context" data-step="problem">
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
     <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Moving out, students cook alone for the first time: short on time, money and kitchen space.</p>
-    <div style="grid-column: 1 / 7; align-self: end; display: grid; gap: 40px">
-      <p class="body" style="max-width: 92%">A problem we lived ourselves as off-site students in Rovereto. Shops are sized for families, the kitchen is shared, and a delivery app is always one tap away.</p>
+    <div style="grid-column: 1 / 6; align-self: end; display: grid; gap: 40px">
+      <p class="body i2">A problem we lived ourselves as off-site students in Rovereto. Shops are sized for families, the kitchen is shared, and a delivery app is always one tap away.</p>
       <div class="cells" style="grid-template-columns: repeat(2, minmax(0, 1fr))">
-        <div class="cell" style="min-height: 280px"><p class="stat">92%</p><p class="small cell__foot">change their eating habits after moving out.<br /><span class="i4">Lupi et al., 2015 · 258 students</span></p></div>
-        <div class="cell"><p class="stat">&gt;60%</p><p class="small cell__foot">eat take-away at least once a week.<br /><span class="i4">Desk research</span></p></div>
+        <div class="cell" style="min-height: 200px"><span class="label i3">SDG 3</span><p class="small cell__foot m">Good health and well-being</p></div>
+        <div class="cell"><span class="label i3">SDG 12</span><p class="small cell__foot m">Responsible consumption and production</p></div>
       </div>
     </div>
-    <figure class="jc-fig" style="grid-column: 7 / 13; align-self: end">
-      <div class="jc-img" style="aspect-ratio: 2 / 1; background: #efe9de"><img src="assets/justcook/questionare-flyer.jpg" alt="Questionnaire flyer: “Off-site student? We need you!”, with a QR code." style="object-fit: contain" /></div>
-      <figcaption class="small i3">How we reached them: a questionnaire flyer with a QR code, in study rooms and group chats.</figcaption>
-    </figure>
+    <div class="cells" style="grid-column: 7 / 13; align-self: end; grid-template-columns: repeat(2, minmax(0, 1fr))">
+      <div class="cell" style="min-height: 270px"><p class="stat">92%</p><p class="small cell__foot">change their eating habits after moving out.<br /><span class="i4">Lupi et al., 2015 · 258 students</span></p></div>
+      <div class="cell"><p class="stat">&gt;60%</p><p class="small cell__foot">eat take-away at least once a week.<br /><span class="i4">Fondazione Istituto Danone survey</span></p></div>
+      <div class="cell" style="min-height: 270px"><p class="stat">44%</p><p class="small cell__foot">eat one portion of fruit a day.<br /><span class="i4">Desk research</span></p></div>
+      <div class="cell"><p class="stat">22.5%</p><p class="small cell__foot">eat two portions of vegetables a day.<br /><span class="i4">Desk research</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="p02-ideas" data-step="problem">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr auto">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Six reframing cycles: each new framing exposed the flaw in the previous idea.</p>
+    <ol class="cells" style="grid-column: 1 / -1; align-self: end; grid-template-columns: repeat(6, minmax(0, 1fr))">
+      <li class="cell cyc"><span class="label kick"><span class="n">Cycle 1</span></span><p class="small"><span class="i3">Who</span><br />Students who eat out</p><p class="small"><span class="i3">Problem</span><br />They rarely have balanced meals.</p><p class="small cell__foot"><span class="i4">Problem only, no idea yet</span></p></li>
+      <li class="cell cyc"><span class="label kick"><span class="n">Cycle 2</span></span><p class="small"><span class="i3">Who</span><br />Students who eat out</p><p class="small"><span class="i3">Problem</span><br />Poor awareness of nutrition.</p><p class="small cell__foot"><span class="i4">Problem only, no idea yet</span></p></li>
+      <li class="cell cyc"><span class="label kick"><span class="n">Cycle 3</span></span><p class="small"><span class="i3">Who</span><br />Students who eat out</p><p class="small"><span class="i3">Problem</span><br />They prefer unhealthy ready food.</p><p class="small cell__foot"><span class="i3">Idea</span><br /><s>Healthy ready-made food</s></p></li>
+      <li class="cell cyc"><span class="label kick"><span class="n">Cycle 4</span></span><p class="small"><span class="i3">Who</span><br />Students who eat out</p><p class="small"><span class="i3">Problem</span><br />A tight budget gets in the way of balanced meals.</p><p class="small cell__foot"><span class="i4">Problem only, no idea yet</span></p></li>
+      <li class="cell cyc"><span class="label kick"><span class="n">Cycle 5</span></span><p class="small"><span class="i3">Who</span><br />Students who eat out</p><p class="small"><span class="i3">Problem</span><br />No time to cook.</p><p class="small cell__foot"><span class="i3">Idea</span><br /><s>Ready-made meals</s></p></li>
+      <li class="cell cyc cyc--final"><span class="label kick"><span class="n">Cycle 6</span></span><p class="small"><span class="i3">Who</span><br />Off-site students, 18–28, cooking for themselves</p><p class="small"><span class="i3">Problem</span><br />Little time and limited skills make balanced, portioned meals hard.</p><p class="small cell__foot"><span class="i3">Idea</span><br /><span class="m">Pre-dosed single-portion boxes, planned through an app</span></p></li>
+    </ol>
+    <p class="small i2" style="grid-column: 1 / 9; margin-top: 24px; align-self: end">Discarded on the way: healthy ready-made food. It saved time but took away the autonomy students were proud of, and did nothing for cost or waste. Creative Problem Solving, then a value proposition canvas to check the fit.</p>
+  </div>
+</section>
+
+<section class="slide" id="p02-research-index" data-step="research">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <div style="grid-column: 1 / 5; grid-row: 2; padding-top: 24px"><p class="h2">Then we went into their kitchens.</p><p class="body i2" style="margin-top: 64px">Sociology course, plus the survey from the communication course. We watched, asked, then coded everything in one grid; the value proposition canvas turned it into needs.</p></div>
+    <ol class="jx jx--dense" style="grid-column: 6 / 13; grid-row: 2; align-self: start; margin-top: 32px"><li><span class="label kick"><span class="n">01</span></span><span><span class="jx__t">Field and question</span><span class="jx__s">Off-site psychology students in Rovereto</span></span><span class="jx__f"><b>3</b> shared flats, of 3, 6 and 7 people</span></li><li><span class="label kick"><span class="n">02</span></span><span><span class="jx__t">Participant observation</span><span class="jx__s">Shopping, cooking, the fridge and the pantry</span></span><span class="jx__f"><b>3</b> field notes</span></li><li><span class="label kick"><span class="n">03</span></span><span><span class="jx__t">Interviews</span><span class="jx__s">Seven topics, with photo elicitation</span></span><span class="jx__f"><b>4</b> interviews</span></li><li><span class="label kick"><span class="n">04</span></span><span><span class="jx__t">Coding</span><span class="jx__s">One matrix for every interview and field note</span></span><span class="jx__f"><b>37</b> codes in <b>7</b> themes</span></li><li><span class="label kick"><span class="n">05</span></span><span><span class="jx__t">Survey</span><span class="jx__s">In group chats and on QR flyers</span></span><span class="jx__f"><b>41</b> responses</span></li><li><span class="label kick"><span class="n">06</span></span><span><span class="jx__t">Customer profile</span><span class="jx__s">Jobs, pains and gains, ranked by importance</span></span><span class="jx__f">Value proposition canvas</span></li></ol>
   </div>
 </section>
 
@@ -1442,25 +1479,18 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">We moved the research into students’ kitchens, where the problem actually happens.</p>
-    <figure class="jc-fig" style="grid-column: 1 / 7; align-self: end">
-      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 12px">
-        <div class="jc-img" style="aspect-ratio: 3 / 4"><img src="assets/justcook/fridge-1.jpg" alt="A shared fridge, one shelf per flatmate." /></div>
-        <div class="jc-img" style="aspect-ratio: 3 / 4"><img src="assets/justcook/fridge-2.jpg" alt="A second shared fridge, packed full." /></div>
-        <div class="jc-img" style="aspect-ratio: 3 / 4"><img src="assets/justcook/fridge-3.jpg" alt="A student pantry shelf." /></div>
-      </div>
-      <figcaption class="small i3">Field observation: two shared fridges and a pantry. Family-size packs, one shelf each.</figcaption>
-    </figure>
-    <div class="cells" style="grid-column: 7 / 13; align-self: end; grid-template-columns: repeat(2, minmax(0, 1fr))">
-      <div class="cell" style="min-height: 250px"><p class="stat">41</p><p class="small cell__foot"><span class="m">Survey responses</span><br /><span class="i3">Student group chats and QR flyers</span></p></div>
-      <div class="cell"><p class="stat">4</p><p class="small cell__foot"><span class="m">In-kitchen interviews</span><br /><span class="i3">In their own kitchens, with photo elicitation</span></p></div>
-      <div class="cell" style="min-height: 250px"><p class="stat">3</p><p class="small cell__foot"><span class="m">Field observations</span><br /><span class="i3">Shopping, cooking, storing</span></p></div>
-      <div class="cell"><p class="stat">36</p><p class="small cell__foot"><span class="m">Codes in 8 themes</span><br /><span class="i3">One grid for every interview and note</span></p></div>
-    </div>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">One finding, traced back: from a bin to a design principle.</p>
+    <ol class="cells trace" style="grid-column: 1 / -1; align-self: end; grid-template-columns: repeat(5, minmax(0, 1fr))">
+      <li class="cell"><span class="label kick"><span class="n">01</span>Observe</span><div class="jc-img trace__m"><img src="assets/justcook/fridge-2.jpg" alt="A shared fridge, packed full." /></div><p class="small cell__foot"><span class="i3">Field note 2 · one of the fridges we photographed</span><br />Leftover salad goes straight in the bin, the plates in the dishwasher.</p></li>
+      <li class="cell"><span class="label kick"><span class="n">02</span>Listen</span><p class="lead trace__m">“From vegetable peels I make broth.”</p><p class="small cell__foot"><span class="i3">Interview 3 (translated)</span><br />Nothing is thrown away, even if it is not what they wanted to eat.</p></li>
+      <li class="cell"><span class="label kick"><span class="n">03</span>Code</span><p class="stat trace__m">4/7</p><p class="small cell__foot"><span class="i3">Coding matrix</span><br /><span class="m">Waste › minimising waste</span>: in 4 of the 7 interviews and field notes.</p></li>
+      <li class="cell"><span class="label kick"><span class="n">04</span>Count</span><p class="stat trace__m">95%</p><p class="small cell__foot"><span class="i3">Survey</span><br />of those who try not to waste blame packs too big for one person.</p></li>
+      <li class="cell cyc--final"><span class="label kick"><span class="n">05</span>Decide</span><div class="trace__m trace__box"><img src="assets/justcook/brand/box-c-3q.png" alt="Box C, a single-portion box." /></div><p class="small cell__foot"><span class="i3">Finding → principle</span><br /><span class="m">Retail is built for families</span> → sized for one: pre-dosed, single-portion boxes.</p></li>
+    </ol>
   </div>
 </section>
 
-<section class="slide" id="p02-insights" data-step="insights">
+<section class="slide" id="p02-insights" data-step="research">
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
@@ -1475,7 +1505,23 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   </div>
 </section>
 
-<section class="slide" id="p02-framing" data-step="framing">
+<section class="slide" id="p02-profile" data-step="research">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">The customer profile: what they try to do, what gets in the way, what they hope for.</p>
+    <div class="cells prof" style="grid-column: 1 / -1; align-self: end; grid-template-columns: repeat(3, minmax(0, 1fr))">
+      <div class="cell"><span class="label kick"><span class="n">Jobs</span></span><p class="h3">Feed themselves between lectures</p>
+        <dl class="prof__l"><dt>Functional</dt><dd>Shop, cook dinner, pack tomorrow’s lunch if there is time</dd><dt>Social</dt><dd>Join friends who eat out, so as not to be left out</dd><dt>Emotional</dt><dd>The joy of cooking something good; the fear of eating badly</dd><dt>Support</dt><dd>Buy the cheapest, simplest products to cook</dd></dl></div>
+      <div class="cell"><span class="label kick"><span class="n">Pains</span></span><p class="h3">Time, skills, money</p>
+        <dl class="prof__l"><dt>Obstacles</dt><dd>No time, few skills, no ideas, a small budget</dd><dt>Risks</dt><dd>An empty fridge at night, a failed recipe, wasted food</dd><dt>Fears</dt><dd>Fresh food going off before it is eaten</dd><dt>Habits</dt><dd>Always the same meal; skipping dinner when tired</dd></dl></div>
+      <div class="cell"><span class="label kick"><span class="n">Gains</span></span><p class="h3">Healthy, cheap, quick</p>
+        <dl class="prof__l"><dt>Required</dt><dd>A balanced diet, affordable, and time saved</dd><dt>Expected</dt><dd>Variety: many recipes from the same ingredients</dd><dt>Desired</dt><dd>Recipes that are simple, with clear levels and times</dd><dt>Unexpected</dt><dd>Discovering a passion for cooking</dd></dl></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="p02-framing" data-step="research">
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
@@ -1499,24 +1545,30 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   </div>
 </section>
 
-<section class="slide" id="p02-ideas" data-step="ideas">
+<section class="slide" id="p02-solution-index" data-step="solution">
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
-  <div class="frame" style="grid-template-rows: auto auto 1fr auto">
+  <div class="frame" style="grid-template-rows: auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Six reframing cycles: each new framing exposed the flaw in the previous idea.</p>
-    <ol class="cells" style="grid-column: 1 / -1; align-self: end; grid-template-columns: repeat(6, minmax(0, 1fr))">
-      <li class="cell cyc"><span class="label kick"><span class="n">Cycle 1</span></span><p class="small"><span class="i3">Who</span><br />Students who eat out</p><p class="small"><span class="i3">Problem</span><br />They rarely have balanced meals.</p><p class="small cell__foot"><span class="i4">Problem only, no idea yet</span></p></li>
-      <li class="cell cyc"><span class="label kick"><span class="n">Cycle 2</span></span><p class="small"><span class="i3">Who</span><br />Students who eat out</p><p class="small"><span class="i3">Problem</span><br />Poor awareness of nutrition.</p><p class="small cell__foot"><span class="i4">Problem only, no idea yet</span></p></li>
-      <li class="cell cyc"><span class="label kick"><span class="n">Cycle 3</span></span><p class="small"><span class="i3">Who</span><br />Students who eat out</p><p class="small"><span class="i3">Problem</span><br />They prefer unhealthy ready food.</p><p class="small cell__foot"><span class="i3">Idea</span><br /><s>Healthy ready-made food</s></p></li>
-      <li class="cell cyc"><span class="label kick"><span class="n">Cycle 4</span></span><p class="small"><span class="i3">Who</span><br />Students who eat out</p><p class="small"><span class="i3">Problem</span><br />A tight budget gets in the way of balanced meals.</p><p class="small cell__foot"><span class="i4">Problem only, no idea yet</span></p></li>
-      <li class="cell cyc"><span class="label kick"><span class="n">Cycle 5</span></span><p class="small"><span class="i3">Who</span><br />Students who eat out</p><p class="small"><span class="i3">Problem</span><br />No time to cook.</p><p class="small cell__foot"><span class="i3">Idea</span><br /><s>Ready-made meals</s></p></li>
-      <li class="cell cyc cyc--final"><span class="label kick"><span class="n">Cycle 6</span></span><p class="small"><span class="i3">Who</span><br />Off-site students, 18–28, cooking for themselves</p><p class="small"><span class="i3">Problem</span><br />Little time and limited skills make balanced, portioned meals hard.</p><p class="small cell__foot"><span class="i3">Idea</span><br /><span class="m">Pre-dosed single-portion boxes, planned through an app</span></p></li>
-    </ol>
-    <p class="small i2" style="grid-column: 1 / 9; margin-top: 24px; align-self: end">Discarded on the way: healthy ready-made food. It saved time but took away the autonomy students were proud of, and did nothing for cost or waste. Creative Problem Solving, then a value proposition canvas to check the fit.</p>
+    <div style="grid-column: 1 / 5; grid-row: 2; padding-top: 24px"><p class="h2">One service, three kinds of product.</p><p class="body i2" style="margin-top: 64px">From the value map: what we offer, sorted the way the canvas sorts it. The final design came later, in Figma; one idea did not make it.</p></div>
+    <ol class="jx" style="grid-column: 6 / 13; grid-row: 2; align-self: start; margin-top: 32px"><li><span class="label kick"><span class="n">01</span></span><span><span class="jx__t">Physical</span><span class="jx__s">Four pre-dosed, single-portion boxes</span></span><span class="jx__f"><b>A</b> protein · <b>B</b> energy · <b>C</b> light · <b>D</b> comfort · 4–5 ingredients, up to 10 recipes</span></li><li><span class="label kick"><span class="n">02</span></span><span><span class="jx__t">Intangible</span><span class="jx__s">Simple recipes and a weekly plan</span></span><span class="jx__f">Few steps, short times, a week that does not repeat</span></li><li><span class="label kick"><span class="n">03</span></span><span><span class="jx__t">Digital</span><span class="jx__s">The app</span></span><span class="jx__f">Plan · the nudge · lid code and focus mode · stamp and streak with friends</span></li><li class="jx--x"><span class="label kick"><span class="n">04</span></span><span><span class="jx__t">Healthy ready-made food</span><span class="jx__s">On the value map, then dropped</span></span><span class="jx__f">It saved time, but took away the autonomy students were proud of</span></li></ol>
   </div>
 </section>
 
-<section class="slide" id="p02-system" data-step="system">
+<section class="slide" id="p02-fit" data-step="solution">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <div style="grid-column: 1 / 4; grid-row: 2; padding-top: 24px"><p class="h2">Every pain has an answer.</p><p class="body i2" style="margin-top: 56px">The value map checked line by line: each pain from the customer profile, the code that proves it in the research, and the part of the service that relieves it.</p>
+      <dl class="fit__key small"><dt><i></i></dt><dd>Relieved by this part of the service</dd><dt>4/7</dt><dd>Interviews and field notes where the code appears</dd></dl></div>
+    <table class="fit" style="grid-column: 5 / 13; grid-row: 2; align-self: start; margin-top: 32px">
+      <thead><tr><th class="fit__p">Pain</th><th class="fit__k">Code in the matrix</th><th class="fit__n">Sources</th><th class="fit__c">Box</th><th class="fit__c">Plan</th><th class="fit__c">Focus mode</th><th class="fit__c">Nudge</th><th class="fit__c">Streak</th><th class="fit__c">Pickup</th></tr></thead>
+      <tbody><tr><td class="fit__p">No time to cook</td><td class="fit__k">Time management</td><td class="fit__n">6/7</td><td class="fit__c"><i></i></td><td class="fit__c"></td><td class="fit__c"><i></i></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"><i></i></td></tr><tr><td class="fit__p">Limited cooking skills</td><td class="fit__k">Cooking skills</td><td class="fit__n">5/7</td><td class="fit__c"><i></i></td><td class="fit__c"></td><td class="fit__c"><i></i></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td></tr><tr><td class="fit__p">A tight budget</td><td class="fit__k">Budget</td><td class="fit__n">5/7</td><td class="fit__c"><i></i></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td></tr><tr><td class="fit__p">A small, shared kitchen</td><td class="fit__k">Spaces, tools</td><td class="fit__n">5/7</td><td class="fit__c"><i></i></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td></tr><tr><td class="fit__p">Always the same meals</td><td class="fit__k">Practicality vs variety</td><td class="fit__n">6/7</td><td class="fit__c"><i></i></td><td class="fit__c"><i></i></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td></tr><tr><td class="fit__p">Food thrown away</td><td class="fit__k">Minimising waste</td><td class="fit__n">4/7</td><td class="fit__c"><i></i></td><td class="fit__c"><i></i></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td></tr><tr><td class="fit__p">Eating out to fit in</td><td class="fit__k">Sociality</td><td class="fit__n">5/7</td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"></td><td class="fit__c"><i></i></td><td class="fit__c"></td></tr><tr><td class="fit__p">No plan, an empty fridge</td><td class="fit__k">Weekly management</td><td class="fit__n">5/7</td><td class="fit__c"></td><td class="fit__c"><i></i></td><td class="fit__c"></td><td class="fit__c"><i></i></td><td class="fit__c"></td><td class="fit__c"><i></i></td></tr></tbody>
+      <tfoot><tr><td class="fit__p">Pains relieved</td><td></td><td></td><td class="fit__c fit__t">6</td><td class="fit__c fit__t">3</td><td class="fit__c fit__t">2</td><td class="fit__c fit__t">1</td><td class="fit__c fit__t">1</td><td class="fit__c fit__t">2</td></tr></tfoot>
+    </table>
+  </div>
+</section>
+
+<section class="slide" id="p02-system" data-step="solution">
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
@@ -1525,7 +1577,12 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   </div>
 </section>
 
-<section class="slide" id="p02-prototypes" data-step="prototypes">
+<section class="slide" id="p02-scene-week" data-step="solution">
+  <div class="quad__bar"><b>The week: four boxes in the fridge, tonight on the phone</b><span>Box renders and final screens</span></div>
+  <div class="jcx"><img class="jcx__scene" src="assets/justcook/scene-week.jpg" alt="Boxes A, B, C and D around a phone showing “Start cooking at 19:45”." /></div>
+</section>
+
+<section class="slide" id="p02-prototypes" data-step="solution">
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
@@ -1567,27 +1624,53 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   </div>
 </section>
 
-<section class="slide" id="p02-brand" data-step="solution">
+<section class="slide" id="p02-scene-tonight" data-step="solution">
+  <div class="quad__bar"><b>Tonight: the code from the lid opens the recipe, one step at a time</b><span>Box render and final screens</span></div>
+  <div class="jcx"><img class="jcx__scene" src="assets/justcook/scene-tonight.jpg" alt="The lid code being typed, Box D, and focus mode at step 4 of 6." /></div>
+</section>
+
+<section class="slide" id="p02-comm" data-step="communication">
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
-  <div class="frame" style="grid-template-rows: auto auto 1fr">
+  <div class="frame" style="grid-template-rows: auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">A brand students would share: four boxes, one colour each, and a campaign for group chats.</p>
-    <figure class="jc-fig" style="grid-column: 1 / 7; align-self: end">
-      <div class="jc-img" style="aspect-ratio: 16 / 10; background: #efe9de"><img src="assets/justcook/box-family.jpg" alt="Boxes A, B, C and D: orange protein, green energy, red light, blue comfort." style="object-fit: contain" /></div>
-      <figcaption class="small i3">Four pre-dosed boxes: A protein, B energy, C light, D comfort. 4–5 ingredients, up to 10 recipes, about 20 minutes.</figcaption>
-    </figure>
-    <figure class="jc-fig" style="grid-column: 7 / 13; align-self: end">
-      <div class="jc-img" style="aspect-ratio: 16 / 10; background: #efe9de"><img src="assets/justcook/social.jpg" alt="Instagram posts: one per box, and the app challenge." style="object-fit: cover" /></div>
-      <figcaption class="small i3">Launch plan: one city first, Rovereto, starting with psychology students; one pickup point at a local supermarket (approached, not confirmed); flyers in study rooms and posts made to be shared.</figcaption>
-    </figure>
+    <div style="grid-column: 1 / 5; grid-row: 2; padding-top: 24px"><p class="h2">A name, a message, and the channels students already use.</p><p class="body i2" style="margin-top: 64px">Communication course. The campaign was built on the same research, and first shown to the students we had interviewed.</p></div>
+    <ol class="jx jx--dense" style="grid-column: 6 / 13; grid-row: 2; align-self: start; margin-top: 32px"><li><span class="label kick"><span class="n">01</span></span><span><span class="jx__t">Name</span><span class="jx__s">Just Cook, a wink at Just Eat</span></span><span class="jx__f">From “let someone else cook” to “just cook”</span></li><li><span class="label kick"><span class="n">02</span></span><span><span class="jx__t">Message</span><span class="jx__s">Reassuring and empowering</span></span><span class="jx__f">Cooking is not hard, and it is a step towards independence</span></li><li><span class="label kick"><span class="n">03</span></span><span><span class="jx__t">Target</span><span class="jx__s">Direct and indirect</span></span><span class="jx__f">Off-site psychology students in Rovereto · parents · supermarkets</span></li><li><span class="label kick"><span class="n">04</span></span><span><span class="jx__t">Channels</span><span class="jx__s">Where students already are</span></span><span class="jx__f">Instagram · WhatsApp groups · flyers with and without QR · the app</span></li><li><span class="label kick"><span class="n">05</span></span><span><span class="jx__t">Products</span><span class="jx__s">What the campaign sells</span></span><span class="jx__f">4 boxes · the app, unlocked by the code in the lid</span></li><li><span class="label kick"><span class="n">06</span></span><span><span class="jx__t">Partner</span><span class="jx__s">A local supermarket for the pickup</span></span><span class="jx__f">Presented to the Conad director in Rovereto: no concrete interest</span></li></ol>
   </div>
 </section>
 
-<section class="slide" id="p02-outcome" data-step="outcome">
+<section class="slide" id="p02-brand" data-step="communication">
+  <div class="quad__bar"><b>Branding: one colour per box, so the week reads at a glance</b><span>Packaging · InDesign, Photoshop</span></div>
+  <div class="jcx"><div class="jcx__boxes"><figure style="background: #ffa91e"><img src="assets/justcook/brand/box-a-3q.png" alt="Box A in perspective." /><figcaption><b>Box A · Protein</b><span>Chicken, spinach, feta, eggs</span></figcaption></figure><figure style="background: #488863"><img src="assets/justcook/brand/box-b-3q.png" alt="Box B in perspective." /><figcaption><b>Box B · Energy</b><span>Pasta, salmon, avocado, tomatoes</span></figcaption></figure><figure style="background: #ff7257"><img src="assets/justcook/brand/box-c-3q.png" alt="Box C in perspective." /><figcaption><b>Box C · Light</b><span>Turkey, courgette, carrots, basmati rice</span></figcaption></figure><figure style="background: #29bcff"><img src="assets/justcook/brand/box-d-3q.png" alt="Box D in perspective." /><figcaption><b>Box D · Comfort</b><span>Meatballs, mash, peas, carrots</span></figcaption></figure></div></div>
+</section>
+
+<section class="slide" id="p02-flyers" data-step="communication">
+  <div class="quad__bar"><b>Flyers: four colours, for study rooms and notice boards</b><span>Print · InDesign</span></div>
+  <div class="jcx"><div class="jcx__flyers"><figure><img src="assets/justcook/brand/volantino-pubblicita-arancione.jpg" alt="Launch flyer, arancione version." /></figure><figure><img src="assets/justcook/brand/volantino-pubblicita-verde.jpg" alt="Launch flyer, verde version." /></figure><figure><img src="assets/justcook/brand/volantino-pubblicita-rosso.jpg" alt="Launch flyer, rosso version." /></figure><figure><img src="assets/justcook/brand/volantino-pubblicita-azzurro.jpg" alt="Launch flyer, azzurro version." /></figure></div></div>
+</section>
+
+<section class="slide" id="p02-social" data-step="communication">
+  <div class="quad__bar"><b>Social: posts made to be shared in group chats</b><span>Instagram · Photoshop</span></div>
+  <div class="jcx"><div class="jcx__social"><div class="jcx__grid"><img src="assets/justcook/brand/post-4box.jpg" alt="Instagram post: 4box." /><img src="assets/justcook/brand/post-box-a.jpg" alt="Instagram post: box a." /><img src="assets/justcook/brand/post-box-b.jpg" alt="Instagram post: box b." /><img src="assets/justcook/brand/post-box-c.jpg" alt="Instagram post: box c." /><img src="assets/justcook/brand/post-box-d.jpg" alt="Instagram post: box d." /><img src="assets/justcook/brand/post-tris.jpg" alt="Instagram post: tris." /><img src="assets/justcook/brand/post-app-arancione.jpg" alt="Instagram post: app arancione." /><img src="assets/justcook/brand/post-app-verde.jpg" alt="Instagram post: app verde." /><img src="assets/justcook/brand/post-so-good.jpg" alt="Instagram post: so good." /></div><div class="jcx__side">
+    <p class="label i3">Launch plan</p>
+    <ol class="rows"><li class="prin"><span class="label kick"><span class="n">01</span></span><span class="body">One city first: Rovereto, starting with psychology students.</span></li>
+    <li class="prin"><span class="label kick"><span class="n">02</span></span><span class="body">Word of mouth: the group chats that filled the survey, flyers in study rooms.</span></li>
+    <li class="prin"><span class="label kick"><span class="n">03</span></span><span class="body">Posts friends forward and challenge each other on: one per box, one for the app.</span></li></ol></div></div></div>
+</section>
+
+<section class="slide" id="p02-impact" data-step="impact">
+  <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto 1fr">
+    <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
+    <div style="grid-column: 1 / 5; grid-row: 2; padding-top: 24px"><p class="h2">No launch, so no data yet: what we would measure, and how.</p><p class="body i2" style="margin-top: 64px">Communication course: the monitoring plan. Every line below is an indicator to collect after a launch, not a result.</p></div>
+    <ol class="jx" style="grid-column: 6 / 13; grid-row: 2; align-self: start; margin-top: 32px"><li><span class="label kick"><span class="n">01</span></span><span><span class="jx__t">Short term · behaviour</span><span class="jx__s">Read from the app’s own feedback</span></span><span class="jx__f">Waste reduced · ease of each recipe · streak continuity · time saved</span></li><li><span class="label kick"><span class="n">02</span></span><span><span class="jx__t">Long term · habits</span><span class="jx__s">Whether the boxes become routine</span></span><span class="jx__f">Boxes logged by lid code · shelves emptied at the store · fewer meals out</span></li><li><span class="label kick"><span class="n">03</span></span><span><span class="jx__t">Product</span><span class="jx__s">Planning and variety</span></span><span class="jx__f">Fewer shopping trips a week · recipes cooked per box · ingredients reused</span></li><li><span class="label kick"><span class="n">04</span></span><span><span class="jx__t">Campaign</span><span class="jx__s">Reach and conversion</span></span><span class="jx__f">Students reached · views and interactions · app downloads · boxes bought</span></li></ol>
+  </div>
+</section>
+
+<section class="slide" id="p02-outcome" data-step="impact">
   <header class="chrome"><span class="chrome__sec" data-proj></span><span class="chrome__pg" data-pg></span></header>
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label kick" style="grid-column: 1 / -1" data-kick></p>
-    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">A concept, not a launch: targets to prove, and what I would do differently.</p>
+    <p class="h2" style="grid-column: 1 / 11; margin-top: 24px">Targets for a pilot, and what I would do differently.</p>
     <div style="grid-column: 1 / 9; align-self: end">
       <p class="label i3" style="margin-bottom: 16px">Targets for a pilot (not results)</p>
       <div class="cells" style="grid-template-columns: repeat(3, minmax(0, 1fr))">
@@ -1601,7 +1684,8 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
       <ol class="rows">
         <li class="prin"><span class="label kick"><span class="n">01</span></span><span class="body">More interviews and a stricter analysis of the data.</span></li>
         <li class="prin"><span class="label kick"><span class="n">02</span></span><span class="body">Usability tests on the prototype, with real boxes.</span></li>
-        <li class="prin"><span class="label kick"><span class="n">03</span></span><span class="body">Smaller, more realistic predictions, and the reframing as the lesson: change what is easy to do, not what people know.</span></li>
+        <li class="prin"><span class="label kick"><span class="n">03</span></span><span class="body">Secure the store before designing the pickup: the director we met was not interested.</span></li>
+        <li class="prin"><span class="label kick"><span class="n">04</span></span><span class="body">The lesson: change what is easy to do, not what people know.</span></li>
       </ol>
     </div>
   </div>
@@ -1951,6 +2035,47 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .cyc { min-height: 430px; gap: 14px; }
   .cyc s { color: var(--ink-4); text-decoration-thickness: 1.5px; }
   .cyc--final { outline: 2px solid var(--pc); outline-offset: -2px; }
+
+  /* JustCook restructure (owner, 2026-11-11): phase index tables, trace, profile, fit matrix, full-bleed scenes and brand. */
+  .jx { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+  .jx > li { display: grid; grid-template-columns: 64px 1fr 36%; column-gap: var(--g); padding-block: 28px; border-bottom: 1px solid var(--rule); align-items: baseline; }
+  .jx__t { display: block; font-size: var(--fs-h3); font-weight: 500; line-height: 1.1; letter-spacing: -0.02em; }
+  .jx__s { display: block; font-size: var(--fs-small); color: var(--ink-3); margin-top: 8px; }
+  .jx__f { font-size: var(--fs-small); color: var(--ink-2); line-height: 1.4; }
+  .jx__f b { font-weight: 500; color: var(--ink); }
+  .jx--dense > li { padding-block: 20px; } .jx--dense .jx__t { font-size: var(--fs-lead); }
+  .jx > li.jx--x .jx__t { text-decoration: line-through; text-decoration-thickness: 1.5px; color: var(--ink-4); }
+  .trace .cell { min-height: 600px; gap: 20px; }
+  .trace__m { height: 280px; }
+  .trace .stat.trace__m, .trace .lead.trace__m { height: auto; min-height: 280px; }
+  .trace__box { display: flex; align-items: center; justify-content: center; } .trace__box img { max-height: 100%; max-width: 100%; }
+  .prof .cell { min-height: 600px; gap: 18px; justify-content: start; }
+  .prof__l { display: grid; grid-template-columns: 150px 1fr; margin: 12px 0 0; }
+  .prof__l dt, .prof__l dd { margin: 0; padding-block: 12px; border-top: 1px solid var(--rule); font-size: var(--fs-small); line-height: 1.35; }
+  .prof__l dt { color: var(--ink-3); }
+  .fit { border-collapse: collapse; width: 100%; font-size: var(--fs-small); }
+  .fit th { font-size: 15px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); text-align: left; padding: 0 0 14px; border-bottom: 1px solid var(--ink); vertical-align: bottom; }
+  .fit td { padding: 17px 0; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+  .fit__p { width: 27%; font-weight: 500; } .fit__k { width: 25%; color: var(--ink-3); padding-right: 16px !important; } .fit__n { width: 8%; color: var(--ink-3); }
+  .fit th.fit__c, .fit td.fit__c { text-align: center; width: 6.6%; }
+  .fit th.fit__c { font-size: 13px; letter-spacing: .04em; }
+  .fit i, .fit__key i { display: inline-block; width: 16px; height: 16px; border-radius: 50%; background: var(--pc); vertical-align: middle; }
+  .fit tfoot td { border-bottom: 0; color: var(--ink-3); } .fit .fit__t { color: var(--ink); font-weight: 500; }
+  .fit__key { display: grid; grid-template-columns: 56px 1fr; row-gap: 14px; margin: 56px 0 0; } .fit__key dt { color: var(--ink-3); } .fit__key dd { margin: 0; color: var(--ink-2); }
+  .jcx { position: absolute; left: 0; right: 0; top: 72px; bottom: 0; background: var(--ink); overflow: hidden; }
+  .jcx__scene { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .jcx__boxes { height: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+  .jcx__boxes figure { margin: 0; position: relative; display: flex; align-items: center; justify-content: center; }
+  .jcx__boxes img { width: 86%; }
+  .jcx__boxes figcaption { position: absolute; left: 32px; right: 32px; bottom: 32px; display: grid; gap: 6px; color: #111; }
+  .jcx__boxes figcaption b { font-size: 26px; font-weight: 500; } .jcx__boxes figcaption span { font-size: 20px; }
+  .jcx__flyers { height: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background: var(--ink); }
+  .jcx__flyers figure { margin: 0; background: #e9e3d6; display: flex; align-items: center; justify-content: center; }
+  .jcx__flyers img { width: 84%; box-shadow: 0 12px 32px rgb(60 45 25 / .22); }
+  .jcx__social { height: 100%; display: grid; grid-template-columns: 1008px 1fr; background: var(--paper); }
+  .jcx__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; background: var(--ink); }
+  .jcx__grid img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .jcx__side { padding: 64px 72px; align-self: end; display: grid; gap: 24px; }
   .jcflow { width: 100%; height: auto; display: block; overflow: visible; }
   .jcflow .jl { stroke: var(--rule-strong); stroke-width: 1; }
   .jcflow .jt1 { font-size: 34px; font-weight: 500; fill: var(--ink); }
@@ -2071,7 +2196,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   }
 
   // Project content slides: project colour + name from the preceding cover, chapter kicker, process bar.
-  const STEPS = [['context', 'Context'], ['research', 'Research'], ['insights', 'Insights'], ['framing', 'Framing'],
+  const STEPS0 = [['context', 'Context'], ['research', 'Research'], ['insights', 'Insights'], ['framing', 'Framing'],
     ['ideas', 'Ideas'], ['system', 'System'], ['prototypes', 'Prototypes'], ['solution', 'Solution'], ['outcome', 'Outcome']];
   let cover = null;
   slides.forEach((s) => {
@@ -2080,7 +2205,8 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     s.style.setProperty('--pc', cover.style.getPropertyValue('--pc'));
     s.querySelectorAll('[data-proj]').forEach((e) => (e.innerHTML = `<span class="n">${cover.dataset.num}</span>${cover.dataset.title}`));
     if (!('step' in s.dataset)) return; // additional projects: no process bar
-    if (s.querySelector('.quad, .solx')) return;  // full-bleed image slides: no process bar
+    if (s.querySelector('.quad, .solx, .jcx')) return;  // full-bleed image slides: no process bar
+    const STEPS = cover.dataset.steps ? cover.dataset.steps.split('|').map((x) => x.split(':')) : STEPS0; // per project (JustCook: its own five phases)
     const at = STEPS.findIndex(([k]) => k === s.dataset.step);
     s.querySelectorAll('[data-kick]').forEach((e) => (e.innerHTML = `<span class="n">${pad(at + 1)}</span>${STEPS[at][1]}`));
     const bar = document.createElement('nav');
