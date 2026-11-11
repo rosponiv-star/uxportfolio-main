@@ -1361,6 +1361,17 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-11 · LOCAL (117)** · Deck-wide typography pass (owner approved 1–5: "spazi, scritte, tipografia più chiara, sempre chiaro e
+  con griglia simile"). (1) One scale for text: h2 72 · h3 44 · lead 34 · body 26 · small 22 · label 18; `--fs-display` = 72; nothing
+  under 18 px anywhere (HTML, board CSS, SVG schema text: 12–17 → 18, 19–20 → 18, 21–24 → 22). (2) ONE uppercase level: the kicker
+  (`.label.kick`, or a `.label` opening the frame) and the running head; every other label, the process bar, tags and board
+  headings are sentence case, no tracking, grey (literal UPPERCASE strings rewritten). (3) Two text greys: `--ink-4` = `--ink-3`
+  (#6b6b65); #8a8a84 → #6b6b65, #4a4a45 → #33332f. (4) Titles use the width: h2 at grid-column 1 / -1 (was 1 / 11), text-wrap
+  pretty instead of balance, a non-breaking space before the last word (no orphan). Title block fixed: in frames `auto auto 1fr`,
+  the content starts 48 px under the title instead of sinking to the bottom (deck.css, end of file); full pages that need the
+  height carry `data-fill` (no extra gap). (5) Fixes after the bigger text: pain-point board rows tighter (fits above the bar),
+  sequence tags wider ("Sequence"/"Flow"), AuraWake night schema events at 18 px (no overlap). PDF kept under 20 MB: brand boxes
+  as JPEG on their panel colour (`box-*-3q-panel.jpg`), AuraWake base renders as JPEG on paper. 82 pages, 19.39 MB.
 - **2026-11-11 · LOCAL (116)** · JustCook: owner rejected boxes and screens together. Both scenes and their script
   removed; p02-solution replaced by five full-bleed screen slides (Tonight, Plan and buy, At home, Cooking, Outside
   the app), 19 final screens, each with title, description and a "Why" line. See §0.B.0.

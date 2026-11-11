@@ -22,7 +22,7 @@
   --ink: #111111;
   --ink-2: #33332f;
   --ink-3: #6b6b65;
-  --ink-4: #8a8a84;
+  --ink-4: #6b6b65;   /* = ink-3 (owner, 2026-11-11: two text greys only) */
   --rule: rgb(17 17 17 / 0.1);
   --rule-strong: rgb(17 17 17 / 0.24);
   --signal: #3d5a73;
@@ -36,7 +36,7 @@
   --fs-lead: 34px;    /* lead paragraphs, item titles */
   --fs-h3: 44px;      /* cell / group titles */
   --fs-h2: 72px;      /* slide titles */
-  --fs-display: 88px; /* statements: one sentence per line across the 12 columns */
+  --fs-display: 72px; /* statements: the title size, Regular (was 88: one scale for all text) */
   --fs-mega: 232px;   /* cover name, divider numbers */
   --fs-stat: 136px;   /* key numbers only (Medium), one size everywhere */
 
@@ -106,7 +106,10 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* Type ----------------------------------------------------------------- */
-.label { font-size: var(--fs-label); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.3; }
+.label { font-size: var(--fs-label); font-weight: 500; letter-spacing: 0; line-height: 1.3; color: var(--ink-3); }
+/* the one uppercase level (owner, 2026-11-11): the kicker above a title, and the running head */
+.label.kick, .kick.label, .frame > .label:first-child { letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }   /* a label opening the frame is the kicker */
+.slide--color .label, .slide--color .frame > .label:first-child { color: color-mix(in srgb, var(--on-accent) 68%, transparent); }
 .small { font-size: var(--fs-small); line-height: 1.45; }
 .body { font-size: var(--fs-body); line-height: 1.45; }
 .lead { font-size: var(--fs-lead); line-height: 1.3; letter-spacing: -0.01em; }
@@ -115,7 +118,8 @@ a { color: inherit; text-decoration: none; }
 .display { font-size: var(--fs-display); font-weight: 400; line-height: 1.02; letter-spacing: -0.04em; }
 .mega { font-size: var(--fs-mega); font-weight: 500; line-height: 0.86; letter-spacing: -0.06em; }
 .stat { font-size: var(--fs-stat); font-weight: 500; line-height: 0.9; letter-spacing: -0.05em; }
-.display, .h2, .h3 { text-wrap: balance; }
+.h3 { text-wrap: balance; }
+.display, .h2 { text-wrap: pretty; }
 .lead, .body, .small { text-wrap: pretty; }
 .m { font-weight: 500; }
 .i2 { color: var(--ink-2); }
@@ -199,10 +203,8 @@ a { color: inherit; text-decoration: none; }
   column-gap: 8px;
   font-size: var(--fs-label);
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   line-height: 1.3;
-  color: var(--ink-4);
+  color: var(--ink-3);   /* sentence case: one uppercase level only (owner, 2026-11-11) */
 }
 .slide[data-step] .frame { bottom: 128px; } /* room for the bar */
 .steps > span { padding-top: 10px; border-top: 2px solid var(--rule); white-space: nowrap; }
@@ -236,22 +238,22 @@ a { color: inherit; text-decoration: none; }
 /* Smart Home Hub: the original boards behind each redrawn schema, 2 × 2 under a bar that names them */
 .orig__bar { position: absolute; left: 0; right: 0; top: 0; height: 72px; padding: 0 96px; display: flex; align-items: center; justify-content: space-between; background: var(--ink); color: var(--paper); }
 .orig__bar b { font-size: 22px; font-weight: 500; }
-.orig__bar span { font-size: 14px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; opacity: .72; }
+.orig__bar span { font-size: 18px; font-weight: 500; opacity: .72; }
 .orig__grid { position: absolute; left: 96px; right: 96px; top: 100px; bottom: 100px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 24px 32px; }
 .orig__grid figure { margin: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 10px; min-height: 0; }
 .orig__grid img { width: 100%; height: 100%; object-fit: contain; background: #f2f1ed; border-radius: 4px; min-height: 0; }
-.orig__grid figcaption { font-size: 15px; color: #6b6b65; }
+.orig__grid figcaption { font-size: 18px; color: #6b6b65; }
 
 /* full-bleed 2 × 2: four images cover the slide under one banner */
 .quad__bar { position: absolute; left: 0; right: 0; top: 0; height: 72px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; background: var(--ink); color: var(--paper); z-index: 2; }
 .quad__bar b { font-size: 22px; font-weight: 500; }
-.quad__bar span { font-size: 14px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; opacity: .72; }
+.quad__bar span { font-size: 18px; font-weight: 500; opacity: .72; }
 .quad { position: absolute; left: 0; right: 0; top: 72px; bottom: 0; display: grid; grid-template-columns: 712px 1fr; grid-template-rows: 1fr 1fr; gap: 4px; background: var(--ink); }   /* 4 px, as .solx */
 .quad figure { margin: 0; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
 .quad figure.scan { background: #dddcd6; } .quad figure.board { background: #fbf7ec; }
 .quad img { max-width: 100%; max-height: 100%; display: block; }
 .quad figure.scan { background: #fff; } .quad figure.scan img { width: 100%; height: 100%; max-width: none; max-height: none; object-fit: cover; }
-.quad figcaption { position: absolute; right: 0; bottom: 0; padding: 7px 12px 6px; background: var(--ink); color: var(--paper); font-size: 13px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; }
+.quad figcaption { position: absolute; right: 0; bottom: 0; padding: 7px 12px 6px; background: var(--ink); color: var(--paper); font-size: 18px; font-weight: 500; }
 
 /* Smart Home Hub: happiness factors of one pain point, with the personas each one serves, next to its UX flow */
 .hf { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule-strong); }
@@ -264,16 +266,16 @@ a { color: inherit; text-decoration: none; }
 .ppw { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule-strong); }
 .ppw li { display: grid; grid-template-columns: 88px 1fr; gap: 24px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--rule); }
 .ppw img { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; }
-.md3 { display: inline-block; margin-top: 8px; font-size: 14px; line-height: 1.4; color: var(--ink-3, #6b6b65); }
+.md3 { display: inline-block; margin-top: 8px; font-size: 18px; line-height: 1.4; color: var(--ink-3, #6b6b65); }
 .md3 .label { color: var(--signal); margin-right: 6px; }
 
 
 .solx { position: absolute; left: 0; right: 0; top: 72px; bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background: var(--ink); }   /* 4 px: still a full pixel when a PDF viewer fits the page to the window (owner, 2026-11-02) */
 .solx figure { margin: 0; background: #f1efe9; display: grid; grid-template-rows: 1fr auto; justify-items: center; padding: 28px 20px 0; min-height: 0; }
 .solx img { height: 100%; max-height: 820px; width: auto; min-height: 0; border: 6px solid var(--ink); border-radius: 34px; align-self: center; }
-.solx figcaption { width: 100%; padding: 14px 4px 18px; font-size: 15px; line-height: 1.4; color: #4a4a45; }
-.solx figcaption b { display: block; font-size: 19px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
-.solx .md3 { display: block; margin-top: 4px; font-size: 13px; }
+.solx figcaption { width: 100%; padding: 14px 4px 18px; font-size: 18px; line-height: 1.4; color: #4a4a45; }
+.solx figcaption b { display: block; font-size: 22px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+.solx .md3 { display: block; margin-top: 4px; font-size: 18px; }
 
 /* Smart Home Hub research boards mounted from deck/boards (shadow roots) */
 .shb-host { position: absolute; inset: 0; }
@@ -283,7 +285,18 @@ a { color: inherit; text-decoration: none; }
 .lfhf figure { padding: 22px 20px 0; }
 .lfhf .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-self: start; width: 100%; padding-top: 104px; }
 .lfhf .pair > div { display: grid; gap: 10px; justify-items: center; }
-.lfhf .pair span { font-size: 12px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: #6b6b65; }
+.lfhf .pair span { font-size: 18px; font-weight: 500; color: #6b6b65; }
 .lfhf .pair .hfi span { color: var(--ink); }
 .lfhf img { width: 100%; height: auto; max-height: none; border-width: 5px; border-radius: 28px; align-self: start; }
 .lfhf figcaption { min-height: 104px; }
+
+/* Title block (owner, 2026-11-11): kicker → title → content at the same distances on every slide. The content no longer
+   sinks to the bottom of the page: it starts one fixed step under the title. Items that span the whole height (an
+   image beside the text, grid-row 1 / …) keep their own placement. */
+.frame[style*="auto auto 1fr"] > :not(.label):not(.kick):not(.h2):not(.display):not([style*="grid-row: 1"]):not([style*="grid-row:1"]) {
+  align-self: start !important;
+  margin-top: 48px;
+}
+/* full pages (data-fill): the content fills the height, so it starts right under the title block's own gap */
+.slide[data-fill] .frame[style*="auto auto 1fr"] > * { margin-top: 0 !important; }
+.slide[data-fill] .frame[style*="auto auto 1fr"] > .h2 { margin-top: 24px !important; }
