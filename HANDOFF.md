@@ -1361,6 +1361,8 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-16 · LOCAL (124)** · Telembot Safari windows shorter again (owner): page 900, window 1440 × 952 (frames 126:671 04a, 126:831 03a,
+  126:939 02, 126:1039 04c, 126:1169 04d). Deck: hero 755 px, 2 × 2 485 px. PDF 19.87 MB.
 - **2026-11-16 · LOCAL (123)** · Telembot Safari windows a little shorter (owner): page 960 high, window 1440 × 1012 (frames 124:1106, 124:1266,
   124:1374, 124:1474, 124:1604), fixed parts still at the bottom; a "Scroll edge" gradient under the toolbar (40 px, toolbar grey to
   transparent) so the toolbar fades into the page instead of being cut by it. Deck: hero 710 px, 2 × 2 456 px. PDF 19.88 MB.
