@@ -1361,6 +1361,13 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-16 · LOCAL (118)** · Side project Telembot (NOI Hackathon SFSCON 2026, Telmekom challenge) after AuraWake, outside the
+  numbered projects: three dark pages (`#side-telembot`, `-2`, `-3`, class `.tb`, Telembot lime as accent), and a "Side project"
+  row in Contents (`data-side`). Facts only from Documents/NOI2026/handoff/PORTFOLIO-HANDOFF.md and team-13/docs/10_handoff.md.
+  Owner: no "not won" (obvious when unsaid); no mention of the AI assistant: "the working frontend in Vue, merged with the
+  team's backend"; decision 02 is "Asks when it's not clear". Page 3 has three EVENT PHOTO placeholders: waiting for the
+  owner's photos; team names and jury feedback not given, so not written. Screens in deck/assets/telembot/ (JPEG). Contents
+  rows tighter (padding 11 px, gap 40 px) so the extra group fits. PDF 85 pages, 19.76 MB.
 - **2026-11-11 · LOCAL (117)** · Deck-wide typography pass (owner approved 1–5: "spazi, scritte, tipografia più chiara, sempre chiaro e
   con griglia simile"). (1) One scale for text: h2 72 · h3 44 · lead 34 · body 26 · small 22 · label 18; `--fs-display` = 72; nothing
   under 18 px anywhere (HTML, board CSS, SVG schema text: 12–17 → 18, 19–20 → 18, 21–24 → 22). (2) ONE uppercase level: the kicker

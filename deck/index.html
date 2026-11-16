@@ -46,7 +46,7 @@
   </header>
   <div class="frame" style="align-content: start">
     <h2 class="h2" style="grid-column: 1 / 4">Contents</h2>
-    <div style="grid-column: 5 / 13; display: grid; gap: 56px" data-toc></div>
+    <div style="grid-column: 5 / 13; display: grid; gap: 40px" data-toc></div>
   </div>
 </section>
 
@@ -1885,6 +1885,64 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   </div>
 </section>
 
+<!-- Side project (owner, 2026-11-16): a two-page note outside the numbered projects, on the dark ground so it reads
+     apart; same grid, chrome and type scale. Facts: Documents/NOI2026/handoff/PORTFOLIO-HANDOFF.md and team-13/docs/10_handoff.md.
+     Team names and jury feedback were not given: none written. -->
+<section class="slide slide--color tb" id="side-telembot" style="--pc: #141414" data-side="Telembot" data-sub="NOI Hackathon SFSCON 2026 · 24 hours">
+  <div class="cols" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <header class="chrome"><span class="chrome__sec">Side project</span><span class="chrome__mid">NOI Hackathon SFSCON 2026</span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label" style="grid-column: 1 / -1">Side project · 24-hour hackathon</p>
+    <p class="h2" style="grid-column: 1 / -1; margin-top: 24px">Telembot: answers from the robot manuals, with the page each one comes&nbsp;from.</p>
+    <div class="tb-side" style="grid-column: 1 / 6; grid-row: 3; align-self: end">
+      <p class="small tb-intro">Technicians look up values in long PDF manuals in three languages. A generic chatbot can invent a voltage or a charging time; on a machine, a wrong number is a real risk. Telmekom asked for conversational access to 22 PUDU robot manuals, judged on faithfulness to the source.</p>
+      <dl class="tb-facts small">
+        <dt>Event</dt><dd>NOI Hackathon SFSCON 2026, NOI Techpark Bolzano, 13–14 Nov</dd>
+        <dt>Challenge</dt><dd>Telmekom · 22 manuals, English, German, Italian</dd>
+        <dt>My role</dt><dd>UX/UI and product designer, the team’s only designer</dd>
+        <dt>Outcome</dt><dd>A working live demo; the code is in the public team repository</dd>
+      </dl>
+    </div>
+    <figure class="tb-hero" style="grid-column: 6 / -1; grid-row: 3; align-self: end"><span class="tb-win"><span class="tb-win__bar"><i></i><i></i><i></i></span><img src="assets/telembot/04a-source-panel.jpg" alt="Telembot: an answer with numbered sources; the source panel shows the manual page with the cited lines highlighted" /></span>
+      <figcaption class="small"><span class="tb-mark">Select a sentence</span> and the manual page opens beside it, the cited lines highlighted, with a link to the real PDF page.</figcaption></figure>
+  </div>
+</section>
+
+<section class="slide slide--color tb" id="side-telembot-2" style="--pc: #141414">
+  <div class="cols" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <header class="chrome"><span class="chrome__sec">Side project</span><span class="chrome__mid">NOI Hackathon SFSCON 2026</span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label" style="grid-column: 1 / -1">Telembot · design decisions</p>
+    <p class="h2" style="grid-column: 1 / -1; margin-top: 24px">Trust over fluency.</p>
+    <div class="tb-grid" style="grid-column: 1 / -1; grid-row: 3; align-self: end"><figure><span class="tb-win"><span class="tb-win__bar"><i></i><i></i><i></i></span><img src="assets/telembot/03a-answer-prose.jpg" alt="Answer: the exact value with its unit first, a source number after every sentence" /></span><figcaption class="small"><span class="tb-n">01</span><b>Short answer first</b>The value as printed; a source after every sentence.</figcaption></figure><figure><span class="tb-win"><span class="tb-win__bar"><i></i><i></i><i></i></span><img src="assets/telembot/02-clarify.jpg" alt="Clarify: the input turns into a choice between BellaBot and BellaBot Pro" /></span><figcaption class="small"><span class="tb-n">02</span><b>Asks when it’s not clear</b>Two models, one name: the input becomes the choice.</figcaption></figure><figure><span class="tb-win"><span class="tb-win__bar"><i></i><i></i><i></i></span><img src="assets/telembot/04c-source-panel-not-found.jpg" alt="Not in the manuals: an amber panel saying what was searched and why there is no answer" /></span><figcaption class="small"><span class="tb-n">03</span><b>“Not in the manuals”</b>Said plainly in amber, never guessed.</figcaption></figure><figure><span class="tb-win"><span class="tb-win__bar"><i></i><i></i><i></i></span><img src="assets/telembot/04d-source-panel-translated.jpg" alt="Translated: an Italian question answered from the English manual, original and AI translation kept apart" /></span><figcaption class="small"><span class="tb-n">04</span><b>Translation you can see</b>Original and AI translation, side by side.</figcaption></figure></div>
+  </div>
+</section>
+
+<section class="slide slide--color tb" id="side-telembot-3" style="--pc: #141414">
+  <div class="cols" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+  <header class="chrome"><span class="chrome__sec">Side project</span><span class="chrome__mid">NOI Hackathon SFSCON 2026</span><span class="chrome__pg" data-pg></span></header>
+  <div class="frame" style="grid-template-rows: auto auto 1fr">
+    <p class="label" style="grid-column: 1 / -1">Telembot · behind the interface</p>
+    <p class="h2" style="grid-column: 1 / -1; margin-top: 24px">An engine that must look before it&nbsp;answers.</p>
+    <div class="tb-stack" style="grid-column: 1 / -1; grid-row: 3; align-self: stretch">
+    <div class="tb-how">
+      <p class="label">How it works · the engine built by my teammates</p>
+      <ol class="tb-flow small">
+        <li><b>22 manuals</b>922 sections, 476 figures, indexed by page</li>
+        <li><b>Specs as values</b>223 printed values, queried exactly</li>
+        <li><b>Agentic RAG</b>It must look first: 5 tools, 4 rounds</li>
+        <li><b>Checks in code</b>No source, no answer; every number audited</li>
+        <li><b>Web app and voice</b>One engine behind an API, my interface on top</li>
+      </ol>
+      <p class="small tb-note">My part: a Figma design system, 13 screens and 18 micro-interactions, then the working frontend in Vue, merged with the team’s backend.</p>
+    </div>
+    <div class="tb-photos">
+      <figure class="tb-ph"><span>Event photo</span></figure><figure class="tb-ph"><span>Event photo</span></figure><figure class="tb-ph"><span>Event photo</span></figure>
+    </div>
+    </div>
+  </div>
+</section>
+
 <style>
   /* Who I am */
   .who-col { display: flex; flex-direction: column; gap: 16px; margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--rule-strong); }
@@ -1895,7 +1953,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
 
   /* Contents: three groups (About, Main projects, Additional projects), one row per entry. */
   .toc-group > .label { display: block; margin-bottom: 12px; }
-  .toc-row { display: grid; grid-template-columns: 40px 64px 1fr auto; align-items: baseline; column-gap: var(--g); padding-block: 16px; border-top: 1px solid var(--rule-strong); }
+  .toc-row { display: grid; grid-template-columns: 40px 64px 1fr auto; align-items: baseline; column-gap: var(--g); padding-block: 11px; border-top: 1px solid var(--rule-strong); }
   .toc-group .toc-row:last-child { border-bottom: 1px solid var(--rule-strong); }
   .toc-row .sw { transform: translateY(2px); }
   .toc-row .t { display: flex; align-items: baseline; gap: 20px; }
@@ -2131,6 +2189,38 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .gfig { width: 100%; height: auto; display: block; overflow: hidden; border: 1px solid var(--rule); }
   .gfig .room { font-size: 18px; font-weight: 500; }
   .gfig .arw { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+  /* Side project (Telembot): dark ground, screens in a browser frame, Telembot's lime as the only accent */
+  .tb { --lime: #d6f264; }
+  .tb .h2 { color: #fdfdfc; }
+  .tb .body, .tb .tb-facts dd { color: color-mix(in srgb, #fdfdfc 82%, transparent); }
+  .tb .small { color: color-mix(in srgb, #fdfdfc 68%, transparent); }
+  .tb .small b { display: block; color: #fdfdfc; font-weight: 500; }
+  .tb-side { display: grid; gap: 48px; }
+  .tb-facts { display: grid; grid-template-columns: 136px 1fr; gap: 18px 20px; padding-top: 32px; border-top: 1px solid color-mix(in srgb, #fdfdfc 22%, transparent); margin: 0; }
+  .tb-facts dt { color: color-mix(in srgb, #fdfdfc 55%, transparent); }
+  .tb-facts dd { margin: 0; }
+  .tb-win { display: block; border-radius: 10px; overflow: hidden; background: #fff; box-shadow: 0 0 0 1px rgb(255 255 255 / .12), 0 30px 60px rgb(0 0 0 / .45); }
+  .tb-win__bar { display: flex; gap: 7px; padding: 10px 12px; background: #2a2a2a; }
+  .tb-win__bar i { width: 10px; height: 10px; border-radius: 50%; background: #555; }
+  .tb-win img { display: block; width: 100%; }
+  .tb-hero .tb-win img { max-height: 560px; object-fit: cover; object-position: top left; }
+  .tb-intro { font-size: var(--fs-body) !important; color: color-mix(in srgb, #fdfdfc 82%, transparent) !important; }
+  .tb-hero { margin: 0; display: grid; gap: 24px; }
+  .tb-mark { color: #141414; background: var(--lime); padding: 0 6px; }
+  .tb-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 56px var(--g); }
+  .tb-grid figure { margin: 0; display: grid; grid-template-columns: 560px 1fr; column-gap: 32px; align-items: end; }
+  .tb-grid figcaption { padding-bottom: 6px; }
+  .tb-grid figcaption b { margin: 8px 0 6px; font-size: var(--fs-lead); line-height: 1.2; }
+  .tb-n { color: var(--lime); font-size: var(--fs-label); font-weight: 500; }
+  .tb-photos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: var(--g); margin-top: 64px; }
+  .tb-ph { margin: 0; aspect-ratio: 3 / 2; border: 1px dashed rgb(255 255 255 / .25); display: flex; align-items: flex-end; padding: 18px; }
+  .tb-ph span { font-size: var(--fs-label); color: rgb(255 255 255 / .45); }
+  .tb-how { display: grid; gap: 24px; margin-top: 64px; }
+  .tb-how .label { color: var(--lime) !important; }
+  .tb-flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); column-gap: var(--g); }
+  .tb-flow li { padding-top: 14px; border-top: 2px solid var(--lime); position: relative; }
+  .tb-flow li:not(:last-child)::after { content: '→'; position: absolute; right: -20px; top: 8px; color: var(--lime); font-size: 22px; }
+  .tb-note { margin: 0; padding-top: 4px; }
   .wcol { grid-column: span 4; }
   .waves { grid-template-columns: minmax(0, 1fr); }
   .waves--dark .cell { background: #17171d; border-color: #2c2c35; }
@@ -2184,7 +2274,8 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
     toc.innerHTML =
       group('About', intros.map((s, i) => row('', pad(i + 1), s.dataset.intro, '', s.id, pageOf(s)))) +
       group('Main projects', projects.filter((p) => p.kind === 'main').map((p) => row(p.color, p.n, p.title, p.sub, p.id, pageOf(p.el), p.ph))) +
-      group('Additional projects', projects.filter((p) => p.kind === 'additional').map((p) => row(p.color, p.n, p.title, p.sub, p.id, pageOf(p.el), p.ph)));
+      group('Additional projects', projects.filter((p) => p.kind === 'additional').map((p) => row(p.color, p.n, p.title, p.sub, p.id, pageOf(p.el), p.ph))) +
+      group('Side project', [...document.querySelectorAll('[data-side]')].map((el) => row('', '·', el.dataset.side, el.dataset.sub || '', el.id, pageOf(el))));
   }
 
   // Selected projects index: images first (placeholder = the project colour), a number and a title below.
