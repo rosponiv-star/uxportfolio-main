@@ -1361,6 +1361,12 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-16 · LOCAL (121)** · Telembot screens now in Apple's Safari mockup from the NOI26 Figma file (owner): new page
+  "Portfolio · Safari" with 5 frames 1500 × 854 (ids 119:1396 04a, 119:1556 03a, 119:1664 02, 119:1764 04c, 119:1894 04d), each = a
+  clone of the "Safari Light" instance (URL "localhost:5173", its sample image hidden) over the screen at 1500 wide; the viewport
+  shows the top of the page while the fixed parts (Prompt Bar, Bottom fade, Clarification card, Source panel Footer) are moved to
+  the viewport bottom. Exported and rounded on #141414 → deck/assets/telembot/safari-*.jpg (grid ones 1180 px); CSS `.tb-saf` (squircle
+  corners, shadow). The CSS macOS window (.tb-win) is gone. PDF 85 pages, 19.97 MB (at the limit: lighten before adding pages).
 - **2026-11-16 · LOCAL (120)** · Telembot window at the screen's real scale (owner: "una vera finestra del MacBook"): sizes in
   points of a 1440-pt window × --k (shown width / 1440): title bar 28, lights 12 / gap 8, radius 26 with 60 % smoothing
   (`corner-shape: squircle`, Chrome 157 renders it in the PDF). --k is set per context (.tb-hero 998, .tb-grid 520).

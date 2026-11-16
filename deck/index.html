@@ -1903,7 +1903,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
         <dt>Outcome</dt><dd>A working live demo; the code is in the public team repository</dd>
       </dl>
     </div>
-    <figure class="tb-hero" style="grid-column: 6 / -1; grid-row: 3; align-self: end"><span class="tb-win"><span class="tb-win__bar"><i></i><i></i><i></i></span><img src="assets/telembot/04a-source-panel.jpg" alt="Telembot: an answer with numbered sources; the source panel shows the manual page with the cited lines highlighted" /></span>
+    <figure class="tb-hero" style="grid-column: 6 / -1; grid-row: 3; align-self: end"><img class="tb-saf" src="assets/telembot/safari-04a-source-panel.jpg" alt="Telembot: an answer with numbered sources; the source panel shows the manual page with the cited lines highlighted" />
       <figcaption class="small"><span class="tb-mark">Select a sentence</span> and the manual page opens beside it, the cited lines highlighted, with a link to the real PDF page.</figcaption></figure>
   </div>
 </section>
@@ -1914,7 +1914,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label" style="grid-column: 1 / -1">Telembot · design decisions</p>
     <p class="h2" style="grid-column: 1 / -1; margin-top: 24px">Trust over fluency.</p>
-    <div class="tb-grid" style="grid-column: 1 / -1; grid-row: 3; align-self: end"><figure><span class="tb-win"><span class="tb-win__bar"><i></i><i></i><i></i></span><img src="assets/telembot/03a-answer-prose.jpg" alt="Answer: the exact value with its unit first, a source number after every sentence" /></span><figcaption class="small"><span class="tb-n">01</span><b>Short answer first</b>The value as printed; a source after every sentence.</figcaption></figure><figure><span class="tb-win"><span class="tb-win__bar"><i></i><i></i><i></i></span><img src="assets/telembot/02-clarify.jpg" alt="Clarify: the input turns into a choice between BellaBot and BellaBot Pro" /></span><figcaption class="small"><span class="tb-n">02</span><b>Asks when it’s not clear</b>Two models, one name: the input becomes the choice.</figcaption></figure><figure><span class="tb-win"><span class="tb-win__bar"><i></i><i></i><i></i></span><img src="assets/telembot/04c-source-panel-not-found.jpg" alt="Not in the manuals: an amber panel saying what was searched and why there is no answer" /></span><figcaption class="small"><span class="tb-n">03</span><b>“Not in the manuals”</b>Said plainly in amber, never guessed.</figcaption></figure><figure><span class="tb-win"><span class="tb-win__bar"><i></i><i></i><i></i></span><img src="assets/telembot/04d-source-panel-translated.jpg" alt="Translated: an Italian question answered from the English manual, original and AI translation kept apart" /></span><figcaption class="small"><span class="tb-n">04</span><b>Translation you can see</b>Original and AI translation, side by side.</figcaption></figure></div>
+    <div class="tb-grid" style="grid-column: 1 / -1; grid-row: 3; align-self: end"><figure><img class="tb-saf" src="assets/telembot/safari-03a-answer-prose.jpg" alt="Answer: the exact value with its unit first, a source number after every sentence" /><figcaption class="small"><span class="tb-n">01</span><b>Short answer first</b>The value as printed; a source after every sentence.</figcaption></figure><figure><img class="tb-saf" src="assets/telembot/safari-02-clarify.jpg" alt="Clarify: the input turns into a choice between BellaBot and BellaBot Pro" /><figcaption class="small"><span class="tb-n">02</span><b>Asks when it’s not clear</b>Two models, one name: the input becomes the choice.</figcaption></figure><figure><img class="tb-saf" src="assets/telembot/safari-04c-source-panel-not-found.jpg" alt="Not in the manuals: an amber panel saying what was searched and why there is no answer" /><figcaption class="small"><span class="tb-n">03</span><b>“Not in the manuals”</b>Said plainly in amber, never guessed.</figcaption></figure><figure><img class="tb-saf" src="assets/telembot/safari-04d-source-panel-translated.jpg" alt="Translated: an Italian question answered from the English manual, original and AI translation kept apart" /><figcaption class="small"><span class="tb-n">04</span><b>Translation you can see</b>Original and AI translation, side by side.</figcaption></figure></div>
   </div>
 </section>
 
@@ -2199,28 +2199,16 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .tb-facts { display: grid; grid-template-columns: 136px 1fr; gap: 18px 20px; padding-top: 32px; border-top: 1px solid color-mix(in srgb, #fdfdfc 22%, transparent); margin: 0; }
   .tb-facts dt { color: color-mix(in srgb, #fdfdfc 55%, transparent); }
   .tb-facts dd { margin: 0; }
-  /* macOS window (owner, 2026-11-16): a real window at the screen's own scale. The screens are 1440 pt wide, so every
-     part of the frame is sized in points of that window and multiplied by --k (shown width / 1440): title bar 28 pt,
-     traffic lights 12 pt, 8 pt apart, the first 20 pt from the left edge, corner radius 26 pt with 60 % smoothing
-     (corner-shape: squircle, Figma's iOS preset), hairline edge, two-layer window shadow. */
-  .tb-win { --k: .5; display: block; position: relative; overflow: hidden; background: #fff;
-    border-radius: calc(26px * var(--k)); corner-shape: squircle;
-    box-shadow: 0 0 0 1px rgb(0 0 0 / .55), 0 calc(30px * var(--k)) calc(70px * var(--k)) rgb(0 0 0 / .55), 0 4px 12px rgb(0 0 0 / .3); }
-  .tb-win__bar { display: flex; align-items: center; gap: calc(8px * var(--k)); height: calc(28px * var(--k)); padding-left: calc(14px * var(--k));
-    background: #f6f6f6; border-bottom: max(0.5px, calc(1px * var(--k))) solid rgb(0 0 0 / .09); }
-  .tb-win__bar i { width: calc(12px * var(--k)); height: calc(12px * var(--k)); border-radius: 50%; box-shadow: inset 0 0 0 max(0.3px, calc(0.5px * var(--k))) rgb(0 0 0 / .2); }
-  .tb-win__bar i:nth-child(1) { background: #ff5f57; }
-  .tb-win__bar i:nth-child(2) { background: #febc2e; }
-  .tb-win__bar i:nth-child(3) { background: #28c840; }
-  .tb-win img { display: block; width: 100%; }
-  .tb-hero .tb-win { --k: calc(998 / 1440); }
-  .tb-grid .tb-win { --k: calc(520 / 1440); }
-  .tb-hero .tb-win img { max-height: 560px; object-fit: cover; object-position: top left; }
+  /* Screens in Apple's Safari mockup (Figma NOI26, page "Portfolio · Safari", instance "Safari Light"), owner 2026-11-16:
+     the top of each page in the browser, the prompt bar and "Open manual" button fixed at the viewport bottom. */
+  .tb-saf { display: block; width: 100%; border-radius: calc(26px * var(--k, .5)); corner-shape: squircle; box-shadow: 0 24px 60px rgb(0 0 0 / .5), 0 4px 12px rgb(0 0 0 / .3); }
+  .tb-hero .tb-saf { --k: calc(998 / 1500); max-height: none !important; }
+  .tb-grid .tb-saf { --k: calc(580 / 1500); }
   .tb-intro { font-size: var(--fs-body) !important; color: color-mix(in srgb, #fdfdfc 82%, transparent) !important; }
   .tb-hero { margin: 0; display: grid; gap: 24px; }
   .tb-mark { color: #141414; background: var(--lime); padding: 0 6px; }
   .tb-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px var(--g); }
-  .tb-grid figure { margin: 0; display: grid; grid-template-columns: 520px 1fr; column-gap: 32px; align-items: end; }
+  .tb-grid figure { margin: 0; display: grid; grid-template-columns: 580px 1fr; column-gap: 32px; align-items: end; }
   .tb-grid figcaption { padding-bottom: 6px; }
   .tb-grid figcaption b { margin: 8px 0 6px; font-size: var(--fs-lead); line-height: 1.2; }
   .tb-n { color: var(--lime); font-size: var(--fs-label); font-weight: 500; }
