@@ -1894,7 +1894,7 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   <div class="frame" style="grid-template-rows: auto auto 1fr">
     <p class="label" style="grid-column: 1 / -1">Side project · 24-hour hackathon</p>
     <p class="h2" style="grid-column: 1 / -1; margin-top: 24px">Telembot: answers from the robot manuals, with the page each one comes&nbsp;from.</p>
-    <div class="tb-side" style="grid-column: 1 / 6; grid-row: 3; align-self: end">
+    <div class="tb-side" style="grid-column: 1 / 7; grid-row: 3; align-self: end">
       <p class="small tb-intro">Technicians look up values in long PDF manuals in three languages. A generic chatbot can invent a voltage or a charging time; on a machine, a wrong number is a real risk. Telmekom asked for conversational access to 22 PUDU robot manuals, judged on faithfulness to the source.</p>
       <dl class="tb-facts small">
         <dt>Event</dt><dd>NOI Hackathon SFSCON 2026, NOI Techpark Bolzano, 13–14 Nov</dd>
@@ -1903,8 +1903,8 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
         <dt>Outcome</dt><dd>A working live demo; the code is in the public team repository</dd>
       </dl>
     </div>
-    <figure class="tb-hero" style="grid-column: 6 / -1; grid-row: 3; align-self: end"><img class="tb-saf" src="assets/telembot/safari-04a-source-panel.jpg" alt="Telembot: an answer with numbered sources; the source panel shows the manual page with the cited lines highlighted" />
-      <figcaption class="small"><span class="tb-mark">Select a sentence</span> and the manual page opens beside it, the cited lines highlighted, with a link to the real PDF page.</figcaption></figure>
+    <figure class="tb-hero" style="grid-column: 7 / -1; grid-row: 3; align-self: end; justify-items: end"><img class="tb-saf" src="assets/telembot/safari-04a-source-panel.jpg" alt="Telembot: an answer with numbered sources; the source panel shows the manual page with the cited lines highlighted" />
+      <figcaption class="small" style="width: 670px"><span class="tb-mark">Select a sentence</span> and the manual page opens beside it, the cited lines highlighted, with a link to the real PDF page.</figcaption></figure>
   </div>
 </section>
 
@@ -2202,13 +2202,13 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   /* Screens in Apple's Safari mockup (Figma NOI26, page "Portfolio · Safari", instance "Safari Light"), owner 2026-11-16:
      the top of each page in the browser, the prompt bar and "Open manual" button fixed at the viewport bottom. */
   .tb-saf { display: block; width: 100%; border-radius: calc(26px * var(--k, .5)); corner-shape: squircle; box-shadow: 0 24px 60px rgb(0 0 0 / .5), 0 4px 12px rgb(0 0 0 / .3); }
-  .tb-hero .tb-saf { --k: calc(998 / 1500); max-height: none !important; }
-  .tb-grid .tb-saf { --k: calc(580 / 1500); }
+  .tb-hero .tb-saf { --k: calc(670 / 1440); width: 670px; height: auto; }
+  .tb-grid .tb-saf { --k: calc(430 / 1440); }
   .tb-intro { font-size: var(--fs-body) !important; color: color-mix(in srgb, #fdfdfc 82%, transparent) !important; }
   .tb-hero { margin: 0; display: grid; gap: 24px; }
   .tb-mark { color: #141414; background: var(--lime); padding: 0 6px; }
-  .tb-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px var(--g); }
-  .tb-grid figure { margin: 0; display: grid; grid-template-columns: 580px 1fr; column-gap: 32px; align-items: end; }
+  .tb-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px var(--g); }
+  .tb-grid figure { margin: 0; display: grid; grid-template-columns: 430px 1fr; column-gap: 32px; align-items: end; }
   .tb-grid figcaption { padding-bottom: 6px; }
   .tb-grid figcaption b { margin: 8px 0 6px; font-size: var(--fs-lead); line-height: 1.2; }
   .tb-n { color: var(--lime); font-size: var(--fs-label); font-weight: 500; }

@@ -1361,6 +1361,11 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-16 · LOCAL (122)** · Telembot Safari windows at the screens' own size (owner: "Safari largo quanto le mie schermate"):
+  Figma page "Portfolio · Safari" rebuilt, 5 frames 1440 × 1076 (Safari bar 52 + the screen 1:1, no scaling): 04a 122:2354, 03a
+  122:2499, 02 122:2592, 04c 122:2684, 04d 122:2799 (04d cut to 1024 with its fixed parts at the bottom). The original "Safari Light"
+  instance is no longer on the Design page; a copy is kept there as "Safari Light · source" (122:2290). Deck: p.83 window 670 px wide
+  at the right, p.84 2 × 2 windows 430 px wide. PDF 85 pages, 19.87 MB.
 - **2026-11-16 · LOCAL (121)** · Telembot screens now in Apple's Safari mockup from the NOI26 Figma file (owner): new page
   "Portfolio · Safari" with 5 frames 1500 × 854 (ids 119:1396 04a, 119:1556 03a, 119:1664 02, 119:1764 04c, 119:1894 04d), each = a
   clone of the "Safari Light" instance (URL "localhost:5173", its sample image hidden) over the screen at 1500 wide; the viewport
