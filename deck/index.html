@@ -2199,17 +2199,22 @@ p.c { position:absolute; left:96px; top:300px; width:420px; margin:0; font-size:
   .tb-facts { display: grid; grid-template-columns: 136px 1fr; gap: 18px 20px; padding-top: 32px; border-top: 1px solid color-mix(in srgb, #fdfdfc 22%, transparent); margin: 0; }
   .tb-facts dt { color: color-mix(in srgb, #fdfdfc 55%, transparent); }
   .tb-facts dd { margin: 0; }
-  /* macOS window (owner, 2026-11-16): the Tahoe-style frame, drawn after Apple's own window: large concentric corners,
-     a light unified title bar, the three traffic lights at the top left (12 px, 8 px apart, a hairline ring each),
-     a hairline edge and the soft two-layer window shadow. */
-  .tb-win { display: block; position: relative; border-radius: 16px; overflow: hidden; background: #fff;
-    box-shadow: 0 0 0 1px rgb(0 0 0 / .55), inset 0 0 0 1px rgb(255 255 255 / .35), 0 22px 48px rgb(0 0 0 / .5), 0 4px 12px rgb(0 0 0 / .35); }
-  .tb-win__bar { display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 16px; background: #f6f6f6; border-bottom: 1px solid rgb(0 0 0 / .08); }
-  .tb-win__bar i { width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / .18); }
+  /* macOS window (owner, 2026-11-16): a real window at the screen's own scale. The screens are 1440 pt wide, so every
+     part of the frame is sized in points of that window and multiplied by --k (shown width / 1440): title bar 28 pt,
+     traffic lights 12 pt, 8 pt apart, the first 20 pt from the left edge, corner radius 26 pt with 60 % smoothing
+     (corner-shape: squircle, Figma's iOS preset), hairline edge, two-layer window shadow. */
+  .tb-win { --k: .5; display: block; position: relative; overflow: hidden; background: #fff;
+    border-radius: calc(26px * var(--k)); corner-shape: squircle;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / .55), 0 calc(30px * var(--k)) calc(70px * var(--k)) rgb(0 0 0 / .55), 0 4px 12px rgb(0 0 0 / .3); }
+  .tb-win__bar { display: flex; align-items: center; gap: calc(8px * var(--k)); height: calc(28px * var(--k)); padding-left: calc(14px * var(--k));
+    background: #f6f6f6; border-bottom: max(0.5px, calc(1px * var(--k))) solid rgb(0 0 0 / .09); }
+  .tb-win__bar i { width: calc(12px * var(--k)); height: calc(12px * var(--k)); border-radius: 50%; box-shadow: inset 0 0 0 max(0.3px, calc(0.5px * var(--k))) rgb(0 0 0 / .2); }
   .tb-win__bar i:nth-child(1) { background: #ff5f57; }
   .tb-win__bar i:nth-child(2) { background: #febc2e; }
   .tb-win__bar i:nth-child(3) { background: #28c840; }
   .tb-win img { display: block; width: 100%; }
+  .tb-hero .tb-win { --k: calc(998 / 1440); }
+  .tb-grid .tb-win { --k: calc(520 / 1440); }
   .tb-hero .tb-win img { max-height: 560px; object-fit: cover; object-position: top left; }
   .tb-intro { font-size: var(--fs-body) !important; color: color-mix(in srgb, #fdfdfc 82%, transparent) !important; }
   .tb-hero { margin: 0; display: grid; gap: 24px; }

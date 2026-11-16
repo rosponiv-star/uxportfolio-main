@@ -1361,6 +1361,9 @@ When a CLOUD session hits something that needs the local environment, it must:
   discs in the line drawing). Real render: softbox light, AgX medium-high contrast. Slides 39–40 re-anchored, the
   radiator shares number 11 ("Sound"). Spec §8.2 updated. NB: the fork session (JustCook) has uncommitted work in
   deck/index.html and export_schemas.mjs; my small index.html edits (inside slides) ride with its commit.
+- **2026-11-16 · LOCAL (120)** · Telembot window at the screen's real scale (owner: "una vera finestra del MacBook"): sizes in
+  points of a 1440-pt window × --k (shown width / 1440): title bar 28, lights 12 / gap 8, radius 26 with 60 % smoothing
+  (`corner-shape: squircle`, Chrome 157 renders it in the PDF). --k is set per context (.tb-hero 998, .tb-grid 520).
 - **2026-11-16 · LOCAL (119)** · Telembot screens in a macOS (Tahoe-style) window, in CSS (`.tb-win`): 16 px corners, light
   title bar 38 px, traffic lights #ff5f57 / #febc2e / #28c840 at 12 px, 8 px apart, hairline edge and window shadow. 2 × 2 on p.84
   screens 520 px wide so it fits. PDF 85 pages, 19.87 MB.
